@@ -1,0 +1,20 @@
+/*
+    Document   : shoppinglists
+    Created on : 14-apr-2018, 15.16.06
+    Author     : Stefano Chirico &lt;chirico dot stefano at parcoprogetti dot com&gt;
+*/
+
+.login-card{
+	max-width: 500px;	
+	margin: 100px auto;
+	padding-top: 10px;
+}
+.signUp-card{
+	max-width: 500px;	
+	margin: 100px auto;
+	padding-top: 10px;
+}
+
+@media (max-width: 700px) {
+
+}

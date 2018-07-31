@@ -1,0 +1,16 @@
+- create su Workbench una connesione ad un database chiamata: shoppinglist e andate avanti
+- create un nuovo schema e chiamatelo: shoppinglistdb
+- tasto destro su shoppinglistdb e set as default
+- entrate nella cartella di flyway-5.1.4 e aprite una shell 
+- eseguite 
+	su Windows: .\flyway migrate 
+	su Ubuntu: ./flyway migrate
+- tasto destro su shoppinglistdb e refresh all
+- tadaaaaa
+
+Non dovete applicare query a mano che modifichino la struttura del DB e poi usare flyway o non capirà più nulla. Se dovete modificare il DB per fare delle prove, 
+vi conviene aprire uno a uno i file sql di Flyway dentro la cartella sql, con Workbench fare un nuovo schema e applicarle a mano su quello dopo averlo messo di default
+e fare le prove che volete. Se poi volete diffonderle agli altri, salvate quelle che vi interessa diffondere agli altri in un nuovo file sql con nome Vid__nomechevolete.sql (ci sono 2 _) 
+dentro la cartella sql di flyway e inviate tutta la cartella di flyway ;). (Non cancellate file sql da quella cartella)
+
+Query per i dati invece potete farne quando volete.
