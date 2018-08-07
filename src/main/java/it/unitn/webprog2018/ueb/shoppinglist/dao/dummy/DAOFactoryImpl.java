@@ -2,6 +2,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 
 
 /**
@@ -15,6 +16,10 @@ public class DAOFactoryImpl implements DAOFactory {
 	@Override
 	public ExampleDAO getExampleDAO() {
 		return EXAMPLE_DAO;
+	}
+	
+	public UserDAO getUserDAO() {
+		return new UserDAOimpl();
 	}
 
 }
