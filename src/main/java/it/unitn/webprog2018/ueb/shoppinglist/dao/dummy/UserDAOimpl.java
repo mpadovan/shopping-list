@@ -11,14 +11,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * Dummy implementation of user DAO
+ * Persistence is handled during runtime through a <code>List</code>
+ * 
  * @author giulia
  */
 public class UserDAOimpl implements UserDAO {
-	private List<User> users;
+	private static List<User> users;
 
 	public UserDAOimpl() {
 		this.users = new LinkedList<>();
+		
+		User user = new User();
+		user.setEmail("mariorossi@gmail.com");
+		user.setPassword("ciao");
+		user.setName("Mario");
+		user.setLastName("Rossi");
+		user.setAdmin(false);
+		
+		users.add(user);
 	}
 	
 	@Override

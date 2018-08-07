@@ -5,16 +5,21 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
-import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
+import java.util.List;
 
 /**
- * Interface for the UserDAOImpl object
+ * Interface for the TokenDAOImpl object
  *
  * @author Giulia Carocari
  */
-public interface UserDAO {
+public interface TokenDAO {
 	
-	User getByEmail(String email);
+	Token getByTokenString(String token);
+
+	void addToken(Token token);
 	
-	void addUser(User user);
+	void removeToken(Token token);
+	
+	List<Token> getExpiredTokens();
 }
