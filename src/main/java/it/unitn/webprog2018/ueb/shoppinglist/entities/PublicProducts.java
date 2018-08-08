@@ -11,52 +11,52 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class PublicProducts extends AbstractEntity{
-    private String name;
-    private String note;
-    private String logo;
-    private String photografy;
-    private String category;
+public class PublicProducts extends AbstractEntity {
 
-    public String getName() {
-	return name;
-    }
+	private String name;
+	private String note;
+	private String logo;
+	private String photografy;
+	private String category;
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getNote() {
-	return note;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setNote(String note) {
-	this.note = note;
-    }
+	public String getNote() {
+		return note;
+	}
 
-    public String getLogo() {
-	return logo;
-    }
+	public void setNote(String note) {
+		this.note = note;
+	}
 
-    public void setLogo(String logo) {
-	this.logo = logo;
-    }
+	public String getLogo() {
+		return logo;
+	}
 
-    public String getPhotografy() {
-	return photografy;
-    }
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 
-    public void setPhotografy(String photografy) {
-	this.photografy = photografy;
-    }
+	public String getPhotografy() {
+		return photografy;
+	}
 
-    public String getCategory() {
-	return category;
-    }
+	public void setPhotografy(String photografy) {
+		this.photografy = photografy;
+	}
 
-    public void setCategory(String category) {
-	this.category = category;
-    }
-    
-    
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 }

@@ -11,61 +11,61 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class Users extends AbstractEntity{
-    private String email;
-    private String password;
-    private String name;
-    private String lastname;
-    private String image;
-    private Boolean administrator;
+public class Users extends AbstractEntity {
 
-    public String getEmail() {
-	return email;
-    }
+	private String email;
+	private String password;
+	private String name;
+	private String lastname;
+	private String image;
+	private Boolean administrator;
 
-    public void setEmail(String email) {
-	this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getPassword() {
-	return password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setPassword(String password) {
-	this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getName() {
-	return name;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getLastname() {
-	return lastname;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setLastname(String lastname) {
-	this.lastname = lastname;
-    }
+	public String getLastname() {
+		return lastname;
+	}
 
-    public String getImage() {
-	return image;
-    }
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 
-    public void setImage(String image) {
-	this.image = image;
-    }
+	public String getImage() {
+		return image;
+	}
 
-    public Boolean getAdministrator() {
-	return administrator;
-    }
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-    public void setAdministrator(Boolean administrator) {
-	this.administrator = administrator;
-    }
-    
-    
+	public Boolean getAdministrator() {
+		return administrator;
+	}
+
+	public void setAdministrator(Boolean administrator) {
+		this.administrator = administrator;
+	}
+
 }

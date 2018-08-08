@@ -11,33 +11,34 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ListsCategoriesImages extends AbstractEntity{
-    private Integer id;
-    private String image;
-    private String category;
+public class ListsCategoriesImages extends AbstractEntity {
 
-    public Integer getId() {
-	return id;
-    }
+	private Integer id;
+	private String image;
+	private String category;
 
-    public void setId(Integer id) {
-	this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getImage() {
-	return image;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setImage(String image) {
-	this.image = image;
-    }
+	public String getImage() {
+		return image;
+	}
 
-    public String getCategory() {
-	return category;
-    }
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-    public void setCategory(String category) {
-	this.category = category;
-    }
-    
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 }

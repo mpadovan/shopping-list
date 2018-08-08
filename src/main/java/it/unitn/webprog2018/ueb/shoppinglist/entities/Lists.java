@@ -11,53 +11,52 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class Lists extends AbstractEntity{
-    private String name;
-    private String email;
-    private String category;
-    private String description;
-    private String image;
+public class Lists extends AbstractEntity {
 
-    public String getName() {
-	return name;
-    }
+	private String name;
+	private String email;
+	private String category;
+	private String description;
+	private String image;
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getEmail() {
-	return email;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setEmail(String email) {
-	this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getCategory() {
-	return category;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setCategory(String category) {
-	this.category = category;
-    }
+	public String getCategory() {
+		return category;
+	}
 
-    public String getDescription() {
-	return description;
-    }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    public void setDescription(String description) {
-	this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getImage() {
-	return image;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setImage(String image) {
-	this.image = image;
-    }
-    
-    
-    
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 }

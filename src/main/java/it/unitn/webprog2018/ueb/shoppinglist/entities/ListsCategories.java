@@ -11,24 +11,25 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ListsCategories extends AbstractEntity{
-    private String name;
-    private String description;
+public class ListsCategories extends AbstractEntity {
 
-    public String getName() {
-	return name;
-    }
+	private String name;
+	private String description;
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-	return description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-	this.description = description;
-    }
-        
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

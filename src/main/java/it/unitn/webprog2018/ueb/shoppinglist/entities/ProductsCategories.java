@@ -11,43 +11,43 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ProductsCategories extends AbstractEntity{
-    private String name;
-    private String category;
-    private String description;
-    private String logo;
+public class ProductsCategories extends AbstractEntity {
 
-    public String getName() {
-	return name;
-    }
+	private String name;
+	private String category;
+	private String description;
+	private String logo;
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCategory() {
-	return category;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setCategory(String category) {
-	this.category = category;
-    }
+	public String getCategory() {
+		return category;
+	}
 
-    public String getDescription() {
-	return description;
-    }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    public void setDescription(String description) {
-	this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getLogo() {
-	return logo;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setLogo(String logo) {
-	this.logo = logo;
-    }
-    
-    
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
 }
