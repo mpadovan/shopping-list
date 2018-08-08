@@ -44,7 +44,7 @@ public class LogoutServlet extends HttpServlet {
 		
 		// TODO remove session from messaging system
 		// TODO redirect to login form
-		response.sendRedirect("index.html");
+		response.sendRedirect("login.html");
 	}
 
 	@Override

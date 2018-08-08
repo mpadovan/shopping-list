@@ -3,7 +3,7 @@
     <context-param>
         <description>Path on the server where the user avatars are stored.</description>
         <param-name>avatarsFolder</param-name>
-        <param-value>assets/images/avatars</param-value>
+        <param-value>/home/giulia/Desktop/WebProject/ProgettoDefinitivo/ShoppingList/userFiles/images/avatar</param-value>
     </context-param>
     <filter>
         <filter-name>RootFilter</filter-name>
@@ -12,6 +12,31 @@
     <filter-mapping>
         <filter-name>RootFilter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+	<filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/restricted/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+	<filter>
+        <filter-name>AdministrationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
+    </filter>
+	<!-- TODO consider having the filter mapped to the URL of the single admin page -->
+    <filter-mapping>
+        <filter-name>AdministrationFilter</filter-name>
+        <url-pattern>/restricted/admin/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
@@ -54,17 +79,32 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/restricted/Logout</url-pattern>
     </servlet-mapping>
-	
+	<servlet>
+        <servlet-name>AdminPage</servlet-name>
+        <jsp-file>/adminPage.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPage</servlet-name>
+        <url-pattern>/restricted/admin/adminPage.html</url-pattern>
+    </servlet-mapping>
+	<!--
 	<servlet>
         <servlet-name>LoginOK</servlet-name>
-        <jsp-file>views/LoginOK.html</jsp-file>
+        <jsp-file>/views/LoginOK.html</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginOK</servlet-name>
         <url-pattern>/restricted/loginOK.html</url-pattern>
     </servlet-mapping>
-	
-	
+	<servlet>
+        <servlet-name>SignUp</servlet-name>
+        <jsp-file>/views/signUp.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignUp</servlet-name>
+        <url-pattern>/signUp.html</url-pattern>
+    </servlet-mapping>
+	-->
     <session-config>
         <session-timeout>
             30

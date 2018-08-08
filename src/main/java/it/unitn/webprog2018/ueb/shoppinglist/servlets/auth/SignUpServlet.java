@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -76,24 +77,27 @@ public class SignUpServlet extends HttpServlet {
 		} else {
 
 			// Retrieving user avatar
+			/*
 			String avatarFileName = "";
 			String avatarsFolder = getServletContext().getInitParameter("avatarsFolder");
 			Part avatar = request.getPart("image");
 			if ((avatar != null) && (avatar.getSize() > 0)) {
 				avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
 				try (InputStream fileContent = avatar.getInputStream()) {
-					File file = new File(avatarsFolder, avatarFileName);
+					File file = new File(avatarsFolder + File.separator + avatarFileName);
+					// file.createNewFile();
 					Files.copy(fileContent, file.toPath());
+					
 				} catch (FileAlreadyExistsException ex) {
 					getServletContext().log("File \"" + avatarFileName + "\" already exists on the server");
-				} catch (RuntimeException ex) {
+				} catch (Exception ex) {
 					response.sendError(500, "Server could not store your avatar, "
 							+ "please retry the sign up process. "
 							+ "Notice that you can also upload the image later in you user page.");
 					getServletContext().log("impossible to upload the file", ex);
 				}
 			}
-			
+			*/
 			if (!response.isCommitted()) {
 				// Creating the new user
 				User user = new User();
@@ -102,7 +106,7 @@ public class SignUpServlet extends HttpServlet {
 				user.setName(name);
 				user.setLastName(lastName);
 				user.setAdmin(false);
-				user.setImage(avatarFileName);
+				user.setImage("");	// TODO set this correctly
 				
 				// Creating the token for the account confirmation
 				Token token = new Token();

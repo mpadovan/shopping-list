@@ -35,7 +35,7 @@ public class UserDAOimpl implements UserDAO {
 	@Override
 	public User getByEmail(String email) {
 		for(User u : users) {
-			if (u.getEmail().equals("email")) {
+			if (u.getEmail().equals(email)) {
 				return u;
 			}
 		}

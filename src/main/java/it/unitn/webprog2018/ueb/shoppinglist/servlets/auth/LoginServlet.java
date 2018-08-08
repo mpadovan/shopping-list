@@ -71,14 +71,14 @@ public class LoginServlet extends HttpServlet {
 				}
 
 				// TODO redirect to user page for successful login
-				response.sendRedirect("restricted/loginOK.html");
+				response.sendRedirect("LoginOK.html");
 			}
 		}
 		// either email or password are wrong
 		if (!response.isCommitted()) {
 			// TODO redirect to login page in case password is wrong
 			request.setAttribute("wrongCredentials", "true");
-			response.sendRedirect("index.html");
+			response.sendRedirect("login.html");
 		}
 	}
 
