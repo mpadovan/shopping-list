@@ -2,6 +2,8 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import java.sql.Connection;
 
 /**
@@ -18,6 +20,16 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public ExampleDAO getExampleDAO() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public UserDAO getUserDAO() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public TokenDAO getTokenDAO() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <description>Path on the server where the user avatars are stored.</description>
+        <param-name>avatarsFolder</param-name>
+        <param-value>assets/images/avatars</param-value>
+    </context-param>
     <filter>
         <filter-name>RootFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
@@ -16,6 +21,50 @@
         <description>ServletContextListener</description>
         <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBListener</listener-class>
     </listener>
+	
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUpServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.SignUpServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountConfirmationServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.AccountConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpServlet</servlet-name>
+        <url-pattern>/SignUp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountConfirmationServlet</servlet-name>
+        <url-pattern>/AccountConfirmation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/restricted/Logout</url-pattern>
+    </servlet-mapping>
+	
+	<servlet>
+        <servlet-name>LoginOK</servlet-name>
+        <jsp-file>views/LoginOK.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginOK</servlet-name>
+        <url-pattern>/restricted/loginOK.html</url-pattern>
+    </servlet-mapping>
+	
+	
     <session-config>
         <session-timeout>
             30

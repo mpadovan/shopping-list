@@ -21,10 +21,12 @@ public class DAOFactoryImpl implements DAOFactory {
 		return EXAMPLE_DAO;
 	}
 	
+	@Override
 	public UserDAO getUserDAO() {
 		return USER_DAO;
 	}
 	
+	@Override
 	public TokenDAO getTokenDAO() {
 		return TOKEN_DAO;
 	}
