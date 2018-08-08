@@ -7,11 +7,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:base pageTitle="Landing Page Anonimus">
+<layouts:empty pageTitle="Landing Page Anonimus">
     <jsp:attribute name="pageContent">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col" id="app">
+			<div class="row justify-content-center">
+				<div class="col-10 mt-5">
+					<h1 class="text-center mt-3">Prova una lista</h1>
+					<h3 class="text-center mt-3">Per avere tutte le funzionalità:</h3>
+					<div class="row justify-content-center">
+						<div class="col-2 mt-3">
+							<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
+						</div>	
+					</div>
+				</div>
+			</div>
+            <div class="row justify-content-center">
+                <div class="col-9 mt-4" id="app">
                     <div class="card">
                         <div class="card-body">
                             <div class="input-group mb-3">
@@ -32,7 +43,6 @@
 					<transition name="fade" v-on:after-leave="listHided">
 						<div class="card" id="list" v-if="showList">
 							<div class="card-body" >
-								<h5 class="card-title text-center">Lista corrente: <a href="InfoList.jsp"><u>Supermercato</u></a></h5>
 								<table class="table table-striped">
 									<thead>
 										<tr>
@@ -43,24 +53,12 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr data-item="A00">
-											<td>Latte Zymil</td>
-											<td>1</td>
-											<td><a href="#"><i class="fas fa-pen-square"></i></a></td>
-											<td><a href="#"><i class="fas fa-trash"></i></a></td>
-										</tr>
-										<tr data-item="A01">
-											<td>Biscotti</td>
-											<td>2</td>
-											<td><a href="#"><i class="fas fa-pen-square"></i></a></td>
-											<td><a href="#"><i class="fas fa-trash"></i></a></td>
-										</tr>
-										<tr data-item="A02">
-											<td>Detersivo</td>
-											<td>1</td>
-											<td><a href="#"><i class="fas fa-pen-square"></i></a></td>
-											<td><a href="#"><i class="fas fa-trash"></i></a></td>
-										</tr>
+										<tr is="list-item"
+											v-for='item in items'
+											v-bind:key='item.name'
+											v-bind:name='item.name'
+											v-bind:amount='item.amount'
+										></tr>
 									</tbody>
 								</table>
 
@@ -82,4 +80,4 @@
 		<script src="assets/js/landing_page.js"></script>
 	</jsp:attribute>
 
-</layouts:base>
+</layouts:empty>
