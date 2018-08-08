@@ -19,7 +19,7 @@ public interface TokenDAO {
 
 	void addToken(Token token);
 	
-	void removeToken(Token token);
+	void removeExpiredTokens();
 	
-	List<Token> getExpiredTokens();
+	public void removeToken(Token token);
 }

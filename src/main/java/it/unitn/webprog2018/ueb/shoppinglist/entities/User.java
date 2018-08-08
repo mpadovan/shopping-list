@@ -17,9 +17,9 @@ public class User extends AbstractEntity {
 	private String email;
 	private String password;
 	private String name;
-	private String lastName;
+	private String lastname;
 	private String image;
-	private boolean admin;
+	private boolean administrator;
 	
 	public User() {
 		
@@ -73,16 +73,16 @@ public class User extends AbstractEntity {
 	/**
 	 * @return the last name string associated with the user
 	 */
-	public String getLastName() {
-		return lastName;
+	public String getLastname() {
+		return lastname;
 	}
 
 	/**
 	 * 
-	 * @param lastName last name to associate with the user
+	 * @param lastname last name to associate with the user
 	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**
@@ -99,15 +99,15 @@ public class User extends AbstractEntity {
 	/**
 	 * @return true if the user is an administrator of the page
 	 */
-	public boolean isAdmin() {
-		return admin;
+	public boolean isAdministrator() {
+		return administrator;
 	}
 	
 	/**
 	 * 
-	 * @param admin if true then the user becomes an administrator to the page-
+	 * @param administrator if true then the user becomes an administrator to the page-
 	 */
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public void setAdministrator(boolean administrator) {
+		this.administrator = administrator;
 	}
 }

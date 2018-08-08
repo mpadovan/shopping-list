@@ -14,7 +14,7 @@ import java.util.List;
  * Dummy implementation of user DAO
  * Persistence is handled during runtime through a <code>List</code>
  * 
- * @author giulia
+ * @author Giulia Carocari
  */
 public class UserDAOimpl implements UserDAO {
 	private static List<User> users;
@@ -26,8 +26,8 @@ public class UserDAOimpl implements UserDAO {
 		user.setEmail("mariorossi@gmail.com");
 		user.setPassword("ciao");
 		user.setName("Mario");
-		user.setLastName("Rossi");
-		user.setAdmin(false);
+		user.setLastname("Rossi");
+		user.setAdministrator(false);
 		
 		users.add(user);
 	}

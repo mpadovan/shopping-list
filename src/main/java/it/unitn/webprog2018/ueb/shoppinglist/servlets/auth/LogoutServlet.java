@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 /**
  * <code>HttpServlet</code> that handles the logout of a user, deleting all of his associated cookies.
  *
- * @author giulia
+ * @author Giulia Carocari
  */
 public class LogoutServlet extends HttpServlet {
 

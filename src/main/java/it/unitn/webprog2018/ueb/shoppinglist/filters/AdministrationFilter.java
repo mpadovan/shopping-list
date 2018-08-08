@@ -59,7 +59,7 @@ public class AdministrationFilter implements Filter {
 				((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "login.html"));
 				return;
 			} else {
-				if (!user.isAdmin()) {
+				if (!user.isAdministrator()) {
 					// TODO redirect to correct not authorized page.
 					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "notAuthorized.html"));
 					return;

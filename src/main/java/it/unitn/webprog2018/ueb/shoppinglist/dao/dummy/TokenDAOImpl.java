@@ -37,15 +37,13 @@ public class TokenDAOImpl implements TokenDAO {
 	}
 
 	@Override
-	public List<Token> getExpiredTokens() {
+	public void removeExpiredTokens() {
 		Date now = new Date(System.currentTimeMillis());
-		List<Token> expired = new LinkedList<>();
 		for (Token tok : tokens) {
 			if (tok.getExpirationDate().before(now)) {
-				expired.add(tok);
+				tokens.remove(tok);
 			}
 		}
-		return expired;
 	}
 
 	@Override

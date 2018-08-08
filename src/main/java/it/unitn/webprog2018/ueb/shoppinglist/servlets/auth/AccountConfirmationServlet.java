@@ -63,6 +63,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 			path += "invalidToken.html";
 			response.sendRedirect(path);
 		} else if (isExpired(token)) {
+			tokenDAO.removeToken(token);
 			path += "expiredToken.html";
 			response.sendRedirect(path);
 		}
@@ -70,6 +71,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 			// REVIEW
 			// user should never be null, because response would already be committed, and will not be null unless token is null
 			userDAO.addUser(token.getUser());
+			tokenDAO.removeToken(token);
 			path += "login.html";
 			response.sendRedirect(path);
 		}

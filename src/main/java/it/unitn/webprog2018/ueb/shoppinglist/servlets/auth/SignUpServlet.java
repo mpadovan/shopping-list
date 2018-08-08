@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -72,7 +71,7 @@ public class SignUpServlet extends HttpServlet {
 
 			request.setAttribute("emailTaken", "true");
 			// TODO add redirection to sign up form
-			response.sendRedirect("");
+			response.sendRedirect("signUp.html");
 
 		} else {
 
@@ -104,8 +103,8 @@ public class SignUpServlet extends HttpServlet {
 				user.setEmail(email);
 				user.setPassword(password);
 				user.setName(name);
-				user.setLastName(lastName);
-				user.setAdmin(false);
+				user.setLastname(lastName);
+				user.setAdministrator(false);
 				user.setImage("");	// TODO set this correctly
 				
 				// Creating the token for the account confirmation
