@@ -10,7 +10,7 @@
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<img class="card-img-top" src="assets/images/eurospar.jpg" alt="image" title="Supermercato">
+			<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/eurospar.jpg" alt="image" title="Supermercato">
 			<div class="card-body">
 				<h5 class="card-title text-center">Informazioni lista "Supermercato"</h5>
 				<table class="table table-hover">
@@ -66,8 +66,8 @@
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link href="assets/css/listForm.css" type="text/css" rel="stylesheet"/>
-		<link href="assets/css/info_list.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/info_list.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<!--<script src="assets/js/landing_page.js"></script>-->

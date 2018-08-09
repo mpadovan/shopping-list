@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8-ago-2018, 14.45.39
+    Author     : giulia
+*/
+
+.info-product{
+	background-color: #2a5788 ;
+	max-width: 50px;
+	min-height: 50px;
+	border-radius: 10px;
+}
+.logo-product{
+	max-width: 40px;
+	max-height: 40px;
+	margin-top: 4px;
+}
+.image-product{
+	max-width: 200px;
+	max-height: 200px;
+	margin: auto;
+}

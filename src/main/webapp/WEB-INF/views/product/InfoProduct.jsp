@@ -4,6 +4,7 @@
     Author     : giulia
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
@@ -13,7 +14,7 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3 text-center">
-						<a href="#"><img class="image-product" src="assets/images/latte_zymil.jpg" alt="Latte" title="Latte"></a>
+						<a href="#"><img class="image-product" src="${pageContext.servletContext.contextPath}/assets/images/latte_zymil.jpg" alt="Latte" title="Latte"></a>
 					</div>
 					<div class="col">
 						<h5 class="card-title text-center">Informazioni prodotto "Latte Zymil"</h5>
@@ -29,7 +30,7 @@
 								</tr>
 								<tr>
 									<th scope="row">Logo</th>
-									<td><div class="text-center info-product"><img class="rounded logo-product" src="assets/images/milch.png" alt="Logo" title="Logo"></div></td>
+									<td><div class="text-center info-product"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Logo" title="Logo"></div></td>
 								</tr>
 								<tr>
 									<th scope="row">Categoria</th>
@@ -49,8 +50,8 @@
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link href="assets/css/listForm.css" type="text/css" rel="stylesheet"/>
-		<link href="assets/css/info_product.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/info_product.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<!--<script src="assets/js/landing_page.js"></script>-->
