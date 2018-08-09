@@ -12,10 +12,99 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
+	<filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/restricted/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+	<filter>
+        <filter-name>AdministrationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
+    </filter>
+	<!-- TODO consider having the filter mapped to the URL of the single admin page -->
+    <filter-mapping>
+        <filter-name>AdministrationFilter</filter-name>
+        <url-pattern>/restricted/admin/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBListener</listener-class>
     </listener>
+	<listener>
+        <description>ServletContextListener that initializes the timer that cleans the 
+			database from unused expired authentication tokens</description>
+        <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBCleaningListener</listener-class>
+    </listener>
+	
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUpServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.SignUpServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountConfirmationServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.AccountConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpServlet</servlet-name>
+        <url-pattern>/SignUp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountConfirmationServlet</servlet-name>
+        <url-pattern>/AccountConfirmation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/restricted/Logout</url-pattern>
+    </servlet-mapping>
+	<servlet>
+        <servlet-name>AdminPage</servlet-name>
+        <jsp-file>/adminPage.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPage</servlet-name>
+        <url-pattern>/restricted/admin/adminPage.html</url-pattern>
+    </servlet-mapping>
+	<!--
+	<servlet>
+        <servlet-name>LoginOK</servlet-name>
+        <jsp-file>/views/LoginOK.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginOK</servlet-name>
+        <url-pattern>/restricted/loginOK.html</url-pattern>
+    </servlet-mapping>
+	<servlet>
+        <servlet-name>SignUp</servlet-name>
+        <jsp-file>/views/signUp.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignUp</servlet-name>
+        <url-pattern>/signUp.html</url-pattern>
+    </servlet-mapping>
+	-->
     <session-config>
         <session-timeout>
             30
