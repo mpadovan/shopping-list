@@ -81,6 +81,12 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect("login.html");
 		}
 	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
+	}
 
 	/**
 	 * value Returns a short description of the servlet.
