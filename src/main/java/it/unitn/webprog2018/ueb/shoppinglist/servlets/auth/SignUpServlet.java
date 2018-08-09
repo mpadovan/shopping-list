@@ -134,6 +134,12 @@ public class SignUpServlet extends HttpServlet {
 			}
 		}
 	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
+	}
 
 	/**
 	 * Returns a short description of the servlet.
