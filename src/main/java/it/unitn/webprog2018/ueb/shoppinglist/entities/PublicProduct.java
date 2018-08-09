@@ -11,12 +11,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ProductsCategories extends AbstractEntity {
+public class PublicProduct extends AbstractEntity {
 
 	private String name;
-	private String category;
-	private String description;
+	private String note;
 	private String logo;
+	private String photografy;
+	private String category;
 
 	public String getName() {
 		return name;
@@ -26,20 +27,12 @@ public class ProductsCategories extends AbstractEntity {
 		this.name = name;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getNote() {
+		return note;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public String getLogo() {
@@ -48,6 +41,22 @@ public class ProductsCategories extends AbstractEntity {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+
+	public String getPhotografy() {
+		return photografy;
+	}
+
+	public void setPhotografy(String photografy) {
+		this.photografy = photografy;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }

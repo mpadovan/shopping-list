@@ -11,7 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ListsCategoriesImages extends AbstractEntity {
+public class ListsCategoriesImage extends AbstractEntity {
 
 	private Integer id;
 	private String image;

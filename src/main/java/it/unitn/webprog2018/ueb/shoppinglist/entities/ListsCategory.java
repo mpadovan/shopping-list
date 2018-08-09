@@ -11,7 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class ListsCategories extends AbstractEntity {
+public class ListsCategory extends AbstractEntity {
 
 	private String name;
 	private String description;

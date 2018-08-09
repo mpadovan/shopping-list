@@ -11,7 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  *
  * @author simon
  */
-public class Products extends AbstractEntity {
+public class Product extends AbstractEntity {
 
 	private String name;
 	private String note;
