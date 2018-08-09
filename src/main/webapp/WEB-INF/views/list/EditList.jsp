@@ -59,8 +59,8 @@
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link href="assets/css/select2-bootstrap4.css" type="text/css" rel="stylesheet"/>
-		<link href="assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<!--<script src="assets/js/landing_page.js"></script>-->

@@ -162,7 +162,7 @@
 		</div>
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link rel="stylesheet" href="assets/css/landing_page.css">
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/landing_page.css">
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 

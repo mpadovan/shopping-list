@@ -2,7 +2,7 @@
 
 <nav id="sidebar">
     <div class="sidebar-header">
-        <h3><a href="User.jsp"><img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" alt="Nome Cognome" class="rounded-circle img-fluid user-image"></a></h3>
+        <h3><a href="InfoUser.jsp"><img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" alt="Nome Cognome" class="rounded-circle img-fluid user-image"></a></h3>
         <h6>Nome Cognome</h6>
     </div>
 
