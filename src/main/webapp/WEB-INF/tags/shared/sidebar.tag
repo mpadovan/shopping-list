@@ -2,7 +2,7 @@
 
 <nav id="sidebar">
     <div class="sidebar-header">
-        <h3><a href="#"><img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" alt="Nome Cognome" class="rounded-circle img-fluid user-image"></a></h3>
+        <h3><a href="User.jsp"><img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" alt="Nome Cognome" class="rounded-circle img-fluid user-image"></a></h3>
         <h6>Nome Cognome</h6>
     </div>
 
@@ -10,7 +10,7 @@
         <li>
             <span>
 				<b> Liste personali</b>
-				<a href="#" style="display: inline-block"><i class="fas fa-plus"></i></a>
+				<a href="NewPersonalList.jsp" style="display: inline-block"><i class="fas fa-plus"></i></a>
 			</span>
             <ul class="list-unstyled scrollable-menu" id="personalList">
                 <li>
@@ -47,7 +47,7 @@
             <li>
                 <span>
 					<b> Liste condivise</b>
-					<a href="#" style="display: inline-block"><i class="fas fa-plus"></i></a>
+					<a href="NewSharedList.jsp" style="display: inline-block"><i class="fas fa-plus"></i></a>
 				</span>
                 <ul class="list-unstyled scrollable-menu" id="shareList">
                     <li class="active">
@@ -58,9 +58,9 @@
         </c:if>
     </ul>
     <div class="d-flex justify-content-end">
-        <a href="#" class="btn btn_sidenav btn-outline-dark mr-sm-1">Registrati</a>
-        <a href="#" class="btn btn_sidenav btn-outline-dark mr-sm-1">Accedi</a>
-        <a href="#" class="btn btn_sidenav btn-outline-dark"><i class="fas fa-sign-out-alt"></i></a>
+        <a href="SignUp.jsp" class="btn btn_sidenav btn-outline-dark mr-sm-1">Registrati</a>
+        <a href="Login.jsp" class="btn btn_sidenav btn-outline-dark mr-sm-1">Accedi</a>
+        <a href="HomePage.jsp" class="btn btn_sidenav btn-outline-dark"><i class="fas fa-sign-out-alt"></i></a>
     </div>
 
 </nav>
