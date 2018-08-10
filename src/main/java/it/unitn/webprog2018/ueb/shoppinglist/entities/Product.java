@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
+import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -13,7 +14,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  */
 public class Product extends AbstractEntity {
 
-	private String name;
+	@Expose private String name;
 	private String note;
 	private String logo;
 	private String photography;

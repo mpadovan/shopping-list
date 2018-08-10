@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,12 +24,20 @@ public class ProductDAOImpl implements ProductDAO {
 	public ProductDAOImpl() {
 		products = new LinkedList<>();
 		Product product = new Product();
-		product.setCategory("Fruit");
+		product.setCategory("Frutta");
 		product.setEmail("mariorossi@gmail.com");
 		product.setName("Ananas");
 		product.setLogo("Sole");
 		product.setNote("Ananas maturo e dolce");
 		products.add(product);
+		
+		Product product2 = new Product();
+		product2.setCategory("Verdura");
+		product2.setEmail("mariorossi@gmail.com");
+		product2.setName("Zucchine");
+		product2.setLogo("Contadino di fiducia");
+		product2.setNote("Zucchine fresche di stagione");
+		products.add(product2);
 	}
 	
 	@Override
@@ -62,10 +71,28 @@ public class ProductDAOImpl implements ProductDAO {
 			}
 		}
 		try {
-			throw new RecordNotFoundDaoException("The prduct you want to update does not exist");
+			throw new RecordNotFoundDaoException("The product you want to update does not exist");
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	@Override
+	public List<Product> getByUser(String email, StringTokenizer filter, String sortBy) {
+		List<Product> matching = new LinkedList<>();
+
+		if (filter == null) {
+			return getByUser(email);
+		}
+
+		for (Product p : products) {
+			while (filter.hasMoreElements()) {
+				if (p.getName().toLowerCase().contains(filter.nextToken().toLowerCase())) {
+					matching.add(p);
+				}
+			}
+		}
+		return matching;
 	}
 	
 }

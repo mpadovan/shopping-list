@@ -5,8 +5,10 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -15,7 +17,9 @@ import java.util.List;
 public interface PublicProductDAO {
 	public List<PublicProduct> getAll();
 	
-	public List<PublicProduct> getFromQuery(String query);
+	public List<PublicProduct> getFromQuery(StringTokenizer query, StringTokenizer sortBy);
 	
 	public PublicProduct getByName(String name);
+
+	public void updateProduct(PublicProduct product);
 }

@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -21,4 +22,6 @@ public interface ProductDAO {
 	public List<Product> getByUser(String userEmail);
 
 	public void updateProduct(Product product);
+
+	public List<Product> getByUser(String email, StringTokenizer filter, String sortBy);
 }
