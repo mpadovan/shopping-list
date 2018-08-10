@@ -46,13 +46,20 @@ public class ProductWebService {
 	}
 	
 	/**
-	 * Retrieves representation of an instance of <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>
-	 * @param email Email of the <code>it.unitn.webprog2018.ueb.shoppinglist.entities.User</code> that owns the products
-	 * @param search Search string to filter results
+	 * Retrieves representation of instances of <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>
+	 * and <code>it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct</code> accessible to the specified user.
+	 * @param email Email of the <code>User</code> that owns the products;
+	 * if "null" then considers only <code>PublicProducts</code> as it is an anonymous user.
+	 * @param search Search query to filter results
 	 * @param compact Parameter that indicates if the result to be returned
-	 *					has to contain only the primary key of the object
-	 * @param sortBy Indicates if the results should be sorted by c
-	 * @return an instance of java.lang.String that represents the products in json format
+	 * has to contain only the primary key of the object (i.e. the product name
+	 * @param sortBy Indicates if the results should be sorted by category and/or by name
+	 * Usage: <code>products/_username_?sortBy="what-to-sort-by"</code>, where "what-to-sort-by" is any combination of:
+	 * <code>+category</code> (category ascending), <code>-category</code> (category descending),
+	 * <code>+name</code> (name ascending), <code>-name</code> (name descending).
+	 * If both of the sorting options are present, then they should be separated by comma (<code>,</code>).
+	 *					
+	 * @return an instance of java.lang.String that represents the products in Json format
 	 */
 	@GET
 	@Path("/{email}")
@@ -76,7 +83,7 @@ public class ProductWebService {
 		List<PublicProduct> publicProducts = publicProductDAO.getFromQuery(filter, sortByTok);
 		
 		Gson gson = null;
-		if(compact.equals("true")) {
+		if(compact != null && compact.equals("true")) {
 			GsonBuilder builder = new GsonBuilder();
 			gson = builder.excludeFieldsWithoutExposeAnnotation().create();
 		} else {
