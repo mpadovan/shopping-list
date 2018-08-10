@@ -16,7 +16,7 @@ public class Product extends AbstractEntity {
 	private String name;
 	private String note;
 	private String logo;
-	private String photografy;
+	private String photography;
 	private String email;
 	private String category;
 
@@ -44,12 +44,12 @@ public class Product extends AbstractEntity {
 	this.logo = logo;
     }
 
-    public String getPhotografy() {
-	return photografy;
+    public String getPhotography() {
+	return photography;
     }
 
-    public void setPhotografy(String photografy) {
-	this.photografy = photografy;
+    public void setPhotography(String photography) {
+	this.photography = photography;
     }
 
     public String getEmail() {

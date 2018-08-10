@@ -5,20 +5,17 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
-import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.List;
 
 /**
  *
  * @author giulia
  */
-public interface ProductDAO {
+public interface PublicProductDAO {
+	public List<PublicProduct> getAll();
 	
-	public void addProduct(Product product);
+	public List<PublicProduct> getFromQuery(String query);
 	
-	public List<Product> getAll();
-	
-	public List<Product> getByUser(String userEmail);
-
-	public void updateProduct(Product product);
+	public PublicProduct getByName(String name);
 }
