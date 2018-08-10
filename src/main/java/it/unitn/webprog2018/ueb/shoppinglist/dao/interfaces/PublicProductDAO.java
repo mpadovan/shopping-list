@@ -22,4 +22,6 @@ public interface PublicProductDAO {
 	public PublicProduct getByName(String name);
 
 	public void updateProduct(PublicProduct product);
+
+	public void addProduct(PublicProduct product);
 }
