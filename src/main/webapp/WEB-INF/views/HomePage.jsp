@@ -26,7 +26,7 @@
 								<div class="card">
 									<div class="card-body">
 										<div class="input-group mb-3">
-											<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query">
+											<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching">
 											<div class="input-group-append">
 												<button class="btn btn-outline-secondary" type="button" @click="searching">
 													<i class="fas fa-search"></i>
@@ -35,8 +35,17 @@
 										</div>
 										<transition name="fade" v-on:after-leave="searchHided">
 											<div class="list-group" v-if="showSearch">
+												<nav class="navbar navbar-dark bg-primary">
+												  	<button @click="hideSearch" type="button" class="btn btn-outline-light">Torna alla lista</button>
+													<div class="form-group" style="margin-bottom:0;">
+      													<select class="form-control" v-model="selected">
+															<option value="all">Tutte le categorie</option>
+															<option v-for="searchCategory in searchCategories">{{ searchCategory }}</option>
+      													</select>
+													</div>
+												</nav>
 												<ul class="search-results list-group list-group-flush">
-													<search-item v-for="result in results" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList"></search-item>
+													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList" class="search-result"></search-item>
 												</ul>
 											</div>
 										</transition>
@@ -64,6 +73,7 @@
 								</transition>
 							</div>
 						</div>
+						<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:query="query"></component>
 						<div id="item-modal" class="modal" tabindex="-1" role="dialog">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">

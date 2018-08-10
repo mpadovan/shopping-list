@@ -3,6 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+Vue.component('search', {
+	props: ['query'],
+	data: function() {
+		return {
+			results: [],
+			user: 'mariorossi@gmail.com'
+		};
+	},
+	created: function(){
+		var self = this;
+		$.get({
+            url: '/ShoppingList/services/products/' + self.user + '?query=' + self.query,
+            success: function (data) {
+				var mergedArray = data.publicProducts.concat(data.products);
+				for(var i = 0; mergedArray.length > i; i++) {
+					if(mergedArray[i] == null) {
+						mergedArray.splice(i,1);
+					}
+				}
+				mergedArray = _.sortBy(mergedArray, ['name']);
+				self.$emit('search', mergedArray);
+				//self.results = mergedArray;
+            },
+            error: function (error) {
+				alert('Errore nel caricamento del componente di ricerca, dettagli in console');
+				console.log(error);
+            }
+        });
+	},
+	template: "<div style=\"display:none;\"></div>"
+});
 
 Vue.component('list-item', {
 	props: ['name', 'amount'],
@@ -67,116 +98,22 @@ var app = new Vue({
 		showList: true,
 		showSearch: false,
 		query: '',
-		results: [
-			{
-				id: 0,
-				name: "banane",
-				inList: false
-			},
-			{
-				id: 1,
-				name: "fragole",
-				inList: true
-			},
-			{
-				id: 2,
-				name: 'Latte',
-				inList: false
-			},
-			{
-				id: 3,
-				name: 'Biscotti',
-				inList: false
-			},
-			{
-				id: 4,
-				name: 'Detersivo',
-				inList: false
-			},
-			{
-				id: 5,
-				name: 'Pane',
-				inList: false
-			},
-			{
-				id: 6,
-				name: 'Pasta',
-				inList: false
-			},
-			{
-				id: 7,
-				name: 'Pollo',
-				inList: false
-			},
-			{
-				id: 8,
-				name: 'Gelato',
-				inList: false
-			},
-			{
-				id: 9,
-				name: 'Prosciutto',
-				inList: false
-			},
-			{
-				id: 10,
-				name: 'Pomodoro',
-				inList: false
-			},
-			{
-				id: 11,
-				name: 'Mozzarella',
-				inList: false
-			},
-			{
-				id: 12,
-				name: 'Pizza',
-				inList: false
-			},
-			{
-				id: 13,
-				name: 'Carne',
-				inList: false
-			},
-			{
-				id: 14,
-				name: 'Pesce',
-				inList: false
-			},
-			{
-				id: 15,
-				name: 'Sapone',
-				inList: false
-			},
-			{
-				id: 16,
-				name: 'Coca Cola',
-				inList: false
-			},
-			{
-				id: 17,
-				name: 'Acqua',
-				inList: false
-			},
-			{
-				id: 18,
-				name: 'Sale',
-				inList: false
-			},
-			{
-				id: 19,
-				name: 'NON SO PIU COSA METTERE',
-				inList: false
-			}
-		],
+		results: [],
 		items: [],
 		item_name: null,
 		item_amount: null,
-		updatingItem: true
+		updatingItem: true,
+		searchInitializing: null,
+		searchCategories: null,
+		resultsSorted: null,
+		selected: 'all'
 	},
 	methods: {
 		searching: function () {
-			this.showList = false;
+			if(this.query != '') {
+				this.showList = false;
+				this.searchInitializing = 'search';
+			}
 		},
 		listHided: function () {
 			this.showSearch = true;
@@ -227,18 +164,45 @@ var app = new Vue({
 					return;
 				}
 			}
+		},
+		addResultsToIstance: function(data) {
+			this.results = data;
+			this.resultsSorted = this.results;
+			var arr = [];
+			for(var i = 0; data.length > i; i++) {
+				arr.push(data[i].category);
+			}
+			var unique = arr.filter(function(elem, index, self) {
+				return index === self.indexOf(elem);
+			});
+			this.searchCategories = unique;
+		},
+		hideSearch: function() {
+			this.query = '';
+			this.selected = 'all';
+			this.showSearch = false;
 		}
 	},
 	watch: {
 		query: function (val) {
-			if (val == 0) this.showSearch = false;
+			if (val == 0) this.hideSearch();
 		},
 		items: function(val) {
 			this.updateLocalStorage();
+		},
+		selected: function(val) {
+			if(val == 'all') {
+				this.resultsSorted = this.results; 
+				return;
+			}
+			this.resultsSorted = [];
+			for(var i = 0; this.results.length > i; i++) {
+				if(this.results[i].category == val) this.resultsSorted.push(this.results[i]);
+			}
 		}
 	},
 	created: function () {
-		console.log(JSON.parse(localStorage.getItem("items")));
+		//console.log(JSON.parse(localStorage.getItem("items")));
 		if (localStorage.getItem("items")) {
 		 	this.items = JSON.parse(localStorage.getItem("items"));
 		} else {
