@@ -23,5 +23,5 @@ public interface ProductDAO {
 
 	public void updateProduct(Product product);
 
-	public List<Product> getByUser(String email, StringTokenizer filter, String sortBy);
+	public List<Product> getByUser(String email, String query);
 }

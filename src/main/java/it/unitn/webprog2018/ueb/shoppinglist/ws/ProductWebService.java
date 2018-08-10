@@ -12,6 +12,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
@@ -53,11 +54,6 @@ public class ProductWebService {
 	 * @param search Search query to filter results
 	 * @param compact Parameter that indicates if the result to be returned
 	 * has to contain only the primary key of the object (i.e. the product name
-	 * @param sortBy Indicates if the results should be sorted by category and/or by name
-	 * Usage: <code>products/_username_?sortBy="what-to-sort-by"</code>, where "what-to-sort-by" is any combination of:
-	 * <code>+category</code> (category ascending), <code>-category</code> (category descending),
-	 * <code>+name</code> (name ascending), <code>-name</code> (name descending).
-	 * If both of the sorting options are present, then they should be separated by comma (<code>,</code>).
 	 *					
 	 * @return an instance of java.lang.String that represents the products in Json format
 	 */
@@ -65,22 +61,25 @@ public class ProductWebService {
 	@Path("/{email}")
     @Produces(MediaType.APPLICATION_JSON)
 	public String getProducts(@PathParam("email") String email, @QueryParam("search") String search,
-			@QueryParam("compact") String compact, @QueryParam("sortBy") String sortBy) {
+			@QueryParam("compact") String compact) {
 		List<Product> products = null;
+		
 		StringTokenizer filter = null;
-		StringTokenizer sortByTok = null;
-		if (search != null)
+		String query = "";
+		if (search != null) {
 			filter = new StringTokenizer(search, "-");
-		if (sortBy != null)
-			sortByTok = new StringTokenizer(sortBy, ",");
+			while (filter.hasMoreTokens()) {
+				query += filter.nextToken();
+			}
+		}
 		if (!email.equals("null")) {
 			DAOFactory factory = (DAOFactory) servletContext.getAttribute("daoFactory");
 			ProductDAO productDAO = factory.getProductDAO();
-			products = productDAO.getByUser(email, filter, sortBy);
+			products = productDAO.getByUser(email, query);
 		}
 		
 		PublicProductDAO publicProductDAO = ((DAOFactory)servletContext.getAttribute("daoFactory")).getPublicProductDAO();
-		List<PublicProduct> publicProducts = publicProductDAO.getFromQuery(filter, sortByTok);
+		List<PublicProduct> publicProducts = publicProductDAO.getFromQuery(query);
 		
 		Gson gson = null;
 		if(compact != null && compact.equals("true")) {

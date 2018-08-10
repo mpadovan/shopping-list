@@ -57,11 +57,11 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	 *
 	 * @param query
 	 * @param sortBy
-	 * @return 
+	 * @return
 	 *
 	 */
 	@Override
-	public List<PublicProduct> getFromQuery(StringTokenizer query, StringTokenizer sortBy) {
+	public List<PublicProduct> getFromQuery(String query) {
 		List<PublicProduct> matching = new LinkedList<>();
 
 		if (query == null) {
@@ -69,10 +69,10 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		}
 
 		for (PublicProduct p : publicProducts) {
-			while (query.hasMoreElements()) {
-				if (p.getName().toLowerCase().contains(query.nextToken().toLowerCase())) {
-					matching.add(p);
-				}
+			System.out.println("Checking product " + p.getName());
+			if (p.getName().toLowerCase().contains(query.toLowerCase())) {
+				matching.add(p);
+				System.out.println("Found " + query + " in " + p.getName());
 			}
 		}
 		return matching;

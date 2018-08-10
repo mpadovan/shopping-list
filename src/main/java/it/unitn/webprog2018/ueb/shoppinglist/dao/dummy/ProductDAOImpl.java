@@ -19,8 +19,9 @@ import java.util.logging.Logger;
  * @author giulia
  */
 public class ProductDAOImpl implements ProductDAO {
+
 	List<Product> products;
-	
+
 	public ProductDAOImpl() {
 		products = new LinkedList<>();
 		Product product = new Product();
@@ -30,7 +31,7 @@ public class ProductDAOImpl implements ProductDAO {
 		product.setLogo("Sole");
 		product.setNote("Ananas maturo e dolce");
 		products.add(product);
-		
+
 		Product product2 = new Product();
 		product2.setCategory("Verdura");
 		product2.setEmail("mariorossi@gmail.com");
@@ -39,7 +40,7 @@ public class ProductDAOImpl implements ProductDAO {
 		product2.setNote("Zucchine fresche di stagione");
 		products.add(product2);
 	}
-	
+
 	@Override
 	public void addProduct(Product product) {
 		products.add(product);
@@ -63,9 +64,9 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public void updateProduct(Product product) {
-		for(Product p : products) {
-			if (p.getName().equals(product.getName()) &&
-					p.getEmail().equals(product.getEmail())) {
+		for (Product p : products) {
+			if (p.getName().equals(product.getName())
+					&& p.getEmail().equals(product.getEmail())) {
 				p = product;
 				return;
 			}
@@ -78,21 +79,22 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> getByUser(String email, StringTokenizer filter, String sortBy) {
+	public List<Product> getByUser(String email, String query) {
 		List<Product> matching = new LinkedList<>();
 
-		if (filter == null) {
+		if (query == null) {
 			return getByUser(email);
 		}
-
+		System.out.println("Checkin out custom products");
 		for (Product p : products) {
-			while (filter.hasMoreElements()) {
-				if (p.getName().toLowerCase().contains(filter.nextToken().toLowerCase())) {
+			if (p.getEmail().equals(email)) {
+				System.out.println("Checking product " + p.getName());
+				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
+					System.out.println("Found " + query + " in " + p.getName());
 				}
 			}
 		}
 		return matching;
 	}
-	
 }
