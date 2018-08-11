@@ -6,12 +6,9 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  *
@@ -40,10 +37,45 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		p3.setLogo("Barilla");
 		p3.setName("Spaghetti numero 5");
 		p3.setNote("Dimensione più piccola accettabile di spaghetti");
+		
+		PublicProduct p4 = new PublicProduct();
+		p4.setCategory("Cereali e legumi");
+		p4.setLogo("EquoSolidale");
+		p4.setName("Quinoa");
+		p4.setNote("Cereale sudamericano dai minuscoli semi rossi, bianchi o neri");
+		
+		PublicProduct p5 = new PublicProduct();
+		p5.setCategory("Pane");
+		p5.setLogo("Mulino Bianco");
+		p5.setName("Pan Bauletto integrale");
+		p5.setNote("Pane in cassetta da cereali integrali, con olio di oliva");
+		
+		PublicProduct p6 = new PublicProduct();
+		p6.setCategory("Casearia");
+		p6.setLogo("Lerdammer");
+		p6.setName("Lerdammer Legére");
+		p6.setNote("Formaggio a fette a ridotto contenuto di grassi. Irresistibile scioglievolezza.");
+		
+		PublicProduct p7 = new PublicProduct();
+		p7.setCategory("Verdura");
+		p7.setLogo("Bonduelle");
+		p7.setName("Lattuga in sacchetto");
+		p7.setNote("Lattuga già lavata e pronta per il consumo");
+		
+		PublicProduct p8 = new PublicProduct();
+		p8.setCategory("Cereali e legumi");
+		p8.setLogo("Valfrutta");
+		p8.setName("Lenticchie a vapore");
+		p8.setNote("Lenticchie in lattina pronte al consumo");
 
 		publicProducts.add(p1);
 		publicProducts.add(p2);
 		publicProducts.add(p3);
+		publicProducts.add(p6);
+		publicProducts.add(p4);
+		publicProducts.add(p5);
+		publicProducts.add(p7);
+		publicProducts.add(p8);
 	}
 
 	@Override
@@ -52,12 +84,8 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 
 	/**
-	 * Note that this implementation will not consider sorting, It should be far
-	 * easier to implement with SQL
-	 *
 	 * @param query
-	 * @param sortBy
-	 * @return
+	 * @return A list of public products that match the query param
 	 *
 	 */
 	@Override
