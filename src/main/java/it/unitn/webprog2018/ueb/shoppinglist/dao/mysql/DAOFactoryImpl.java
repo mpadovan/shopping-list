@@ -2,6 +2,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
@@ -42,6 +43,11 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public PublicProductDAO getPublicProductDAO() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public ListsCategoryDAO getListsCategoryDAO() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
