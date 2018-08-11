@@ -42,6 +42,7 @@ public class LogoutServlet extends HttpServlet {
 		Cookie cookies[] = request.getCookies();
 		for (Cookie cookie : cookies) {
 			cookie.setMaxAge(0);
+			System.out.println(cookie.getMaxAge());
 			response.addCookie(cookie);
 		}
 		// Session is removed from sessionHandler (notifications)

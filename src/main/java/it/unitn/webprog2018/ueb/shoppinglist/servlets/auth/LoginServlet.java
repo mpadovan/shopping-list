@@ -68,9 +68,12 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("user", user);
 				if (request.getParameter("remember") != null) {
 					boolean found = false;
-					for (Cookie cookie : request.getCookies()) {
-						if (cookie.getName().equals("remember")) {
-							found = true;
+					Cookie[] cookies = request.getCookies();
+					if (cookies != null) {
+						for (Cookie cookie : request.getCookies()) {
+							if (cookie.getName().equals("remember")) {
+								found = true;
+							}
 						}
 					}
 					if (!found) {

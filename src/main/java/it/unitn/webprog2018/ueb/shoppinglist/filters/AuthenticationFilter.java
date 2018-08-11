@@ -63,8 +63,7 @@ public class AuthenticationFilter implements Filter {
 				}
 				Cookie rememberCookie = getRememberCookie(request);
 				if (rememberCookie == null) {
-					// TODO redirect to correct login page.
-					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "login.html"));
+					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "Login"));
 					return;
 				} else {
 					// IDEA: login user from filter
