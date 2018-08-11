@@ -12,7 +12,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-	<filter>
+    <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AuthenticationFilter</filter-class>
     </filter>
@@ -24,11 +24,11 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-	<filter>
+    <filter>
         <filter-name>AdministrationFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
     </filter>
-	<!-- TODO consider having the filter mapped to the URL of the single admin page -->
+    <!-- TODO consider having the filter mapped to the URL of the single admin page -->
     <filter-mapping>
         <filter-name>AdministrationFilter</filter-name>
         <url-pattern>/restricted/admin/*</url-pattern>
@@ -41,12 +41,11 @@
         <description>ServletContextListener</description>
         <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBListener</listener-class>
     </listener>
-	<listener>
+    <listener>
         <description>ServletContextListener that initializes the timer that cleans the 
 			database from unused expired authentication tokens</description>
         <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBCleaningListener</listener-class>
     </listener>
-	
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LoginServlet</servlet-class>
@@ -59,10 +58,51 @@
         <servlet-name>AccountConfirmationServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.AccountConfirmationServlet</servlet-class>
     </servlet>
-    <servlet>
+    <servlet>Login
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InfoUserServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.InfoUserServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>EditListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InfoListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.InfoListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewPersonalListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.NewPersonalListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewSharedListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.NewSharedListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.EditProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InfoProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.InfoProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.NewProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HomePageLoginServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
+    </servlet>
+	<servlet-mapping>
+        <servlet-name>InfoUserServlet</servlet-name>
+        <url-pattern>/restricted/InfoUser</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -79,32 +119,38 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/restricted/Logout</url-pattern>
     </servlet-mapping>
-	<servlet>
-        <servlet-name>AdminPage</servlet-name>
-        <jsp-file>/adminPage.html</jsp-file>
-    </servlet>
     <servlet-mapping>
-        <servlet-name>AdminPage</servlet-name>
-        <url-pattern>/restricted/admin/adminPage.html</url-pattern>
+        <servlet-name>EditListServlet</servlet-name>
+        <url-pattern>/restricted/permission/EditList</url-pattern>
     </servlet-mapping>
-	<!--
-	<servlet>
-        <servlet-name>LoginOK</servlet-name>
-        <jsp-file>/views/LoginOK.html</jsp-file>
-    </servlet>
     <servlet-mapping>
-        <servlet-name>LoginOK</servlet-name>
-        <url-pattern>/restricted/loginOK.html</url-pattern>
+        <servlet-name>InfoListServlet</servlet-name>
+        <url-pattern>/restricted/InfoList</url-pattern>
     </servlet-mapping>
-	<servlet>
-        <servlet-name>SignUp</servlet-name>
-        <jsp-file>/views/signUp.html</jsp-file>
-    </servlet>
     <servlet-mapping>
-        <servlet-name>SignUp</servlet-name>
-        <url-pattern>/signUp.html</url-pattern>
+        <servlet-name>NewPersonalListServlet</servlet-name>
+        <url-pattern>/restricted/NewPersonalList</url-pattern>
     </servlet-mapping>
-	-->
+    <servlet-mapping>
+        <servlet-name>NewSharedListServlet</servlet-name>
+        <url-pattern>/restricted/NewSharedList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProductServlet</servlet-name>
+        <url-pattern>/restricted/permission/EditProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InfoProductServlet</servlet-name>
+        <url-pattern>/restricted/InfoProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewProductServlet</servlet-name>
+        <url-pattern>/restricted/NewProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomePageLoginServlet</servlet-name>
+        <url-pattern>/restricted/HomePageLogin</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

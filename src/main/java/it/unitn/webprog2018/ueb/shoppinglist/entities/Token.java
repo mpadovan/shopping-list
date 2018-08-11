@@ -48,14 +48,10 @@ public class Token extends AbstractEntity {
 	
 	public void generateToken() {
 		token = UUID.randomUUID().toString();
-		// TODO remove testing prints
-		System.out.println("Generated token = " + token);
 	}
 	
 	public void setExpirationFromNow(long delay) {
 		Date date = new Date(System.currentTimeMillis() + delay);
 		expirationDate = date;
-		// TODO remove testin prints
-		System.out.println("Set expiration at: " + date.toString());
 	}
 }

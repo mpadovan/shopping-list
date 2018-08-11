@@ -7,9 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.io.IOException;
@@ -29,10 +27,10 @@ public class LoginServlet extends HttpServlet {
 
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
 	private UserDAO userDAO;
-	
+
 	/**
-	 * Method to be executed at servlet initialization.
-	 * Handles connections with persistence layer.
+	 * Method to be executed at servlet initialization. Handles connections with
+	 * persistence layer.
 	 */
 	@Override
 	public void init() {
@@ -53,6 +51,11 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String path = getServletContext().getContextPath();
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
+
 		String email = (String) request.getParameter("email");
 		String password = (String) request.getParameter("password");
 
@@ -64,26 +67,43 @@ public class LoginServlet extends HttpServlet {
 				HttpSession session = request.getSession(true);
 				session.setAttribute("user", user);
 				if (request.getParameter("remember") != null) {
-					Cookie userId = new Cookie("remember", CookieCipher.encrypt(email));
-					// Keeps you signed in for one week
-					userId.setMaxAge(COOKIE_EXP);
-					response.addCookie(userId);
+					boolean found = false;
+					Cookie[] cookies = request.getCookies();
+					if (cookies != null) {
+						for (Cookie cookie : request.getCookies()) {
+							if (cookie.getName().equals("remember")) {
+								found = true;
+							}
+						}
+					}
+					if (!found) {
+						Cookie userId = new Cookie("remember", CookieCipher.encrypt(email));
+						userId.setMaxAge(COOKIE_EXP);
+						response.addCookie(userId);
+					}
 				}
 
-				// TODO redirect to user page for successful login
-				response.sendRedirect("LoginOK.html");
+				path += "restricted/HomePageLogin";
+				response.sendRedirect(path);
 			}
 		}
 		// either email or password are wrong
 		if (!response.isCommitted()) {
 			// TODO redirect to login page in case password is wrong
 			request.setAttribute("wrongCredentials", "true");
-			response.sendRedirect("login.html");
+			path += "Login";
+			response.sendRedirect(path);
 		}
 	}
 
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
+	}
+
 	/**
-	 * value Returns a short description of the servlet.
+	 * Returns a short description of the servlet.
 	 *
 	 * @return a String containing servlet description
 	 */

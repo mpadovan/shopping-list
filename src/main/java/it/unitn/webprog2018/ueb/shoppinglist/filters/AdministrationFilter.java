@@ -5,6 +5,8 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,7 +28,6 @@ import javax.servlet.http.HttpSession;
  * @author Giulia Carocari
  */
 public class AdministrationFilter implements Filter {
-
 	/**
 	 * FilterConfig object associated with this filter
 	 */
@@ -35,7 +36,6 @@ public class AdministrationFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		// TODO add DAO
 	}
 
 	@Override
@@ -55,12 +55,10 @@ public class AdministrationFilter implements Filter {
 			}
 			
 			if (user == null) { // Should never happen, but just in case
-				// TODO redirect to correct login page.
-				((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "login.html"));
+				((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "Login"));
 				return;
 			} else {
 				if (!user.isAdministrator()) {
-					// TODO redirect to correct not authorized page.
 					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "notAuthorized.html"));
 					return;
 				}
