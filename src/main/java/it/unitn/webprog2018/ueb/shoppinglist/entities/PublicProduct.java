@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
+import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -13,10 +14,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  */
 public class PublicProduct extends AbstractEntity {
 
-	private String name;
+	@Expose private String name;
 	private String note;
 	private String logo;
-	private String photografy;
+	private String photography;
 	private String category;
 
 	public String getName() {
@@ -43,12 +44,12 @@ public class PublicProduct extends AbstractEntity {
 		this.logo = logo;
 	}
 
-	public String getPhotografy() {
-		return photografy;
+	public String getPhotography() {
+		return photography;
 	}
 
-	public void setPhotografy(String photografy) {
-		this.photografy = photografy;
+	public void setPhotography(String photography) {
+		this.photography = photography;
 	}
 
 	public String getCategory() {
