@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class UserDAOimpl implements UserDAO {
 		
 		User user = new User();
 		user.setEmail("mariorossi@gmail.com");
-		user.setPassword("ciao");
+		user.setPassword(Sha256.doHash("ciao"));
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
