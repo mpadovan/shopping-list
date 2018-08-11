@@ -91,8 +91,7 @@ public class LoginServlet extends HttpServlet {
 		// either email or password are wrong
 		if (!response.isCommitted()) {
 			request.setAttribute("wrongCredentials", "true");
-			path += "Login";
-			request.getRequestDispatcher(path).forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/auth/AuthFailed.jsp").forward(request, response);
 		}
 	}
 
