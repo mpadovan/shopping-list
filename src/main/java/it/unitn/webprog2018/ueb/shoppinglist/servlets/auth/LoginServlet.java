@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -60,9 +61,9 @@ public class LoginServlet extends HttpServlet {
 		String password = (String) request.getParameter("password");
 
 		User user = userDAO.getByEmail(email);
-
+		
 		if (user != null) {
-			if (user.getPassword().equals(password)) {	// TODO add password encription
+			if (Sha256.checkPassword(password, user.getPassword())) {
 				// session is inserted into sessionHandler (notifications)
 				HttpSession session = request.getSession(true);
 				session.setAttribute("user", user);
@@ -89,10 +90,9 @@ public class LoginServlet extends HttpServlet {
 		}
 		// either email or password are wrong
 		if (!response.isCommitted()) {
-			// TODO redirect to login page in case password is wrong
 			request.setAttribute("wrongCredentials", "true");
 			path += "Login";
-			response.sendRedirect(path);
+			request.getRequestDispatcher(path).forward(request, response);
 		}
 	}
 

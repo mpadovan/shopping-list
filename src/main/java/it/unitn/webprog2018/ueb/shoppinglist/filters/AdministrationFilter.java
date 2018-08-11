@@ -76,7 +76,6 @@ public class AdministrationFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// Anything TODO here?
 	}
 	
 	/**

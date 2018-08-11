@@ -3,7 +3,7 @@
     Created on : 19-giu-2018, 10.52.56
     Author     : giuliapeserico
 --%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
 <layouts:auth pageTitle="Login">

@@ -6,6 +6,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,9 +97,10 @@ public class SignUpServlet extends HttpServlet {
 			*/
 			if (!response.isCommitted()) {
 				// Creating the new user
+				
 				User user = new User();
 				user.setEmail(email);
-				user.setPassword(password); // TODO add pw encription
+				user.setPassword(Sha256.doHash(password));
 				user.setName(name);
 				user.setLastname(lastName);
 				user.setAdministrator(false);
@@ -111,8 +113,6 @@ public class SignUpServlet extends HttpServlet {
 				token.setExpirationFromNow(TOKEN_EXP);
 				token.setUser(user);
 
-				tokenDAO.addToken(token);
-
 				// Sending the email to the new user
 				EmailSender emailSender = new EmailSender();
 
@@ -123,6 +123,7 @@ public class SignUpServlet extends HttpServlet {
 				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
 				if (emailSender.send(user.getEmail(), "Account Confirmation",
 						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
+					tokenDAO.addToken(token);
 					response.sendRedirect("Login");
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");

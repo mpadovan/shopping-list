@@ -4,7 +4,7 @@
     Author     : giuliapeserico
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <layouts:auth pageTitle="Sign up">
 	<jsp:attribute name="pageContent">

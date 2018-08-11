@@ -86,7 +86,6 @@ public class AuthenticationFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// Anything TODO here?
 	}
 
 	private Cookie getRememberCookie(ServletRequest request) {
