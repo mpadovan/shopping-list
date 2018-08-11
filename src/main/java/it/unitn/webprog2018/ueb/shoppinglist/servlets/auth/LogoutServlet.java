@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * <code>HttpServlet</code> that handles the logout of a user, deleting all of his associated cookies.
+ * <code>HttpServlet</code> that handles the logout of a user, deleting all of
+ * his associated cookies.
  *
  * @author Giulia Carocari
  */
@@ -35,19 +36,19 @@ public class LogoutServlet extends HttpServlet {
 		if (!path.endsWith("/")) {
 			path += "/";
 		}
-		
+
 		HttpSession session = request.getSession();
-		
+
 		// Delete all cookies
 		Cookie cookies[] = request.getCookies();
 		for (Cookie cookie : cookies) {
 			cookie.setMaxAge(0);
-			System.out.println(cookie.getMaxAge());
+			cookie.setValue("");
+			cookie.setPath("/ShoppingList");
 			response.addCookie(cookie);
 		}
 		// Session is removed from sessionHandler (notifications)
 		session.invalidate();
-		path += "Login";
 		response.sendRedirect(path);
 	}
 

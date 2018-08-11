@@ -9,7 +9,7 @@ import java.util.Base64;
  *
  * @author Michele
  */
-public class sha256 {
+public class Sha256 {
 	
 	public static String doHash(String password)/*fa l'hash di una String in sha256 e la converte in base64*/{
 		byte[] encodedhash = null;
