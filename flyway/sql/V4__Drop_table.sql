@@ -1,0 +1,10 @@
+Drop table sharedlists;
+Drop table productsonlists;
+Drop table publicproductsonlists;
+Drop table lists;
+Drop table products;
+Drop table users;
+Drop table listscategoriesimages;
+Drop table listscategories;
+Drop table publicproducts;
+Drop table productscategories;
