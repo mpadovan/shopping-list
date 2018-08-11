@@ -14,7 +14,7 @@ Vue.component('search', {
 	created: function(){
 		var self = this;
 		$.get({
-            url: '/ShoppingList/services/products/' + self.user + '?query=' + self.query,
+            url: '/ShoppingList/services/products/' + self.user + '?search=' + self.query,
             success: function (data) {
 				var mergedArray = data.publicProducts.concat(data.products);
 				for(var i = 0; mergedArray.length > i; i++) {
@@ -106,7 +106,8 @@ var app = new Vue({
 		searchInitializing: null,
 		searchCategories: null,
 		resultsSorted: null,
-		selected: 'all'
+		selected: 'all',
+		noResults: false
 	},
 	methods: {
 		searching: function () {
@@ -168,6 +169,9 @@ var app = new Vue({
 		addResultsToIstance: function(data) {
 			this.results = data;
 			this.resultsSorted = this.results;
+			console.log(this.results.length);
+			if(this.results.length == 0) this.noResults = true;
+			else this.noResults = false;
 			var arr = [];
 			for(var i = 0; data.length > i; i++) {
 				arr.push(data[i].category);
@@ -176,6 +180,7 @@ var app = new Vue({
 				return index === self.indexOf(elem);
 			});
 			this.searchCategories = unique;
+			this.searchInitializing = null;
 		},
 		hideSearch: function() {
 			this.query = '';

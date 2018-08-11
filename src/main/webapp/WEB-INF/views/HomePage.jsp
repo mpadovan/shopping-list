@@ -44,6 +44,11 @@
       													</select>
 													</div>
 												</nav>
+												<div id="row justify-content-center" v-show="noResults">
+													<div id="col mt-2 text-center">
+														Sembra non ci siano risultati alla tua ricerca ¯\_(ツ)_/¯
+													</div>
+												</div>
 												<ul class="search-results list-group list-group-flush">
 													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList" class="search-result"></search-item>
 												</ul>
