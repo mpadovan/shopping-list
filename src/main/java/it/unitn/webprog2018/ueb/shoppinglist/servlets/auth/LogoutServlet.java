@@ -31,6 +31,11 @@ public class LogoutServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String path = getServletContext().getContextPath();
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
+		
 		HttpSession session = request.getSession();
 		
 		// Delete all cookies
@@ -41,10 +46,8 @@ public class LogoutServlet extends HttpServlet {
 		}
 		// Session is removed from sessionHandler (notifications)
 		session.invalidate();
-		
-		// TODO remove session from messaging system
-		// TODO redirect to login form
-		response.sendRedirect("login.html");
+		path += "Login";
+		response.sendRedirect(path);
 	}
 
 	@Override

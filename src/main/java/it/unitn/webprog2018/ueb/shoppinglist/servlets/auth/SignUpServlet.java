@@ -60,18 +60,15 @@ public class SignUpServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
 
-		// TODO check for not null values, maybe client-side?
 		if (!password.equals(checkPassword)) {
 
 			request.setAttribute("passwordError", "true");
-			// TODO add redirection to sign up form
-			response.sendRedirect("");
+			request.getRequestDispatcher("SignUp").forward(request, response);
 
 		} else if (userDAO.getByEmail(email) != null) {
 
 			request.setAttribute("emailTaken", "true");
-			// TODO add redirection to sign up form
-			response.sendRedirect("signUp.html");
+			request.getRequestDispatcher("SignUp").forward(request, response);
 
 		} else {
 
@@ -101,7 +98,7 @@ public class SignUpServlet extends HttpServlet {
 				// Creating the new user
 				User user = new User();
 				user.setEmail(email);
-				user.setPassword(password);
+				user.setPassword(password); // TODO add pw encription
 				user.setName(name);
 				user.setLastname(lastName);
 				user.setAdministrator(false);
@@ -126,7 +123,7 @@ public class SignUpServlet extends HttpServlet {
 				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
 				if (emailSender.send(user.getEmail(), "Account Confirmation",
 						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
-					// TODO redirect response to successful registration
+					response.sendRedirect("Login");
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
 				}

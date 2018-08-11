@@ -5,6 +5,6 @@
 --%>
 
 <div class="d-flex justify-content-end">
-	<a href="#" class="btn btn_sidenav btn-outline-dark mr-sm-1">Registrati</a>
-	<a href="#" class="btn btn_sidenav btn-outline-dark mr-sm-1">Accedi</a>
+	<a href="SignUp" class="btn btn_sidenav btn-outline-dark mr-sm-1">Registrati</a>
+	<a href="Login" class="btn btn_sidenav btn-outline-dark mr-sm-1">Accedi</a>
 </div>

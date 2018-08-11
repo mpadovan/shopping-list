@@ -14,15 +14,15 @@
 					<h3 class="text-center">Login</h3>
 				</div>
 				<div class="card-body">
-					<form>
+					<form action="Login" method="POST">
 						<div class="form-group">
 							<label for="email">Email</label>
-							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required="required">
 
 						</div>
 						<div class="form-group">
 							<label for="password">Password</label>
-							<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
 						</div>
 						<div class="form-check">
 							<input type="checkbox" class="form-check-input" id="remember" name="remember">
@@ -34,8 +34,8 @@
 						<div class="float-right">
 							<a href="HomePageLogin.jsp" class="btn btn-outline-dark">Annulla</a>
 						</div>
-						<!--<button type="submit" class="btn btn-primary">accedi</button>-->
-						<a href="HomePageLogin.jsp" class="btn btn-outline-dark">Accedi</a>
+						<button type="submit" class="btn btn-outline-dark">Accedi</button>
+						<!-- <a href="HomePageLogin.jsp" class="btn btn-outline-dark">Accedi</a> -->
 					</form>
 				</div>
 			</div>

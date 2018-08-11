@@ -15,15 +15,15 @@
 				</div>
 
 				<div class="card-body">
-					<form>
+					<form action="SignUp" method="POST">
 						<div class="form-row">
 							<div class="form-group col-md-6">
 								<label for="name">Nome</label>
-								<input type="text" class="form-control" placeholder="Nome" name="name">
+								<input type="text" class="form-control" placeholder="Nome" name="name" required="required">
 							</div>
 							<div class="form-group col-md-6">
 								<label for="name">Cognome</label>
-								<input type="text" class="form-control" placeholder="Cognome" name="lastName">
+								<input type="text" class="form-control" placeholder="Cognome" name="lastName" required="required">
 							</div>
 						</div>
 						<div class="custom-file my-2">
@@ -32,25 +32,26 @@
 						</div>
 						<div class="form-group">
 							<label for="email">Email</label>
-							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required="required">
 						</div>
 						<div class="form-group">
 							<label for="password">Password</label>
-							<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
 						</div>
 						<div class="form-group">
 							<label for="checkPassword">Password</label>
-							<input type="checkPassword" class="form-control" id="checkPassword" name="checkPassword" placeholder="Password">
+							<input type="password" class="form-control" id="checkPassword" name="checkPassword" placeholder="Password" required="required">
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input type="checkbox" class="form-check-input" id="privacy" name="privacy">
+								<input type="checkbox" class="form-check-input" id="privacy" name="privacy" required="required">
 								<label class="form-check-label" for="privacy">Normativa privacy</label>
 							</div>
 						</div>
-						<a href="CheckSignUp.jsp" class="btn btn-outline-dark">Registrati</a>
+						<button type="submit" class="btn btn-outline-dark">Registrati</button>
 						<div class="float-right">
-							<a href="HomePage.jsp" class="btn btn-outline-dark">Annulla</a>
+							<!-- TODO change href -->
+							<a href="" class="btn btn-outline-dark">Annulla</a>
 						</div>
 					</form>
 				</div>

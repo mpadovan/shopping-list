@@ -58,7 +58,7 @@
         <servlet-name>AccountConfirmationServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.AccountConfirmationServlet</servlet-class>
     </servlet>
-    <servlet>
+    <servlet>Login
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>
     </servlet>
@@ -66,10 +66,7 @@
         <servlet-name>InfoUserServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.InfoUserServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>AdminPage</servlet-name>
-        <jsp-file>/adminPage.html</jsp-file>
-    </servlet>
+    
     <servlet>
         <servlet-name>EditListServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>
@@ -102,24 +99,6 @@
         <servlet-name>HomePageLoginServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
     </servlet>
-    <!--
-	<servlet>
-        <servlet-name>LoginOK</servlet-name>
-        <jsp-file>/views/LoginOK.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LoginOK</servlet-name>
-        <url-pattern>/restricted/loginOK.html</url-pattern>
-    </servlet-mapping>
-	<servlet>
-        <servlet-name>SignUp</servlet-name>
-        <jsp-file>/views/signUp.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>SignUp</servlet-name>
-        <url-pattern>/signUp.html</url-pattern>
-    </servlet-mapping>
-	-->
 	<servlet-mapping>
         <servlet-name>InfoUserServlet</servlet-name>
         <url-pattern>/restricted/InfoUser</url-pattern>
@@ -139,10 +118,6 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/restricted/Logout</url-pattern>
-    </servlet-mapping>
-	<servlet-mapping>
-        <servlet-name>AdminPage</servlet-name>
-        <url-pattern>/restricted/admin/adminPage.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditListServlet</servlet-name>

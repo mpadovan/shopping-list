@@ -60,7 +60,7 @@
     <div class="d-flex justify-content-end">
         <a href="SignUp.jsp" class="btn btn_sidenav btn-outline-dark mr-sm-1">Registrati</a>
         <a href="Login.jsp" class="btn btn_sidenav btn-outline-dark mr-sm-1">Accedi</a>
-        <a href="HomePage.jsp" class="btn btn_sidenav btn-outline-dark"><i class="fas fa-sign-out-alt"></i></a>
+        <a href="Logout" class="btn btn_sidenav btn-outline-dark"><i class="fas fa-sign-out-alt"></i></a>
     </div>
 
 </nav>
