@@ -113,15 +113,12 @@ public class SignUpServlet extends HttpServlet {
 				token.setExpirationFromNow(TOKEN_EXP);
 				token.setUser(user);
 
-				// Sending the email to the new user
-				EmailSender emailSender = new EmailSender();
-
 				String context = getServletContext().getContextPath();
 				if (!context.endsWith("/")) {
 					context += "/";
 				}
 				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
-				if (emailSender.send(user.getEmail(), "Account Confirmation",
+				if (EmailSender.send(user.getEmail(), "Account Confirmation",
 						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
 					tokenDAO.addToken(token);
 					response.sendRedirect("Login");
