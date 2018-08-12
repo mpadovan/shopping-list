@@ -107,13 +107,15 @@ var app = new Vue({
 		searchCategories: null,
 		resultsSorted: null,
 		selected: 'all',
-		noResults: false
+		noResults: false,
+		showAutocomplete: false
 	},
 	methods: {
 		searching: function () {
 			if(this.query != '') {
 				this.showList = false;
 				this.searchInitializing = 'search';
+				this.showAutocomplete = false;
 			}
 		},
 		listHided: function () {
@@ -190,7 +192,12 @@ var app = new Vue({
 	},
 	watch: {
 		query: function (val) {
-			if (val == 0) this.hideSearch();
+			if (val == 0) {
+				this.showAutocomplete = false;
+				this.hideSearch();
+			} else {
+				this.showAutocomplete = true;
+			}
 		},
 		items: function(val) {
 			this.updateLocalStorage();
