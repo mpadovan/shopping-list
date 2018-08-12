@@ -45,12 +45,7 @@ public class ProductDAOImpl implements ProductDAO {
 	public void addProduct(Product product) {
 		products.add(product);
 	}
-
-	@Override
-	public List<Product> getAll() {
-		return products;
-	}
-
+	/*
 	@Override
 	public List<Product> getByUser(String email) {
 		List<Product> owned = new LinkedList<>();
@@ -61,12 +56,11 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 		return owned;
 	}
-
+	*/
 	@Override
-	public void updateProduct(Product product) {
+	public void updateProduct(Integer productId, Product product) {
 		for (Product p : products) {
-			if (p.getName().equals(product.getName())
-					&& p.getEmail().equals(product.getEmail())) {
+			if (p.getId().equals(product.getId())) {
 				p = product;
 				return;
 			}
@@ -81,17 +75,12 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<Product> getByUser(String email, String query) {
 		List<Product> matching = new LinkedList<>();
-
-		if (query == null) {
-			return getByUser(email);
-		}
+		
 		System.out.println("Checkin out custom products");
 		for (Product p : products) {
 			if (p.getEmail().equals(email)) {
-				System.out.println("Checking product " + p.getName());
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
-					System.out.println("Found " + query + " in " + p.getName());
 				}
 			}
 		}

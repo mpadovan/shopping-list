@@ -25,17 +25,20 @@
 							<div class="col-9 mt-4">
 								<div class="card">
 									<div class="card-body">
-										<div class="input-group mb-3">
-											<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching">
+										<div class="input-group mb-0">
+											<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 											<div class="input-group-append">
 												<button class="btn btn-outline-secondary" type="button" @click="searching">
 													<i class="fas fa-search"></i>
 												</button>
 											</div>
 										</div>
+										<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
+											<li class="pointer autocomplete-li" style="padding-left: .5rem;" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+										</div>
 										<transition name="fade" v-on:after-leave="searchHided">
 											<div class="list-group" v-if="showSearch">
-												<nav class="navbar navbar-dark bg-primary">
+												<nav class="navbar navbar-dark bg-primary mt-3">
 												  	<button @click="hideSearch" type="button" class="btn btn-outline-light">Torna alla lista</button>
 													<div class="form-group" style="margin-bottom:0;">
       													<select class="form-control" v-model="selected">
@@ -50,7 +53,7 @@
 													</div>
 												</div>
 												<ul class="search-results list-group list-group-flush">
-													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList" class="search-result"></search-item>
+													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList" class="search-result pointer"></search-item>
 												</ul>
 											</div>
 										</transition>
@@ -78,7 +81,7 @@
 								</transition>
 							</div>
 						</div>
-						<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:query="query"></component>
+						<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:url="url"></component>
 						<div id="item-modal" class="modal" tabindex="-1" role="dialog">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">

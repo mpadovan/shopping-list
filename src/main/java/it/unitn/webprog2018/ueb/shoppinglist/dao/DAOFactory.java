@@ -1,10 +1,12 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 
 /**
  *
@@ -21,5 +23,7 @@ public interface DAOFactory {
 	public ProductDAO getProductDAO();
 
 	public PublicProductDAO getPublicProductDAO();
+	
+	public ListsCategoryDAO getListsCategoryDAO();
 	
 }

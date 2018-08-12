@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
+import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -13,17 +14,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  */
 public class ListsCategoriesImage extends AbstractEntity {
 
-	private Integer id;
-	private String image;
+	@Expose private String image;
 	private String category;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getImage() {
 		return image;
