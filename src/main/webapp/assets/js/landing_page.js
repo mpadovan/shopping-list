@@ -167,7 +167,8 @@ var app = new Vue({
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
-				this.autocompleteList = data;
+				console.log(data);
+				(data.length == 0) ? this.autocompleteList = [{ name: 'Nessun risultato'}] : this.autocompleteList = data;
 			} else {
 				this.results = data;
 				this.resultsSorted = this.results;
