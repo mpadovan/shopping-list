@@ -21,25 +21,26 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	public ListsCategoryDAOImpl() {
 		listsCategories = new LinkedList<>();
 		ListsCategory l1 = new ListsCategory();
+		l1.setId(1);
 		l1.setName("Supermercato");
 		l1.setDescription("Un luogo per la spesa di tutti i giorni, prodotti comuni e talvolta cibi esotici");
 
 		ListsCategory l2 = new ListsCategory();
 		l2.setName("Ferramenta");
-		l1.setDescription("Dove comprare prodotti per il fai-da-te, il giardinaggio e molto altro");
-
+		l2.setDescription("Dove comprare prodotti per il fai-da-te, il giardinaggio e molto altro");
+		l2.setId(2);
 		ListsCategory l3 = new ListsCategory();
 		l3.setName("Fruttivendolo");
 		l3.setDescription("Piccolo negozio in cui comprare frutta e verdura fresca. Pezzo forte: motoseghe.");
-
+		l3.setId(3);
 		ListsCategory l4 = new ListsCategory();
 		l4.setName("Erboristeria");
 		l4.setDescription("Luogo in cui comprare prodotti naturali e medicinali omeopatici");
-
+		l4.setId(4);
 		ListsCategory l5 = new ListsCategory();
 		l5.setName("Determarket");
 		l5.setDescription("Venditore di prodotti per le pulizie della casa, di igiene personale e cura della persona");
-
+		l5.setId(5);
 		listsCategories.add(l5);
 		listsCategories.add(l4);
 		listsCategories.add(l3);
