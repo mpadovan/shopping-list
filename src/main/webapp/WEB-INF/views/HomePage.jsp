@@ -25,13 +25,16 @@
 							<div class="col-9 mt-4">
 								<div class="card">
 									<div class="card-body">
-										<div class="input-group mb-3">
+										<div class="input-group mb-0">
 											<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching">
 											<div class="input-group-append">
 												<button class="btn btn-outline-secondary" type="button" @click="searching">
 													<i class="fas fa-search"></i>
 												</button>
 											</div>
+										</div>
+										<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
+											<li style="padding-left: .5rem;">Searching...</li>
 										</div>
 										<transition name="fade" v-on:after-leave="searchHided">
 											<div class="list-group" v-if="showSearch">
