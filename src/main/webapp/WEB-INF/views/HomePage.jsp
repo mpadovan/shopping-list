@@ -53,7 +53,7 @@
 													</div>
 												</div>
 												<ul class="search-results list-group list-group-flush">
-													<search-item v-for="result in resultsSorted" v-bind:key="result.id + result.name" v-bind:id="result.id" v-bind:name="result.name" v-bind:category="result.category" @add="addItemToList" class="search-result pointer"></search-item>
+													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
 												</ul>
 											</div>
 										</transition>
@@ -72,7 +72,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr is="list-item" v-for='item in items' v-bind:key='item.id + item.name' v-bind:id="item.id" v-bind:name='item.name' v-bind:amount='item.amount' @update="updateWithModal"
+													<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" @update="updateWithModal"
 													    @delete="deleteWithModal"></tr>
 												</tbody>
 											</table>

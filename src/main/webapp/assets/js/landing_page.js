@@ -29,10 +29,11 @@ Vue.component('search', {
 });
 
 Vue.component('list-item', {
-	props: ['id', 'name', 'amount'],
+	props: ['item'],
 	computed: {
 		capitalized: function () {
-			var capitalized = _.capitalize(this.name);
+			console.log(this.item);
+			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
 	},
@@ -40,32 +41,30 @@ Vue.component('list-item', {
 		updateItem: function () {
 			var self = this;
 			this.$emit('update', {
-				name: self.name,
-				amount: self.amount
+				item: self.item,
 			});
 			$('#item-modal').modal('show');
 		},
 		deleteItem: function () {
 			var self = this;
 			this.$emit('delete', {
-				name: self.name,
-				amount: undefined
+				item: self.item,
 			});
 			$('#item-modal').modal('show');
 		}
 	},
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
-				<td>{{ amount }}</td> \
+				<td>{{ item.amount }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
 Vue.component('search-item', {
-	props: ['id', "name", 'category'],
+	props: ['item'],
 	computed: {
 		capitalized: function () {
-			var capitalized = _.capitalize(this.name);
+			var capitalized = _.capitalize(this.item.name);
 			return capitalized;
 		}
 	},
@@ -73,14 +72,13 @@ Vue.component('search-item', {
 		callParent: function () {
 			var self = this;
 			this.$emit('add', {
-				name: self.capitalized,
-				amount: 1
+				item: self.item
 			});
 		}
 	},
 	template: '<li class="list-group-item" @click="callParent"> \
 					<div class="row align-items-center"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ category }}</h6></div>\
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category }}</h6></div>\
 				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
 					</div> \
 				</li>'
@@ -106,7 +104,8 @@ var app = new Vue({
 		showAutocomplete: false,
 		url: null,
 		autocompleteList: [],
-		user: 'anon'
+		user: 'anon',
+		item_id: null
 	},
 	methods: {
 		searching: function () {
@@ -128,12 +127,13 @@ var app = new Vue({
 		},
 		isInList: function (item) {
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == item.name) {
+				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
 					this.updateLocalStorage();
 					return;
 				}
 			}
+			item.amount = 1;
 			this.items.push(item);
 		},
 		updateLocalStorage: function () {
@@ -141,13 +141,14 @@ var app = new Vue({
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
-			this.item_name = val.name;
-			this.item_amount = val.amount;
+			this.item_name = val.item.item.name;
+			this.item_id = val.item.item.id;
+			this.item_amount = val.item.amount;
 		},
 		updateComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == this.item_name) {
-					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
+				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
+					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
 					this.updateLocalStorage();
 					return;
 				}
@@ -155,12 +156,13 @@ var app = new Vue({
 		},
 		deleteWithModal: function (val) {
 			this.updatingItem = false;
-			this.item_name = val.name;
-			this.item_amount = val.amount;
+			this.item_name = val.item.item.name;
+			this.item_id = val.item.item.id;
+			this.item_amount = undefined;
 		},
 		deleteComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == this.item_name) {
+				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
 					this.items.splice(i, 1);
 					this.updateLocalStorage();
 					return;
@@ -229,7 +231,9 @@ var app = new Vue({
 			this.items = JSON.parse(localStorage.getItem("items"));
 		} else {
 			this.items.push({
-				name: 'il tuo primo oggetto in lista',
+				item: {
+					name: 'il tuo primo oggetto in lista',
+				},
 				amount: 1
 			});
 		}
