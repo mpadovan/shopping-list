@@ -15,14 +15,8 @@ Vue.component('search', {
 		$.get({
 			url: self.url,
 			success: function (data) {
-				var mergedArray = data.publicProducts.concat(data.products);
-				for (var i = 0; mergedArray.length > i; i++) {
-					if (mergedArray[i] == null) {
-						mergedArray.splice(i, 1);
-					}
-				}
-				mergedArray = _.sortBy(mergedArray, ['name']);
-				self.$emit('search', mergedArray);
+				data = _.sortBy(data, ['name']);
+				self.$emit('search', data);
 				//self.results = mergedArray;
 			},
 			error: function (error) {
@@ -116,7 +110,7 @@ var app = new Vue({
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
-				this.url = '/ShoppingList/services/products/' + this.user + '?search=' + this.query;
+				this.url = '/ShoppingList/services/products/?search=' + this.query;
 				this.searchInitializing = 'search';
 				this.showAutocomplete = false;
 			}
@@ -207,7 +201,7 @@ var app = new Vue({
 				this.hideSearch();
 			} else {
 				this.showAutocomplete = true;
-				this.url = '/ShoppingList/services/products/' + this.user + '?search=' + this.query + '&compact=true';
+				this.url = '/ShoppingList/services/products/?search=' + this.query + '&compact=true';
 				this.searchInitializing = 'search';
 				$('#search-input').focus();
 			}

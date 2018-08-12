@@ -7,7 +7,9 @@ and open the template in the editor.
     Created on : 6-lug-2018, 16.32.49
     Author     : giuliapeserico
 */
-
+body {
+	overflow-y: scroll;
+}
 .table-wrapper-2 {
     max-height: 500px;
     overflow-y: auto;
