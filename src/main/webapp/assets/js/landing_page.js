@@ -29,7 +29,7 @@ Vue.component('search', {
 });
 
 Vue.component('list-item', {
-	props: ['name', 'amount'],
+	props: ['id', 'name', 'amount'],
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.name);
@@ -62,7 +62,7 @@ Vue.component('list-item', {
 			</tr>'
 });
 Vue.component('search-item', {
-	props: ["name"],
+	props: ['id', "name", 'category'],
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.name);
@@ -79,9 +79,11 @@ Vue.component('search-item', {
 		}
 	},
 	template: '<li class="list-group-item" @click="callParent"> \
-				 {{ capitalized }} \
-				 <i class="fa fa-plus float-right"></i> \
-				 </li>'
+					<div class="row align-items-center"> \
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ category }}</h6></div>\
+				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
+					</div> \
+				</li>'
 });
 
 var app = new Vue({
@@ -104,7 +106,7 @@ var app = new Vue({
 		showAutocomplete: false,
 		url: null,
 		autocompleteList: [],
-		user: 'mariorossi@gmail.com'
+		user: 'anon'
 	},
 	methods: {
 		searching: function () {
@@ -168,7 +170,7 @@ var app = new Vue({
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
 				console.log(data);
-				(data.length == 0) ? this.autocompleteList = [{ name: 'Nessun risultato'}] : this.autocompleteList = data;
+				(data.length == 0) ? this.autocompleteList = [{name: 'Nessun risultato'}] : this.autocompleteList = data;
 			} else {
 				this.results = data;
 				this.resultsSorted = this.results;
