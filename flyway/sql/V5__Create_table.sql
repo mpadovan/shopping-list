@@ -33,13 +33,16 @@ create table if not exists lists(
     image VARCHAR(2083),
     foreign key(iduser) references users(id),
 	foreign key(idcategory) references listscategories(id),
-    primary key (id,iduser)
+    primary key (id)
 );
 
 create table if not exists sharedlists(
 	iduser integer not null,
 	idlist integer not null,
     iduserlist integer not null,
+	modifylist tinyint(1) default 0 not null,
+	deletelist tinyint(1) default 0 not null,
+	adddelete tinyint(1) default 1 not null,
 	foreign key(iduser) references users(id),
     foreign key(idlist) references lists(id),
     primary key(iduser,idlist)
@@ -70,7 +73,7 @@ create table if not exists products(
 
 create table if not exists publicproducts(
 	id integer not null AUTO_INCREMENT,
-	name varchar(40) not null,
+	name varchar(40) not null unique,
     note varchar(256),
     logo VARCHAR(2083),
     photography VARCHAR(2083),
