@@ -15,11 +15,11 @@ import java.util.StringTokenizer;
  * @author giulia
  */
 public interface PublicProductDAO {
-	public List<PublicProduct> getAll();
+	// public List<PublicProduct> getAll();
 	
 	public List<PublicProduct> getFromQuery(String query);
 	
-	public PublicProduct getByName(String name);
+	public PublicProduct getById(Integer id);
 
 	public void updateProduct(PublicProduct product);
 

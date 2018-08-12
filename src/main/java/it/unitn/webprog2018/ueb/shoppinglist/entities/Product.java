@@ -13,14 +13,14 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  * @author simon
  */
 public class Product extends AbstractEntity {
-
+	
 	@Expose private String name;
 	private String note;
 	private String logo;
 	private String photography;
 	private String email;
 	private String category;
-
+	
     public String getName() {
 	return name;
     }

@@ -14,7 +14,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
  */
 public interface UserDAO {
 	
+	User getById(Integer id);
+	
 	User getByEmail(String email);
 	
 	void addUser(User user);
+	
+	// void updateUser(Integer id, User user);
 }

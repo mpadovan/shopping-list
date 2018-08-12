@@ -77,14 +77,27 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		publicProducts.add(p7);
 		publicProducts.add(p8);
 	}
-
+	
+	/*
 	@Override
 	public List<PublicProduct> getAll() {
 		return publicProducts;
 	}
-
+	*/
+	
+	
+	@Override
+	public PublicProduct getById(Integer id) {
+		for (PublicProduct p : publicProducts) {
+			if (p.getId().equals(id)) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 	/**
-	 * @param query
+	 * @param query String to filter the results
 	 * @return A list of public products that match the query param
 	 *
 	 */
@@ -104,16 +117,6 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 			}
 		}
 		return matching;
-	}
-
-	@Override
-	public PublicProduct getByName(String name) {
-		for (PublicProduct p : publicProducts) {
-			if (p.getName().equals(name)) {
-				return p;
-			}
-		}
-		return null;
 	}
 
 	@Override

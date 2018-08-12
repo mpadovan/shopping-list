@@ -13,10 +13,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  * @author simon
  */
 public class ListsCategory extends AbstractEntity {
-
+	
 	@Expose private String name;
 	private String description;
-
+	
 	public String getName() {
 		return name;
 	}

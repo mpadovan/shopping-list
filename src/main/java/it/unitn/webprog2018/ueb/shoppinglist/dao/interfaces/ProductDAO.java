@@ -17,11 +17,9 @@ public interface ProductDAO {
 	
 	public void addProduct(Product product);
 	
-	public List<Product> getAll();
-	
-	public List<Product> getByUser(String userEmail);
+	// public List<Product> getByUser(String userEmail);
 
-	public void updateProduct(Product product);
+	public void updateProduct(Integer productId, Product product);
 
 	public List<Product> getByUser(String email, String query);
 }
