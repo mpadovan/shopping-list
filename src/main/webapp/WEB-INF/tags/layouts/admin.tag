@@ -22,51 +22,56 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
 		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
 		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-		
-		<!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
-		
+
+<!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
+
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/info_product.css" />
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar.css" />
 
 		<jsp:invoke fragment="customCss" />
 
-		<title><c:out value="${pageTitle}" />Admin page</title>
+		<title><c:out value="${pageTitle}" /></title>
 	</head>
 	<body>
 
 		<%-- Container for page Content printed via JSP tag --%>
-		<nav class="navbar navbar-expand-lg navbar-color mb-2">
+		<nav class="navbar navbar-expand-lg navbar-dark navbar-color">
+			<a class="navbar-brand" href="#">Amministratore</a>
+			<a class="nav-link navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</a>
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a class="nav-link btn btn-outline-light mr-2 active" href="ProductList.jsp">Prodotti</a>
+						<a class="nav-link" href="ProductList.jsp">Prodotti</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link btn btn-outline-light mr-2" href="ClassProduct.html">Categorie di prodotto</a>
+						<a class="nav-link" href="CategoryList.jsp">Categorie di lista</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link btn btn-outline-light" href="ClassList.html">Categorie di lista</a>
+						<a class="nav-link" href="CategoryProduct.jsp">Categorie di prodotto</a>
 					</li>
 				</ul>
-			</div>
-			<div class="btn-group">
-				<img src="assets/images/avatar.png" class="float-right rounded-circle" alt="..." style="max-width: 40px; max-height: 40px;">
+				<div class="btn-group">
+					<img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" class="float-right rounded-circle" alt="..." style="max-width: 40px; max-height: 40px;">
 
-				<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
-					Giulia Peserico
-				</a>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<a class="dropdown-item" href="#">Profilo</a>
-					<a class="dropdown-item" href="#">Logout</a>
+					<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+						Giulia Peserico
+					</a>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Profilo</a>
+						<a class="dropdown-item" href="#">Logout</a>
+					</div>
 				</div>
 			</div>
+			
 		</nav>
 		<div class="container-fluid">
 			<jsp:invoke fragment="pageContent" />
 		</div>
-		
-		
+
+
 
 
 
@@ -77,9 +82,7 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 		<!-- jQuery Custom Scroller CDN -->
 		<!-- development version, includes helpful console warnings -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+
 		<jsp:invoke fragment="customJs" />
 	</body>
 </html>
