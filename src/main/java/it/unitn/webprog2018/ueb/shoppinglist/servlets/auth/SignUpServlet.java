@@ -74,15 +74,17 @@ public class SignUpServlet extends HttpServlet {
 		} else {
 
 			// Retrieving user avatar
-			/*
+			
 			String avatarFileName = "";
-			String avatarsFolder = getServletContext().getInitParameter("avatarsFolder");
+			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/tmp/";
 			Part avatar = request.getPart("image");
 			if ((avatar != null) && (avatar.getSize() > 0)) {
 				avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+				int ext = avatarFileName.lastIndexOf(".");
+				int noExt = avatarFileName.lastIndexOf(File.separator);
 				try (InputStream fileContent = avatar.getInputStream()) {
-					File file = new File(avatarsFolder + File.separator + avatarFileName);
-					// file.createNewFile();
+					File file = new File(avatarsFolder +
+							email + (ext > noExt ? avatarFileName.substring(ext) : ""));
 					Files.copy(fileContent, file.toPath());
 					
 				} catch (FileAlreadyExistsException ex) {
@@ -94,7 +96,7 @@ public class SignUpServlet extends HttpServlet {
 					getServletContext().log("impossible to upload the file", ex);
 				}
 			}
-			*/
+			
 			if (!response.isCommitted()) {
 				// Creating the new user
 				
@@ -117,6 +119,7 @@ public class SignUpServlet extends HttpServlet {
 				if (!context.endsWith("/")) {
 					context += "/";
 				}
+				
 				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
 				if (EmailSender.send(user.getEmail(), "Account Confirmation",
 						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
@@ -125,7 +128,6 @@ public class SignUpServlet extends HttpServlet {
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
 				}
-
 			}
 		}
 	}

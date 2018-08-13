@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <filter>
+	<context-param>
+        <param-name>uploadFolder</param-name>
+        <param-value>/home/giulia/Desktop/WebProject/ProgettoDefinitivo/ShoppingList/uploads</param-value>
+    </context-param>
+	<filter>
         <filter-name>RootFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
     </filter>
