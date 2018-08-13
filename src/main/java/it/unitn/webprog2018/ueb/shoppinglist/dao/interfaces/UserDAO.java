@@ -20,5 +20,5 @@ public interface UserDAO {
 	
 	void addUser(User user);
 	
-	// void updateUser(Integer id, User user);
+	void updateUser(Integer id, User user);
 }

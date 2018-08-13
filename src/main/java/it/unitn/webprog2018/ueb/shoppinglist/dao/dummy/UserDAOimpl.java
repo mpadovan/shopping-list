@@ -59,4 +59,9 @@ public class UserDAOimpl implements UserDAO {
 		return null;
 	}
 
+	@Override
+	public void updateUser(Integer id, User user) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

@@ -1,6 +1,5 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
@@ -76,12 +75,12 @@ public class UserQueries extends Query implements UserDAO{
 	public void addUser(User user) {
 		try{
 			String query = "INSERT INTO users (email,name,lastname,administrator,image,password) VALUES ("+
-							user.getEmail()+","+
-							user.getName()+","+
-							user.getLastname()+","+
-							(user.isAdministrator()? 1 : 0)+","+
-							user.getImage()+","+
-							user.getPassword()+")";
+					user.getEmail()+","+
+					user.getName()+","+
+					user.getLastname()+","+
+					(user.isAdministrator()? 1 : 0)+","+
+					user.getImage()+","+
+					user.getPassword()+")";
 			PreparedStatement st = this.connection.prepareStatement(query);
 			int count = st.executeUpdate();
 			st.close();
@@ -90,7 +89,28 @@ public class UserQueries extends Query implements UserDAO{
 		}
 		catch(SQLException | UnsupportedOperationException | UpdateException e){
 			System.err.println("Error during update\n"+e);
-		}	
+		}
 	}
 	
+	@Override
+	public void updateUser(Integer id, User user) {
+		try{
+			String query = "UPDATE users " +
+					"SET email = " + user.getEmail() +
+					", password = " + user.getPassword() +
+					", name = " + user.getName() +
+					", lastname = " + user.getLastname() +
+					", image = " + user.getImage() +
+					", administrator = " + (user.isAdministrator()? 1 : 0) +
+					" WHERE id = " + id;
+			PreparedStatement st = this.connection.prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			if(count != 1)
+				throw new UpdateException("Bad query: "+query);
+		}
+		catch(SQLException | UnsupportedOperationException | UpdateException e){
+			System.err.println("Error during update\n"+e);
+		}
+	}	
 }
