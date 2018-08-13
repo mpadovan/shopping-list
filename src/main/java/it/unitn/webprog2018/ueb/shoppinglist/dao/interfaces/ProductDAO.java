@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
  */
 public interface ProductDAO {
 	
-	public void addProduct(Product product);
+	public boolean addProduct(Product product);
 	
 	// public List<Product> getByUser(String userEmail);
 

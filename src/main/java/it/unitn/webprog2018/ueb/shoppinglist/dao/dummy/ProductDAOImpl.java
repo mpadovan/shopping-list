@@ -42,8 +42,9 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public void addProduct(Product product) {
+	public boolean addProduct(Product product) {
 		products.add(product);
+		return true;
 	}
 	/*
 	@Override
