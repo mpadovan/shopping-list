@@ -36,7 +36,7 @@
 
 		<%-- Container for page Content printed via JSP tag --%>
 		<nav class="navbar navbar-expand-lg navbar-dark navbar-color">
-			<a class="navbar-brand" href="#">Amministratore</a>
+			<a class="navbar-brand" style="color: white;">Amministratore</a>
 			<a class="nav-link navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</a>
@@ -44,24 +44,26 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="ProductList.jsp">Prodotti</a>
+						<a id="productList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList">Prodotti</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="CategoryList.jsp">Categorie di lista</a>
+						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryList">Categorie di lista</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="CategoryProduct.jsp">Categorie di prodotto</a>
+						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryProduct">Categorie di prodotto</a>
 					</li>
 				</ul>
 				<div class="btn-group">
 					<img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" class="float-right rounded-circle" alt="..." style="max-width: 40px; max-height: 40px;">
 
 					<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
-						Giulia Peserico
+						Luigi Bianchi
 					</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<a class="dropdown-item" href="#">Profilo</a>
-						<a class="dropdown-item" href="#">Logout</a>
+						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin">Vai al sito</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/Logout">Logout</a>
 					</div>
 				</div>
 			</div>
@@ -82,7 +84,8 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 		<!-- jQuery Custom Scroller CDN -->
 		<!-- development version, includes helpful console warnings -->
-
+		<script src="${pageContext.servletContext.contextPath}/assets/js/admin_page.js"></script>
 		<jsp:invoke fragment="customJs" />
+		
 	</body>
 </html>

@@ -20,6 +20,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
+	
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/restricted/*</url-pattern>
@@ -28,6 +29,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
+	
     <filter-mapping>
         <filter-name>AdministrationFilter</filter-name>
         <url-pattern>/restricted/admin/*</url-pattern>
@@ -63,6 +65,7 @@
         <servlet-name>InfoUserServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.InfoUserServlet</servlet-class>
     </servlet>
+	
     <servlet>
         <servlet-name>EditListServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>

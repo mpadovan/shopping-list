@@ -44,84 +44,84 @@
 							<tr>
 								<td>Latte</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Pane</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Formaggio</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Cioccolata</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Prosciutto</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Caffe</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Acqua</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Cocacola</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Te</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Latte</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Carta igienica</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
 							<tr>
 								<td>Brioches</td>
 								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="assets/images/milch.png" alt="Latte" title="Latte"></div></td>
+								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
 								<td></td>
 								<td>Latticini</td>
 							</tr>
