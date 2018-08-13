@@ -62,6 +62,11 @@
 								<transition name="fade" v-on:after-leave="listHided">
 									<div class="card" id="list" v-if="showList">
 										<div class="card-body">
+											<nav class="navbar navbar-dark bg-primary">
+													<div class="form-group" style="margin-bottom:0;">
+      													<categories></categories>
+													</div>
+												</nav>
 											<table class="table table-striped">
 												<thead>
 													<tr>
@@ -100,8 +105,8 @@
 										<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
 									</div>
 									<div class="modal-footer">
-										<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Update</button>
-										<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Delete</button>
+										<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
+										<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
 									</div>
 								</div>
 							</div>

@@ -3,6 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+Vue.component('categories', {
+	data: function() {
+		return {
+			categories: [],
+			cat: null
+		};
+	},
+	created: function () {
+		var self = this;
+		$.get({
+			url: '/ShoppingList/services/lists/categories',
+			success: function (data) {
+				data = _.sortBy(data, ['name']);
+				self.categories = data;
+			},
+			error: function (error) {
+				alert('Errore nel caricamento delle categorie');
+				console.log(error);
+			}
+		});
+	},
+	template: ' <div>Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}, {{ category.description}}</option> \
+				</select></div>',
+	watch: {
+		cat: function(val) {
+			toastr['success']('Notifiche attivate per ' + val.name);
+		}
+	}
+});
+
 Vue.component('search', {
 	props: ['url'],
 	data: function () {
@@ -126,6 +158,7 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
+			toastr["success"](item.item.name + ' aggiunto')
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
