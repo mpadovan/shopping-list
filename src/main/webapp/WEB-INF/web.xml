@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-	<context-param>
+    <context-param>
         <param-name>uploadFolder</param-name>
         <param-value>/home/giulia/Desktop/WebProject/ProgettoDefinitivo/ShoppingList/uploads</param-value>
     </context-param>
-	<filter>
+    <filter>
         <filter-name>RootFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
     </filter>
@@ -70,7 +70,6 @@
         <servlet-name>InfoUserServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.InfoUserServlet</servlet-class>
     </servlet>
-    
     <servlet>
         <servlet-name>EditListServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>
@@ -103,7 +102,11 @@
         <servlet-name>HomePageLoginServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
     </servlet>
-	<servlet-mapping>
+    <servlet>
+        <servlet-name>AvatarServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads.UploadsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
         <servlet-name>InfoUserServlet</servlet-name>
         <url-pattern>/restricted/InfoUser</url-pattern>
     </servlet-mapping>
@@ -155,6 +158,12 @@
         <servlet-name>HomePageLoginServlet</servlet-name>
         <url-pattern>/restricted/HomePageLogin</url-pattern>
     </servlet-mapping>
+    <!--
+    <servlet-mapping>
+        <servlet-name>AvatarServlet</servlet-name>
+        <url-pattern>/uploads/restricted/avatar</url-pattern>
+    </servlet-mapping>
+	-->
     <session-config>
         <session-timeout>
             30
