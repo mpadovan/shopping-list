@@ -32,7 +32,7 @@
 							<a href="#">Password dimenticata?</a><br>
 						</div>
 						<div class="float-right">
-							<a href="HomePageLogin.jsp" class="btn btn-outline-dark">Annulla</a>
+							<a href="HomePage" class="btn btn-outline-dark">Annulla</a>
 						</div>
 						<button type="submit" class="btn btn-outline-dark">Accedi</button>
 						<!-- <a href="HomePageLogin.jsp" class="btn btn-outline-dark">Accedi</a> -->

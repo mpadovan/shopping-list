@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Dummy implementation of user DAO Persistence is handled during runtime
@@ -25,11 +26,13 @@ public class UserDAOimpl implements UserDAO {
 		this.users = new LinkedList<>();
 
 		User user = new User();
+		user.setId(1);
 		user.setEmail("mariorossi@gmail.com");
 		user.setPassword(Sha256.doHash("ciao"));
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
+		user.setImage("/uploads/restricted/avatar/445.png");
 
 		users.add(user);
 	}
@@ -46,6 +49,8 @@ public class UserDAOimpl implements UserDAO {
 
 	@Override
 	public void addUser(User user) {
+		Random rand = new Random();
+		user.setId(rand.nextInt());
 		users.add(user);
 	}
 

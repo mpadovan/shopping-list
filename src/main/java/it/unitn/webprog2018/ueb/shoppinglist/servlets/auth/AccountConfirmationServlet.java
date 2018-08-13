@@ -9,7 +9,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,9 +74,17 @@ public class AccountConfirmationServlet extends HttpServlet {
 			response.sendRedirect(path);
 		}
 		if (!response.isCommitted()) {
-			// REVIEW
-			// user should never be null, because response would already be committed, and will not be null unless token is null
-			userDAO.addUser(token.getUser());
+			User user = token.getUser();
+			userDAO.addUser(user);
+			String avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
+			
+			String uploadFolder = getServletContext().getInitParameter("uploadFolder");
+			File src = new File(uploadFolder + "/restricted/tmp/" + avatarName);
+			String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
+			File dest = new File(uploadFolder + "/restricted/avatar/" + avatarName2);
+			Files.copy(src.toPath(), dest.toPath());
+			src.delete();
+			
 			tokenDAO.removeToken(token);
 			path += "Login";
 			response.sendRedirect(path);

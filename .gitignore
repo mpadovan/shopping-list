@@ -1,3 +1,9 @@
 /target
 .DS_Store
-
+/uploads/restricted/avatar/*
+/uploads/restricted/productLogo/*
+/uploads/restricted/productImage/*
+/uploads/restricted/tmp/*
+/uploads/public/productLogo/*
+/uploads/public/productImage/*
+/uploads/public/categoryListImage/*

@@ -15,7 +15,7 @@
 				</div>
 
 				<div class="card-body">
-					<form action="SignUp" method="POST">
+					<form action="SignUp" method="POST" enctype='multipart/form-data'>
 						<div class="form-row">
 							<div class="form-group col-md-6">
 								<label for="name">Nome</label>
@@ -51,7 +51,7 @@
 						<button type="submit" class="btn btn-outline-dark">Registrati</button>
 						<div class="float-right">
 							<!-- TODO change href -->
-							<a href="" class="btn btn-outline-dark">Annulla</a>
+							<a href="HomePage" class="btn btn-outline-dark">Annulla</a>
 						</div>
 					</form>
 				</div>

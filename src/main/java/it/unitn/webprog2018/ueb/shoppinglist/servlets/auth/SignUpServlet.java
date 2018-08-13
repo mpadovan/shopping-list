@@ -33,8 +33,8 @@ public class SignUpServlet extends HttpServlet {
 	private TokenDAO tokenDAO;
 
 	/**
-	 * Method to be executed at servlet initialization.
-	 * Handles connections with persistence layer.
+	 * Method to be executed at servlet initialization. Handles connections with
+	 * persistence layer.
 	 */
 	@Override
 	public void init() {
@@ -54,58 +54,65 @@ public class SignUpServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
+		}
+
 		String name = request.getParameter("name");
 		String lastName = request.getParameter("lastName");
 
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
-
+		String avatarURI = "";
 		if (!password.equals(checkPassword)) {
 
 			request.setAttribute("passwordError", "true");
-			request.getRequestDispatcher("SignUp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 
 		} else if (userDAO.getByEmail(email) != null) {
 
 			request.setAttribute("emailTaken", "true");
-			request.getRequestDispatcher("SignUp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 
 		} else {
 
 			// Retrieving user avatar
-			/*
 			String avatarFileName = "";
-			String avatarsFolder = getServletContext().getInitParameter("avatarsFolder");
+			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
 			Part avatar = request.getPart("image");
 			if ((avatar != null) && (avatar.getSize() > 0)) {
 				avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+				int ext = avatarFileName.lastIndexOf(".");
+				int noExt = avatarFileName.lastIndexOf(File.separator);
+				avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
 				try (InputStream fileContent = avatar.getInputStream()) {
-					File file = new File(avatarsFolder + File.separator + avatarFileName);
-					// file.createNewFile();
+					File file = new File(avatarFileName);
 					Files.copy(fileContent, file.toPath());
-					
+					avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
+							+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
+							
 				} catch (FileAlreadyExistsException ex) {
-					getServletContext().log("File \"" + avatarFileName + "\" already exists on the server");
-				} catch (Exception ex) {
 					response.sendError(500, "Server could not store your avatar, "
 							+ "please retry the sign up process. "
 							+ "Notice that you can also upload the image later in you user page.");
 					getServletContext().log("impossible to upload the file", ex);
 				}
 			}
-			*/
+
 			if (!response.isCommitted()) {
+
 				// Creating the new user
-				
 				User user = new User();
 				user.setEmail(email);
 				user.setPassword(Sha256.doHash(password));
 				user.setName(name);
 				user.setLastname(lastName);
 				user.setAdministrator(false);
-				user.setImage("");	// TODO set this correctly
-				
+				user.setImage(avatarURI);
+				System.out.println(user.getImage());
+
 				// Creating the token for the account confirmation
 				Token token = new Token();
 
@@ -113,29 +120,21 @@ public class SignUpServlet extends HttpServlet {
 				token.setExpirationFromNow(TOKEN_EXP);
 				token.setUser(user);
 
-				// Sending the email to the new user
-				EmailSender emailSender = new EmailSender();
-
-				String context = getServletContext().getContextPath();
-				if (!context.endsWith("/")) {
-					context += "/";
-				}
 				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
-				if (emailSender.send(user.getEmail(), "Account Confirmation",
+				if (EmailSender.send(user.getEmail(), "Account Confirmation",
 						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
 					tokenDAO.addToken(token);
 					response.sendRedirect("Login");
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
 				}
-
 			}
 		}
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+			throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 	}
 
