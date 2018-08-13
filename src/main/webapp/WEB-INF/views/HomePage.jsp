@@ -49,11 +49,11 @@
 												</nav>
 												<div id="row justify-content-center" v-show="noResults">
 													<div id="col mt-2 text-center">
-														Sembra non ci siano risultati alla tua ricerca ¯\_(ツ)_/¯
+														Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
 													</div>
 												</div>
 												<ul class="search-results list-group list-group-flush">
-													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:name="result.name" @add="addItemToList" class="search-result pointer"></search-item>
+													<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
 												</ul>
 											</div>
 										</transition>
@@ -62,6 +62,11 @@
 								<transition name="fade" v-on:after-leave="listHided">
 									<div class="card" id="list" v-if="showList">
 										<div class="card-body">
+											<nav class="navbar navbar-dark bg-primary">
+													<div class="form-group" style="margin-bottom:0;">
+      													<categories></categories>
+													</div>
+												</nav>
 											<table class="table table-striped">
 												<thead>
 													<tr>
@@ -72,7 +77,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr is="list-item" v-for='item in items' v-bind:key='item.name' v-bind:name='item.name' v-bind:amount='item.amount' @update="updateWithModal"
+													<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" @update="updateWithModal"
 													    @delete="deleteWithModal"></tr>
 												</tbody>
 											</table>
@@ -100,8 +105,8 @@
 										<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
 									</div>
 									<div class="modal-footer">
-										<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Update</button>
-										<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Delete</button>
+										<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
+										<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
 									</div>
 								</div>
 							</div>

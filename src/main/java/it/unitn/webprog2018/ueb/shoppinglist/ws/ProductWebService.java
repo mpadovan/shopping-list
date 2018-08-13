@@ -64,7 +64,7 @@ public class ProductWebService {
 		if (search != null) {
 			filter = new StringTokenizer(search, "-");
 			while (filter.hasMoreTokens()) {
-				// ADD WILDCARD
+				// TODO add sql wildcard
 				query += filter.nextToken();
 			}
 		}

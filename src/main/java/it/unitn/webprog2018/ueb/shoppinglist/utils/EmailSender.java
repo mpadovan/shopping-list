@@ -33,7 +33,7 @@ public class EmailSender {
 	 * @param text String with the message to be sent
 	 * @return Returns true if the email is successfully sent, false otherwise.
 	 */
-	public boolean send(String recipient, String subject, String text) {
+	public static boolean send(String recipient, String subject, String text) {
 		Email email = new SimpleEmail();
 		email.setHostName(HOST);
 		email.setSmtpPort(PORT);

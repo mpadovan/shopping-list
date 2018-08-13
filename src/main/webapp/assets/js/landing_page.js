@@ -3,6 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+Vue.component('categories', {
+	data: function() {
+		return {
+			categories: [],
+			cat: null
+		};
+	},
+	created: function () {
+		var self = this;
+		$.get({
+			url: '/ShoppingList/services/lists/categories',
+			success: function (data) {
+				data = _.sortBy(data, ['name']);
+				self.categories = data;
+			},
+			error: function (error) {
+				alert('Errore nel caricamento delle categorie');
+				console.log(error);
+			}
+		});
+	},
+	template: ' <div>Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}, {{ category.description}}</option> \
+				</select></div>',
+	watch: {
+		cat: function(val) {
+			toastr['success']('Notifiche attivate per ' + val.name);
+		}
+	}
+});
+
 Vue.component('search', {
 	props: ['url'],
 	data: function () {
@@ -29,10 +61,11 @@ Vue.component('search', {
 });
 
 Vue.component('list-item', {
-	props: ['name', 'amount'],
+	props: ['item'],
 	computed: {
 		capitalized: function () {
-			var capitalized = _.capitalize(this.name);
+			console.log(this.item);
+			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
 	},
@@ -40,32 +73,30 @@ Vue.component('list-item', {
 		updateItem: function () {
 			var self = this;
 			this.$emit('update', {
-				name: self.name,
-				amount: self.amount
+				item: self.item,
 			});
 			$('#item-modal').modal('show');
 		},
 		deleteItem: function () {
 			var self = this;
 			this.$emit('delete', {
-				name: self.name,
-				amount: undefined
+				item: self.item,
 			});
 			$('#item-modal').modal('show');
 		}
 	},
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
-				<td>{{ amount }}</td> \
+				<td>{{ item.amount }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
 Vue.component('search-item', {
-	props: ["name"],
+	props: ['item'],
 	computed: {
 		capitalized: function () {
-			var capitalized = _.capitalize(this.name);
+			var capitalized = _.capitalize(this.item.name);
 			return capitalized;
 		}
 	},
@@ -73,15 +104,16 @@ Vue.component('search-item', {
 		callParent: function () {
 			var self = this;
 			this.$emit('add', {
-				name: self.capitalized,
-				amount: 1
+				item: self.item
 			});
 		}
 	},
 	template: '<li class="list-group-item" @click="callParent"> \
-				 {{ capitalized }} \
-				 <i class="fa fa-plus float-right"></i> \
-				 </li>'
+					<div class="row align-items-center"> \
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category }}</h6></div>\
+				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
+					</div> \
+				</li>'
 });
 
 var app = new Vue({
@@ -104,7 +136,8 @@ var app = new Vue({
 		showAutocomplete: false,
 		url: null,
 		autocompleteList: [],
-		user: 'mariorossi@gmail.com'
+		user: 'anon',
+		item_id: null
 	},
 	methods: {
 		searching: function () {
@@ -125,13 +158,15 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
+			toastr["success"](item.item.name + ' aggiunto')
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == item.name) {
+				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
 					this.updateLocalStorage();
 					return;
 				}
 			}
+			item.amount = 1;
 			this.items.push(item);
 		},
 		updateLocalStorage: function () {
@@ -139,13 +174,14 @@ var app = new Vue({
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
-			this.item_name = val.name;
-			this.item_amount = val.amount;
+			this.item_name = val.item.item.name;
+			this.item_id = val.item.item.id;
+			this.item_amount = val.item.amount;
 		},
 		updateComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == this.item_name) {
-					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
+				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
+					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
 					this.updateLocalStorage();
 					return;
 				}
@@ -153,12 +189,13 @@ var app = new Vue({
 		},
 		deleteWithModal: function (val) {
 			this.updatingItem = false;
-			this.item_name = val.name;
-			this.item_amount = val.amount;
+			this.item_name = val.item.item.name;
+			this.item_id = val.item.item.id;
+			this.item_amount = undefined;
 		},
 		deleteComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].name == this.item_name) {
+				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
 					this.items.splice(i, 1);
 					this.updateLocalStorage();
 					return;
@@ -167,7 +204,8 @@ var app = new Vue({
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
-				this.autocompleteList = data;
+				console.log(data);
+				(data.length == 0) ? this.autocompleteList = [{name: 'Nessun risultato'}] : this.autocompleteList = data;
 			} else {
 				this.results = data;
 				this.resultsSorted = this.results;
@@ -226,7 +264,9 @@ var app = new Vue({
 			this.items = JSON.parse(localStorage.getItem("items"));
 		} else {
 			this.items.push({
-				name: 'il tuo primo oggetto in lista',
+				item: {
+					name: 'il tuo primo oggetto in lista',
+				},
 				amount: 1
 			});
 		}
