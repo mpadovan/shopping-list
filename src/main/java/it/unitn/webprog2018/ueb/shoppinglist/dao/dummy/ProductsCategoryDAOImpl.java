@@ -1,0 +1,87 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
+
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ *
+ * @author giulia
+ */
+public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
+
+	private static List<ProductsCategory> productsCategories;
+
+	public ProductsCategoryDAOImpl() {
+		productsCategories = new LinkedList<>();
+
+		ProductsCategory pc1 = new ProductsCategory();
+		pc1.setId(1);
+		pc1.setName("Frutta");
+		pc1.setDescription("Vegetali dal sapore dolce");
+		pc1.setLogo("");
+		pc1.setCategory("");
+		productsCategories.add(pc1);
+
+		ProductsCategory pc2 = new ProductsCategory();
+		pc2.setId(2);
+		pc2.setName("Frutta surgelata");
+		pc2.setDescription("Vegetali dal sapore dolce, ma surgelati");
+		pc2.setLogo("");
+		pc2.setCategory("Frutta");
+		productsCategories.add(pc2);
+
+		ProductsCategory pc3 = new ProductsCategory();
+		pc3.setId(3);
+		pc3.setName("Verdura");
+		pc3.setDescription("Vegetali in genere mangiati salati");
+		pc3.setLogo("");
+		pc3.setCategory("");
+		productsCategories.add(pc3);
+
+		ProductsCategory pc4 = new ProductsCategory();
+		pc4.setId(4);
+		pc4.setName("Protezioni solari");
+		pc4.setDescription("Creme per il corpo che proteggono contro l'azione dei raggi solari");
+		pc4.setLogo("");
+		pc4.setCategory("Crema");
+		productsCategories.add(pc4);
+
+		ProductsCategory pc5 = new ProductsCategory();
+		pc5.setId(5);
+		pc5.setName("Crema");
+		pc5.setDescription("Vegetali dal sapore dolce");
+		pc5.setLogo("");
+		pc5.setCategory("");
+		productsCategories.add(pc5);
+
+		ProductsCategory pc6 = new ProductsCategory();
+		pc6.setId(6);
+		pc6.setName("Cereali e legumi");
+		pc6.setDescription("Vegetali amidacei e in genere ricchi di carboidrati");
+		pc6.setLogo("");
+		pc6.setCategory("");
+		productsCategories.add(pc6);
+	}
+
+	@Override
+	public List<ProductsCategory> getFromQuery(String query) {
+		List<ProductsCategory> matching = new LinkedList<>();
+
+		System.out.println("Checkin out custom products");
+		for (ProductsCategory p : productsCategories) {
+			if (p.getName().toLowerCase().contains(query.toLowerCase())) {
+				matching.add(p);
+			}
+		}
+		return matching;
+	}
+
+}

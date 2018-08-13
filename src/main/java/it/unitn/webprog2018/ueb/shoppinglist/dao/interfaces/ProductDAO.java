@@ -21,5 +21,5 @@ public interface ProductDAO {
 
 	public void updateProduct(Integer productId, Product product);
 
-	public List<Product> getByUser(String email, String query);
+	public List<Product> getByUser(int id, String query);
 }

@@ -26,7 +26,7 @@ public class ProductDAOImpl implements ProductDAO {
 		products = new LinkedList<>();
 		Product product = new Product();
 		product.setCategory("Frutta");
-		product.setEmail("mariorossi@gmail.com");
+		product.setOwner(1);
 		product.setName("Ananas");
 		product.setLogo("Sole");
 		product.setNote("Ananas maturo e dolce");
@@ -34,7 +34,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 		Product product2 = new Product();
 		product2.setCategory("Verdura");
-		product2.setEmail("mariorossi@gmail.com");
+		product2.setOwner(1);
 		product2.setName("Zucchine");
 		product2.setLogo("Contadino di fiducia");
 		product2.setNote("Zucchine fresche di stagione");
@@ -73,12 +73,12 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> getByUser(String email, String query) {
+	public List<Product> getByUser(int id, String query) {
 		List<Product> matching = new LinkedList<>();
 		
 		System.out.println("Checkin out custom products");
 		for (Product p : products) {
-			if (p.getEmail().equals(email)) {
+			if (p.getOwner() == id) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
 				}

@@ -13,65 +13,61 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  * @author simon
  */
 public class Product extends AbstractEntity {
-	
-	@Expose private String name;
+
+	@Expose
+	private String name;
 	private String note;
 	private String logo;
 	private String photography;
-	private String email;
+	private int owner;
 	private String category;
-	
-    public String getName() {
-	return name;
-    }
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getNote() {
-	return note;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setNote(String note) {
-	this.note = note;
-    }
+	public String getNote() {
+		return note;
+	}
 
-    public String getLogo() {
-	return logo;
-    }
+	public void setNote(String note) {
+		this.note = note;
+	}
 
-    public void setLogo(String logo) {
-	this.logo = logo;
-    }
+	public String getLogo() {
+		return logo;
+	}
 
-    public String getPhotography() {
-	return photography;
-    }
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 
-    public void setPhotography(String photography) {
-	this.photography = photography;
-    }
+	public String getPhotography() {
+		return photography;
+	}
 
-    public String getEmail() {
-	return email;
-    }
+	public void setPhotography(String photography) {
+		this.photography = photography;
+	}
 
-    public void setEmail(String email) {
-	this.email = email;
-    }
+	public int getOwner() {
+		return owner;
+	}
 
-    public String getCategory() {
-	return category;
-    }
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
 
-    public void setCategory(String category) {
-	this.category = category;
-    }
-    
-    
-    
-    
-    
-    
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 }
