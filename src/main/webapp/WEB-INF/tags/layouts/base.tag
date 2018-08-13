@@ -28,7 +28,7 @@
 		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 		<!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/sidebar.css">
-
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
 
 		<jsp:invoke fragment="customCss" />
 
@@ -64,6 +64,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/assets/js/sidebar.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 		<jsp:invoke fragment="customJs" />
 	</body>
 </html>
