@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.servlet.ServletContext;
@@ -14,9 +15,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * ServletContextListener that initializes the timer that cleans the 
- * database from unused expired authentication tokens. The timer then becomes
- * an attribute of the servlet context and keeps executing
+ * ServletContextListener that initializes the timer that cleans the database
+ * from unused expired authentication tokens. The timer then becomes an
+ * attribute of the servlet context and keeps executing
  *
  * @author Giulia Carocari
  */
@@ -31,7 +32,8 @@ public class DBCleaningListener implements ServletContextListener {
 		DAOFactory factory = (DAOFactory) sc.getAttribute("daoFactory");
 		tokenDAO = factory.getTokenDAO();
 		Timer expiredTokenScheduler = new Timer();
-		expiredTokenScheduler.scheduleAtFixedRate(new CleanDBTask(), CLEANING_RATE, CLEANING_RATE);
+		String path = sc.getInitParameter("uploadFolder");
+		expiredTokenScheduler.scheduleAtFixedRate(new CleanDBTask(path), CLEANING_RATE, CLEANING_RATE);
 
 		sc.setAttribute("expiredTokenScheduler", expiredTokenScheduler);
 	}
@@ -44,11 +46,25 @@ public class DBCleaningListener implements ServletContextListener {
 
 	private class CleanDBTask extends TimerTask {
 
+		private String path;
+
+		public CleanDBTask(String path) {
+			this.path = path + "/restricted/tmp/";
+		}
+
 		@Override
 		public void run() {
 			System.out.println("Cleaning DB... ... ...");
 			tokenDAO.removeExpiredTokens();
+			File tmpDir = new File(path);
+			File[] entries = tmpDir.listFiles();
+			if (entries != null) {
+				for (File currentFile : entries) {
+					currentFile.delete();
+				}
+			} else {
+				System.out.println("Nothing to delete");
+			}
 		}
 	}
-
 }

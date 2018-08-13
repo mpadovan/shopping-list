@@ -69,12 +69,12 @@ public class SignUpServlet extends HttpServlet {
 		if (!password.equals(checkPassword)) {
 
 			request.setAttribute("passwordError", "true");
-			request.getRequestDispatcher("SignUp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 
 		} else if (userDAO.getByEmail(email) != null) {
 
 			request.setAttribute("emailTaken", "true");
-			request.getRequestDispatcher("SignUp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 
 		} else {
 
@@ -90,7 +90,7 @@ public class SignUpServlet extends HttpServlet {
 				try (InputStream fileContent = avatar.getInputStream()) {
 					File file = new File(avatarFileName);
 					Files.copy(fileContent, file.toPath());
-					avatarURI = "localhost:8080" + context + "uploads/	restricted/tmp/"
+					avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
 							+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
 							
 				} catch (FileAlreadyExistsException ex) {

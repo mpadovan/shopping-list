@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,6 @@ import java.util.Map;
  * @author Giulia Carocari
  */
 public class TokenDAOImpl implements TokenDAO {
-	
 	private static Map<String, Token> tokens;
 	
 	public TokenDAOImpl() {
