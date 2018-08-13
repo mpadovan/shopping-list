@@ -83,9 +83,14 @@ public class LoginServlet extends HttpServlet {
 						response.addCookie(userId);
 					}
 				}
-
-				path += "restricted/HomePageLogin";
-				response.sendRedirect(path);
+				
+				if(user.isAdministrator()){
+					path += "restricted/admin/ProductList";
+					response.sendRedirect(path);
+				} else {
+					path += "restricted/HomePageLogin";
+					response.sendRedirect(path);
+				}
 			}
 		}
 		// either email or password are wrong

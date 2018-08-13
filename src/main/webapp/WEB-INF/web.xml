@@ -8,6 +8,14 @@
         <filter-name>RootFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AdministrationFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>RootFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -16,10 +24,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AuthenticationFilter</filter-class>
-    </filter>
+	
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/restricted/*</url-pattern>
@@ -28,11 +33,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-    <filter>
-        <filter-name>AdministrationFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
-    </filter>
-    <!-- TODO consider having the filter mapped to the URL of the single admin page -->
+	
     <filter-mapping>
         <filter-name>AdministrationFilter</filter-name>
         <url-pattern>/restricted/admin/*</url-pattern>
@@ -62,10 +63,8 @@
         <servlet-name>AccountConfirmationServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.AccountConfirmationServlet</servlet-class>
     </servlet>
-    <servlet>Login
-        <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>
-    </servlet>
+    <servlet><servlet-name>LogoutServlet</servlet-name><servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.LogoutServlet</servlet-class>Login
+        </servlet>
     <servlet>
         <servlet-name>InfoUserServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.auth.InfoUserServlet</servlet-class>
@@ -102,6 +101,18 @@
         <servlet-name>HomePageLoginServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CategoryListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CategoryProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryProductServlet</servlet-class>
+	</servlet>
     <servlet>
         <servlet-name>AvatarServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads.UploadsServlet</servlet-class>
@@ -158,15 +169,27 @@
         <servlet-name>HomePageLoginServlet</servlet-name>
         <url-pattern>/restricted/HomePageLogin</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategoryListServlet</servlet-name>
+        <url-pattern>/restricted/admin/CategoryList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductListServlet</servlet-name>
+        <url-pattern>/restricted/admin/ProductList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategoryProductServlet</servlet-name>
+        <url-pattern>/restricted/admin/CategoryProduct</url-pattern>
+    </servlet-mapping>
+
     <!--
     <servlet-mapping>
         <servlet-name>AvatarServlet</servlet-name>
         <url-pattern>/uploads/restricted/avatar</url-pattern>
     </servlet-mapping>
 	-->
+	
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>
