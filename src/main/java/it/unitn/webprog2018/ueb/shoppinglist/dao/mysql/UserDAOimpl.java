@@ -13,9 +13,9 @@ import java.sql.Statement;
  *
  * @author Michele Tessari
  */
-public class UserQueries extends Query implements UserDAO{
+public class UserDAOimpl extends AbstractDAO implements UserDAO{
 	
-	public UserQueries(Connection connection) {
+	public UserDAOimpl(Connection connection) {
 		super(connection);
 	}
 	
@@ -24,7 +24,7 @@ public class UserQueries extends Query implements UserDAO{
 		try{
 			User user = new User();
 			String query = "SELECT email,password,name,lastname,image,administrator FROM users WHERE id = "+id;
-			Statement st = this.connection.createStatement();
+			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			rs.first();
 			
@@ -50,7 +50,7 @@ public class UserQueries extends Query implements UserDAO{
 		try{
 			User user = new User();
 			String query = "SELECT id,password,name,lastname,image,administrator FROM users WHERE email = "+email;
-			Statement st = this.connection.createStatement();
+			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			rs.first();
 			
@@ -81,7 +81,7 @@ public class UserQueries extends Query implements UserDAO{
 					(user.isAdministrator()? 1 : 0)+","+
 					user.getImage()+","+
 					user.getPassword()+")";
-			PreparedStatement st = this.connection.prepareStatement(query);
+			PreparedStatement st = this.getCon().prepareStatement(query);
 			int count = st.executeUpdate();
 			st.close();
 			if(count != 1)
@@ -103,7 +103,7 @@ public class UserQueries extends Query implements UserDAO{
 					", image = " + user.getImage() +
 					", administrator = " + (user.isAdministrator()? 1 : 0) +
 					" WHERE id = " + id;
-			PreparedStatement st = this.connection.prepareStatement(query);
+			PreparedStatement st = this.getCon().prepareStatement(query);
 			int count = st.executeUpdate();
 			st.close();
 			if(count != 1)
