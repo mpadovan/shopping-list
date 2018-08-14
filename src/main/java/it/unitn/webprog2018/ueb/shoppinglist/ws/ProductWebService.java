@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
@@ -15,6 +14,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
@@ -52,10 +52,8 @@ public class ProductWebService {
 	 * Retrieves representation of instances of
 	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct</code>.
 	 *
-	 * @param search Search query to filter results
-	 * @param compact Parameter that indicates if the result to be returned has
-	 * to contain certain fields of the object (i.e. the product name and ID)
-	 *
+	 * @param search Parameter to filter the results by name
+	 * @param compact Parameter to obtain only name and id field of the object
 	 * @return an instance of java.lang.String that represents the products in
 	 * Json format
 	 */
@@ -69,13 +67,7 @@ public class ProductWebService {
 		PublicProductDAO publicProductDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getPublicProductDAO();
 		List<PublicProduct> publicProducts = publicProductDAO.getFromQuery(query);
 
-		Gson gson = null;
-		if (compact != null && compact.equals("true")) {
-			GsonBuilder builder = new GsonBuilder();
-			gson = builder.excludeFieldsWithoutExposeAnnotation().create();
-		} else {
-			gson = new Gson();
-		}
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
 		try {
 			return (publicProducts == null ? "{[]}" : gson.toJson(publicProducts));
 		} catch (Exception ex) {
@@ -89,9 +81,8 @@ public class ProductWebService {
 	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>.
 	 *
 	 * @param userId Id of the user that wants to access his custom products
-	 * @param search Search query to filter results
-	 * @param compact Parameter that indicates if the result to be returned has
-	 * to contain certain fields of the object (i.e. the product name and ID)
+	 * @param search Parameter to filter the results by name
+	 * @param compact Parameter to obtain only name and id field of the object
 	 * @param privateOnly if value is "true" then returns only custom products
 	 *
 	 * @return an instance of java.lang.String that represents the products in
@@ -108,19 +99,14 @@ public class ProductWebService {
 		ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
 		List<Product> products = productDAO.getByUser(userId, query);
 
-		Gson gson = null;
-		if (compact != null && compact.equals("true")) {
-			GsonBuilder builder = new GsonBuilder();
-			gson = builder.excludeFieldsWithoutExposeAnnotation().create();
-		} else {
-			gson = new Gson();
-		}
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
+
 		try {
 			if (privateOnly != null && privateOnly.equals("true")) {
 				return gson.toJson(products);
 			} else {
 				return "{ \"publicProducts\" :" + getPublicProducts(search, compact)
-						+ ", \"products\" : " + (products == null ? "[]" : gson.toJson(products));
+						+ ", \"products\" : " + (products == null ? "[]" : gson.toJson(products)) + "}";
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -132,10 +118,8 @@ public class ProductWebService {
 	 * Retrieves representation of instances of
 	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>.
 	 *
-	 * @param userId Id of the user that wants to access his custom products
-	 * @param search Search query to filter results
-	 * @param compact Parameter that indicates if the result to be returned has
-	 * to contain certain fields of the object (i.e. the product name and ID)
+	 * @param search Parameter to filter the results by name
+	 * @param compact Parameter to obtain only name and id field of the object
 	 *
 	 * @return an instance of java.lang.String that represents the products in
 	 * Json format
@@ -151,13 +135,7 @@ public class ProductWebService {
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 
 		List<ProductsCategory> productsCategories = productsCategoryDAO.getFromQuery(query);
-		Gson gson = null;
-		if (compact != null && compact.equals("true")) {
-			GsonBuilder builder = new GsonBuilder();
-			gson = builder.excludeFieldsWithoutExposeAnnotation().create();
-		} else {
-			gson = new Gson();
-		}
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
 		try {
 			return productsCategories == null ? "{[]}" : gson.toJson(productsCategories);
 		} catch (Exception ex) {
@@ -165,7 +143,11 @@ public class ProductWebService {
 			return null;
 		}
 	}
-
+	/**
+	 * Creates a new personal object for the specified user
+	 * @param content String in JSON format that contains the field "name"
+	 * @param userId Id of the owner of the product
+	 */
 	@POST
 	@Path("restricted/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -182,7 +164,6 @@ public class ProductWebService {
 		ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
 		if (productDAO.addProduct(product)) {
 			System.out.println("Added new product");
-			return;
 		} else {
 			try {
 				throw new RuntimeException();
@@ -192,7 +173,7 @@ public class ProductWebService {
 		}
 	}
 
-	private String getQuery(String search) {
+	protected static String getQuery(String search) {
 		StringTokenizer filter = null;
 		String query = "";
 		if (search != null) {
@@ -204,4 +185,5 @@ public class ProductWebService {
 		}
 		return query;
 	}
+
 }

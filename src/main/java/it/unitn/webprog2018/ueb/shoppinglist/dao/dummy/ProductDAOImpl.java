@@ -50,6 +50,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public boolean addProduct(Product product) {
+		product.setId(products.size() + 1);
 		products.add(product);
 		return true;
 	}
