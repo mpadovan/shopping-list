@@ -22,4 +22,8 @@ public interface ListDAO {
 	public boolean addProduct(int listId, Product product);
 
 	public boolean addPublicProduct(int listId, PublicProduct product);
+
+	public boolean isOnList(int listId, PublicProduct product);
+
+	public boolean updateAmount(int listId, PublicProduct product);
 }

@@ -100,5 +100,17 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean isOnList(int listId, PublicProduct product) {
+		if (listId == 1) {
+			return publicProductsOnList1.containsKey(product);
+		} else if(listId == 2) {
+			return publicProductsOnList2.containsKey(product);
+		}
+		return false;
+	}
+	
+	
 	
 }

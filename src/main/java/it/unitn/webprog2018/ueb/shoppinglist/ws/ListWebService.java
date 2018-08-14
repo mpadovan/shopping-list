@@ -66,7 +66,7 @@ public class ListWebService {
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
 		String query = ProductWebService.getQuery(search);
-		
+
 		List<ListsCategory> listsCategories = listsCategoryDAO.getFromQuery(query);
 		if (listsCategories == null || listsCategories.isEmpty()) {
 			return "{[]}";
@@ -95,7 +95,7 @@ public class ListWebService {
 		if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
 			return "{[]}";
 		}
-		Gson gson = CustomGsonBuilder.create(false);	
+		Gson gson = CustomGsonBuilder.create(false);
 		String json = "{[";
 		for (Map.Entry<PublicProduct, Integer> entry : publicProductsOnList.entrySet()) {
 			try {
@@ -112,7 +112,7 @@ public class ListWebService {
 		json += "}";
 		return json;
 	}
-	
+
 	/**
 	 * Adds a PUBLIC product to a personal list
 	 *
@@ -131,17 +131,29 @@ public class ListWebService {
 			ex.printStackTrace();
 		}
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		if (listDAO.addPublicProduct(listId,product)) {
-			System.out.println("Added new product");
+		if (!listDAO.isOnList(listId, product)) {
+			if (listDAO.addPublicProduct(listId, product)) {
+				System.out.println("Added new product");
+			} else {
+				try {
+					throw new RuntimeException();
+				} catch (RuntimeException ex) {
+					System.err.println("List with given id does not exist");
+				}
+			}
 		} else {
-			try {
-				throw new RuntimeException();
-			} catch (RuntimeException ex) {
-				System.err.println("List with given id does not exist");
+			if(listDAO.updateAmount(listId,product)) {
+				System.out.println("Added new product");
+			} else {
+				try {
+					throw new RuntimeException();
+				} catch (RuntimeException ex) {
+					System.err.println("List with given id does not exist");
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a PERSONAL product to a personal list
 	 *
@@ -160,7 +172,7 @@ public class ListWebService {
 			ex.printStackTrace();
 		}
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		if (listDAO.addProduct(listId,product)) {
+		if (listDAO.addProduct(listId, product)) {
 			System.out.println("Added new product");
 		} else {
 			try {
@@ -170,5 +182,5 @@ public class ListWebService {
 			}
 		}
 	}
-	
+
 }
