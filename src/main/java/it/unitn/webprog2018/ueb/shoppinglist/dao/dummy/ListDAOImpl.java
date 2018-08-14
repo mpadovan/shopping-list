@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.HashMap;
@@ -79,6 +80,25 @@ public class ListDAOImpl implements ListDAO {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean addProduct(int listId, Product product) {
+		if (listId == 1) {
+		}
+		return true;
+	}
+
+	@Override
+	public boolean addPublicProduct(int listId, PublicProduct product) {
+		if (listId == 1) {
+			publicProductsOnList1.putIfAbsent(product, 1);
+			return true;
+		} else if (listId == 2) {
+			publicProductsOnList1.putIfAbsent(product, 1);
+			return true;
+		}
+		return false;
 	}
 	
 }

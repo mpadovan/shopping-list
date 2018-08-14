@@ -1,4 +1,4 @@
-	/*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -13,7 +13,9 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  * @author simon
  */
 public class ProductsCategory extends AbstractEntity {
-	@Expose private String name;
+
+	@Expose
+	private String name;
 	private ProductsCategory category;
 	private String description;
 	private String logo;

@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.Map;
 
@@ -17,4 +18,8 @@ public interface ListDAO {
 	public List getList(int id);
 	
 	public Map<PublicProduct,Integer> getPublicProductsOnList(int listId);
+
+	public boolean addProduct(int listId, Product product);
+
+	public boolean addPublicProduct(int listId, PublicProduct product);
 }

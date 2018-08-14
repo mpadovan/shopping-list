@@ -10,10 +10,12 @@ import com.google.gson.GsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
-import java.util.Arrays;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -49,11 +52,10 @@ public class ListWebService {
 	}
 
 	/**
-	 * Retrieves representation of an instance of
-	 * it.unitn.webprog2018.ueb.shoppinglist.ws.ListWebService
+	 * Retrieves representation of the possible categories of a list
 	 *
-	 * @param search
-	 * @param compact
+	 * @param search Parameter to filter the results by name
+	 * @param compact Parameter to obtain only name and id field of the object
 	 * @return an instance of java.lang.String
 	 */
 	@GET
@@ -63,27 +65,13 @@ public class ListWebService {
 			@QueryParam("compact") String compact) {
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
-		StringTokenizer filter = null;
-		String query = "";
-		if (search != null) {
-			filter = new StringTokenizer(search, "-");
-			while (filter.hasMoreTokens()) {
-				// ADD WILDCARD
-				query += filter.nextToken();
-			}
-		}
+		String query = ProductWebService.getQuery(search);
+		
 		List<ListsCategory> listsCategories = listsCategoryDAO.getFromQuery(query);
 		if (listsCategories == null || listsCategories.isEmpty()) {
 			return "{[]}";
 		}
-		Gson gson = null;
-		System.out.println(compact);
-		if (compact != null && compact.equals("true")) {
-			GsonBuilder builder = new GsonBuilder();
-			gson = builder.excludeFieldsWithoutExposeAnnotation().create();
-		} else {
-			gson = new Gson();
-		}
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
 		try {
 			return gson.toJson(listsCategories);
 		} catch (Exception ex) {
@@ -99,7 +87,7 @@ public class ListWebService {
 	 * @return an instance of java.lang.String
 	 */
 	@GET
-	@Path("/restricted/{user_id}/personal/{listId}/products")
+	@Path("/restricted/{userId}/personal/{listId}/products")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProductsOnPersonalList(@PathParam("listId") int listId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
@@ -107,12 +95,12 @@ public class ListWebService {
 		if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
 			return "{[]}";
 		}
-		Gson gson = new Gson();
+		Gson gson = CustomGsonBuilder.create(false);	
 		String json = "{[";
 		for (Map.Entry<PublicProduct, Integer> entry : publicProductsOnList.entrySet()) {
 			try {
 				json += "{\"product\":" + gson.toJson(entry.getKey()) + ","
-						+ "\"quantity\":" + entry.getValue().toString() + "},";
+						+ "\"amount\":" + entry.getValue().toString() + "},";
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return null;
@@ -124,4 +112,63 @@ public class ListWebService {
 		json += "}";
 		return json;
 	}
+	
+	/**
+	 * Adds a PUBLIC product to a personal list
+	 *
+	 * @param listId
+	 * @param content body of the request
+	 */
+	@PUT
+	@Path("/restricted/{userId}/personal/{listId}/products/public")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void addPublicProductOnPersonalList(@PathParam("listId") int listId, String content) {
+		PublicProduct product = null;
+		try {
+			Gson gson = new Gson();
+			product = gson.fromJson(content, PublicProduct.class);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		if (listDAO.addPublicProduct(listId,product)) {
+			System.out.println("Added new product");
+		} else {
+			try {
+				throw new RuntimeException();
+			} catch (RuntimeException ex) {
+				System.err.println("List with given id does not exist");
+			}
+		}
+	}
+	
+	/**
+	 * Adds a PERSONAL product to a personal list
+	 *
+	 * @param listId
+	 * @param content body of the request
+	 */
+	@PUT
+	@Path("/restricted/{userId}/personal/{listId}/products/personal")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void addProductOnPersonalList(@PathParam("listId") int listId, String content) {
+		Product product = null;
+		try {
+			Gson gson = new Gson();
+			product = gson.fromJson(content, Product.class);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		if (listDAO.addProduct(listId,product)) {
+			System.out.println("Added new product");
+		} else {
+			try {
+				throw new RuntimeException();
+			} catch (RuntimeException ex) {
+				System.err.println("Could not persist this product");
+			}
+		}
+	}
+	
 }
