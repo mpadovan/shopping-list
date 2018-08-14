@@ -1,6 +1,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
@@ -27,5 +28,7 @@ public interface DAOFactory {
 	public ListsCategoryDAO getListsCategoryDAO();
 	
 	public ProductsCategoryDAO getProductsCategoryDAO();
+
+	public ListDAO getListDAO();
 	
 }

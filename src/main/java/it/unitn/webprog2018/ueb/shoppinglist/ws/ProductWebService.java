@@ -14,6 +14,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
@@ -76,7 +77,7 @@ public class ProductWebService {
 			gson = new Gson();
 		}
 		try {
-			return gson.toJson(publicProducts);
+			return (publicProducts == null ? "{[]}" : gson.toJson(publicProducts));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
@@ -119,7 +120,7 @@ public class ProductWebService {
 				return gson.toJson(products);
 			} else {
 				return "{ \"publicProducts\" :" + getPublicProducts(search, compact)
-						+ ", \"products\" : " + gson.toJson(products);
+						+ ", \"products\" : " + (products == null ? "[]" : gson.toJson(products));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -158,7 +159,7 @@ public class ProductWebService {
 			gson = new Gson();
 		}
 		try {
-			return gson.toJson(productsCategories);
+			return productsCategories == null ? "{[]}" : gson.toJson(productsCategories);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
@@ -166,13 +167,15 @@ public class ProductWebService {
 	}
 
 	@POST
-	@Path("restricted/{user_id}")
+	@Path("restricted/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProduct(String content) {
+	public void addProduct(String content, @PathParam("userId") Integer userId) {
 		Product product = null;
 		try {
 			Gson gson = new Gson();
 			product = gson.fromJson(content, Product.class);
+			product.setOwner(new User());
+			product.getOwner().setId(userId);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

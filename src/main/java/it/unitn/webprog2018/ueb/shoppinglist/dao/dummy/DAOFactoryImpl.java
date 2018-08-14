@@ -3,6 +3,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.TokenDAOImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
@@ -24,6 +25,7 @@ public class DAOFactoryImpl implements DAOFactory {
 	private static final PublicProductDAO PUBLIC_PRODUCT_DAO = new PublicProductDAOImpl();
 	private static final ListsCategoryDAO LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl();
 	private static final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl();
+	private static final ListDAO LIST_DAO = new ListDAOImpl();
 	
 	@Override
 	public ExampleDAO getExampleDAO() {
@@ -58,6 +60,11 @@ public class DAOFactoryImpl implements DAOFactory {
 	@Override
 	public ProductsCategoryDAO getProductsCategoryDAO() {
 		return PRODUCTS_CATEGORY_DAO;
+	}
+
+	@Override
+	public ListDAO getListDAO() {
+		return LIST_DAO;
 	}
 
 }

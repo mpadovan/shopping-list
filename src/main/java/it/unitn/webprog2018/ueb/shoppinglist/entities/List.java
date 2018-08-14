@@ -18,8 +18,8 @@ public class List extends AbstractEntity {
 	private Integer id;
 	@Expose
 	private String name;
-	private int owner;
-	private String category;
+	private User owner;
+	private ListsCategory category;
 	private String description;
 	private String image;
 
@@ -39,19 +39,19 @@ public class List extends AbstractEntity {
 		this.name = name;
 	}
 
-	public int getOwner() {
+	public User getOwner() {
 		return owner;
 	}
 
-	public void setOwner(int owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 
-	public String getCategory() {
+	public ListsCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ListsCategory category) {
 		this.category = category;
 	}
 

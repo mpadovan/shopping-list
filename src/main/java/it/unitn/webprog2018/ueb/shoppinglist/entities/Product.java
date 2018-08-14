@@ -19,8 +19,8 @@ public class Product extends AbstractEntity {
 	private String note;
 	private String logo;
 	private String photography;
-	private int owner;
-	private String category;
+	private User owner;
+	private ProductsCategory category;
 
 	public String getName() {
 		return name;
@@ -54,19 +54,19 @@ public class Product extends AbstractEntity {
 		this.photography = photography;
 	}
 
-	public int getOwner() {
+	public User getOwner() {
 		return owner;
 	}
 
-	public void setOwner(int owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 
-	public String getCategory() {
+	public ProductsCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ProductsCategory category) {
 		this.category = category;
 	}
 

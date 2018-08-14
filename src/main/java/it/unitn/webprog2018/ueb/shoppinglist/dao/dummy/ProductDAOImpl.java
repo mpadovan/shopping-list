@@ -8,9 +8,10 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,18 +24,24 @@ public class ProductDAOImpl implements ProductDAO {
 	List<Product> products;
 
 	public ProductDAOImpl() {
+		User user = new User();
+		user.setId(1);
 		products = new LinkedList<>();
 		Product product = new Product();
-		product.setCategory("Frutta");
-		product.setOwner(1);
+		product.setCategory(new ProductsCategory());
+		product.getCategory().setId(1);
+		product.getCategory().setName("Frutta");
+		product.setOwner(user);
 		product.setName("Ananas");
 		product.setLogo("Sole");
 		product.setNote("Ananas maturo e dolce");
 		products.add(product);
 
 		Product product2 = new Product();
-		product2.setCategory("Verdura");
-		product2.setOwner(1);
+		product2.setCategory(new ProductsCategory());
+		product2.getCategory().setId(3);
+		product2.getCategory().setName("Verdura");
+		product2.setOwner(user);
 		product2.setName("Zucchine");
 		product2.setLogo("Contadino di fiducia");
 		product2.setNote("Zucchine fresche di stagione");
@@ -79,7 +86,7 @@ public class ProductDAOImpl implements ProductDAO {
 		
 		System.out.println("Checkin out custom products");
 		for (Product p : products) {
-			if (p.getOwner() == id) {
+			if (p.getOwner().getId() == id) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
 				}

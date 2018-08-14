@@ -14,7 +14,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
  */
 public class ProductsCategory extends AbstractEntity {
 	@Expose private String name;
-	private String category;
+	private ProductsCategory category;
 	private String description;
 	private String logo;
 
@@ -26,11 +26,11 @@ public class ProductsCategory extends AbstractEntity {
 		this.name = name;
 	}
 
-	public String getCategory() {
+	public ProductsCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ProductsCategory category) {
 		this.category = category;
 	}
 

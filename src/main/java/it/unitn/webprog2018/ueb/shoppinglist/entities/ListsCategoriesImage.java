@@ -15,7 +15,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 public class ListsCategoriesImage extends AbstractEntity {
 
 	@Expose private String image;
-	private String category;
+	private ListsCategory category;
 
 	public String getImage() {
 		return image;
@@ -25,11 +25,11 @@ public class ListsCategoriesImage extends AbstractEntity {
 		this.image = image;
 	}
 
-	public String getCategory() {
+	public ListsCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ListsCategory category) {
 		this.category = category;
 	}
 
