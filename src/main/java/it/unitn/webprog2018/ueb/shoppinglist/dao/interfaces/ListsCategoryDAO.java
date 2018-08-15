@@ -15,4 +15,5 @@ import java.util.Locale;
  */
 public interface ListsCategoryDAO {
 	List<ListsCategory> getFromQuery(String query);
+	List<ListsCategory> getAll();
 }

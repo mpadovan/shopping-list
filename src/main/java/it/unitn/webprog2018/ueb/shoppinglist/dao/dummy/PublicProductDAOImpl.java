@@ -98,12 +98,12 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		publicProducts.add(p8);
 	}
 	
-	/*
+	
 	@Override
 	public List<PublicProduct> getAll() {
 		return publicProducts;
 	}
-	*/
+	
 	
 	
 	@Override
