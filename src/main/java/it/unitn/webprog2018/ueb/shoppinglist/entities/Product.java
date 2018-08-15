@@ -27,6 +27,8 @@ public class Product extends AbstractEntity {
 	private User owner;
 	@Expose
 	private ProductsCategory category;
+	@Expose
+	private int amount;
 
 	public String getName() {
 		return name;

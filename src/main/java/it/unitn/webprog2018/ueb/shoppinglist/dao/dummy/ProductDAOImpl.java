@@ -14,19 +14,18 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author giulia
  */
 public class ProductDAOImpl implements ProductDAO {
+
 	private DAOFactory dAOFactory;
 	private List<Product> products;
 
 	public ProductDAOImpl(DAOFactory dAOFactory) {
-		this.dAOFactory=dAOFactory;
+		this.dAOFactory = dAOFactory;
 		User user = new User();
 		user.setId(1);
 		products = new LinkedList<>();
@@ -52,7 +51,7 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public Boolean addProduct(Product product) throws DaoException{
+	public Boolean addProduct(Product product) throws DaoException {
 		Boolean valid = product.isVaildOnCreate(dAOFactory);
 		if (valid) {
 			product.setId(products.size() + 1);
@@ -60,27 +59,15 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 		return valid;
 	}
-	/*
+
 	@Override
-	public List<Product> getByUser(String email) throws DaoException{
-		List<Product> owned = new LinkedList<>();
-		for (Product p : products) {
-			if (p.getEmail().equals(email)) {
-				owned.add(p);
-			}
-		}
-		return owned;
-	}
-	*/
-	@Override
-	public Boolean updateProduct(Integer productId, Product product) throws DaoException{
-		if(product.isVaildOnUpdate(dAOFactory))
-		{
+	public Boolean updateProduct(Integer productId, Product product) throws DaoException {
+		if (product.isVaildOnUpdate(dAOFactory)) {
 			for (Product p : products) {
 				if (p.getId().equals(product.getId())) {
 					p = product;
 					return true;
-				}	
+				}
 			}
 			throw new RecordNotFoundDaoException("The product with id: " + product.getId() + " does not exist");
 		}
@@ -88,10 +75,9 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> getByUser(int id, String query) throws DaoException{
+	public List<Product> getByUser(int id, String query) throws DaoException {
 		List<Product> matching = new LinkedList<>();
-		
-		System.out.println("Checkin out custom products");
+
 		for (Product p : products) {
 			if (p.getOwner().getId() == id) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
@@ -104,6 +90,13 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public List<Product> getByUser(int userId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		List<Product> matching = new LinkedList<>();
+
+		for (Product p : products) {
+			if (p.getOwner().getId() == userId) {
+				matching.add(p);
+			}
+		}
+		return matching;
 	}
 }

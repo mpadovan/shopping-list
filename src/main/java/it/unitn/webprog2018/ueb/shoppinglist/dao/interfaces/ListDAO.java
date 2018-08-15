@@ -17,9 +17,9 @@ import java.util.Map;
 public interface ListDAO {
 	public List getList(int id);
 	
-	public java.util.List<PublicProduct> getPublicProductsOnList(int listId);
+	public Map<PublicProduct, Integer> getPublicProductsOnList(int listId);
 	
-	public java.util.List<Product> getProductsOnList(int listId);
+	public Map<Product, Integer> getProductsOnList(int listId);
 
 	public boolean addProduct(int listId, Product product);
 
