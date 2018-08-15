@@ -64,4 +64,9 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 		return matching;
 	}
 
+	@Override
+	public List<ListsCategory> getAll() {
+		return listsCategories;
+	}
+
 }

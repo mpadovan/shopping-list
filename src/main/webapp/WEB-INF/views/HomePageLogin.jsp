@@ -24,7 +24,8 @@
 								</div>
 							</div>
 							<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
-								<li class="pointer autocomplete-li" style="padding-left: .5rem;" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+								<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome <b> {{ query }}</b>. Clicca qui per crearlo.</li>
+								<li v-if="showAutocompleteList" class="pointer autocomplete-li" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 							</div>
 							<transition name="fade" v-on:after-leave="searchHided">
 								<div class="list-group" v-if="showSearch">
@@ -43,7 +44,7 @@
 										</div>
 									</div>
 									<ul class="search-results list-group list-group-flush">
-										<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
+										<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id"  v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
 									</ul>
 								</div>
 							</transition>
@@ -77,7 +78,7 @@
 					</transition>
 				</div>
 			</div>
-			<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:url="url"></component>
+			<component v-bind:is="ajaxComponent" @done="ajaxDone" v-bind:settings="ajaxSettings"></component>
 			<div id="item-modal" class="modal" tabindex="-1" role="dialog">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">

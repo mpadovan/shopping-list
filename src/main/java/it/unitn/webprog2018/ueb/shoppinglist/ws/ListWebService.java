@@ -63,7 +63,7 @@ public class ListWebService {
 
 		List<ListsCategory> listsCategories = listsCategoryDAO.getFromQuery(query);
 		if (listsCategories == null || listsCategories.isEmpty()) {
-			return "{[]}";
+			return "[]";
 		}
 		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
 		try {
@@ -90,7 +90,7 @@ public class ListWebService {
 			return "{[]}";
 		}
 		Gson gson = CustomGsonBuilder.create(false);
-		String json = "{[";
+		String json = "{ \"publicProducts\" : [";
 		for (Map.Entry<PublicProduct, Integer> entry : publicProductsOnList.entrySet()) {
 			try {
 				json += "{\"product\":" + gson.toJson(entry.getKey()) + ","

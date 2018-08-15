@@ -5,7 +5,11 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +32,25 @@ public class ProductListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
+		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
+		String searchParam = request.getParameter("search");
+		Integer checkParam = 0;
+		
+		List<PublicProduct> publicProducts = null;
+		if(searchParam == null){
+			searchParam = "";
+		}
+		if(searchParam.equals("")){
+			checkParam = 0;
+			publicProducts = publicProductDAO.getAll();
+		} else {
+			checkParam = 1;
+			publicProducts = publicProductDAO.getFromQuery(searchParam);
+		}
+		request.setAttribute("publicProducts", publicProducts);
+		request.setAttribute("searchParam", searchParam);
+		request.setAttribute("checkParam", checkParam);
+		request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
 	}
 
 	/**
