@@ -86,9 +86,12 @@ public class LoginServlet extends HttpServlet {
 						userId.setMaxAge(COOKIE_EXP);
 						response.addCookie(userId);
 					}
+				} else {
+					request.setAttribute("user", user);
+					request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 				}
-				
-				if(user.isAdministrator()){
+
+				if (user.isAdministrator()) {
 					path += "restricted/admin/ProductList";
 					response.sendRedirect(path);
 				} else {
@@ -96,12 +99,10 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect(path);
 				}
 			}
-		} catch (RecordNotFoundDaoException ex)
-		{
+		} catch (RecordNotFoundDaoException ex) {
 			request.setAttribute("user", user);
 			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
-		}
-		catch (DaoException ex) {
+		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
 			//pagina di errore OPSS
 		}

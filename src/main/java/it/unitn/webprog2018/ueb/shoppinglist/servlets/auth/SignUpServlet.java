@@ -70,14 +70,15 @@ public class SignUpServlet extends HttpServlet {
 		user.setName(name);
 		user.setLastname(lastName);
 		user.setEmail(email);
-		user.setPassword(password);
-		user.setCheckpassword(checkPassword);
+		user.setPassword(Sha256.doHash(password));
+		user.setCheckpassword(Sha256.doHash(checkPassword));
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
 		
 		if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
 		{
 			// Retrieving user avatar
+			File file = null;
 			String avatarFileName = "";
 			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
 			Part avatar = request.getPart("image");
@@ -87,7 +88,7 @@ public class SignUpServlet extends HttpServlet {
 				int noExt = avatarFileName.lastIndexOf(File.separator);
 				avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
 				try (InputStream fileContent = avatar.getInputStream()) {
-					File file = new File(avatarFileName);
+					file = new File(avatarFileName);
 					Files.copy(fileContent, file.toPath());
 					avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
 							+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
@@ -100,16 +101,8 @@ public class SignUpServlet extends HttpServlet {
 				}
 			}
 			if (!response.isCommitted()) {
-
-				// Creating the new user
-				user.setEmail(email);
-				user.setPassword(Sha256.doHash(password));
-				user.setName(name);
-				user.setLastname(lastName);
-				user.setAdministrator(false);
 				user.setImage(avatarURI);
-				System.out.println(user.getImage());
-
+				
 				// Creating the token for the account confirmation
 				Token token = new Token();
 
@@ -124,6 +117,9 @@ public class SignUpServlet extends HttpServlet {
 					response.sendRedirect("Login");
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
+					if(file != null) {
+						file.delete();
+					}
 				}
 			}
 		}

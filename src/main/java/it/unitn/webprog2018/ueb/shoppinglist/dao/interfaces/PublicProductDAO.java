@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
  * @author giulia
  */
 public interface PublicProductDAO {
-	// public List<PublicProduct> getAll();
+	public List<PublicProduct> getAll();
 	
 	public List<PublicProduct> getFromQuery(String query);
 	

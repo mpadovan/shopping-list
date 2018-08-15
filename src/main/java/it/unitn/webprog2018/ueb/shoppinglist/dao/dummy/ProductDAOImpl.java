@@ -101,4 +101,9 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 		return matching;
 	}
+
+	@Override
+	public List<Product> getByUser(int userId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

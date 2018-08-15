@@ -18,7 +18,7 @@ public interface ProductDAO {
 	
 	public Boolean addProduct(Product product) throws DaoException;
 	
-	// public List<Product> getByUser(String userEmail) throws DaoException;
+	public List<Product> getByUser(int userId) throws DaoException;
 
 	public Boolean updateProduct(Integer productId, Product product) throws DaoException;
 
