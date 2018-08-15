@@ -48,9 +48,9 @@ public class ProductListServlet extends HttpServlet {
 			publicProducts = publicProductDAO.getFromQuery(searchParam);
 		}
 		request.setAttribute("publicProducts", publicProducts);
-			request.setAttribute("searchParam", searchParam);
-			request.setAttribute("checkParam", checkParam);
-			request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
+		request.setAttribute("searchParam", searchParam);
+		request.setAttribute("checkParam", checkParam);
+		request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
 	}
 
 	/**

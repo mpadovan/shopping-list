@@ -16,7 +16,7 @@
 				<h1 class="card-title">Prodotti</h1>
 				<p><a href="#">Nuovo prodotto <i class="fas fa-plus-circle"></i></a></p>
 				<form>
-					<label class="sr-only" for="cerca">Cerca</label>
+					<label class="sr-only" for="search">Cerca</label>
 					<div class="input-group mb-2">
 						<input type="text" class="form-control" id="search" name="search" placeholder="Cerca">
 						<div class="input-group-append">
