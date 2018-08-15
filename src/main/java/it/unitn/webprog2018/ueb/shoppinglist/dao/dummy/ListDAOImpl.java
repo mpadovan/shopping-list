@@ -115,7 +115,16 @@ public class ListDAOImpl implements ListDAO {
 	public boolean updateAmount(int listId, PublicProduct product) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-	
-	
-	
+
+	@Override
+	public java.util.List<List> getByUser(int userID) {
+		java.util.List<List> match = new LinkedList<>();
+		for (List l : lists) {
+			System.out.println("checking list " + l.getName() + ", owner: " + l.getOwner().getId());
+			if (l.getOwner().getId() == userID) {
+				match.add(l);
+			}
+		}
+		return match;
+	}
 }
