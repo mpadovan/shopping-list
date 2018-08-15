@@ -143,6 +143,7 @@ var app = new Vue({
 			}
 			item.amount = 1;
 			this.items.push(item);
+			console.log(this.items);
 		},
 		updateLocalStorage: function () {
 			localStorage.setItem("items", JSON.stringify(this.items));
@@ -299,9 +300,14 @@ var app = new Vue({
 		}
 	},
 	created: function () {
-		$.get('/ShoppingList/services/lists/restricted/1/personal/1/products').always(function(jqxhr) {
-			if(jqxhr.status == 200) {
-				console.log(jqxhr.responseText);
+		var self = this;
+		$.get('/ShoppingList/services/lists/restricted/' + this.user + '/personal/' + this.list + '/products').done(function (data) {
+			data = data.publicProducts.concat(data.products); 
+			//_.sortBy(data,['product.category.name', 'product.name']);
+			for(var i = 0; data.length > i; i++) {
+				data[i].item = data[i].product;
+				data[i].product = undefined;
+				self.items.push(data[i]);
 			}
 		});
 	}
