@@ -47,10 +47,10 @@
 						<a id="productList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList">Prodotti</a>
 					</li>
 					<li class="nav-item">
-						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryList">Categorie di lista</a>
+						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryProduct">Categorie di prodotto</a>
 					</li>
 					<li class="nav-item">
-						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryProduct">Categorie di prodotto</a>
+						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryList">Categorie di lista</a>
 					</li>
 				</ul>
 				<div class="btn-group">
