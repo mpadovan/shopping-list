@@ -4,8 +4,10 @@
     Author     : giulia
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <layouts:admin pageTitle="Admin products">
 	<jsp:attribute name="pageContent">
@@ -16,7 +18,7 @@
 				<form>
 					<label class="sr-only" for="cerca">Cerca</label>
 					<div class="input-group mb-2">
-						<input type="text" class="form-control" id="cerca" placeholder="Cerca">
+						<input type="text" class="form-control" id="search" name="search" placeholder="Cerca">
 						<div class="input-group-append">
 							<button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i></button>
 						</div>
@@ -29,108 +31,60 @@
 						<li class="page-item"><a class="page-link" href="#">Successivo</a></li>
 					</ul>
 				</nav>
-				<div class="table-responsive-md">
-					<table class="table">
-						<thead>
+				<table class="table table-responsive-md table-striped">
+					<thead>
+						<tr>
+							<th>Nome prodotto</th>
+							<th>Note</th>
+							<th>Logo</th>
+							<th>Fotografia</th>
+							<th>Categoria</th>
+							<th>Gestisci</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="p" items="${requestScope.publicProducts}">
 							<tr>
-								<th>Nome prodotto</th>
-								<th>Note</th>
-								<th>Logo</th>
-								<th>Fotografia</th>
-								<th>Categoria</th>
+								<td>${p.name}</td>
+								<td>${p.note}</td>
+								<td>${p.logo}</td>
+								<td>${p.photography}</td>
+								<td>${p.category}</td>
+								<td><span><a href="#"><i class="fas fa-pen-square"></i></a></span><span class="ml-4"><a href="#" data-toggle="modal" data-target="#delete"><i class="fas fa-trash"></i></a></span></td>
 							</tr>
-						</thead>
-						<tbody>
+						</c:forEach>
+						<c:if test="${fn:length(requestScope.publicProducts) == 0}">
 							<tr>
-								<td>Latte</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
+								<td class="text-center" colspan="6">Nessun risultato</td>
 							</tr>
-							<tr>
-								<td>Pane</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Formaggio</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Cioccolata</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Prosciutto</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Caffe</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Acqua</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Cocacola</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Te</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Latte</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Carta igienica</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-							<tr>
-								<td>Brioches</td>
-								<td>Generico</td>
-								<td><div class="info-product text-center"><img class="logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Latte" title="Latte"></div></td>
-								<td></td>
-								<td>Latticini</td>
-							</tr>
-						</tbody>
-					</table>
+						</c:if>
+					</tbody>
+				</table>
+				<c:if test="${requestScope.checkParam > 0}">
+					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList"><p>Torna alla lista</p></a></div>
+				</c:if>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="delete">Elimina prodotto</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						Sei sicuro di voler eliminare il prodotto?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+						<button type="button" class="btn btn-danger">Elimina</button>
+					</div>
 				</div>
 			</div>
 		</div>
-
 
 
 	</jsp:attribute>
