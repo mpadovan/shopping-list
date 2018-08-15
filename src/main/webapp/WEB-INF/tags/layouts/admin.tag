@@ -25,9 +25,10 @@
 
 <!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 
-		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/info_product.css" />
+		
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar.css" />
-
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/admin_page.css" />
+		
 		<jsp:invoke fragment="customCss" />
 
 		<title><c:out value="${pageTitle}" /></title>

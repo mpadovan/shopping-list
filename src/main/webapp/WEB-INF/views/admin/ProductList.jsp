@@ -49,7 +49,7 @@
 								<td>${p.note}</td>
 								<td>${p.logo}</td>
 								<td>${p.photography}</td>
-								<td>${p.category}</td>
+								<td>${p.category.name}</td>
 								<td><span><a href="#"><i class="fas fa-pen-square"></i></a></span><span class="ml-4"><a href="#" data-toggle="modal" data-target="#delete"><i class="fas fa-trash"></i></a></span></td>
 							</tr>
 						</c:forEach>
