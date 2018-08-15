@@ -65,8 +65,12 @@ public class UserDAOimpl implements UserDAO {
 		
 		Random rand = new Random();
 		user.setId(rand.nextInt());
-		users.add(user);
-		return true;
+		boolean valid = user.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			users.add(user);
+		}
+		return valid;
 	}
 
 	@Override
@@ -81,7 +85,17 @@ public class UserDAOimpl implements UserDAO {
 
 	@Override
 	public Boolean updateUser(Integer id, User user) throws DaoException{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if(user.isVaildOnUpdate(dAOFactory))
+		{
+			for (User p : users) {
+				if (p.getId().equals(user.getId())) {
+					p = user;
+					return true;
+				}
+			}
+			throw new RecordNotFoundDaoException("The product with id: " + user.getId() + " does not exist");
+		}
+		return false;
 	}
 
 }

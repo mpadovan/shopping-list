@@ -80,7 +80,7 @@ public class ProductDAOImpl implements ProductDAO {
 				if (p.getId().equals(product.getId())) {
 					p = product;
 					return true;
-				}
+				}	
 			}
 			throw new RecordNotFoundDaoException("The product with id: " + product.getId() + " does not exist");
 		}

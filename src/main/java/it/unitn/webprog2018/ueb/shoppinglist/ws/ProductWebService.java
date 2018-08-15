@@ -166,7 +166,7 @@ public class ProductWebService {
 		if (productDAO.addProduct(product)) {
 			System.out.println("Added new product");
 		} else {
-			System.out.println("Added new product");
+			System.out.println("Not added new product - error");
 			try {
 				throw new RuntimeException();
 			} catch (RuntimeException ex) {

@@ -96,7 +96,8 @@ public class AccountConfirmationServlet extends HttpServlet {
 				}
 				else
 				{
-					
+					request.setAttribute("user", user);
+					request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 				}
 			} catch (DaoException ex) {
 				Logger.getLogger(AccountConfirmationServlet.class.getName()).log(Level.SEVERE, null, ex);
