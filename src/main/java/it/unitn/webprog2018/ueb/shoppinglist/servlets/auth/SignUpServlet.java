@@ -61,23 +61,22 @@ public class SignUpServlet extends HttpServlet {
 
 		String name = request.getParameter("name");
 		String lastName = request.getParameter("lastName");
-
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
 		String avatarURI = "";
-		if (!password.equals(checkPassword)) {
-
-			request.setAttribute("passwordError", "true");
-			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
-
-		} else if (userDAO.getByEmail(email) != null) {
-
-			request.setAttribute("emailTaken", "true");
-			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
-
-		} else {
-
+		
+		User user = new User();
+		user.setName(name);
+		user.setLastname(lastName);
+		user.setEmail(email);
+		user.setPassword(password);
+		user.setCheckpassword(checkPassword);
+		user.setImage(avatarURI);
+		user.setAdministrator(false);
+		
+		if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
+		{
 			// Retrieving user avatar
 			String avatarFileName = "";
 			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
@@ -100,11 +99,9 @@ public class SignUpServlet extends HttpServlet {
 					getServletContext().log("impossible to upload the file", ex);
 				}
 			}
-
 			if (!response.isCommitted()) {
 
 				// Creating the new user
-				User user = new User();
 				user.setEmail(email);
 				user.setPassword(Sha256.doHash(password));
 				user.setName(name);
@@ -129,6 +126,11 @@ public class SignUpServlet extends HttpServlet {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
 				}
 			}
+		}
+		else
+		{
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 		}
 	}
 

@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 
 /**
@@ -14,11 +15,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
  */
 public interface UserDAO {
 	
-	User getById(Integer id);
+	User getById(Integer id) throws DaoException;
 	
-	User getByEmail(String email);
+	User getByEmail(String email) throws DaoException;
 	
-	void addUser(User user);
+	Boolean addUser(User user) throws DaoException;
 	
-	void updateUser(Integer id, User user);
+	Boolean updateUser(Integer id, User user) throws DaoException;
 }

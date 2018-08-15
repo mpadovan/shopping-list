@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
@@ -16,6 +17,8 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -75,19 +78,29 @@ public class AccountConfirmationServlet extends HttpServlet {
 		}
 		if (!response.isCommitted()) {
 			User user = token.getUser();
-			userDAO.addUser(user);
-			String avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
+			try {
+				if(userDAO.addUser(user))
+				{
+					String avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
 			
-			String uploadFolder = getServletContext().getInitParameter("uploadFolder");
-			File src = new File(uploadFolder + "/restricted/tmp/" + avatarName);
-			String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
-			File dest = new File(uploadFolder + "/restricted/avatar/" + avatarName2);
-			Files.copy(src.toPath(), dest.toPath());
-			src.delete();
-			
-			tokenDAO.removeToken(token);
-			path += "Login";
-			response.sendRedirect(path);
+					String uploadFolder = getServletContext().getInitParameter("uploadFolder");
+					File src = new File(uploadFolder + "/restricted/tmp/" + avatarName);
+					String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
+					File dest = new File(uploadFolder + "/restricted/avatar/" + avatarName2);
+					Files.copy(src.toPath(), dest.toPath());
+					src.delete();
+
+					tokenDAO.removeToken(token);
+					path += "Login";
+					response.sendRedirect(path);
+				}
+				else
+				{
+					
+				}
+			} catch (DaoException ex) {
+				Logger.getLogger(AccountConfirmationServlet.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 

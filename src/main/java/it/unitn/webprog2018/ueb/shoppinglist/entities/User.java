@@ -5,7 +5,13 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Entity class that implements the User entity (aka user table in database)
@@ -16,6 +22,7 @@ public class User extends AbstractEntity {
 
 	private String email;
 	private String password;
+	private String checkpassword;
 	private String name;
 	private String lastname;
 	private String image;
@@ -23,6 +30,14 @@ public class User extends AbstractEntity {
 	
 	public User() {
 		
+	}
+	
+	public String getCheckpassword() {
+		return checkpassword;
+	}
+
+	public void setCheckpassword(String checkpassword) {
+		this.checkpassword = checkpassword;
 	}
 	
 	/**
@@ -109,5 +124,47 @@ public class User extends AbstractEntity {
 	 */
 	public void setAdministrator(boolean administrator) {
 		this.administrator = administrator;
+	}
+	
+	@Override
+	protected void validateOnSave(DAOFactory dAOFactory) {
+		UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
+		try {
+			userDAO.getByEmail(email);
+			setError("email", "email già esistente");
+		} catch (RecordNotFoundDaoException ex) {
+			if (name == null || name.equals("")) {
+				setError("firstname", "Non può essere lasciato vuoto");
+			}
+			if (lastname == null || lastname.equals("")) {
+				setError("lastname", "Non può essere lasciato vuoto");
+			}
+			if (email == null || email.equals("")) {
+				setError("email", "Non può essere lasciato vuoto");
+			}
+		}
+		catch (DaoException ex) {
+			Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) {
+		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+			setError("passwordconfirmation", "Deve coincidere con password");
+		}
+	}
+
+	@Override
+	protected void validateOnCreate(DAOFactory dAOFactory) {
+		if (password == null || password.equals("")) {
+			setError("password", "Non può essere lasciato vuoto");
+		}
+		if (checkpassword == null || checkpassword.equals("")) {
+			setError("passwordconfirmation", "Non può essere lasciato vuoto");
+		}
+		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+			setError("passwordconfirmation", "Deve coincidere con password");
+		}
 	}
 }
