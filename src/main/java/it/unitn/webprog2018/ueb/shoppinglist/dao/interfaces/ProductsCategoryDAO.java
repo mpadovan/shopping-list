@@ -5,13 +5,16 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author giulia
  */
 public interface ProductsCategoryDAO {
-	public List<ProductsCategory> getFromQuery(String query);
+	public ArrayList<ProductsCategory> getFromQuery(String query) throws DaoException;
+	
+	public boolean addProductsCategory(ProductsCategory productCategory) throws DaoException;
 }

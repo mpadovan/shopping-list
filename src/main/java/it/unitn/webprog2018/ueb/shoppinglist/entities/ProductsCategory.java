@@ -16,7 +16,7 @@ public class ProductsCategory extends AbstractEntity {
 
 	@Expose
 	private String name;
-	private ProductsCategory category;
+	private int category;
 	private String description;
 	private String logo;
 
@@ -28,11 +28,11 @@ public class ProductsCategory extends AbstractEntity {
 		this.name = name;
 	}
 
-	public ProductsCategory getCategory() {
+	public int getCategory() {
 		return category;
 	}
 
-	public void setCategory(ProductsCategory category) {
+	public void setCategory(int category) {
 		this.category = category;
 	}
 
