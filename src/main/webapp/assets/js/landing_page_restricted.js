@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
-Vue.component('search', {
-	props: ['url'],
+Vue.component('ajaxComponent', {
+	props: ['settings'],
 	data: function () {
 		return {
 			results: []
@@ -13,18 +13,14 @@ Vue.component('search', {
 	},
 	created: function () {
 		var self = this;
-		$.get({
-			url: self.url,
-			success: function (data) {
-				data = _.sortBy(data, ['name']);
-				self.$emit('search', data);
-				//self.results = mergedArray;
-			},
-			error: function (error) {
-				alert('Errore nel caricamento del componente di ricerca, dettagli in console');
-				console.log(error);
-			}
-		});
+		$.ajax(this.settings)
+			.done(function (data) {
+				self.$emit('done', data);
+			})
+			.fail(function (err) {
+				console.log(err);
+				alert('Errore nel caricamento AJAX, dettagli in console');
+			});
 	},
 	template: "<div style=\"display:none;\"></div>"
 });
@@ -33,7 +29,6 @@ Vue.component('list-item', {
 	props: ['item'],
 	computed: {
 		capitalized: function () {
-			console.log(this.item);
 			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
@@ -79,7 +74,7 @@ Vue.component('search-item', {
 	},
 	template: '<li class="list-group-item" @click="callParent"> \
 					<div class="row align-items-center"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category }}</h6></div>\
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
 				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
 					</div> \
 				</li>'
@@ -105,15 +100,26 @@ var app = new Vue({
 		showAutocomplete: false,
 		url: null,
 		autocompleteList: [],
-		user: 'anon',
-		item_id: null
+		user: 1,
+		item_id: null,
+		showAutocompleteList: false,
+		ajaxSettings: {},
+		ajaxComponent: null,
+		operation: null,
+		list: 1
 	},
 	methods: {
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
-				this.url = '/ShoppingList/services/products/?search=' + this.query;
-				this.searchInitializing = 'search';
+				this.ajaxSettings = {
+					"url": '/ShoppingList/services/products/restricted/' + this.user + '?search=' + this.query,
+					"method": 'GET',
+					"async": true,
+					"crossDomain": true
+				};
+				this.operation = 3;
+				this.ajaxComponent = 'ajaxComponent';
 				this.showAutocomplete = false;
 			}
 		},
@@ -137,6 +143,7 @@ var app = new Vue({
 			}
 			item.amount = 1;
 			this.items.push(item);
+			console.log(this.items);
 		},
 		updateLocalStorage: function () {
 			localStorage.setItem("items", JSON.stringify(this.items));
@@ -150,7 +157,7 @@ var app = new Vue({
 		updateComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
+					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
 					this.updateLocalStorage();
 					return;
 				}
@@ -173,17 +180,31 @@ var app = new Vue({
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
-				console.log(data);
-				(data.length == 0) ? this.autocompleteList = [{name: 'Nessun risultato'}] : this.autocompleteList = data;
+				if (data.length == 0) {
+					this.showAutocompleteList = false;
+				} else {
+					this.showAutocompleteList = true;
+					this.autocompleteList = data;
+				}
 			} else {
 				this.results = data;
+				for (var j = 0; this.results.length > j; j++) {
+					console.log(this.results[j].category);
+					if (this.results[j].category == undefined) this.results[j].category = {
+						name: 'Default'
+					};
+				}
 				this.resultsSorted = this.results;
-				console.log(this.results.length);
 				if (this.results.length == 0) this.noResults = true;
 				else this.noResults = false;
 				var arr = [];
+				console.log(data);
 				for (var i = 0; data.length > i; i++) {
-					arr.push(data[i].category);
+					if (typeof data[i].category == 'undefined') {
+						arr.push('Default');
+					} else {
+						arr.push(data[i].category.name);
+					}
 				}
 				var unique = arr.filter(function (elem, index, self) {
 					return index === self.indexOf(elem);
@@ -197,8 +218,53 @@ var app = new Vue({
 			this.selected = 'all';
 			this.showSearch = false;
 		},
-		replaceQuerySearch: function(val) {
+		replaceQuerySearch: function (val) {
 			this.query = val;
+		},
+		quickAddProduct: function () {
+			this.ajaxSettings = {
+				"async": true,
+				"crossDomain": true,
+				"url": "/ShoppingList/services/products/restricted/" + this.user,
+				"method": "POST",
+				"data": "{\"name\": " + this.query + "}",
+				"headers": {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			this.operation = 2;
+			this.ajaxComponent = 'ajaxComponent';
+			this.operationData = {
+				product_name: this.query
+			};
+		},
+		ajaxDone: function (data) {
+			this.ajaxComponent = null;
+			switch (this.operation) {
+				case 1:
+					data = data.products.concat(data.publicProducts);
+					this.addResultsToIstance(data);
+					break;
+				case 2:
+					toastr['success'](this.operationData.product_name + ' aggiunto ai propri prodotti');
+					break;
+				case 3:
+					data = data.products.concat(data.publicProducts);
+					this.addResultsToIstance(data);
+					break;
+				case 4:
+					console.log(data);
+					break;
+				default:
+					break;
+			}
+			this.operation = null;
+		},
+		sortBasedOnCategories: function (val) {
+			if (this.selected == 'all') return true;
+			else if (val == this.selected) return true;
+			else return false;
 		}
 	},
 	watch: {
@@ -208,8 +274,14 @@ var app = new Vue({
 				this.hideSearch();
 			} else {
 				this.showAutocomplete = true;
-				this.url = '/ShoppingList/services/products/?search=' + this.query + '&compact=true';
-				this.searchInitializing = 'search';
+				this.ajaxSettings = {
+					"url": '/ShoppingList/services/products/restricted/' + this.user + '/?search=' + this.query + '&compact=true',
+					"method": 'GET',
+					"async": true,
+					"crossDomain": true
+				};
+				this.operation = 1;
+				this.ajaxComponent = 'ajaxComponent';
 				$('#search-input').focus();
 			}
 		},
@@ -223,8 +295,20 @@ var app = new Vue({
 			}
 			this.resultsSorted = [];
 			for (var i = 0; this.results.length > i; i++) {
-				if (this.results[i].category == val) this.resultsSorted.push(this.results[i]);
+				if (this.results[i].category.name == val) this.resultsSorted.push(this.results[i]);
 			}
 		}
+	},
+	created: function () {
+		var self = this;
+		$.get('/ShoppingList/services/lists/restricted/' + this.user + '/personal/' + this.list + '/products').done(function (data) {
+			data = data.publicProducts.concat(data.products); 
+			//_.sortBy(data,['product.category.name', 'product.name']);
+			for(var i = 0; data.length > i; i++) {
+				data[i].item = data[i].product;
+				data[i].product = undefined;
+				self.items.push(data[i]);
+			}
+		});
 	}
 });

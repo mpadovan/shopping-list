@@ -114,8 +114,5 @@ public class ListDAOImpl implements ListDAO {
 	@Override
 	public boolean updateAmount(int listId, PublicProduct product) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-	
-	
-	
+	}	
 }

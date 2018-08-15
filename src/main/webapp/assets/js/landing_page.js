@@ -26,7 +26,7 @@ Vue.component('categories', {
 		});
 	},
 	template: ' <div>Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}, {{ category.description}}</option> \
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
 				</select></div>',
 	watch: {
 		cat: function(val) {
@@ -110,7 +110,7 @@ Vue.component('search-item', {
 	},
 	template: '<li class="list-group-item" @click="callParent"> \
 					<div class="row align-items-center"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category }}</h6></div>\
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
 				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
 					</div> \
 				</li>'
@@ -208,13 +208,22 @@ var app = new Vue({
 				(data.length == 0) ? this.autocompleteList = [{name: 'Nessun risultato'}] : this.autocompleteList = data;
 			} else {
 				this.results = data;
+				for (var j = 0; this.results.length > j; j++) {
+					if (this.results[j].category == undefined) this.results[j].category = {
+						name: 'Default'
+					};
+				}
 				this.resultsSorted = this.results;
-				console.log(this.results.length);
+				console.log(this.results);
 				if (this.results.length == 0) this.noResults = true;
 				else this.noResults = false;
 				var arr = [];
 				for (var i = 0; data.length > i; i++) {
-					arr.push(data[i].category);
+					if (typeof data[i].category == 'undefined') {
+						arr.push('Default');
+					} else {
+						arr.push(data[i].category.name);
+					}
 				}
 				var unique = arr.filter(function (elem, index, self) {
 					return index === self.indexOf(elem);
@@ -254,7 +263,7 @@ var app = new Vue({
 			}
 			this.resultsSorted = [];
 			for (var i = 0; this.results.length > i; i++) {
-				if (this.results[i].category == val) this.resultsSorted.push(this.results[i]);
+				if (this.results[i].category.name == val) this.resultsSorted.push(this.results[i]);
 			}
 		}
 	},
