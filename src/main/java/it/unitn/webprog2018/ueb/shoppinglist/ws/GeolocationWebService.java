@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author giulia
  */
-@Path("restricted/geolocation")
+@Path("/geolocation")
 public class GeolocationWebService {
 
 	@Context
@@ -55,32 +55,30 @@ public class GeolocationWebService {
 	 *
 	 * @param userId
 	 * @param location
+	 * @param category
 	 * @return an instance of java.lang.String
 	 */
 	@GET
-	@Path("/{userId}")
+	@Path("/restricted/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getShops(@PathParam("userId") int userId,
+	public String getShopsByUser(@PathParam("userId") int userId,
 			@QueryParam("location") String location) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		
-		System.out.println("userId: " + userId);
-		java.util.List<List> lists = listDAO.getByUser(userId);
+
 		Set<String> categories = new HashSet<>();
-		System.out.println(lists.size());
+		java.util.List<List> lists = listDAO.getByUser(userId);
 		for (List l : lists) {
 			categories.add(l.getCategory().getName());
 		}
-		System.out.println(categories.size());
 		Client client = ClientBuilder.newClient();
 		String json = "[";
 		URI uri = null;
-		for (String category : categories) {
+		for (String cat : categories) {
 			String response = "";
 			try {
 				uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name&"
 						+ "center=" + location + "&distance" + RADIUS + "&"
-						+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + category.toLowerCase(), null);
+						+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + cat.toLowerCase(), null);
 			} catch (URISyntaxException ex) {
 				Logger.getLogger(GeolocationWebService.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -89,10 +87,55 @@ public class GeolocationWebService {
 						request().
 						accept(MediaType.APPLICATION_JSON).
 						get(String.class);
-				json += "{ \"category\":" + "\"" + category + "\"," + "\"response\":" + response + "},";
+				json += "{ \"category\":" + "\"" + cat + "\"," + "\"response\":" + response + "},";
 			}
 		}
 		if (json.endsWith(",")) {
+			char[] tmp = json.toCharArray();
+			tmp[json.lastIndexOf(",")] = ']';
+			json = new String(tmp);
+		} else {
+			json += "]";
+		}
+		return json;
+	}
+
+	/**
+	 * Retrieves representation of an instance of
+	 * it.unitn.webprobramming.geolocationtest.entities.Shop
+	 *
+	 * @param location
+	 * @param category
+	 * @return an instance of java.lang.String
+	 */
+	@GET
+	@Path("/{category}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getShops(@PathParam("category") String category,
+			@QueryParam("location") String location) {
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+
+		Client client = ClientBuilder.newClient();
+		String json = "[";
+		URI uri = null;
+		String response = "";
+		try {
+			uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name&"
+					+ "center=" + location + "&distance" + RADIUS + "&"
+					+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + category.toLowerCase(), null);
+		} catch (URISyntaxException ex) {
+			Logger.getLogger(GeolocationWebService.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		if (uri != null) {
+			response = client.target(uri).
+					request().
+					accept(MediaType.APPLICATION_JSON).
+					get(String.class);
+			json += "{ \"category\":" + "\"" + category + "\"," + "\"response\":" + response + "},";
+		}
+
+		if (json.endsWith(
+				",")) {
 			char[] tmp = json.toCharArray();
 			tmp[json.lastIndexOf(",")] = ']';
 			json = new String(tmp);
