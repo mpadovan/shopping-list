@@ -26,4 +26,6 @@ public interface ListDAO {
 	public boolean isOnList(int listId, PublicProduct product);
 
 	public boolean updateAmount(int listId, PublicProduct product);
+
+	public java.util.List<List> getByUser(int userId);
 }
