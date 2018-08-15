@@ -5,7 +5,11 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +31,25 @@ public class CategoryListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
+		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
+		String searchParam = request.getParameter("search");
+		Integer checkParam = 0;
+		
+		List<ListsCategory> listsCategory = null;
+		if(searchParam == null){
+			searchParam = "";
+		}
+		if(searchParam.equals("")){
+			checkParam = 0;
+			listsCategory = listsCategoryDAO.getAll();
+		} else {
+			checkParam = 1;
+			listsCategory = listsCategoryDAO.getFromQuery(searchParam);
+		}
+		request.setAttribute("listsCategory", listsCategory);
+		request.setAttribute("searchParam", searchParam);
+		request.setAttribute("checkParam", checkParam);
+		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
 	}
 
 	/**
