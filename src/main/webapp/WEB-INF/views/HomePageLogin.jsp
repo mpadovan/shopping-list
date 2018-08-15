@@ -44,7 +44,7 @@
 										</div>
 									</div>
 									<ul class="search-results list-group list-group-flush">
-										<search-item v-for="result in results" v-bind:key="result.name"  v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
+										<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id"  v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
 									</ul>
 								</div>
 							</transition>
