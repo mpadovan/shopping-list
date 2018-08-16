@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -13,8 +14,10 @@ import java.util.Set;
  * @author giuliapeserico
  */
 public abstract class AbstractEntity implements Serializable {
-	@Expose private Integer id;
-	
+
+	@Expose
+	private Integer id;
+
 	public Integer getId() {
 		return id;
 	}
@@ -22,7 +25,7 @@ public abstract class AbstractEntity implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	private final Map<String, Set<String>> errors;
 
 	public AbstractEntity() {
@@ -35,7 +38,7 @@ public abstract class AbstractEntity implements Serializable {
 		this.validateOnSave(dAOFactory);
 		return this.errors.isEmpty();
 	}
-	
+
 	public Boolean isVaildOnUpdate(DAOFactory dAOFactory) {
 		this.clearErrors();
 		this.validateOnUpdate(dAOFactory);
@@ -43,10 +46,22 @@ public abstract class AbstractEntity implements Serializable {
 		return this.errors.isEmpty();
 	}
 
-	protected void validateOnCreate(DAOFactory dAOFactory) {};
-	protected void validateOnUpdate(DAOFactory dAOFactory) {};
-	protected void validateOnSave(DAOFactory dAOFactory) {};
-	protected void validateOnDestroy(DAOFactory dAOFactory) {};
+	protected void validateOnCreate(DAOFactory dAOFactory) {
+	}
+
+	;
+	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	}
+
+	;
+	protected void validateOnSave(DAOFactory dAOFactory) {
+	}
+
+	;
+	protected void validateOnDestroy(DAOFactory dAOFactory) {
+	}
+
+	;
 
 	public void setError(String field, String error) {
 		Set<String> fieldErrors = this.errors.get(field);
@@ -55,7 +70,7 @@ public abstract class AbstractEntity implements Serializable {
 			this.errors.put(field, new HashSet<String>());
 			fieldErrors = this.errors.get(field);
 		}
-		
+
 		fieldErrors.add(error);
 	}
 
@@ -75,5 +90,22 @@ public abstract class AbstractEntity implements Serializable {
 		this.clearErrors();
 		this.validateOnDestroy(dAOFactory);
 		return this.errors.isEmpty();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == this.getClass()) {
+			if (this.id.equals(((AbstractEntity)o).getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 97 * hash + Objects.hashCode(this.id);
+		return hash;
 	}
 }

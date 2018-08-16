@@ -29,9 +29,9 @@ public interface ListDAO {
 	
 	public boolean isOnList(int listId, Product product);
 
-	public boolean updateAmount(int listId, PublicProduct product);
+	public boolean updateAmount(int listId, PublicProduct product, int newAmount);
 	
-	public boolean updateAmount(int listId, Product product);
+	public boolean updateAmount(int listId, Product product, int newAmount);
 	
 	public boolean hasAddDeletePermission(int listId, int userId);
 	
