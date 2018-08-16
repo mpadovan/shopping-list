@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
@@ -16,10 +17,11 @@ import java.util.List;
  * @author giulia
  */
 public class ListsCategoryDAOImpl implements ListsCategoryDAO {
-
+	private DAOFactory dAOFactory;
 	private ArrayList<ListsCategory> listsCategories;
 
-	public ListsCategoryDAOImpl() {
+	public ListsCategoryDAOImpl(DAOFactory dAOFactory) {
+		this.dAOFactory=dAOFactory;
 		listsCategories = new ArrayList<>();
 		ListsCategory l1 = new ListsCategory();
 		l1.setId(1);
@@ -50,7 +52,7 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	}
 
 	@Override
-	public List<ListsCategory> getFromQuery(String query) {
+	public List<ListsCategory> getFromQuery(String query) throws DaoException{
 		List<ListsCategory> matching = new ArrayList<ListsCategory>();
 
 		if (query == null) {
@@ -70,7 +72,7 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
-	public List<ListsCategory> getAll() {
+	public List<ListsCategory> getAll() throws DaoException{
 		return listsCategories;
 		
 	}

@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
@@ -17,10 +18,11 @@ import java.util.List;
  * @author giulia
  */
 public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
-
+	private DAOFactory dAOFactory;
 	private static List<ProductsCategory> productsCategories;
 
-	public ProductsCategoryDAOImpl() {
+	public ProductsCategoryDAOImpl(DAOFactory dAOFactory) {
+		this.dAOFactory=dAOFactory;
 		productsCategories = new LinkedList<>();
 
 		ProductsCategory pc1 = new ProductsCategory();

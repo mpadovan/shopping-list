@@ -45,7 +45,11 @@ public class CategoryListServlet extends HttpServlet {
 		}
 		if (searchParam.equals("")) {
 			checkParam = 0;
-			listsCategory = listsCategoryDAO.getAll();
+			try {
+				listsCategory = listsCategoryDAO.getAll();
+			} catch (DaoException ex) {
+				Logger.getLogger(CategoryListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		} else {
 			checkParam = 1;
 			try {

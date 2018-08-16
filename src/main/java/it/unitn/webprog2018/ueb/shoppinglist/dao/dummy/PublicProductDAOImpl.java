@@ -5,6 +5,9 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
@@ -16,14 +19,15 @@ import java.util.List;
  * @author giulia
  */
 public class PublicProductDAOImpl implements PublicProductDAO {
-
+	private DAOFactory dAOFactory;
 	private static List<PublicProduct> publicProducts;
 
-	public static List<PublicProduct> getPublicProducts() {
+	public static List<PublicProduct> getPublicProducts() throws DaoException{
 		return publicProducts;
 	}
 
-	public PublicProductDAOImpl() {
+	public PublicProductDAOImpl(DAOFactory dAOFactory) {
+		this.dAOFactory=dAOFactory;
 		publicProducts = new LinkedList<>();
 		PublicProduct p1 = new PublicProduct();
 		p1.setId(1);
@@ -103,18 +107,18 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 	
 	@Override
-	public List<PublicProduct> getAll() {
+	public List<PublicProduct> getAll() throws DaoException{
 		return publicProducts;
 	}
 
 	@Override
-	public PublicProduct getById(Integer id) {
+	public PublicProduct getById(Integer id) throws DaoException{
 		for (PublicProduct p : publicProducts) {
 			if (p.getId().equals(id)) {
 				return p;
 			}
 		}
-		return null;
+		throw new RecordNotFoundDaoException("Product with id: " + id + " not found");
 	}
 	
 	/**
@@ -123,7 +127,7 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	 *
 	 */
 	@Override
-	public List<PublicProduct> getFromQuery(String query) {
+	public List<PublicProduct> getFromQuery(String query) throws DaoException{
 		List<PublicProduct> matching = new LinkedList<>();
 
 		if (query == null) {
@@ -139,7 +143,7 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 
 	@Override
-	public boolean updateProduct(PublicProduct product) {
+	public Boolean updateProduct(PublicProduct product) throws DaoException{
 		for (PublicProduct p : publicProducts) {
 			if (p.getName().equals(product.getName())) {
 				p = product;
@@ -150,7 +154,7 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 
 	@Override
-	public boolean addProduct(PublicProduct product) {
+	public Boolean addProduct(PublicProduct product) throws DaoException{
 		product.setId((int)(Math.random() * 10000));
 		for(PublicProduct p : publicProducts) {
 			if (p.getName().equals(product.getName())) {

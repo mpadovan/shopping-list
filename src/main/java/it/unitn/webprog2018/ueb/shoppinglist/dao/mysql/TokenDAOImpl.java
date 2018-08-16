@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import java.nio.file.Paths;
@@ -26,17 +27,17 @@ public class TokenDAOImpl implements TokenDAO {
 	}
 	
 	@Override
-	public Token getByTokenString(String token) {
+	public Token getByTokenString(String token){
 		return tokens.get(token);
 	}
 
 	@Override
-	public void addToken(Token token) {
+	public void addToken(Token token){
 		tokens.put(token.getToken(), token);
 	}
 
 	@Override
-	public void removeExpiredTokens() {
+	public void removeExpiredTokens(){
 		Date now = new Date(System.currentTimeMillis());
 		for (Map.Entry<String,Token> entry : tokens.entrySet()) {
 			if (entry.getValue().getExpirationDate().before(now)) {
@@ -46,7 +47,7 @@ public class TokenDAOImpl implements TokenDAO {
 	}
 
 	@Override
-	public void removeToken(Token token) {
+	public void removeToken(Token token){
 		tokens.remove(token.getToken());
 	}
 }

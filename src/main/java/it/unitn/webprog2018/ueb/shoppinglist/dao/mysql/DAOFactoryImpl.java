@@ -25,7 +25,7 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public ExampleDAO getExampleDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ExampleDAOImpl(con, this);
 	}
 
 	@Override
@@ -35,32 +35,32 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public TokenDAO getTokenDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new TokenDAOImpl();
 	}
 
 	@Override
 	public ProductDAO getProductDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ProductDAOImpl(con, this);
 	}
 
 	@Override
 	public PublicProductDAO getPublicProductDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new PublicProductDAOImpl(con, this);
 	}
 
 	@Override
 	public ListsCategoryDAO getListsCategoryDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ListsCategoryDAOImpl(con, this);
 	}
 
 	@Override
 	public ProductsCategoryDAO getProductsCategoryDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ProductsCategoryDAOImpl(con, this);
 	}
 
 	@Override
 	public ListDAO getListDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ListDAOImpl(con, this);
 	}
 
 }

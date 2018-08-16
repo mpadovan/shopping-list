@@ -6,10 +6,13 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,17 +38,25 @@ public class ProductListServlet extends HttpServlet {
 		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
 		String searchParam = request.getParameter("search");
 		Integer checkParam = 0;
-		
+
 		List<PublicProduct> publicProducts = null;
-		if(searchParam == null){
+		if (searchParam == null) {
 			searchParam = "";
 		}
-		if(searchParam.equals("")){
+		if (searchParam.equals("")) {
 			checkParam = 0;
-			publicProducts = publicProductDAO.getAll();
+			try {
+				publicProducts = publicProductDAO.getAll();
+			} catch (DaoException ex) {
+				Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		} else {
 			checkParam = 1;
-			publicProducts = publicProductDAO.getFromQuery(searchParam);
+			try {
+				publicProducts = publicProductDAO.getFromQuery(searchParam);
+			} catch (DaoException ex) {
+				Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 		request.setAttribute("publicProducts", publicProducts);
 		request.setAttribute("searchParam", searchParam);
@@ -64,7 +75,7 @@ public class ProductListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 	}
 
 	/**

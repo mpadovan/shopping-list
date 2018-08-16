@@ -14,7 +14,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
@@ -85,7 +84,7 @@ public class ListWebService {
 	@GET
 	@Path("/restricted/{userId}/personal/{listId}/products")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getProductsOnPersonalList(@PathParam("listId") int listId) {
+	public String getProductsOnPersonalList(@PathParam("listId") int listId) throws DaoException {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> publicProductsOnList = listDAO.getPublicProductsOnList(listId);
 		if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
@@ -120,7 +119,7 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/personal/{listId}/products/public")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void addPublicProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	public void addPublicProductOnPersonalList(@PathParam("listId") int listId, String content) throws DaoException {
 		PublicProduct product = null;
 		try {
 			Gson gson = new Gson();
@@ -161,7 +160,7 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/personal/{listId}/products/personal")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void addProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	public void addProductOnPersonalList(@PathParam("listId") int listId, String content) throws DaoException {
 		Product product = null;
 		try {
 			Gson gson = new Gson();

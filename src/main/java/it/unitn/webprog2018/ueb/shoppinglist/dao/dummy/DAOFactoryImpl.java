@@ -18,14 +18,14 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
  */
 public class DAOFactoryImpl implements DAOFactory {
 
-	private final ExampleDAO EXAMPLE_DAO = new ExampleDAOImpl();
+	private final ExampleDAO EXAMPLE_DAO = new ExampleDAOImpl(this);
 	private final UserDAO USER_DAO = new UserDAOimpl(this);
 	private final TokenDAO TOKEN_DAO = new TokenDAOImpl();
 	private final ProductDAO PRODUCT_DAO = new ProductDAOImpl(this);
-	private final PublicProductDAO PUBLIC_PRODUCT_DAO = new PublicProductDAOImpl();
-	private final ListsCategoryDAO LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl();
-	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl();
-	private final ListDAO LIST_DAO = new ListDAOImpl();
+	private final PublicProductDAO PUBLIC_PRODUCT_DAO = new PublicProductDAOImpl(this);
+	private final ListsCategoryDAO LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl(this);
+	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl(this);
+	private final ListDAO LIST_DAO = new ListDAOImpl(this);
 	
 	@Override
 	public ExampleDAO getExampleDAO() {
