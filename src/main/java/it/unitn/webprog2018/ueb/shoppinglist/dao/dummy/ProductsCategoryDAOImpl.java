@@ -5,8 +5,10 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,8 +33,7 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc2.setId(2);
 		pc2.setName("Frutta surgelata");
 		pc2.setDescription("Vegetali dal sapore dolce, ma surgelati");
-		pc2.setCategory(new ProductsCategory());
-		pc2.getCategory().setId(1);
+		pc2.setCategory(-1);
 		productsCategories.add(pc2);
 
 		ProductsCategory pc3 = new ProductsCategory();
@@ -45,8 +46,7 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc4.setId(4);
 		pc4.setName("Protezioni solari");
 		pc4.setDescription("Creme per il corpo che proteggono contro l'azione dei raggi solari");
-		pc4.setCategory(new ProductsCategory());
-		pc4.getCategory().setId(5);
+		pc4.setCategory(-1);
 		
 		productsCategories.add(pc4);
 
@@ -65,7 +65,7 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 
 	@Override
 	public List<ProductsCategory> getFromQuery(String query) {
-		List<ProductsCategory> matching = new LinkedList<>();
+		List<ProductsCategory> matching = new ArrayList<>();
 
 		System.out.println("Checkin out custom products");
 		for (ProductsCategory p : productsCategories) {
@@ -77,7 +77,12 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	}
 
 	@Override
-	public List<ProductsCategory> getAll() {
+	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+
+	public List<ProductsCategory> getAll() throws DaoException{
 		return productsCategories;
 	}
 

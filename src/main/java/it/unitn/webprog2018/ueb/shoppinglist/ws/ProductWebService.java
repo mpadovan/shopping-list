@@ -129,7 +129,7 @@ public class ProductWebService {
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProductCategories(@QueryParam("search") String search,
-			@QueryParam("compact") String compact) {
+			@QueryParam("compact") String compact) throws DaoException {
 
 		String query = getQuery(search);
 
