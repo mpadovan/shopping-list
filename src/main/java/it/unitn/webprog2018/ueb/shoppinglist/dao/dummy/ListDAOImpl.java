@@ -59,10 +59,8 @@ public class ListDAOImpl implements ListDAO {
 		l2.setOwner(user);
 
 		lists.add(l2);
-		DAOFactoryImpl factory = new DAOFactoryImpl();
 
-		PublicProductDAO ppdaoi = factory.getPublicProductDAO();
-		java.util.List<PublicProduct> publicProducts = ppdaoi.getFromQuery("");
+		java.util.List<PublicProduct> publicProducts = PublicProductDAOImpl.getPublicProducts();
 		for (int i = 0; i < publicProducts.size(); i++) {
 			if (i % 2 == 0) {
 				publicProductsOnList1.put(publicProducts.get(i), (int) (Math.random() * 10 + 1));
@@ -70,19 +68,14 @@ public class ListDAOImpl implements ListDAO {
 				publicProductsOnList2.put(publicProducts.get(i), (int) (Math.random() * 10 + 1));
 			}
 		}
-		ProductDAO pdaoi = factory.getProductDAO();
-		java.util.List<Product> products = null;
-		try {
-			products = pdaoi.getByUser(1);
-			for (int i = 0; i < products.size(); i++) {
-				if (i % 2 == 0) {
-					productsOnList1.put(products.get(i), (int) (Math.random() * 10 + 1));
-				} else {
-					productsOnList2.put(products.get(i), (int) (Math.random() * 10 + 1));
-				}
+		
+		java.util.List<Product> products = ProductDAOImpl.getProducts();
+		for (int i = 0; i < products.size(); i++) {
+			if (i % 2 == 0 && products.get(i).getOwner().getId().equals(1)) {
+				productsOnList1.put(products.get(i), (int) (Math.random() * 10 + 1));
+			} else if (products.get(i).getOwner().getId().equals(1)) {
+				productsOnList2.put(products.get(i), (int) (Math.random() * 10 + 1));
 			}
-		} catch (DaoException ex) {
-			Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 	}

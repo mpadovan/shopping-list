@@ -22,7 +22,11 @@ import java.util.List;
 public class ProductDAOImpl implements ProductDAO {
 
 	private DAOFactory dAOFactory;
-	private List<Product> products;
+	private static List<Product> products;
+
+	public static List<Product> getProducts() {
+		return products;
+	}
 
 	public ProductDAOImpl(DAOFactory dAOFactory) {
 		this.dAOFactory = dAOFactory;

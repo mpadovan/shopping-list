@@ -17,7 +17,11 @@ import java.util.List;
  */
 public class PublicProductDAOImpl implements PublicProductDAO {
 
-	private List<PublicProduct> publicProducts;
+	private static List<PublicProduct> publicProducts;
+
+	public static List<PublicProduct> getPublicProducts() {
+		return publicProducts;
+	}
 
 	public PublicProductDAOImpl() {
 		publicProducts = new LinkedList<>();
