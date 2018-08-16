@@ -19,6 +19,8 @@ public interface PublicProductDAO {
 	public List<PublicProduct> getFromQuery(String query) throws DaoException;
 	
 	public PublicProduct getById(Integer id) throws DaoException;
+	
+	public PublicProduct getByName(String name) throws DaoException;
 
 	public Boolean updateProduct(PublicProduct product) throws DaoException;
 

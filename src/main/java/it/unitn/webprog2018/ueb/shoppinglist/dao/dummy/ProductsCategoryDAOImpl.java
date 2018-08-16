@@ -88,4 +88,9 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		return productsCategories;
 	}
 
+	@Override
+	public ProductsCategory getById(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

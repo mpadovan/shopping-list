@@ -21,4 +21,6 @@ public interface ProductsCategoryDAO {
 	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException;
 	
 	public List<ProductsCategory> getAll() throws DaoException;
+	
+	public ProductsCategory getById(Integer id) throws DaoException;
 }

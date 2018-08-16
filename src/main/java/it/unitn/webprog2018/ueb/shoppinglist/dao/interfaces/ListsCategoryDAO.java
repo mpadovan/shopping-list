@@ -20,4 +20,6 @@ public interface ListsCategoryDAO {
 	public Boolean addListCategory(ListsCategory listCategory) throws DaoException;
 	
 	List<ListsCategory> getAll() throws DaoException;
+	
+	public ListsCategory getByName(String name) throws DaoException;
 }

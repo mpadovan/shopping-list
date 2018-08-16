@@ -77,4 +77,9 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 		
 	}
 
+	@Override
+	public ListsCategory getByName(String name) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

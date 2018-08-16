@@ -88,5 +88,10 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	public List<ProductsCategory> getAll() throws DaoException{
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public ProductsCategory getById(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

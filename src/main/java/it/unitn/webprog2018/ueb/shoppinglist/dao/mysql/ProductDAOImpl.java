@@ -29,7 +29,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	}
 
 	@Override
-	public List<Product> getByUser(int userId) throws DaoException {
+	public List<Product> getByUser(Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -39,7 +39,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	}
 
 	@Override
-	public List<Product> getByUser(int id, String query) throws DaoException {
+	public List<Product> getByUser(Integer id, String query) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

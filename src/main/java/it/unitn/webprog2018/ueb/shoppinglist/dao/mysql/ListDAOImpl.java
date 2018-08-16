@@ -26,77 +26,77 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	}
 
 	@Override
-	public List getList(int id) throws DaoException {
+	public List getList(Integer id) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Map<PublicProduct, Integer> getPublicProductsOnList(int listId) throws DaoException {
+	public Map<PublicProduct, Integer> getPublicProductsOnList(Integer listId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Map<Product, Integer> getProductsOnList(int listId) throws DaoException {
+	public Map<Product, Integer> getProductsOnList(Integer listId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean addProduct(int listId, Product product) throws DaoException {
+	public Boolean addProduct(Integer listId, Product product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean addPublicProduct(int listId, PublicProduct product) throws DaoException {
+	public Boolean addPublicProduct(Integer listId, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean isOnList(int listId, PublicProduct product) throws DaoException {
+	public Boolean isOnList(Integer listId, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean isOnList(int listId, Product product) throws DaoException {
+	public Boolean isOnList(Integer listId, Product product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean updateAmount(int listId, PublicProduct product, int newAmount) throws DaoException {
+	public Boolean updateAmount(Integer listId, PublicProduct product, Integer newAmount) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean updateAmount(int listId, Product product, int newAmount) throws DaoException {
+	public Boolean updateAmount(Integer listId, Product product, Integer newAmount) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean updateAmount(int listId, PublicProduct product) throws DaoException {
+	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean updateAmount(int listId, Product product) throws DaoException {
+	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean hasAddDeletePermission(int listId, int userId) throws DaoException {
+	public Boolean hasAddDeletePermission(Integer listId, Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean hasModifyPermission(int listId, int userId) throws DaoException {
+	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Boolean hasDeletePermission(int listId, int userId) throws DaoException {
+	public Boolean hasDeletePermission(Integer listId, Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public java.util.List<List> getByUser(int userId) throws DaoException {
+	public java.util.List<List> getByUser(Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	

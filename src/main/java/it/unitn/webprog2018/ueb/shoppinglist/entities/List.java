@@ -6,6 +6,8 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import com.google.gson.annotations.Expose;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -69,6 +71,29 @@ public class List extends AbstractEntity {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	@Override
+	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
+		if (name == null || name.equals("")) {
+			setError("name", "Non può essere lasciato vuoto");
+		}
+		if (image==null || image.equals(""))
+		{
+			setError("image", "image può essere lasciato vuoto");
+		}
+		if(errors.isEmpty())
+		{
+			
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	}
+
+	@Override
+	protected void validateOnCreate(DAOFactory dAOFactory) {
 	}
 
 }

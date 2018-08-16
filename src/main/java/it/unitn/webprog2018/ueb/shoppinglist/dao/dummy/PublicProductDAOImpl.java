@@ -165,4 +165,9 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		return true;
 	}
 
+	@Override
+	public PublicProduct getByName(String name) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }
