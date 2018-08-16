@@ -33,6 +33,10 @@ public interface ListDAO {
 	
 	public boolean updateAmount(int listId, Product product, int newAmount);
 	
+	public boolean updateAmount(int listId, PublicProduct product);
+	
+	public boolean updateAmount(int listId, Product product);
+	
 	public boolean hasAddDeletePermission(int listId, int userId);
 	
 	public boolean hasModifyPermission(int listId, int userId);

@@ -255,4 +255,46 @@ public class ListDAOImpl implements ListDAO {
 		return false;
 	}
 
+	@Override
+	public boolean updateAmount(int listId, PublicProduct product) {
+		if (listId == 1) {
+			if (publicProductsOnList1.containsKey(product)) {
+				publicProductsOnList1.replace(product, publicProductsOnList1.get(product) + 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if (listId == 2) {
+			if (publicProductsOnList2.containsKey(product)) {
+				publicProductsOnList2.replace(product, publicProductsOnList2.get(product) + 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean updateAmount(int listId, Product product) {
+		if (listId == 1) {
+			if (productsOnList1.containsKey(product)) {
+				productsOnList1.replace(product, productsOnList1.get(product) + 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if (listId == 2) {
+			if (productsOnList2.containsKey(product)) {
+				productsOnList2.replace(product, productsOnList2.get(product) + 1);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
 }
