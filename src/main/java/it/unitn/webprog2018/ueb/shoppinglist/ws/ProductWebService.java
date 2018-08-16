@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
 import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -128,7 +129,7 @@ public class ProductWebService {
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProductCategories(@QueryParam("search") String search,
-			@QueryParam("compact") String compact) {
+			@QueryParam("compact") String compact) throws DaoException {
 
 		String query = getQuery(search);
 

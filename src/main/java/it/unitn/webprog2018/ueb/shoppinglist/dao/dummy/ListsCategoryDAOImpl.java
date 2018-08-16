@@ -5,10 +5,10 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
-	private List<ListsCategory> listsCategories;
+	private ArrayList<ListsCategory> listsCategories;
 
 	public ListsCategoryDAOImpl() {
-		listsCategories = new LinkedList<>();
+		listsCategories = new ArrayList<>();
 		ListsCategory l1 = new ListsCategory();
 		l1.setId(1);
 		l1.setName("Supermercato");
@@ -49,8 +49,8 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	}
 
 	@Override
-	public List<ListsCategory> getFromQuery(String query) {
-		List<ListsCategory> matching = new LinkedList<>();
+	public ArrayList<ListsCategory> getFromQuery(String query) {
+		ArrayList<ListsCategory> matching = new ArrayList<ListsCategory>();
 
 		if (query == null) {
 			return listsCategories;
@@ -62,6 +62,11 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 			}
 		}
 		return matching;
+	}
+
+	@Override
+	public Boolean addListCategory(ListsCategory listCategory) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

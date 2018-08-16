@@ -27,11 +27,11 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	 */
 	
 	@Override
-	public ArrayList<ProductsCategory> getFromQuery(String mathing) throws DaoException{
+	public ArrayList<ProductsCategory> getFromQuery(String matching) throws DaoException{
 		ArrayList<ProductsCategory> list = new ArrayList<ProductsCategory>();
 		try{
-			String query = "SELECT id,name,category,description,logo"
-					+ "	WHERE name LIKE \"%"+mathing+"%\"";
+			String query = "SELECT id,name,category,description,logo FROM productscategories"
+					+ "	WHERE name LIKE \"%"+matching+"%\"";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			ProductsCategory pc;
@@ -66,7 +66,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	@Override
 	public boolean addProductsCategory(ProductsCategory pc) throws DaoException{
 		try{
-			String query = "INSERT INTO productscategories (name,caregory,description,logo) VALUES (\""+
+			String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""+
 					pc.getName()+ "\"," +
 					pc.getCategory()+ ",\"" +
 					pc.getDescription()+ "\",\"" +

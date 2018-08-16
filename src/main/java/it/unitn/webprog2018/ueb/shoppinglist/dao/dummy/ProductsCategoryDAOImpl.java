@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
@@ -76,8 +77,9 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	}
 
 	@Override
-	public boolean addProductsCategory() {
+	public boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 
 }
