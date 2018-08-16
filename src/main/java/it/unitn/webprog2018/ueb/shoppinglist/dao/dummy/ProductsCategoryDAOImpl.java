@@ -76,4 +76,9 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		return matching;
 	}
 
+	@Override
+	public List<ProductsCategory> getAll() {
+		return productsCategories;
+	}
+
 }

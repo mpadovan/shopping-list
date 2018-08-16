@@ -35,9 +35,9 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 
 		PublicProduct p2 = new PublicProduct();
 		p2.setId(2);
-		p1.setCategory(new ProductsCategory());
-		p1.getCategory().setId(4);
-		p1.getCategory().setName("Protezioni solari");
+		p2.setCategory(new ProductsCategory());
+		p2.getCategory().setId(4);
+		p2.getCategory().setName("Protezioni solari");
 		p2.setName("Crema solare protezione 50");
 		p2.setNote("Bottiglia blu con scritte giallo/arancio");
 
@@ -103,6 +103,11 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 	
 	@Override
+	public List<PublicProduct> getAll() {
+		return publicProducts;
+	}
+
+	@Override
 	public PublicProduct getById(Integer id) {
 		for (PublicProduct p : publicProducts) {
 			if (p.getId().equals(id)) {
@@ -154,11 +159,6 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		}
 		publicProducts.add(product);
 		return true;
-	}
-
-	@Override
-	public List<PublicProduct> getAll() {
-		return publicProducts;
 	}
 
 }

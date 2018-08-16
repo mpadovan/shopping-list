@@ -268,8 +268,7 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return false;
 	}
-
-	@Override
+	
 	public boolean updateAmount(int listId, Product product) {
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
@@ -290,4 +289,14 @@ public class ListDAOImpl implements ListDAO {
 		return false;
 	}
 
+	public java.util.List<List> getByUser(int userID) {
+		java.util.List<List> match = new LinkedList<>();
+		for (List l : lists) {
+			System.out.println("checking list " + l.getName() + ", owner: " + l.getOwner().getId());
+			if (l.getOwner().getId() == userID) {
+				match.add(l);
+			}
+		}
+		return match;
+	}
 }

@@ -42,4 +42,6 @@ public interface ListDAO {
 	public boolean hasModifyPermission(int listId, int userId);
 	
 	public boolean hasDeletePermission(int listId, int userId);
+	
+	public java.util.List<List> getByUser(int userId);
 }

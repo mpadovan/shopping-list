@@ -14,4 +14,5 @@ import java.util.List;
  */
 public interface ProductsCategoryDAO {
 	public List<ProductsCategory> getFromQuery(String query);
+	public List<ProductsCategory> getAll();
 }
