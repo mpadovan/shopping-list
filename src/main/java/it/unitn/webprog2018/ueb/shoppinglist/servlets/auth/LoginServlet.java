@@ -86,9 +86,6 @@ public class LoginServlet extends HttpServlet {
 						userId.setMaxAge(COOKIE_EXP);
 						response.addCookie(userId);
 					}
-				} else {
-					request.setAttribute("user", user);
-					request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 				}
 
 				if (user.isAdministrator()) {
@@ -104,6 +101,7 @@ public class LoginServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+			System.err.println("ERRORE DAOEXCEPTION");
 			//pagina di errore OPSS
 		}
 	}
