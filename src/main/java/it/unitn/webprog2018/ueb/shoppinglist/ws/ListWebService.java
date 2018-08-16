@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.ws;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
@@ -16,6 +17,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -62,12 +64,12 @@ public class ListWebService {
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCategories(@QueryParam("search") String search,
-			@QueryParam("compact") String compact) {
+			@QueryParam("compact") String compact) throws DaoException {
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
 		String query = ProductWebService.getQuery(search);
 
-		List<ListsCategory> listsCategories = listsCategoryDAO.getFromQuery(query);
+		ArrayList<ListsCategory> listsCategories = listsCategoryDAO.getFromQuery(query);
 		if (listsCategories == null || listsCategories.isEmpty()) {
 			return "{[]}";
 		}
