@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
 import java.sql.Connection;
 
@@ -14,8 +15,8 @@ import java.sql.Connection;
  */
 public class ExampleDAOImpl extends AbstractDAO implements ExampleDAO{
 	
-	public ExampleDAOImpl(Connection con) {
-		super(con);
+	public ExampleDAOImpl(Connection con, DAOFactory dAOFactory) {
+		super(con, dAOFactory);
 	}
 
 	@Override

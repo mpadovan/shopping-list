@@ -17,15 +17,31 @@ import java.util.Map;
 public interface ListDAO {
 	public List getList(int id);
 	
-	public Map<PublicProduct,Integer> getPublicProductsOnList(int listId);
+	public Map<PublicProduct, Integer> getPublicProductsOnList(int listId);
+	
+	public Map<Product, Integer> getProductsOnList(int listId);
 
 	public boolean addProduct(int listId, Product product);
 
 	public boolean addPublicProduct(int listId, PublicProduct product);
 
 	public boolean isOnList(int listId, PublicProduct product);
+	
+	public boolean isOnList(int listId, Product product);
 
+	public boolean updateAmount(int listId, PublicProduct product, int newAmount);
+	
+	public boolean updateAmount(int listId, Product product, int newAmount);
+	
 	public boolean updateAmount(int listId, PublicProduct product);
-
+	
+	public boolean updateAmount(int listId, Product product);
+	
+	public boolean hasAddDeletePermission(int listId, int userId);
+	
+	public boolean hasModifyPermission(int listId, int userId);
+	
+	public boolean hasDeletePermission(int listId, int userId);
+	
 	public java.util.List<List> getByUser(int userId);
 }

@@ -17,7 +17,11 @@ import java.util.List;
  */
 public class PublicProductDAOImpl implements PublicProductDAO {
 
-	private List<PublicProduct> publicProducts;
+	private static List<PublicProduct> publicProducts;
+
+	public static List<PublicProduct> getPublicProducts() {
+		return publicProducts;
+	}
 
 	public PublicProductDAOImpl() {
 		publicProducts = new LinkedList<>();
@@ -98,14 +102,11 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		publicProducts.add(p8);
 	}
 	
-	
 	@Override
 	public List<PublicProduct> getAll() {
 		return publicProducts;
 	}
-	
-	
-	
+
 	@Override
 	public PublicProduct getById(Integer id) {
 		for (PublicProduct p : publicProducts) {
@@ -130,27 +131,34 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		}
 
 		for (PublicProduct p : publicProducts) {
-			// System.out.println("Checking product " + p.getName());
 			if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 				matching.add(p);
-				//	System.out.println("Found " + query + " in " + p.getName());
 			}
 		}
 		return matching;
 	}
 
 	@Override
-	public void updateProduct(PublicProduct product) {
+	public boolean updateProduct(PublicProduct product) {
 		for (PublicProduct p : publicProducts) {
 			if (p.getName().equals(product.getName())) {
 				p = product;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override
-	public void addProduct(PublicProduct product) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public boolean addProduct(PublicProduct product) {
+		product.setId((int)(Math.random() * 10000));
+		for(PublicProduct p : publicProducts) {
+			if (p.getName().equals(product.getName())) {
+				return false;
+			}
+		}
+		publicProducts.add(product);
+		return true;
 	}
 
 }
