@@ -20,7 +20,9 @@ public interface PublicProductDAO {
 	
 	public PublicProduct getById(Integer id) throws DaoException;
 
-	public Boolean updateProduct(PublicProduct product) throws DaoException;
+	public Boolean updateProduct(Integer id, PublicProduct product) throws DaoException;
 
 	public Boolean addProduct(PublicProduct product) throws DaoException;
+	
+	public Boolean deleteProduct(Integer id) throws DaoException;
 }

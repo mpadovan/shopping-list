@@ -13,6 +13,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -143,14 +145,12 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 
 	@Override
-	public Boolean updateProduct(PublicProduct product) throws DaoException{
-		for (PublicProduct p : publicProducts) {
-			if (p.getName().equals(product.getName())) {
-				p = product;
-				return true;
-			}
-		}
-		return false;
+	public Boolean updateProduct(Integer id, PublicProduct product) throws DaoException{
+		getById(id);
+		
+		update(id, product);
+
+		return true;
 	}
 
 	@Override
@@ -164,5 +164,29 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		publicProducts.add(product);
 		return true;
 	}
+	
+	@Override
+	public Boolean deleteProduct(Integer id) throws DaoException {
+		PublicProduct p = getById(id);
+		removeProductFromList(p);
+		return true;
+	}
+	
+	private synchronized void update(Integer id, PublicProduct p) {
+		try {
+			PublicProduct found = getById(id);
 
+			found.setId(p.getId());
+			found.setName(p.getName());
+			found.setLogo(p.getLogo());
+			found.setNote(p.getNote());
+			found.setPhotography(p.getPhotography());
+			found.setCategory(p.getCategory());
+		} catch (DaoException ex) {
+			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	private synchronized void removeProductFromList(PublicProduct p) {
+		publicProducts.remove(p);
+	}
 }
