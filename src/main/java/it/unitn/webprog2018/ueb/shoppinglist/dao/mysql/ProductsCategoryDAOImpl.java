@@ -64,7 +64,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	 */
 	
 	@Override
-	public boolean addProductsCategory(ProductsCategory pc) throws DaoException{
+	public Boolean addProductsCategory(ProductsCategory pc) throws DaoException{
 		try{
 			String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""+
 					pc.getName()+ "\"," +

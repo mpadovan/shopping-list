@@ -16,5 +16,5 @@ import java.util.ArrayList;
 public interface ProductsCategoryDAO {
 	public ArrayList<ProductsCategory> getFromQuery(String query) throws DaoException;
 	
-	public boolean addProductsCategory(ProductsCategory productCategory) throws DaoException;
+	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException;
 }

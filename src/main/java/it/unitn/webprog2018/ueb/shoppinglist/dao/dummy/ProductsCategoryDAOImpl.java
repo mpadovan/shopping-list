@@ -77,7 +77,7 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	}
 
 	@Override
-	public boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
+	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

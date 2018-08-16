@@ -25,6 +25,12 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		super(connection);
 	}
 	
+	/**
+	 * @param matching
+	 * @return un'ArrayList con tutte le categorie di liste con nomi conteneti quella parola, lancia una DaoException per qualsiasi errore riscontrato
+	 * @throws DaoException 
+	 */
+	
 	@Override
 	public ArrayList<ListsCategory> getFromQuery(String matching) throws DaoException {
 		ArrayList<ListsCategory> list = new ArrayList<ListsCategory>();
