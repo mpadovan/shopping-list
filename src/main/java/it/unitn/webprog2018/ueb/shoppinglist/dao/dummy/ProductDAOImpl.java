@@ -5,6 +5,8 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
@@ -12,8 +14,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,9 +21,15 @@ import java.util.logging.Logger;
  */
 public class ProductDAOImpl implements ProductDAO {
 
-	List<Product> products;
+	private DAOFactory dAOFactory;
+	private static List<Product> products;
 
-	public ProductDAOImpl() {
+	public static List<Product> getProducts() {
+		return products;
+	}
+
+	public ProductDAOImpl(DAOFactory dAOFactory) {
+		this.dAOFactory = dAOFactory;
 		User user = new User();
 		user.setId(1);
 		products = new LinkedList<>();
@@ -49,48 +55,50 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public boolean addProduct(Product product) {
-		product.setId(products.size() + 1);
-		products.add(product);
-		return true;
-	}
-	/*
-	@Override
-	public List<Product> getByUser(String email) {
-		List<Product> owned = new LinkedList<>();
-		for (Product p : products) {
-			if (p.getEmail().equals(email)) {
-				owned.add(p);
-			}
+	public Boolean addProduct(Product product) throws DaoException {
+		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		if (valid) {
+			product.setId(products.size() + 1);
+			products.add(product);
 		}
-		return owned;
-	}
-	*/
-	@Override
-	public void updateProduct(Integer productId, Product product) {
-		for (Product p : products) {
-			if (p.getId().equals(product.getId())) {
-				p = product;
-				return;
-			}
-		}
-		try {
-			throw new RecordNotFoundDaoException("The product you want to update does not exist");
-		} catch (RecordNotFoundDaoException ex) {
-			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		return valid;
 	}
 
 	@Override
-	public List<Product> getByUser(int id, String query) {
+	public Boolean updateProduct(Integer productId, Product product) throws DaoException {
+		if (product.isVaildOnUpdate(dAOFactory)) {
+			for (Product p : products) {
+				if (p.getId().equals(product.getId())) {
+					p = product;
+					return true;
+				}
+			}
+			throw new RecordNotFoundDaoException("The product with id: " + product.getId() + " does not exist");
+		}
+		return false;
+	}
+
+	@Override
+	public List<Product> getByUser(int id, String query) throws DaoException {
 		List<Product> matching = new LinkedList<>();
-		
-		System.out.println("Checkin out custom products");
+
 		for (Product p : products) {
 			if (p.getOwner().getId() == id) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
 				}
+			}
+		}
+		return matching;
+	}
+
+	@Override
+	public List<Product> getByUser(int userId) throws DaoException {
+		List<Product> matching = new LinkedList<>();
+
+		for (Product p : products) {
+			if (p.getOwner().getId() == userId) {
+				matching.add(p);
 			}
 		}
 		return matching;

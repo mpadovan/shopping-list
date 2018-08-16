@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import com.google.gson.annotations.Expose;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -26,6 +27,8 @@ public class Product extends AbstractEntity {
 	private User owner;
 	@Expose
 	private ProductsCategory category;
+	@Expose
+	private int amount;
 
 	public String getName() {
 		return name;
@@ -73,6 +76,23 @@ public class Product extends AbstractEntity {
 
 	public void setCategory(ProductsCategory category) {
 		this.category = category;
+	}
+	
+	@Override
+	protected void validateOnSave(DAOFactory dAOFactory) {
+		//ProductDAO productDAO = ((DAOFactory) dAOFactory).getProductDAO();
+		if (name==null || name.equals(""))
+		{
+			setError("name", "Non può essere lasciato vuoto");
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	}
+
+	@Override
+	protected void validateOnCreate(DAOFactory dAOFactory) {
 	}
 
 }

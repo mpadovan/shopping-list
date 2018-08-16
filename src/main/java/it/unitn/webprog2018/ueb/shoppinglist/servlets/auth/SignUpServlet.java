@@ -61,24 +61,24 @@ public class SignUpServlet extends HttpServlet {
 
 		String name = request.getParameter("name");
 		String lastName = request.getParameter("lastName");
-
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
 		String avatarURI = "";
-		if (!password.equals(checkPassword)) {
-
-			request.setAttribute("passwordError", "true");
-			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
-
-		} else if (userDAO.getByEmail(email) != null) {
-
-			request.setAttribute("emailTaken", "true");
-			request.getRequestDispatcher("WEB-INF/views/auth/SignUp.jsp").forward(request, response);
-
-		} else {
-
+		
+		User user = new User();
+		user.setName(name);
+		user.setLastname(lastName);
+		user.setEmail(email);
+		user.setPassword(Sha256.doHash(password));
+		user.setCheckpassword(Sha256.doHash(checkPassword));
+		user.setImage(avatarURI);
+		user.setAdministrator(false);
+		
+		if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
+		{
 			// Retrieving user avatar
+			File file = null;
 			String avatarFileName = "";
 			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
 			Part avatar = request.getPart("image");
@@ -88,7 +88,7 @@ public class SignUpServlet extends HttpServlet {
 				int noExt = avatarFileName.lastIndexOf(File.separator);
 				avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
 				try (InputStream fileContent = avatar.getInputStream()) {
-					File file = new File(avatarFileName);
+					file = new File(avatarFileName);
 					Files.copy(fileContent, file.toPath());
 					avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
 							+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
@@ -100,19 +100,9 @@ public class SignUpServlet extends HttpServlet {
 					getServletContext().log("impossible to upload the file", ex);
 				}
 			}
-
 			if (!response.isCommitted()) {
-
-				// Creating the new user
-				User user = new User();
-				user.setEmail(email);
-				user.setPassword(Sha256.doHash(password));
-				user.setName(name);
-				user.setLastname(lastName);
-				user.setAdministrator(false);
 				user.setImage(avatarURI);
-				System.out.println(user.getImage());
-
+				
 				// Creating the token for the account confirmation
 				Token token = new Token();
 
@@ -127,8 +117,16 @@ public class SignUpServlet extends HttpServlet {
 					response.sendRedirect("Login");
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
+					if(file != null) {
+						file.delete();
+					}
 				}
 			}
+		}
+		else
+		{
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 		}
 	}
 

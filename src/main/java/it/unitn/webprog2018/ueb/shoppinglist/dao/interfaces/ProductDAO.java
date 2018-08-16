@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -15,11 +16,11 @@ import java.util.StringTokenizer;
  */
 public interface ProductDAO {
 	
-	public boolean addProduct(Product product);
+	public Boolean addProduct(Product product) throws DaoException;
 	
-	// public List<Product> getByUser(String userEmail);
+	public List<Product> getByUser(int userId) throws DaoException;
 
-	public void updateProduct(Integer productId, Product product);
+	public Boolean updateProduct(Integer productId, Product product) throws DaoException;
 
-	public List<Product> getByUser(int id, String query);
+	public List<Product> getByUser(int id, String query) throws DaoException;
 }

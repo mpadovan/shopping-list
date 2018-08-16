@@ -5,6 +5,9 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
@@ -19,10 +22,11 @@ import java.util.Random;
  * @author Giulia Carocari
  */
 public class UserDAOimpl implements UserDAO {
-
+	private DAOFactory dAOFactory;
 	private static List<User> users;
 
-	public UserDAOimpl() {
+	public UserDAOimpl(DAOFactory dAOFactory) {
+		this.dAOFactory=dAOFactory;
 		this.users = new LinkedList<>();
 
 		User user = new User();
@@ -47,35 +51,51 @@ public class UserDAOimpl implements UserDAO {
 	}
 
 	@Override
-	public User getByEmail(String email) {
+	public User getByEmail(String email) throws DaoException{
 		for (User u : users) {
 			if (u.getEmail().equals(email)) {
 				return u;
 			}
 		}
-		return null;
+		throw new RecordNotFoundDaoException("User with email: " + email + " not found");
 	}
 
 	@Override
-	public void addUser(User user) {
+	public Boolean addUser(User user) throws DaoException{
+		
 		Random rand = new Random();
 		user.setId(rand.nextInt());
-		users.add(user);
+		boolean valid = user.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			users.add(user);
+		}
+		return valid;
 	}
 
 	@Override
-	public User getById(Integer id) {
+	public User getById(Integer id) throws DaoException{
 		for (User u : users) {
 			if (u.getId().equals(id)) {
 				return u;
 			}
 		}
-		return null;
+		throw new RecordNotFoundDaoException("User with email: " + id + " not found");
 	}
 
 	@Override
-	public void updateUser(Integer id, User user) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Boolean updateUser(Integer id, User user) throws DaoException{
+		if(user.isVaildOnUpdate(dAOFactory))
+		{
+			for (User p : users) {
+				if (p.getId().equals(user.getId())) {
+					p = user;
+					return true;
+				}
+			}
+			throw new RecordNotFoundDaoException("The product with id: " + user.getId() + " does not exist");
+		}
+		return false;
 	}
 
 }

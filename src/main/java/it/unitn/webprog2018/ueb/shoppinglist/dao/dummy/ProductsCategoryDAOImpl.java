@@ -64,8 +64,8 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	}
 
 	@Override
-	public ArrayList<ProductsCategory> getFromQuery(String query) {
-		ArrayList<ProductsCategory> matching = new ArrayList<>();
+	public List<ProductsCategory> getFromQuery(String query) {
+		List<ProductsCategory> matching = new ArrayList<>();
 
 		System.out.println("Checkin out custom products");
 		for (ProductsCategory p : productsCategories) {
@@ -81,5 +81,9 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+
+	public List<ProductsCategory> getAll() throws DaoException{
+		return productsCategories;
+	}
 
 }

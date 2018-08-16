@@ -30,7 +30,7 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public UserDAO getUserDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new UserDAOimpl(con, this);
 	}
 
 	@Override

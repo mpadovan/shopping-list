@@ -6,6 +6,8 @@
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
@@ -13,6 +15,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -68,7 +72,18 @@ public class AuthenticationFilter implements Filter {
 				} else {
 					// IDEA: login user from filter
 					HttpSession newSession = ((HttpServletRequest) request).getSession(true);
-					user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
+					try {
+						user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
+					} catch (RecordNotFoundDaoException ex)
+					{
+						//redirect alla pagina di Login - esiste un remember cookie che però non corrisponde all'email dell'utente (es: cambio email)
+						//cancellare cookie di remember per evitare altri problemi
+					}
+					catch (DaoException ex) {
+						Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);		
+						//redirect pagina di errore: Ops qualcosa è andato storto
+						//cancellare cookie di remember per evitare altri problemi
+					}
 					newSession.setAttribute("user", user);
 				}
 			}

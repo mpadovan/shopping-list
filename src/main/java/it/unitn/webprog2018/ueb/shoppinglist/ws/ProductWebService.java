@@ -93,7 +93,7 @@ public class ProductWebService {
 	@Path("/restricted/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProducts(@PathParam("userId") int userId, @QueryParam("search") String search,
-			@QueryParam("compact") String compact, @QueryParam("privateOnly") String privateOnly) {
+			@QueryParam("compact") String compact, @QueryParam("privateOnly") String privateOnly) throws DaoException {
 
 		String query = getQuery(search);
 
@@ -152,7 +152,7 @@ public class ProductWebService {
 	@POST
 	@Path("restricted/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProduct(String content, @PathParam("userId") Integer userId) {
+	public void addProduct(String content, @PathParam("userId") Integer userId) throws DaoException {
 		Product product = null;
 		try {
 			Gson gson = new Gson();
@@ -166,6 +166,7 @@ public class ProductWebService {
 		if (productDAO.addProduct(product)) {
 			System.out.println("Added new product");
 		} else {
+			System.out.println("Not added new product - error");
 			try {
 				throw new RuntimeException();
 			} catch (RuntimeException ex) {

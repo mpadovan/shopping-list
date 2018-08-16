@@ -25,9 +25,10 @@
 
 <!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 
-		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/info_product.css" />
+		
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar.css" />
-
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/admin_page.css" />
+		
 		<jsp:invoke fragment="customCss" />
 
 		<title><c:out value="${pageTitle}" /></title>
@@ -47,10 +48,10 @@
 						<a id="productList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList">Prodotti</a>
 					</li>
 					<li class="nav-item">
-						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryList">Categorie di lista</a>
+						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryProduct">Categorie di prodotto</a>
 					</li>
 					<li class="nav-item">
-						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryProduct">Categorie di prodotto</a>
+						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/CategoryList">Categorie di lista</a>
 					</li>
 				</ul>
 				<div class="btn-group">

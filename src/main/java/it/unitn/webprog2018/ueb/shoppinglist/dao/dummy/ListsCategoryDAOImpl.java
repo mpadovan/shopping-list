@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -49,8 +50,8 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	}
 
 	@Override
-	public ArrayList<ListsCategory> getFromQuery(String query) {
-		ArrayList<ListsCategory> matching = new ArrayList<ListsCategory>();
+	public List<ListsCategory> getFromQuery(String query) {
+		List<ListsCategory> matching = new ArrayList<ListsCategory>();
 
 		if (query == null) {
 			return listsCategories;
@@ -67,6 +68,11 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	@Override
 	public Boolean addListCategory(ListsCategory listCategory) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
+	public List<ListsCategory> getAll() {
+		return listsCategories;
+		
 	}
 
 }

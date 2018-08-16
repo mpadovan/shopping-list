@@ -1,5 +1,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
@@ -9,15 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Michele
  */
 public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCategoryDAO{
+	private DAOFactory dAOFactory;
 	
-	public ProductsCategoryDAOImpl(Connection connection) {
-		super(connection);
+	public ProductsCategoryDAOImpl(Connection connection, DAOFactory dAOFactory) {
+		super(connection, dAOFactory);
 	}
 	
 	/**
@@ -27,8 +30,8 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	 */
 	
 	@Override
-	public ArrayList<ProductsCategory> getFromQuery(String matching) throws DaoException{
-		ArrayList<ProductsCategory> list = new ArrayList<ProductsCategory>();
+	public List<ProductsCategory> getFromQuery(String matching) throws DaoException{
+		List<ProductsCategory> list = new ArrayList<ProductsCategory>();
 		try{
 			String query = "SELECT id,name,category,description,logo FROM productscategories"
 					+ "	WHERE name LIKE \"%"+matching+"%\"";
@@ -79,6 +82,11 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		catch(SQLException e){
 			throw new DaoException(e);
 		}
+	}
+
+	@Override
+	public List<ProductsCategory> getAll() throws DaoException{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 }

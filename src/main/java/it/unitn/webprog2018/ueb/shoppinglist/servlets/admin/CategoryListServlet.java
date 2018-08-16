@@ -5,7 +5,14 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author giulia
  */
 public class CategoryListServlet extends HttpServlet {
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -27,7 +35,29 @@ public class CategoryListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
+		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
+		String searchParam = request.getParameter("search");
+		Integer checkParam = 0;
+
+		List<ListsCategory> listsCategory = null;
+		if (searchParam == null) {
+			searchParam = "";
+		}
+		if (searchParam.equals("")) {
+			checkParam = 0;
+			listsCategory = listsCategoryDAO.getAll();
+		} else {
+			checkParam = 1;
+			try {
+				listsCategory = listsCategoryDAO.getFromQuery(searchParam);
+			} catch (DaoException ex) {
+				Logger.getLogger(CategoryListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		request.setAttribute("listsCategory", listsCategory);
+		request.setAttribute("searchParam", searchParam);
+		request.setAttribute("checkParam", checkParam);
+		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
 	}
 
 	/**
@@ -41,7 +71,7 @@ public class CategoryListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 	}
 
 	/**

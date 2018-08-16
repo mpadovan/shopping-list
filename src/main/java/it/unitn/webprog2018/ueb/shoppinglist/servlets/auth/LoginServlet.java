@@ -7,11 +7,15 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -60,9 +64,9 @@ public class LoginServlet extends HttpServlet {
 		String email = (String) request.getParameter("email");
 		String password = (String) request.getParameter("password");
 
-		User user = userDAO.getByEmail(email);
-		
-		if (user != null) {
+		User user = null;
+		try {
+			user = userDAO.getByEmail(email);
 			if (Sha256.checkPassword(password, user.getPassword())) {
 				// session is inserted into sessionHandler (notifications)
 				HttpSession session = request.getSession(true);
@@ -83,8 +87,8 @@ public class LoginServlet extends HttpServlet {
 						response.addCookie(userId);
 					}
 				}
-				
-				if(user.isAdministrator()){
+
+				if (user.isAdministrator()) {
 					path += "restricted/admin/ProductList";
 					response.sendRedirect(path);
 				} else {
@@ -92,11 +96,13 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect(path);
 				}
 			}
-		}
-		// either email or password are wrong
-		if (!response.isCommitted()) {
-			request.setAttribute("wrongCredentials", "true");
-			request.getRequestDispatcher("/WEB-INF/views/auth/AuthFailed.jsp").forward(request, response);
+		} catch (RecordNotFoundDaoException ex) {
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
+		} catch (DaoException ex) {
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+			System.err.println("ERRORE DAOEXCEPTION");
+			//pagina di errore OPSS
 		}
 	}
 
