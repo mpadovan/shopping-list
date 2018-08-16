@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
@@ -25,14 +26,15 @@ import java.util.logging.Logger;
  * @author Giulia Carocari
  */
 public class ListDAOImpl implements ListDAO {
-
+	private DAOFactory dAOFactory;
 	private java.util.List<List> lists;
 	private final Map<PublicProduct, Integer> publicProductsOnList1 = new HashMap<>();
 	private final Map<PublicProduct, Integer> publicProductsOnList2 = new HashMap<>();
 	private final Map<Product, Integer> productsOnList1 = new HashMap<>();
 	private final Map<Product, Integer> productsOnList2 = new HashMap<>();
 
-	public ListDAOImpl() {
+	public ListDAOImpl(DAOFactory dAOFactory) {
+	    this.dAOFactory=dAOFactory;
 		lists = new LinkedList<>();
 		List l1 = new List();
 		User user = new User();
@@ -60,7 +62,12 @@ public class ListDAOImpl implements ListDAO {
 
 		lists.add(l2);
 
-		java.util.List<PublicProduct> publicProducts = PublicProductDAOImpl.getPublicProducts();
+		java.util.List<PublicProduct> publicProducts = null;
+		try {
+			publicProducts = PublicProductDAOImpl.getPublicProducts();
+		} catch (DaoException ex) {
+			Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		for (int i = 0; i < publicProducts.size(); i++) {
 			if (i % 2 == 0) {
 				publicProductsOnList1.put(publicProducts.get(i), (int) (Math.random() * 10 + 1));
@@ -81,7 +88,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public Map<PublicProduct, Integer> getPublicProductsOnList(int listId) {
+	public Map<PublicProduct, Integer> getPublicProductsOnList(int listId) throws DaoException{
 		if (listId == 1) {
 			return publicProductsOnList1;
 		} else if (listId == 2) {
@@ -91,7 +98,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public List getList(int id) {
+	public List getList(int id) throws DaoException{
 		for (List l : lists) {
 			if (l.getId() == id) {
 				return l;
@@ -101,7 +108,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean addProduct(int listId, Product product) {
+	public Boolean addProduct(int listId, Product product) throws DaoException{
 		if (listId == 1) {
 			productsOnList1.putIfAbsent(product, 1);
 		} else if (listId == 2) {
@@ -111,7 +118,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean addPublicProduct(int listId, PublicProduct product) {
+	public Boolean addPublicProduct(int listId, PublicProduct product) throws DaoException{
 		if (listId == 1) {
 			publicProductsOnList1.putIfAbsent(product, 1);
 			return true;
@@ -123,7 +130,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean isOnList(int listId, PublicProduct product) {
+	public Boolean isOnList(int listId, PublicProduct product) throws DaoException{
 		if (listId == 1) {
 			return publicProductsOnList1.containsKey(product);
 		} else if (listId == 2) {
@@ -133,7 +140,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean updateAmount(int listId, PublicProduct product, int newAmount) {
+	public Boolean updateAmount(int listId, PublicProduct product, int newAmount) throws DaoException{
 		if (listId == 1) {
 			if (publicProductsOnList1.containsKey(product)) {
 				publicProductsOnList1.replace(product, newAmount);
@@ -154,7 +161,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public Map<Product, Integer> getProductsOnList(int listId) {
+	public Map<Product, Integer> getProductsOnList(int listId) throws DaoException{
 		if (listId == 1) {
 			return productsOnList1;
 		} else if (listId == 2) {
@@ -164,7 +171,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean isOnList(int listId, Product product) {
+	public Boolean isOnList(int listId, Product product) {
 		if (listId == 1) {
 			return productsOnList1.containsKey(product);
 		} else if (listId == 2) {
@@ -174,7 +181,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean updateAmount(int listId, Product product, int newAmount) {
+	public Boolean updateAmount(int listId, Product product, int newAmount) throws DaoException{
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
 				productsOnList1.replace(product, newAmount);
@@ -195,7 +202,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean hasAddDeletePermission(int listId, int userId) {
+	public Boolean hasAddDeletePermission(int listId, int userId) throws DaoException{
 		if (listId == 1) {
 			if (userId == 1) {
 				return true;
@@ -213,7 +220,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean hasModifyPermission(int listId, int userId) {
+	public Boolean hasModifyPermission(int listId, int userId) throws DaoException{
 		if (listId == 1) {
 			if (userId == 1) {
 				return true;
@@ -231,7 +238,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean hasDeletePermission(int listId, int userId) {
+	public Boolean hasDeletePermission(int listId, int userId) throws DaoException{
 		if (listId == 1) {
 			if (userId == 1) {
 				return true;
@@ -249,7 +256,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean updateAmount(int listId, PublicProduct product) {
+	public Boolean updateAmount(int listId, PublicProduct product) throws DaoException{
 		if (listId == 1) {
 			if (publicProductsOnList1.containsKey(product)) {
 				publicProductsOnList1.replace(product, publicProductsOnList1.get(product) + 1);
@@ -269,7 +276,7 @@ public class ListDAOImpl implements ListDAO {
 		return false;
 	}
 	
-	public boolean updateAmount(int listId, Product product) {
+	public Boolean updateAmount(int listId, Product product) throws DaoException{
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
 				productsOnList1.replace(product, productsOnList1.get(product) + 1);
@@ -289,7 +296,7 @@ public class ListDAOImpl implements ListDAO {
 		return false;
 	}
 
-	public java.util.List<List> getByUser(int userID) {
+	public java.util.List<List> getByUser(int userID) throws DaoException{
 		java.util.List<List> match = new LinkedList<>();
 		for (List l : lists) {
 			System.out.println("checking list " + l.getName() + ", owner: " + l.getOwner().getId());

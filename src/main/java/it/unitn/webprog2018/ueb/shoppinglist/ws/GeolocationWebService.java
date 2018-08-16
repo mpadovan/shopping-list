@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import java.net.URI;
@@ -62,7 +63,7 @@ public class GeolocationWebService {
 	@Path("/restricted/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getShopsByUser(@PathParam("userId") int userId,
-			@QueryParam("location") String location) {
+			@QueryParam("location") String location) throws DaoException {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 
 		Set<String> categories = new HashSet<>();

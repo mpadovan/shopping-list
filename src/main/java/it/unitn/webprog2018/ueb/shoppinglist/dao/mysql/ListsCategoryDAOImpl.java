@@ -80,7 +80,7 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	}
 
 	@Override
-	public List<ListsCategory> getAll() {
+	public List<ListsCategory> getAll() throws DaoException{
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

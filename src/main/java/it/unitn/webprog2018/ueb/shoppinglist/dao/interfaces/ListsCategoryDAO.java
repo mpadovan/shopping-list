@@ -19,5 +19,5 @@ public interface ListsCategoryDAO {
 	
 	public Boolean addListCategory(ListsCategory listCategory) throws DaoException;
 	
-	List<ListsCategory> getAll();
+	List<ListsCategory> getAll() throws DaoException;
 }
