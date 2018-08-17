@@ -5,8 +5,6 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -28,6 +26,7 @@ import javax.servlet.http.HttpSession;
  * @author Giulia Carocari
  */
 public class AdministrationFilter implements Filter {
+
 	/**
 	 * FilterConfig object associated with this filter
 	 */
@@ -41,19 +40,19 @@ public class AdministrationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
-			
+
 			ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
 			HttpSession session = ((HttpServletRequest) request).getSession(false);
 			User user = null;
 			if (session != null) {
 				user = (User) session.getAttribute("user");
 			}
-			
+
 			String contextPath = servletContext.getContextPath();
 			if (!contextPath.endsWith("/")) {
 				contextPath += "/";
 			}
-			
+
 			if (user == null) { // Should never happen, but just in case
 				((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "Login"));
 				return;
@@ -64,20 +63,22 @@ public class AdministrationFilter implements Filter {
 				}
 			}
 		}
-		Throwable problem = null;
-		try {
-			chain.doFilter(request, response);
-		} catch (Throwable t) {
-			problem = t;
-			t.printStackTrace();
-			sendProcessingError(problem, response);
+		if (!response.isCommitted()) {
+			Throwable problem = null;
+			try {
+				chain.doFilter(request, response);
+			} catch (Throwable t) {
+				problem = t;
+				t.printStackTrace();
+				sendProcessingError(problem, response);
+			}
 		}
 	}
 
 	@Override
 	public void destroy() {
 	}
-	
+
 	/**
 	 * Sends processing error to client, either stack trace exception or generic
 	 * message
@@ -132,4 +133,3 @@ public class AdministrationFilter implements Filter {
 	}
 
 }
-

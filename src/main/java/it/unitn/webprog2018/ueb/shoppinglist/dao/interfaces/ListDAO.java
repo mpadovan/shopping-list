@@ -41,6 +41,10 @@ public interface ListDAO {
 	
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException;
 	
+	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException;
+	
+	public Boolean deleteFromList(Integer listId, Product product) throws DaoException;
+	
 	public Boolean hasAddDeletePermission(Integer listId, Integer userId) throws DaoException;
 	
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException;
