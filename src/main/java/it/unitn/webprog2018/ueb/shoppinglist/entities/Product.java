@@ -94,13 +94,6 @@ public class Product extends AbstractEntity {
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
-		{
-			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
-			productsCategoryDAO.getById(category.getId());
-			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
-			userDAO.getById(owner.getId());
-		}
 	}
 
 	@Override

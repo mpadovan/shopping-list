@@ -347,4 +347,14 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return false;
 	}
+    
+    @Override
+	public List getList(String name, User owner) throws DaoException {
+		for (List u : lists) {
+			if (u.getName().equals(name) && u.getOwner().getId().equals(owner.getId())) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("List with name: " + name + " not found");
+	}
 }

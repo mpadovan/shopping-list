@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface ProductsCategoryDAO {
 	public List<ProductsCategory> getAll() throws DaoException;
 	
 	public ProductsCategory getById(Integer id) throws DaoException;
+	
+	public ProductsCategory getByName(String name) throws DaoException;
 }

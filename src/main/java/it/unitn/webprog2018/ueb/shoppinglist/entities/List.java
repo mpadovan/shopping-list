@@ -8,6 +8,8 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -84,7 +86,13 @@ public class List extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			
+			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
+			try {
+				listDAO.getList(name, owner);
+				setError("name", "name già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
 		}
 	}
 

@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,9 +70,9 @@ public class ProductsCategory extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
 			try {
-				publicProductDAO.getByName(name);
+				productsCategoryDAO.getByName(name);
 				setError("name", "Nome già esistente");
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato

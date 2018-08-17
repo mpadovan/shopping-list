@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -27,6 +28,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 
 	@Override
 	public List getList(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
+	@Override
+	public List getList(String name, User owner) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

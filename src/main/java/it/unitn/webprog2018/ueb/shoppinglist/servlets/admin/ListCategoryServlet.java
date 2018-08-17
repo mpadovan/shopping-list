@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class CategoryListServlet extends HttpServlet {
+public class ListCategoryServlet extends HttpServlet {
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -48,14 +48,14 @@ public class CategoryListServlet extends HttpServlet {
 			try {
 				listsCategory = listsCategoryDAO.getAll();
 			} catch (DaoException ex) {
-				Logger.getLogger(CategoryListServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else {
 			checkParam = 1;
 			try {
 				listsCategory = listsCategoryDAO.getFromQuery(searchParam);
 			} catch (DaoException ex) {
-				Logger.getLogger(CategoryListServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 		request.setAttribute("listsCategory", listsCategory);
