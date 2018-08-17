@@ -23,4 +23,6 @@ public interface ProductsCategoryDAO {
 	public List<ProductsCategory> getAll() throws DaoException;
 	
 	public ProductsCategory getById(Integer id) throws DaoException;
+	
+	public ProductsCategory getByName(String name) throws DaoException;
 }

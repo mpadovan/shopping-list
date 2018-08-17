@@ -43,7 +43,6 @@ public class ListsCategoriesImage extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			
 		}
 	}
 

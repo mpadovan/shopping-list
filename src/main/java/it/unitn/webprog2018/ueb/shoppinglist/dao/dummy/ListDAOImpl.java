@@ -306,4 +306,11 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return match;
 	}
+
+	@Override
+	public List getList(String name, User owner) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
+	
 }
