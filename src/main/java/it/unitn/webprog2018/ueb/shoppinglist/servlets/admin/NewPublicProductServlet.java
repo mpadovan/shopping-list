@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
@@ -61,7 +62,9 @@ public class NewPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
+		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
+		
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
 		String note = request.getParameter("note");
@@ -69,15 +72,22 @@ public class NewPublicProductServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 
 		PublicProduct product = new PublicProduct();
-		ProductsCategory productsCategory = new ProductsCategory();
-		productsCategory.setId(categoryId);
-		product.setName(name);
-		product.setLogo(logo);
-		product.setNote(note);
-		product.setPhotography(photography);
-		product.setCategory(productsCategory);
+		try {
+			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
+			productsCategory.setId(categoryId);
+			product.setName(name);
+			product.setLogo(logo);
+			product.setNote(note);
+			product.setPhotography(photography);
+			product.setCategory(productsCategory);
+		}  catch (RecordNotFoundDaoException ex){
+			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
+		} catch (DaoException ex) {
+			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
+		}
 
-		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
 		try {
 			if (publicProductDAO.addProduct(product)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductList");
@@ -85,10 +95,10 @@ public class NewPublicProductServlet extends HttpServlet {
 				request.setAttribute("product", product);
 				request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);
 			}
-		} catch (DaoException ex) {
+		}catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
-
 	}
 
 	/**

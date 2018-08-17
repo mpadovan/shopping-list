@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class NewCategoryProductServlet extends HttpServlet {
+public class NewProductsCategoryServlet extends HttpServlet {
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -28,7 +28,7 @@ public class NewCategoryProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		request.getRequestDispatcher("/WEB-INF/views/admin/NewCategoryProduct.jsp").forward(request, response);
 	}
 
 	/**

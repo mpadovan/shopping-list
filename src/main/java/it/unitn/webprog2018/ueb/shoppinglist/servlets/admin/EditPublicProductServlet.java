@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
@@ -48,9 +49,13 @@ public class EditPublicProductServlet extends HttpServlet {
 			request.setAttribute("productsCategory", productsCategory);
 			request.setAttribute("product", publicProduct);
 			request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+		} catch (RecordNotFoundDaoException ex){
+			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
 		} catch (DaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
-			//aggiungere record not found ex
+			response.sendError(500, ex.getMessage());
+			
 		}
 
 	}
@@ -91,8 +96,13 @@ public class EditPublicProductServlet extends HttpServlet {
 				request.setAttribute("product", product);
 				request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 			}
-		} catch (DaoException ex) {
+		}
+		catch (RecordNotFoundDaoException ex){
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
+		}catch (DaoException ex) {
+			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
 	}
 
@@ -103,7 +113,7 @@ public class EditPublicProductServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Short description";
+		return "Edit public product servlet";
 	}
 
 }

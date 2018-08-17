@@ -100,16 +100,16 @@
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CategoryListServlet</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryListServlet</servlet-class>
+        <servlet-name>ListCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ListCategoryServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProductListServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductListServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CategoryProductServlet</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryProductServlet</servlet-class>
+        <servlet-name>ProductsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductsCategoryServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AvatarServlet</servlet-name>
@@ -128,8 +128,8 @@
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeletePublicProductServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewCatgeoryProductServlet</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewCategoryProductServlet</servlet-class>
+        <servlet-name>NewProductsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewProductsCategoryServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InfoUserServlet</servlet-name>
@@ -184,16 +184,16 @@
         <url-pattern>/restricted/HomePageLogin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CategoryListServlet</servlet-name>
-        <url-pattern>/restricted/admin/CategoryList</url-pattern>
+        <servlet-name>ListCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/ListCategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductListServlet</servlet-name>
         <url-pattern>/restricted/admin/ProductList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CategoryProductServlet</servlet-name>
-        <url-pattern>/restricted/admin/CategoryProduct</url-pattern>
+        <servlet-name>ProductsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/ProductsCategory</url-pattern>
     </servlet-mapping>
     <!--
     <servlet-mapping>
@@ -214,8 +214,8 @@
         <url-pattern>/restricted/admin/DeletePublicProduct</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewCatgeoryProductServlet</servlet-name>
-        <url-pattern>/restricted/admin/NewCatgeoryProduct</url-pattern>
+        <servlet-name>NewProductsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewProductsCategory</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

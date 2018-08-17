@@ -39,7 +39,7 @@
 							   id="logo"
 							   name="logo" 
 							   value="${product.logo}"
-							   required>
+							   >
 					</div>
 					<div>
 						<label for="photo">Fotografia</label>
