@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.io.IOException;
@@ -45,8 +46,12 @@ public class DeletePublicProductServlet extends HttpServlet {
 				request.setAttribute("product", publicProduct);
 				request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
 			}
-		} catch (DaoException ex) {
+		} catch (RecordNotFoundDaoException ex){
 			Logger.getLogger(DeletePublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
+		}catch (DaoException ex) {
+			Logger.getLogger(DeletePublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
 		
 	}

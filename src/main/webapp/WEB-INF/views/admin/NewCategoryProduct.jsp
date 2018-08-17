@@ -15,12 +15,12 @@
 				<h1 class="card-title">Nuovo categoria di prodotto</h1>
 				<form method="POST" action="NewProductCategory">
 					<div>
-						<label for="name">Nome prodotto</label>
+						<label for="name">Nome categoria</label>
 						<input type="text"
 							   class="form-control" 
 							   id="name"
 							   name="name" 
-							   value="${product.name}"
+							   value="${productsCategory.name}"
 							   required />
 					</div>
 					<div>
@@ -29,7 +29,7 @@
 							   class="form-control"
 							   id="note"
 							   name="note" 
-							   value="${product.note}"
+							   value="${productsCategory.description}"
 							   required>
 					</div>
 					<div>
@@ -38,30 +38,18 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   value="${product.logo}"
+							   value="${productsCategory.logo}"
 							   required>
 					</div>
 					<div>
-						<label for="photo">Fotografia</label>
-						<div class="custom-file">
-							<input type="file"
-								   class="custom-file-input form-control"
-								   id="photography"
-								   name="photography"
-								   aria-describedby="photography"
-								   value="${product.photography}">
-							<label class="custom-file-label" for="photography">Scegli file</label>
-						</div>
-					</div>
-					<div>
-						<label for="category">Categoria</label>
+						<label for="category">Categoria padre</label>
 						<select class="select2 js-example-basic-single form-control py-3"
 								name="category"
 								id="category"
 								name="category" 
-								value="${product.category}"
 								required
 								>
+							<option selected>Nessuna</option>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
 								<option value="${c.id}">${c.name}</option>
 							</c:forEach>

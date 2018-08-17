@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class CategoryProductServlet extends HttpServlet {
+public class ProductsCategoryServlet extends HttpServlet {
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -48,14 +48,14 @@ public class CategoryProductServlet extends HttpServlet {
 				checkParam = 0;
 				productsCategory = productsCategoryDAO.getAll();
 			} catch (DaoException ex) {
-				Logger.getLogger(CategoryProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else {
 			try {
 				checkParam = 1;
 				productsCategory = productsCategoryDAO.getFromQuery(searchParam);
 			} catch (DaoException ex) {
-				Logger.getLogger(CategoryProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 		request.setAttribute("productsCategory", productsCategory);
