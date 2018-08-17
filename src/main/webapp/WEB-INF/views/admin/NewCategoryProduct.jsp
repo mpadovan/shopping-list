@@ -20,16 +20,14 @@
 							   class="form-control" 
 							   id="name"
 							   name="name" 
-							   value="${productsCategory.name}"
 							   required />
 					</div>
 					<div>
-						<label for="note">Note</label>
+						<label for="note">Descrizione</label>
 						<input type="text"
 							   class="form-control"
 							   id="note"
-							   name="note" 
-							   value="${productsCategory.description}"
+							   name="description" 
 							   required>
 					</div>
 					<div>
@@ -38,7 +36,6 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   value="${productsCategory.logo}"
 							   required>
 					</div>
 					<div>
@@ -49,7 +46,7 @@
 								name="category" 
 								required
 								>
-							<option selected>Nessuna</option>
+							<option selected value="-1">Nessuna</option>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
 								<option value="${c.id}">${c.name}</option>
 							</c:forEach>

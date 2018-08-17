@@ -44,7 +44,9 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				pc = new ProductsCategory();
 				pc.setId(rs.getInt("id"));
 				pc.setName(rs.getString("name"));
-				pc.setCategory(rs.getInt("category"));
+				Integer idcategory= rs.getInt("category");
+				ProductsCategory productsCategory = getById(idcategory);
+				pc.setCategory(productsCategory);
 				pc.setDescription(rs.getString("description"));
 				pc.setLogo(rs.getString("logo"));
 				list.add(pc);
@@ -71,7 +73,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		try{
 			String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""+
 					pc.getName()+ "\"," +
-					(pc.getCategory() < 0 ? "null" : pc.getCategory())+ ",\"" +
+					(pc.getCategory().getId() < 0 ? "null" : pc.getCategory().getId())+ ",\"" +
 					pc.getDescription()+ "\",\"" +
 					pc.getLogo()+"\")";
 			PreparedStatement st = this.getCon().prepareStatement(query);

@@ -36,7 +36,6 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc2.setId(2);
 		pc2.setName("Frutta surgelata");
 		pc2.setDescription("Vegetali dal sapore dolce, ma surgelati");
-		pc2.setCategory(-1);
 		productsCategories.add(pc2);
 
 		ProductsCategory pc3 = new ProductsCategory();
@@ -49,7 +48,6 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc4.setId(4);
 		pc4.setName("Protezioni solari");
 		pc4.setDescription("Creme per il corpo che proteggono contro l'azione dei raggi solari");
-		pc4.setCategory(-1);
 		
 		productsCategories.add(pc4);
 

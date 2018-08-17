@@ -13,7 +13,8 @@
 		<div class="card card-new">
 			<div class="card-body">
 				<h1 class="card-title">Modifica categoria di prodotto</h1>
-				<form method="POST" action="EditProductCategory">
+				<form method="POST" action="EditProductCategory?id=${param.id}">
+					<input type="hidden" name="id" value="${productsCategory.id}">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
