@@ -143,6 +143,10 @@
         <servlet-name>DeleteListCategoryServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeleteListCategoryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewListsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewListsCategoryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InfoUserServlet</servlet-name>
         <url-pattern>/restricted/InfoUser</url-pattern>
@@ -240,6 +244,10 @@
     <servlet-mapping>
         <servlet-name>DeleteListCategoryServlet</servlet-name>
         <url-pattern>/restricted/admin/DeleteListCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewListsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewListsCategory</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

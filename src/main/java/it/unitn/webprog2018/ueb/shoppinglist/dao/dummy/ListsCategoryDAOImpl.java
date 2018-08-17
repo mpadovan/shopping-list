@@ -71,7 +71,14 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
 	@Override
 	public Boolean addListCategory(ListsCategory listCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		listCategory.setId((int)(Math.random() * 10000));
+		for(ListsCategory c : listsCategories) {
+			if (c.getName().equals(listCategory.getName())) {
+				return false;
+			}
+		}
+		listsCategories.add(listCategory);
+		return true;
 	}
 	
 	public List<ListsCategory> getAll() throws DaoException{

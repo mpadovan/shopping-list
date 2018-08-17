@@ -14,7 +14,7 @@
 		<div class="card" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
 			<div class="card-body">
 				<h1 class="card-title">Categorie di lista</h1>
-				<p><a href="#">Nuovo categoria <i class="fas fa-plus-circle"></i></a></p>
+				<p><a href="${pageContext.servletContext.contextPath}/restricted/admin/NewListsCategory">Nuovo categoria <i class="fas fa-plus-circle"></i></a></p>
 				<form>
 					<label class="sr-only" for="search">Cerca</label>
 					<div class="input-group mb-2">

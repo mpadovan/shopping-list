@@ -1,6 +1,6 @@
 <%-- 
-    Document   : NewPublicProduct
-    Created on : 16-ago-2018, 21.28.47
+    Document   : NewListsCategory
+    Created on : 17-ago-2018, 22.31.44
     Author     : giulia
 --%>
 
@@ -8,38 +8,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:admin pageTitle="New Public Product">
+<layouts:admin pageTitle="New List Category">
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
-				<h1 class="card-title">Nuovo prodotto</h1>
-				<form method="POST" action="NewPublicProduct">
+				<h1 class="card-title">Nuovo categoria di lista</h1>
+				<form method="POST" action="NewProductsCategory">
 					<div>
-						<label for="name">Nome prodotto</label>
+						<label for="name">Nome categoria</label>
 						<input type="text"
 							   class="form-control" 
 							   id="name"
 							   name="name" 
-							   value="${product.name}"
 							   required />
 					</div>
 					<div>
-						<label for="note">Note</label>
+						<label for="note">Descrizione</label>
 						<input type="text"
 							   class="form-control"
 							   id="note"
-							   name="note" 
-							   value="${product.note}"
+							   name="description" 
 							   required>
-					</div>
-					<div>
-						<label for="logo">Logo</label>
-						<input type="text"
-							   class="form-control"
-							   id="logo"
-							   name="logo" 
-							   value="${product.logo}"
-							   >
 					</div>
 					<div>
 						<label for="photography">Fotografia</label>
@@ -53,22 +42,8 @@
 							<label class="custom-file-label" for="photography">Scegli file</label>
 						</div>
 					</div>
-					<div>
-						<label for="category">Categoria</label>
-						<select class="select2 js-example-basic-single form-control py-3"
-								name="category"
-								id="category"
-								name="category" 
-								value="${product.category}"
-								required
-								>
-							<c:forEach var="c" items="${requestScope.productsCategory}">
-								<option value="${c.id}">${c.name}</option>
-							</c:forEach>
-						</select>
-					</div>
 					<div class="float-right mt-3">
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList" class="btn btn-light">Annulla</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>
 					</div>
 				</form>

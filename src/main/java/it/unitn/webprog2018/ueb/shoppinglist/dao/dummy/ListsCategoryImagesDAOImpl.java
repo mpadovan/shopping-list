@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 
 /**
@@ -12,5 +13,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesD
  * @author simon
  */
 public class ListsCategoryImagesDAOImpl implements ListsCategoryImagesDAO {
+	private DAOFactory dAOFactory;
+
+	public ListsCategoryImagesDAOImpl(DAOFactory dAOFactory) {
+		this.dAOFactory = dAOFactory;
+	}
 	
 }

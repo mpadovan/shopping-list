@@ -5,6 +5,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -26,6 +27,7 @@ public class DAOFactoryImpl implements DAOFactory {
 	private final ListsCategoryDAO LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl(this);
 	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl(this);
 	private final ListDAO LIST_DAO = new ListDAOImpl(this);
+	private final ListsCategoryImagesDAO LISTS_CATEGORY_IMAGE_DAO = new ListsCategoryImagesDAOImpl(this);
 	
 	@Override
 	public ExampleDAO getExampleDAO() {
@@ -65,6 +67,11 @@ public class DAOFactoryImpl implements DAOFactory {
 	@Override
 	public ListDAO getListDAO() {
 		return LIST_DAO;
+	}
+
+	@Override
+	public ListsCategoryImagesDAO getListsCategoryImageDAO() {
+		return LISTS_CATEGORY_IMAGE_DAO;
 	}
 
 }
