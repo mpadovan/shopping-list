@@ -51,7 +51,7 @@
 						<button type="submit" class="btn btn-outline-dark">Registrati</button>
 						<div class="float-right">
 							<!-- TODO change href -->
-							<a href="HomePage" class="btn btn-outline-dark">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/home" class="btn btn-outline-dark">Annulla</a>
 						</div>
 					</form>
 				</div>
