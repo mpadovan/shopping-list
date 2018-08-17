@@ -60,7 +60,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				throw new UpdateException(ex);
 			}
 		}
-		return valid;	}
+		return valid;
+	}
 	
 	/**
 	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire la Query (dato che il chiamante conosce giá l'utente)
@@ -110,7 +111,29 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	
 	@Override
 	public Boolean updateProduct(Integer productId, Product product) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String query = "UPDATE products\n" +
+						"SET name = \""+product.getName()+"\"," +
+						"	note = \""+product.getNote()+"\"," +
+						"   logo = \""+product.getLogo()+"\"," +
+						"   photography = \""+product.getPhotography()+"\"," +
+						"   iduser = "+product.getOwner().getId()+"," +
+						"   idproductscategory = "+product.getCategory().getId()+
+						"WHERE id = "+productId;
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.executeUpdate();
+				st.close();
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 	
 	@Override
