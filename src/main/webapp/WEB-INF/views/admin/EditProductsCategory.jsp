@@ -1,6 +1,6 @@
 <%-- 
-    Document   : NewCategoryProduct
-    Created on : 17-ago-2018, 12.48.40
+    Document   : EditProductsCategory
+    Created on : 17-ago-2018, 16.35.23
     Author     : giulia
 --%>
 
@@ -8,12 +8,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:admin pageTitle="New Product Category">
+<layouts:admin pageTitle="Edit Product Category">
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
-				<h1 class="card-title">Nuovo categoria di prodotto</h1>
-				<form method="POST" action="NewProductsCategory">
+				<h1 class="card-title">Modifica categoria di prodotto</h1>
+				<form method="POST" action="EditProductCategory">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
@@ -57,7 +57,7 @@
 					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory" class="btn btn-light">Annulla</a>
-						<button class="btn btn-new ml-2" type="submit">Crea</button>
+						<button class="btn btn-new ml-2" type="submit">Modifica</button>
 					</div>
 				</form>
 			</div>
@@ -73,4 +73,3 @@
 
 	</jsp:attribute>
 </layouts:admin>
-

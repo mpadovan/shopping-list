@@ -81,7 +81,14 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 
 	@Override
 	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		productCategory.setId((int)(Math.random() * 10000));
+		for(ProductsCategory c : productsCategories) {
+			if (c.getName().equals(productCategory.getName())) {
+				return false;
+			}
+		}
+		productsCategories.add(productCategory);
+		return true;
 	}
 
 
@@ -99,4 +106,14 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		throw new RecordNotFoundDaoException("Product category with id: " + id + " not found");
 	}
 
+	@Override
+	public Boolean deleteProductsCategory(Integer id) throws DaoException {
+		ProductsCategory c = getById(id);
+		removeProductsCategoryFromList(c);
+		return true;
+	}
+	
+	private synchronized void removeProductsCategoryFromList(ProductsCategory c) {
+		productsCategories.remove(c);
+	}
 }

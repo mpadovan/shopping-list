@@ -68,7 +68,7 @@
 					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList" class="btn btn-light">Annulla</a>
-						<button class="btn btn-new ml-2" type="submit">Crea</button>
+						<button class="btn btn-new ml-2" type="submit">Modifica</button>
 					</div>
 				</form>
 			</div>
