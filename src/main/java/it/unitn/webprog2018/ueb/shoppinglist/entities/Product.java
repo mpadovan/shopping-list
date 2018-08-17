@@ -7,6 +7,10 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 
 /**
@@ -79,11 +83,25 @@ public class Product extends AbstractEntity {
 	}
 	
 	@Override
-	protected void validateOnSave(DAOFactory dAOFactory) {
-		//ProductDAO productDAO = ((DAOFactory) dAOFactory).getProductDAO();
+	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
 		if (name==null || name.equals(""))
 		{
 			setError("name", "Non può essere lasciato vuoto");
+		}
+		if (owner==null || owner.equals(""))
+		{
+			setError("owner", "Non può essere lasciato vuoto");
+		}
+		if (category==null || category.equals(""))
+		{
+			setError("name", "Non può essere lasciato vuoto");
+		}
+		if(errors.isEmpty())
+		{
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
+			productsCategoryDAO.getById(category.getId());
+			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
+			userDAO.getById(owner.getId());
 		}
 	}
 

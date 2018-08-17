@@ -2,6 +2,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities.utils;
 
 import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -26,20 +27,20 @@ public abstract class AbstractEntity implements Serializable {
 		this.id = id;
 	}
 
-	private final Map<String, Set<String>> errors;
+	protected final Map<String, Set<String>> errors;
 
 	public AbstractEntity() {
 		this.errors = new LinkedHashMap<>();
 	}
 
-	public Boolean isVaildOnCreate(DAOFactory dAOFactory) {
+	public Boolean isVaildOnCreate(DAOFactory dAOFactory) throws DaoException {
 		this.clearErrors();
 		this.validateOnCreate(dAOFactory);
 		this.validateOnSave(dAOFactory);
 		return this.errors.isEmpty();
 	}
 
-	public Boolean isVaildOnUpdate(DAOFactory dAOFactory) {
+	public Boolean isVaildOnUpdate(DAOFactory dAOFactory) throws DaoException {
 		this.clearErrors();
 		this.validateOnUpdate(dAOFactory);
 		this.validateOnSave(dAOFactory);
@@ -54,7 +55,7 @@ public abstract class AbstractEntity implements Serializable {
 	}
 
 	;
-	protected void validateOnSave(DAOFactory dAOFactory) {
+	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 	}
 
 	;

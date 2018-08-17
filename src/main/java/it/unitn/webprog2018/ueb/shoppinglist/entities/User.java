@@ -26,7 +26,7 @@ public class User extends AbstractEntity {
 	private String name;
 	private String lastname;
 	private String image;
-	private boolean administrator;
+	private Boolean administrator;
 	
 	public User() {
 		
@@ -122,29 +122,30 @@ public class User extends AbstractEntity {
 	 * 
 	 * @param administrator if true then the user becomes an administrator to the page-
 	 */
-	public void setAdministrator(boolean administrator) {
+	public void setAdministrator(Boolean administrator) {
 		this.administrator = administrator;
 	}
 	
 	@Override
-	protected void validateOnSave(DAOFactory dAOFactory) {
-		UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
-		try {
-			userDAO.getByEmail(email);
-			setError("email", "email già esistente");
-		} catch (RecordNotFoundDaoException ex) {
-			if (name == null || name.equals("")) {
-				setError("firstname", "Non può essere lasciato vuoto");
-			}
-			if (lastname == null || lastname.equals("")) {
-				setError("lastname", "Non può essere lasciato vuoto");
-			}
-			if (email == null || email.equals("")) {
-				setError("email", "Non può essere lasciato vuoto");
-			}
+	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
+		if (name == null || name.equals("")) {
+			setError("firstname", "Non può essere lasciato vuoto");
 		}
-		catch (DaoException ex) {
-			Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+		if (lastname == null || lastname.equals("")) {
+			setError("lastname", "Non può essere lasciato vuoto");
+		}
+		if (email == null || email.equals("")) {
+			setError("email", "Non può essere lasciato vuoto");
+		}
+		if(errors.isEmpty())
+		{
+			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
+			try {
+				userDAO.getByEmail(email);
+				setError("email", "email già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
 		}
 	}
 

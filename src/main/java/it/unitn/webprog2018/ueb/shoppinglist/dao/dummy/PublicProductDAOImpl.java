@@ -171,6 +171,10 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 		removeProductFromList(p);
 		return true;
 	}
+	@Override
+	public PublicProduct getByName(String name) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 	private synchronized void update(Integer id, PublicProduct p) {
 		try {
@@ -189,4 +193,6 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	private synchronized void removeProductFromList(PublicProduct p) {
 		publicProducts.remove(p);
 	}
+	
+
 }

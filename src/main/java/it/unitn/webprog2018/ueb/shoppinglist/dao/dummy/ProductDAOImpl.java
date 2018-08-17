@@ -79,7 +79,7 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> getByUser(int id, String query) throws DaoException {
+	public List<Product> getByUser(Integer id, String query) throws DaoException {
 		List<Product> matching = new LinkedList<>();
 
 		for (Product p : products) {
@@ -93,7 +93,7 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> getByUser(int userId) throws DaoException {
+	public List<Product> getByUser(Integer userId) throws DaoException {
 		List<Product> matching = new LinkedList<>();
 
 		for (Product p : products) {

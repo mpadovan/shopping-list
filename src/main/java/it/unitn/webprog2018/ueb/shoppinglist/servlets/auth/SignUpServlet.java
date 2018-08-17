@@ -1,6 +1,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
@@ -13,6 +14,8 @@ import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -75,58 +78,62 @@ public class SignUpServlet extends HttpServlet {
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
 		
-		if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
-		{
-			// Retrieving user avatar
-			File file = null;
-			String avatarFileName = "";
-			String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
-			Part avatar = request.getPart("image");
-			if ((avatar != null) && (avatar.getSize() > 0)) {
-				avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
-				int ext = avatarFileName.lastIndexOf(".");
-				int noExt = avatarFileName.lastIndexOf(File.separator);
-				avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
-				try (InputStream fileContent = avatar.getInputStream()) {
-					file = new File(avatarFileName);
-					Files.copy(fileContent, file.toPath());
-					avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
-							+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
-							
-				} catch (FileAlreadyExistsException ex) {
-					response.sendError(500, "Server could not store your avatar, "
-							+ "please retry the sign up process. "
-							+ "Notice that you can also upload the image later in you user page.");
-					getServletContext().log("impossible to upload the file", ex);
+		try {
+			if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
+			{
+				// Retrieving user avatar
+				File file = null;
+				String avatarFileName = "";
+				String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
+				Part avatar = request.getPart("image");
+				if ((avatar != null) && (avatar.getSize() > 0)) {
+					avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+					int ext = avatarFileName.lastIndexOf(".");
+					int noExt = avatarFileName.lastIndexOf(File.separator);
+					avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
+					try (InputStream fileContent = avatar.getInputStream()) {
+						file = new File(avatarFileName);
+						Files.copy(fileContent, file.toPath());
+						avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
+								+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
+						
+					} catch (FileAlreadyExistsException ex) {
+						response.sendError(500, "Server could not store your avatar, "
+								+ "please retry the sign up process. "
+								+ "Notice that you can also upload the image later in you user page.");
+						getServletContext().log("impossible to upload the file", ex);
+					}
 				}
-			}
-			if (!response.isCommitted()) {
-				user.setImage(avatarURI);
-				
-				// Creating the token for the account confirmation
-				Token token = new Token();
-
-				token.generateToken();
-				token.setExpirationFromNow(TOKEN_EXP);
-				token.setUser(user);
-
-				String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
-				if (EmailSender.send(user.getEmail(), "Account Confirmation",
-						"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
-					tokenDAO.addToken(token);
-					response.sendRedirect("Login");
-				} else {
-					response.sendError(500, "The server could not reach your email address. Please try again later.");
-					if(file != null) {
-						file.delete();
+				if (!response.isCommitted()) {
+					user.setImage(avatarURI);
+					
+					// Creating the token for the account confirmation
+					Token token = new Token();
+					
+					token.generateToken();
+					token.setExpirationFromNow(TOKEN_EXP);
+					token.setUser(user);
+					
+					String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
+					if (EmailSender.send(user.getEmail(), "Account Confirmation",
+							"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
+						tokenDAO.addToken(token);
+						response.sendRedirect("Login");
+					} else {
+						response.sendError(500, "The server could not reach your email address. Please try again later.");
+						if(file != null) {
+							file.delete();
+						}
 					}
 				}
 			}
-		}
-		else
-		{
-			request.setAttribute("user", user);
-			request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
+			else
+			{
+				request.setAttribute("user", user);
+				request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(SignUpServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

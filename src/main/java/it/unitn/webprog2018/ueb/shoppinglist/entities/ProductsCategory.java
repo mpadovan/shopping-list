@@ -6,7 +6,13 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import com.google.gson.annotations.Expose;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,7 +22,7 @@ public class ProductsCategory extends AbstractEntity {
 
 	@Expose
 	private String name;
-	private int category;
+	private Integer category;
 	private String description;
 	private String logo;
 
@@ -50,6 +56,36 @@ public class ProductsCategory extends AbstractEntity {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	
+	@Override
+	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
+		if (name==null || name.equals(""))
+		{
+			setError("name", "Non può essere lasciato vuoto");
+		}
+		if (category==null)
+		{
+			setError("category", "Non può essere lasciato vuoto");
+		}
+		if(errors.isEmpty())
+		{
+			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
+			try {
+				publicProductDAO.getByName(name);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	}
+
+	@Override
+	protected void validateOnCreate(DAOFactory dAOFactory) {
 	}
 
 }

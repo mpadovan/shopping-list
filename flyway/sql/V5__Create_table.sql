@@ -69,7 +69,7 @@ create table if not exists products(
 	foreign key(iduser) references users(id),
 	foreign key(idproductscategory) references productscategories(id),
 	primary key(id)
-);	
+);
 
 create table if not exists publicproducts(
 	id integer not null AUTO_INCREMENT,
