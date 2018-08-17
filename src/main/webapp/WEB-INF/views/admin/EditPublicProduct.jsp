@@ -39,8 +39,7 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   value="${product.logo}"
-							   required>
+							   value="${product.logo}">
 					</div>
 					<div>
 						<label for="photo">Fotografia</label>
@@ -59,12 +58,11 @@
 						<select class="select2 js-example-basic-single form-control py-3"
 								name="category"
 								id="category"
-								name="category" 
-								value="${product.category}"
+								name="category"
 								required
 								>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
-								<option value="${c.id}">${c.name}</option>
+								<option value="${c.id}"<c:if test="${product.category.id == c.id}"	> selected</c:if>>${c.name}</option>
 							</c:forEach>
 						</select>
 					</div>

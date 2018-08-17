@@ -68,6 +68,7 @@ public class EditPublicProduct extends HttpServlet {
 			throws ServletException, IOException {
 		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
 		Integer productId = Integer.parseInt(request.getParameter("id"));
+		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
@@ -76,8 +77,8 @@ public class EditPublicProduct extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 
 		try {
-			PublicProduct product = new PublicProduct();
-			ProductsCategory productsCategory = new ProductsCategory();
+			PublicProduct product = publicProductDAO.getById(productId);
+			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
 			productsCategory.setId(categoryId);
 			product.setName(name);
 			product.setLogo(logo);

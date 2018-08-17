@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
@@ -86,6 +87,16 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 
 	public List<ProductsCategory> getAll() throws DaoException{
 		return productsCategories;
+	}
+
+	@Override
+	public ProductsCategory getById(Integer id) throws DaoException {
+		for (ProductsCategory c : productsCategories) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product category with id: " + id + " not found");
 	}
 
 }
