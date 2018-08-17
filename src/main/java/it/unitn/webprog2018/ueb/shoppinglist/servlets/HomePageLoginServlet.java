@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author simon
  */
+@WebServlet("/restricted/HomePageLogin/*")
 public class HomePageLoginServlet extends HttpServlet {
 /**
 	 * Handles the HTTP <code>GET</code> method.
@@ -52,5 +54,5 @@ public class HomePageLoginServlet extends HttpServlet {
 	@Override
 	public String getServletInfo() {
 		return "Home Page Login Servlet";
-	}// </editor-fold>
+	}
 }

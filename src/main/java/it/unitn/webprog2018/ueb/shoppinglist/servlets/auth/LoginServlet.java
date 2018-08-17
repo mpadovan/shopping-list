@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
+@WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
@@ -92,7 +94,7 @@ public class LoginServlet extends HttpServlet {
 					path += "restricted/admin/ProductList";
 					response.sendRedirect(path);
 				} else {
-					path += "restricted/HomePageLogin";
+					path += "restricted/HomePageLogin/" + user.getId();
 					response.sendRedirect(path);
 				}
 			}
