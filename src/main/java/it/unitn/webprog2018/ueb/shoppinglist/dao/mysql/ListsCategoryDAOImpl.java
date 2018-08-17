@@ -88,4 +88,14 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	public ListsCategory getByName(String name) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public ListsCategory getById(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean deleteListsCategory(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

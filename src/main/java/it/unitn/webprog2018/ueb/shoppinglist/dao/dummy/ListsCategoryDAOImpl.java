@@ -7,8 +7,10 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,4 +84,23 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+	@Override
+	public ListsCategory getById(Integer id) throws DaoException {
+		for (ListsCategory c : listsCategories) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product category with id: " + id + " not found");
+	}
+
+	@Override
+	public Boolean deleteListsCategory(Integer id) throws DaoException {
+		ListsCategory c = getById(id);
+		removeListsCategory(c);
+		return true;
+	}
+	private synchronized void removeListsCategory(ListsCategory c) {
+		listsCategories.remove(c);
+	}
 }

@@ -46,14 +46,37 @@
 								<td>${c.name}</td>
 								<td>${c.description}</td>
 								<td></td>
-								<td><span><a href="#"><i class="fas fa-pen-square"></i></a></span><span class="ml-4"><a href="#" data-toggle="modal" data-target="#delete"><i class="fas fa-trash"></i></a></span></td>
+								<td>
+									<span><a href="#"><i class="fas fa-pen-square"></i></a></span>
+									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a></span>
+								</td>
 							</tr>
-						</c:forEach>
-						<c:if test="${fn:length(requestScope.listsCategory) == 0}">
-							<tr>
-								<td class="text-center" colspan="6">Nessun risultato</td>
-							</tr>
-						</c:if>
+							<!-- Modal -->
+						<div class="modal fade" id="delete-${c.id}" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="delete-${c.id}">Elimina categoria di lista</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										Sei sicuro di voler eliminare la categoria di lista "${c.name}"?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+										<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeleteListCategory?id=${c.id}" class="btn btn-danger">Elimina</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+					<c:if test="${fn:length(requestScope.listsCategory) == 0}">
+						<tr>
+							<td class="text-center" colspan="6">Nessun risultato</td>
+						</tr>
+					</c:if>
 					</tbody>
 				</table>
 				<c:if test="${requestScope.checkParam > 0}">
@@ -61,26 +84,7 @@
 				</c:if>
 			</div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="delete">Elimina categoria di lista</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						Sei sicuro di voler eliminare la categoria di lista?
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-						<button type="button" class="btn btn-danger">Elimina</button>
-					</div>
-				</div>
-			</div>
-		</div>
+
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 
