@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class EditPublicProduct extends HttpServlet {
+public class EditPublicProductServlet extends HttpServlet {
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -49,7 +49,7 @@ public class EditPublicProduct extends HttpServlet {
 			request.setAttribute("product", publicProduct);
 			request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 		} catch (DaoException ex) {
-			Logger.getLogger(EditPublicProduct.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			//aggiungere record not found ex
 		}
 
@@ -92,7 +92,7 @@ public class EditPublicProduct extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(EditPublicProduct.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

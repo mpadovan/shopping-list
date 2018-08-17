@@ -121,11 +121,15 @@
     </servlet>
     <servlet>
         <servlet-name>EditPublicProduct</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.EditPublicProduct</servlet-class>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.EditPublicProductServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeletePublicProductServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeletePublicProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewCatgeoryProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewCategoryProductServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InfoUserServlet</servlet-name>
@@ -208,6 +212,10 @@
     <servlet-mapping>
         <servlet-name>DeletePublicProductServlet</servlet-name>
         <url-pattern>/restricted/admin/DeletePublicProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewCatgeoryProductServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewCatgeoryProduct</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

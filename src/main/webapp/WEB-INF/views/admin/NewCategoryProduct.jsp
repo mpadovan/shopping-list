@@ -1,6 +1,6 @@
 <%-- 
-    Document   : NewPublicProduct
-    Created on : 16-ago-2018, 21.28.47
+    Document   : NewCategoryProduct
+    Created on : 17-ago-2018, 12.48.40
     Author     : giulia
 --%>
 
@@ -8,12 +8,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:admin pageTitle="New Public Product">
+<layouts:admin pageTitle="New Product Category">
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
-				<h1 class="card-title">Nuovo prodotto</h1>
-				<form method="POST" action="NewPublicProduct">
+				<h1 class="card-title">Nuovo categoria di prodotto</h1>
+				<form method="POST" action="NewProductCategory">
 					<div>
 						<label for="name">Nome prodotto</label>
 						<input type="text"
@@ -85,3 +85,4 @@
 
 	</jsp:attribute>
 </layouts:admin>
+
