@@ -5,18 +5,11 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -25,24 +18,21 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Filter that prevents not logged users from accessing restricted areas of the
- * web app
  *
  * @author Giulia Carocari
  */
-public class AuthenticationFilter implements Filter {
-
+public class UserFilter implements Filter {
+	
 	/**
 	 * FilterConfig object associated with this filter
 	 */
 	private FilterConfig filterConfig = null;
-
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
@@ -58,22 +48,30 @@ public class AuthenticationFilter implements Filter {
 				user = (User) session.getAttribute("user");
 			}
 
-			if (user == null) {
+			if (user == null) { // Should never happen, but just in case
 				String contextPath = servletContext.getContextPath();
 				if (!contextPath.endsWith("/")) {
 					contextPath += "/";
 				}
 				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
 			}
-		}
-		if (!response.isCommitted()) {
-			Throwable problem = null;
-			try {
-				chain.doFilter(request, response);
-			} catch (Throwable t) {
-				problem = t;
-				t.printStackTrace();
-				sendProcessingError(problem, response);
+
+			String uri = ((HttpServletRequest) request).getRequestURI();
+			if (!Pattern.matches(".*/restricted/[a-zA-Z]*/?" + user.getId() + ".*", uri)) {
+				// TODO add redirection to correct error page.
+				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
+						+ "The resource you are trying to access is none of your business.\n"
+						+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
+			}
+			if (!response.isCommitted()) {
+				Throwable problem = null;
+				try {
+					chain.doFilter(request, response);
+				} catch (Throwable t) {
+					problem = t;
+					t.printStackTrace();
+					sendProcessingError(problem, response);
+				}
 			}
 		}
 	}
@@ -134,4 +132,5 @@ public class AuthenticationFilter implements Filter {
 		}
 		return stackTrace;
 	}
+
 }

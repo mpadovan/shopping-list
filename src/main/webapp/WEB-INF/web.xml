@@ -16,6 +16,10 @@
 		<filter-name>AdministrationFilter</filter-name>
 		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
 	</filter>
+	<filter>
+		<filter-name>UserFilter</filter-name>
+		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UserFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>RootFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -28,9 +32,6 @@
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/restricted/*</url-pattern>
-		<url-pattern>/services/lists/restricted/*</url-pattern>
-		<url-pattern>/services/geolocation/restricted/*</url-pattern>
-		<url-pattern>/services/products/restricted/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
@@ -40,6 +41,18 @@
 	<filter-mapping>
 		<filter-name>AdministrationFilter</filter-name>
 		<url-pattern>/restricted/admin/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>UserFilter</filter-name>
+		<url-pattern>/restricted/HomePageLogin/*</url-pattern>
+		<url-pattern>/services/lists/restricted/*</url-pattern>
+		<url-pattern>/services/geolocation/restricted/*</url-pattern>
+		<url-pattern>/services/products/restricted/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
