@@ -70,13 +70,13 @@ public class ProductsCategory extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			/*ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
 			try {
 				productsCategoryDAO.getByName(name);
 				setError("name", "Nome già esistente");
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
-			}*/
+			}
 		}
 	}
 

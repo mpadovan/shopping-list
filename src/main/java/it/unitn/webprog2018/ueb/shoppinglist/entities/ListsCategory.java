@@ -47,13 +47,13 @@ public class ListsCategory extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			/*ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
+			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
 			try {
 				listsCategoryDAO.getByName(name);
 				setError("name", "name già esistente");
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
-			}*/
+			}
 		}
 	}
 

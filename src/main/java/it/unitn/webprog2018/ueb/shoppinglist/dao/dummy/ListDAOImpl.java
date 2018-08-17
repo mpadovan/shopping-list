@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -309,7 +310,12 @@ public class ListDAOImpl implements ListDAO {
 
 	@Override
 	public List getList(String name, User owner) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		for (List u : lists) {
+			if (u.getName().equals(name) && u.getOwner().getId().equals(owner.getId())) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("List with name: " + name + " not found");
 	}
 	
 	

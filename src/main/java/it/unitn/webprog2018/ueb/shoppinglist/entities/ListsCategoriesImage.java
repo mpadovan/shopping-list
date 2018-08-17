@@ -41,9 +41,6 @@ public class ListsCategoriesImage extends AbstractEntity {
 		{
 			setError("image", "image può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
-		{
-		}
 	}
 
 	@Override

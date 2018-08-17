@@ -167,11 +167,7 @@ public class ProductWebService {
 			System.out.println("Added new product");
 		} else {
 			System.out.println("Not added new product - error");
-			try {
-				throw new RuntimeException();
-			} catch (RuntimeException ex) {
-				System.err.println("Could not persist this product");
-			}
+			throw new DaoException("Not added new product - error");
 		}
 	}
 

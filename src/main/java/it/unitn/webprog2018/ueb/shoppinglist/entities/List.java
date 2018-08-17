@@ -86,13 +86,13 @@ public class List extends AbstractEntity {
 		}
 		if(errors.isEmpty())
 		{
-			/*ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
+			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
 			try {
 				listDAO.getList(name, owner);
 				setError("name", "name già esistente");
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
-			*/
+			}
 		}
 	}
 
