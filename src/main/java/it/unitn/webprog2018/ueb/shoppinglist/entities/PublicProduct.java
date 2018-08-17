@@ -91,8 +91,6 @@ public class PublicProduct extends AbstractEntity {
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}
-			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
-			productsCategoryDAO.getById(category.getId());
 		}
 	}
 

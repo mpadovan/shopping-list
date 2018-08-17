@@ -99,4 +99,14 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		throw new RecordNotFoundDaoException("Product category with id: " + id + " not found");
 	}
 
+	@Override
+	public ProductsCategory getByName(String name) throws DaoException {
+		for (ProductsCategory u : productsCategories) {
+			if (u.getName().equals(name)) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product category with name: " + name + " not found");
+	}
+
 }
