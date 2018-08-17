@@ -13,25 +13,25 @@
 		<div class="card card-new">
 			<div class="card-body">
 				<h1 class="card-title">Modifica categoria di prodotto</h1>
-				<form method="POST" action="EditProductCategory?id=${param.id}">
-					<input type="hidden" name="id" value="${productsCategory.id}">
+				<form method="POST" action="EditProductsCategory?id=${param.id}">
+					<input type="hidden" name="id" value="${productCategory.id}">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
 							   class="form-control" 
 							   id="name"
 							   name="name" 
-							   value="${productsCategory.name}"
+							   value="${productCategory.name}"
 							   required />
 					</div>
 					<div>
-						<label for="note">Note</label>
+						<label for="note">Descrizione</label>
 						<input type="text"
 							   class="form-control"
-							   id="note"
-							   name="note" 
-							   value="${productsCategory.description}"
-							   required>
+							   id="description"
+							   name="description" 
+							   value="${productCategory.description}"
+							   >
 					</div>
 					<div>
 						<label for="logo">Logo</label>
@@ -39,18 +39,17 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   value="${productsCategory.logo}"
-							   required>
+							   value="${productCategory.logo}"
+							   >
 					</div>
 					<div>
 						<label for="category">Categoria padre</label>
 						<select class="select2 js-example-basic-single form-control py-3"
 								name="category"
 								id="category"
-								name="category" 
-								required
+								name="category"
 								>
-							<option selected>Nessuna</option>
+							<option selected value="-1">Nessuna</option>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
 								<option value="${c.id}">${c.name}</option>
 							</c:forEach>
@@ -63,9 +62,6 @@
 				</form>
 			</div>
 		</div>
-
-
-
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 

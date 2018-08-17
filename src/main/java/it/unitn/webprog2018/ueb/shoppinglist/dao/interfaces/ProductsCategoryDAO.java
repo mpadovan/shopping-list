@@ -26,4 +26,6 @@ public interface ProductsCategoryDAO {
 	public ProductsCategory getById(Integer id) throws DaoException;
 	
 	public Boolean deleteProductsCategory(Integer id) throws DaoException;
+	
+	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException;
 }

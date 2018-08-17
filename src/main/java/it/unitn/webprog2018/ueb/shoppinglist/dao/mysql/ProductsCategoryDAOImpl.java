@@ -100,5 +100,10 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	public Boolean deleteProductsCategory(Integer id) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

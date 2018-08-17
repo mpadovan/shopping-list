@@ -13,6 +13,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -111,6 +113,28 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		return true;
 	}
 	
+	
+
+	@Override
+	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException {
+		getById(id);
+
+		Boolean valid = productsCategory.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			updateProduct(id, productsCategory);
+		}
+		return valid;
+	}
+	private synchronized void updateProduct(Integer id, ProductsCategory c) throws DaoException {
+		ProductsCategory found = getById(id);
+
+		found.setId(c.getId());
+		found.setName(c.getName());
+		found.setLogo(c.getLogo());
+		found.setDescription(c.getDescription());
+		found.setCategory(c.getCategory());
+
+	}
 	private synchronized void removeProductsCategoryFromList(ProductsCategory c) {
 		productsCategories.remove(c);
 	}

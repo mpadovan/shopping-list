@@ -48,7 +48,7 @@
 								<td>${c.logo}</td>
 								<td>${c.category.name}</td>
 								<td>
-									<span><a href="#"><i class="fas fa-pen-square"></i></a></span>
+									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditProductsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a></span>
 									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a></span>
 								</td>
 							</tr>
