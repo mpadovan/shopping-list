@@ -7,9 +7,8 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
@@ -305,5 +304,47 @@ public class ListDAOImpl implements ListDAO {
 			}
 		}
 		return match;
+	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException {
+		if (listId == 1) {
+			if (publicProductsOnList1.containsKey(product)) {
+				publicProductsOnList1.remove(product);
+				return true;
+			} else {
+				throw new RecordNotFoundDaoException("Public product with id " + product.getId() + "not found on list with id " + listId);
+			}
+		}
+		if (listId == 2) {
+			if (publicProductsOnList2.containsKey(product)) {
+				publicProductsOnList2.remove(product);
+				return true;
+			} else {
+				throw new RecordNotFoundDaoException("Public product with id " + product.getId() + "not found on list with id " + listId);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, Product product) throws DaoException {
+		if (listId == 1) {
+			if (productsOnList1.containsKey(product)) {
+				productsOnList1.remove(product);
+				return true;
+			} else {
+				throw new RecordNotFoundDaoException("Product with id " + product.getId() + "not found on list with id " + listId);
+			}
+		}
+		if (listId == 2) {
+			if (productsOnList2.containsKey(product)) {
+				productsOnList2.remove(product);
+				return true;
+			} else {
+				throw new RecordNotFoundDaoException("Product with id " + product.getId() + "not found on list with id " + listId);
+			}
+		}
+		return false;
 	}
 }

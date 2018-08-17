@@ -99,5 +99,15 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public java.util.List<List> getByUser(Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, Product product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }
