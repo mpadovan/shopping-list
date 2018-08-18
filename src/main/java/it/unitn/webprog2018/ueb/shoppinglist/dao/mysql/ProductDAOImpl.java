@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author simon
+ * @author Michele
  */
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	private DAOFactory dAOFactory;
@@ -137,8 +137,43 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	}
 	
 	@Override
-	public List<Product> getByUser(Integer id, String query) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
+		List<Product> list = new ArrayList<Product>();
+		try{
+			String query =	"SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory," +
+					"pc.name,pc.category,pc.description,pc.logo " +
+					"FROM products p inner join productscategories pc on p.idproductscategory = pc.id " +
+					"WHERE p.iduser = "+userId+" AND p.name LIKE \"%"+matching+"%\"";
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			Product p;
+			ProductsCategory pc;
+			while(rs.next())
+			{
+				p = new Product();
+				pc = new ProductsCategory();
+				p.setId(rs.getInt(0));
+				p.setName(rs.getString(1));
+				p.setNote(rs.getString(2));
+				p.setLogo(rs.getString(3));
+				p.setPhotography(rs.getString(4));
+				p.setOwner(null);
+				pc.setId(rs.getInt(5));
+				pc.setName(rs.getString(6));
+				pc.setCategory(rs.getInt(7));
+				pc.setDescription(rs.getString(8));
+				pc.setLogo(rs.getString(9));
+				p.setCategory(pc);
+				list.add(p);
+			}
+			rs.close();
+			st.close();
+			return list;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
 	
 	
