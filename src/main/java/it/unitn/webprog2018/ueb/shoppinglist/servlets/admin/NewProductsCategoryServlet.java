@@ -3,24 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
+package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author simon
+ * @author giulia
  */
-@WebServlet("/restricted/InfoUser/*")
-public class InfoUserServlet extends HttpServlet {
-
-	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+public class NewProductsCategoryServlet extends HttpServlet {
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -32,7 +28,7 @@ public class InfoUserServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/auth/InfoUser.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/admin/NewCategoryProduct.jsp").forward(request, response);
 	}
 
 	/**
@@ -46,6 +42,7 @@ public class InfoUserServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 	}
 
 	/**
@@ -55,7 +52,6 @@ public class InfoUserServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Information of User Servlet";
+		return "New category product servlet";
 	}
-
 }

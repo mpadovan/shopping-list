@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.util.ArrayList;
@@ -79,7 +80,12 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
 	@Override
 	public ListsCategory getByName(String name) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		for (ListsCategory u : listsCategories) {
+			if (u.getName().equals(name)) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("List category with name: " + name + " not found");
 	}
 
 }

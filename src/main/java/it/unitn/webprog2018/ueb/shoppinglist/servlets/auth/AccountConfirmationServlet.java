@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Giulia Carocari
  */
+@WebServlet("/AccountConfirmation")
 public class AccountConfirmationServlet extends HttpServlet {
 
 	private UserDAO userDAO;

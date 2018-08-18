@@ -14,6 +14,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
+import org.glassfish.hk2.utilities.reflection.Logger;
 
 /**
  *
@@ -102,5 +103,15 @@ public class ProductDAOImpl implements ProductDAO {
 			}
 		}
 		return matching;
+	}
+
+	@Override
+	public Product getProduct(Integer productId) throws DaoException {
+		for (Product p : products) {
+			if (p.getId().equals(productId)) {
+				return p;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product " + productId + " does not exist");
 	}
 }

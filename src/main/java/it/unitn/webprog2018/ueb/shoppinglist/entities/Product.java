@@ -30,9 +30,7 @@ public class Product extends AbstractEntity {
 	@Expose
 	private User owner;
 	@Expose
-	private ProductsCategory category;
-	@Expose
-	private int amount;
+	private ProductsCategory category;	
 
 	public String getName() {
 		return name;
@@ -95,13 +93,6 @@ public class Product extends AbstractEntity {
 		if (category==null || category.equals(""))
 		{
 			setError("name", "Non può essere lasciato vuoto");
-		}
-		if(errors.isEmpty())
-		{
-			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
-			productsCategoryDAO.getById(category.getId());
-			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
-			userDAO.getById(owner.getId());
 		}
 	}
 

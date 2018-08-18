@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -36,8 +37,7 @@ import javax.servlet.http.HttpSession;
  * @author Giulia Carocari
  */
 public class AuthenticationFilter implements Filter {
-	private UserDAO userDAO;
-	
+
 	/**
 	 * FilterConfig object associated with this filter
 	 */
@@ -46,8 +46,6 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		DAOFactory factory = (DAOFactory) this.filterConfig.getServletContext().getAttribute("daoFactory");
-		userDAO = factory.getUserDAO();
 	}
 
 	@Override
@@ -59,60 +57,29 @@ public class AuthenticationFilter implements Filter {
 			if (session != null) {
 				user = (User) session.getAttribute("user");
 			}
-			
+
 			if (user == null) {
 				String contextPath = servletContext.getContextPath();
 				if (!contextPath.endsWith("/")) {
 					contextPath += "/";
 				}
-				Cookie rememberCookie = getRememberCookie(request);
-				if (rememberCookie == null) {
-					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "Login"));
-					return;
-				} else {
-					// IDEA: login user from filter
-					HttpSession newSession = ((HttpServletRequest) request).getSession(true);
-					try {
-						user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
-					} catch (RecordNotFoundDaoException ex)
-					{
-						//redirect alla pagina di Login - esiste un remember cookie che però non corrisponde all'email dell'utente (es: cambio email)
-						//cancellare cookie di remember per evitare altri problemi
-					}
-					catch (DaoException ex) {
-						Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);		
-						//redirect pagina di errore: Ops qualcosa è andato storto
-						//cancellare cookie di remember per evitare altri problemi
-					}
-					newSession.setAttribute("user", user);
-				}
+				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
 			}
 		}
-
-		Throwable problem = null;
-		try {
-			chain.doFilter(request, response);
-		} catch (Throwable t) {
-			problem = t;
-			t.printStackTrace();
-			sendProcessingError(problem, response);
+		if (!response.isCommitted()) {
+			Throwable problem = null;
+			try {
+				chain.doFilter(request, response);
+			} catch (Throwable t) {
+				problem = t;
+				t.printStackTrace();
+				sendProcessingError(problem, response);
+			}
 		}
 	}
 
 	@Override
 	public void destroy() {
-	}
-
-	private Cookie getRememberCookie(ServletRequest request) {
-		Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("remember")) {
-					return cookie;
-				}
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -168,4 +135,3 @@ public class AuthenticationFilter implements Filter {
 		return stackTrace;
 	}
 }
-

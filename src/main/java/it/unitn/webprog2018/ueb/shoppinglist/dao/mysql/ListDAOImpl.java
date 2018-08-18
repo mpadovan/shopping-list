@@ -82,6 +82,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	}
 	
 	@Override
+	public List getList(String name, User owner) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
 	public Map<PublicProduct, Integer> getPublicProductsOnList(Integer listId) throws DaoException {
 		Map<PublicProduct, Integer> list = new HashMap<>();
 		try{
@@ -225,6 +230,21 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	
 	@Override
 	public java.util.List<List> getByUser(Integer userId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean deleteFromList(Integer listId, Product product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	

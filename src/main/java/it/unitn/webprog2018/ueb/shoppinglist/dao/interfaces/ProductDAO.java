@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
  * @author giulia
  */
 public interface ProductDAO {
+	public Product getProduct(Integer productId) throws DaoException;
 	
 	public Boolean addProduct(Product product) throws DaoException;
 	

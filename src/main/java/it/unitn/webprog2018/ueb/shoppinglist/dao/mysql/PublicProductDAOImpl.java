@@ -39,7 +39,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	}
 
 	@Override
-	public Boolean updateProduct(PublicProduct product) throws DaoException {
+	public Boolean updateProduct(Integer id, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -48,6 +48,10 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+	@Override
+	public Boolean deleteProduct(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	@Override
 	public PublicProduct getByName(String name) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
