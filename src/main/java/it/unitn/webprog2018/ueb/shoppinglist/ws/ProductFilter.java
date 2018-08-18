@@ -7,14 +7,12 @@ package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,9 +52,17 @@ public class ProductFilter implements ContainerRequestFilter {
 
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
-			Integer productId = Integer.parseInt(uri.substring(0, uri.lastIndexOf("/")));
+			Integer productId = Integer.parseInt(uri.substring(uri.lastIndexOf("/")+1, uri.length()));
 			
-			
+			try {
+				if(!productDAO.getProduct(productId).getOwner().getId().equals(user.getId())) {
+					// TODO USE CORRECT ERROR PAGE
+					servletResponse.sendError(401, "YOU SHALL NOT PASS!");
+				}
+			} catch (DaoException ex) {
+				Logger.getLogger(ProductFilter.class.getName()).log(Level.SEVERE, null, ex);
+				servletResponse.sendError(404, "The product you want does not yet exist. Create it yourself!");
+			}
 		}
 	}
 }

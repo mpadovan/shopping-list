@@ -14,7 +14,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
-import org.glassfish.hk2.utilities.reflection.Logger;
 
 /**
  *
@@ -35,6 +34,7 @@ public class ProductDAOImpl implements ProductDAO {
 		user.setId(1);
 		products = new LinkedList<>();
 		Product product = new Product();
+		product.setId(1);
 		product.setCategory(new ProductsCategory());
 		product.getCategory().setId(1);
 		product.getCategory().setName("Frutta");
@@ -45,6 +45,7 @@ public class ProductDAOImpl implements ProductDAO {
 		products.add(product);
 
 		Product product2 = new Product();
+		product2.setId(2);
 		product2.setCategory(new ProductsCategory());
 		product2.getCategory().setId(3);
 		product2.getCategory().setName("Verdura");
@@ -84,7 +85,7 @@ public class ProductDAOImpl implements ProductDAO {
 		List<Product> matching = new LinkedList<>();
 
 		for (Product p : products) {
-			if (p.getOwner().getId() == id) {
+			if (p.getOwner().getId().equals(id)) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
 				}

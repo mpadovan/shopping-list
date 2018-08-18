@@ -89,12 +89,14 @@ public class ListDAOImpl implements ListDAO {
 
 	@Override
 	public Map<PublicProduct, Integer> getPublicProductsOnList(Integer listId) throws DaoException {
-		if (listId == 1) {
-			return publicProductsOnList1;
-		} else if (listId == 2) {
-			return publicProductsOnList2;
+		switch (listId) {
+			case 1:
+				return publicProductsOnList1;
+			case 2:
+				return publicProductsOnList2;
+			default:
+				throw new RecordNotFoundDaoException("List " + listId + " not found");
 		}
-		return null;
 	}
 
 	@Override
@@ -104,7 +106,7 @@ public class ListDAOImpl implements ListDAO {
 				return l;
 			}
 		}
-		return null;
+		throw new RecordNotFoundDaoException("List " + id + "does not exist");
 	}
 
 	@Override
@@ -259,6 +261,7 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
 		if (listId == 1) {
 			if (publicProductsOnList1.containsKey(product)) {
+				System.out.println("Updating product" + product.getId());
 				publicProductsOnList1.replace(product, publicProductsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -280,6 +283,8 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
+				
+				System.out.println("Updating product" + product.getId());
 				productsOnList1.replace(product, productsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -297,6 +302,7 @@ public class ListDAOImpl implements ListDAO {
 		return false;
 	}
 
+	@Override
 	public java.util.List<List> getByUser(Integer userID) throws DaoException {
 		java.util.List<List> match = new LinkedList<>();
 		for (List l : lists) {
@@ -362,11 +368,15 @@ public class ListDAOImpl implements ListDAO {
 
 	@Override
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
-		if (listId == 1) {
-			return userId == 1;
-		} else if (listId == 2) {
-			return userId == 1;
+		if (null == listId) {
+			throw new RecordNotFoundDaoException("List " + listId + " not found");
+		} else switch (listId) {
+			case 1:
+				return userId == 1;
+			case 2:
+				return userId == 1;
+			default:
+				throw new RecordNotFoundDaoException("List " + listId + " not found");
 		}
-		return false;
 	}
 }

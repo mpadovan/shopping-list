@@ -60,6 +60,7 @@ public class ListViewFilter implements ContainerRequestFilter {
 			} catch (DaoException ex) {
 				Logger.getLogger(ListProductEditFilter.class.getName()).log(Level.SEVERE, null, ex);
 				// TODO redirect to oops page
+				servletResponse.sendError(404, "The list you are trying to access does not exist");
 			}
 		}
 	}
