@@ -40,7 +40,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				user.setName(rs.getString("name"));
 				user.setLastname(rs.getString("lastname"));
 				user.setImage(rs.getString("image"));
-				user.setAdministrator(rs.getInt("administrator") == 0 ? false : true);
+				user.setAdministrator(rs.getInt("administrator") != 0);
 
 				rs.close();
 				st.close();
@@ -69,7 +69,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				user.setName(rs.getString("name"));
 				user.setLastname(rs.getString("lastname"));
 				user.setImage(rs.getString("image"));
-				user.setAdministrator(rs.getInt("administrator") == 0 ? false : true);
+				user.setAdministrator(rs.getInt("administrator") != 0);
 
 				rs.close();
 				st.close();

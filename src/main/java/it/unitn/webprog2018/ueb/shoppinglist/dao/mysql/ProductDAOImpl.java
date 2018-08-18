@@ -65,13 +65,13 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	
 	/**
 	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire la Query (dato che il chiamante conosce giá l'utente)
-	 * @param product
+	 * @param userId
 	 * @return lista dei prodotti privati di un utente
 	 * @throws DaoException
 	 */
 	@Override
 	public List<Product> getByUser(Integer userId) throws DaoException {
-		List<Product> list = new ArrayList<Product>();
+		List<Product> list = new ArrayList<>();
 		try{
 			String query =	"SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory," +
 					"pc.name,pc.category,pc.description,pc.logo " +
@@ -85,17 +85,17 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			{
 				p = new Product();
 				pc = new ProductsCategory();
-				p.setId(rs.getInt(0));
-				p.setName(rs.getString(1));
-				p.setNote(rs.getString(2));
-				p.setLogo(rs.getString(3));
-				p.setPhotography(rs.getString(4));
+				p.setId(rs.getInt(1));
+				p.setName(rs.getString(2));
+				p.setNote(rs.getString(3));
+				p.setLogo(rs.getString(4));
+				p.setPhotography(rs.getString(5));
 				p.setOwner(null);
-				pc.setId(rs.getInt(5));
-				pc.setName(rs.getString(6));
-				pc.setCategory(rs.getInt(7));
-				pc.setDescription(rs.getString(8));
-				pc.setLogo(rs.getString(9));
+				pc.setId(rs.getInt(6));
+				pc.setName(rs.getString(7));
+				pc.setCategory(rs.getInt(8));
+				pc.setDescription(rs.getString(9));
+				pc.setLogo(rs.getString(10));
 				p.setCategory(pc);
 				list.add(p);
 			}
@@ -138,7 +138,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	
 	@Override
 	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
-		List<Product> list = new ArrayList<Product>();
+		List<Product> list = new ArrayList<>();
 		try{
 			String query =	"SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory," +
 					"pc.name,pc.category,pc.description,pc.logo " +
@@ -152,17 +152,17 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			{
 				p = new Product();
 				pc = new ProductsCategory();
-				p.setId(rs.getInt(0));
-				p.setName(rs.getString(1));
-				p.setNote(rs.getString(2));
-				p.setLogo(rs.getString(3));
-				p.setPhotography(rs.getString(4));
+				p.setId(rs.getInt(1));
+				p.setName(rs.getString(2));
+				p.setNote(rs.getString(3));
+				p.setLogo(rs.getString(4));
+				p.setPhotography(rs.getString(5));
 				p.setOwner(null);
-				pc.setId(rs.getInt(5));
-				pc.setName(rs.getString(6));
-				pc.setCategory(rs.getInt(7));
-				pc.setDescription(rs.getString(8));
-				pc.setLogo(rs.getString(9));
+				pc.setId(rs.getInt(6));
+				pc.setName(rs.getString(7));
+				pc.setCategory(rs.getInt(8));
+				pc.setDescription(rs.getString(9));
+				pc.setLogo(rs.getString(10));
 				p.setCategory(pc);
 				list.add(p);
 			}
