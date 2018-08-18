@@ -8,7 +8,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.ws;
 import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -17,11 +16,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
-import java.io.IOException;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
@@ -70,21 +66,21 @@ public class ProductWebService {
 	public String getPublicProducts(@QueryParam("search") String search,
 			@QueryParam("compact") String compact) {
 
-		String query = getQuery(search);
-
+		String query = ServiceUtils.getQuery(search);
+		
 		PublicProductDAO publicProductDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getPublicProductDAO();
 		List<PublicProduct> publicProducts = null;
 		if (query.equals("")) {
 			try {
 				publicProducts = publicProductDAO.getAll();
 			} catch (DaoException ex) {
-				handleDAOException(ex, response);
+				ServiceUtils.handleDAOException(ex, response);
 			}
 		} else {
 			try {
 				publicProducts = publicProductDAO.getFromQuery(query);
 			} catch (DaoException ex) {
-				handleDAOException(ex, response);
+				ServiceUtils.handleDAOException(ex, response);
 			}
 		}
 		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
@@ -115,11 +111,10 @@ public class ProductWebService {
 			@QueryParam("compact") String compact, @QueryParam("privateOnly") String privateOnly) {
 
 		try {
-
-			String query = getQuery(search);
+			String query = ServiceUtils.getQuery(search);
 
 			ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
-			List<Product> products = productDAO.getByUser(userId, query);
+			List<Product> products = null;
 			if (query.equals("")) {
 				products = productDAO.getByUser(userId);
 			} else {
@@ -139,7 +134,7 @@ public class ProductWebService {
 				return null;
 			}
 		} catch (DaoException ex) {
-			handleDAOException(ex, response);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 		return null;
 	}
@@ -160,7 +155,7 @@ public class ProductWebService {
 	public String getProductCategories(@QueryParam("search") String search,
 			@QueryParam("compact") String compact) {
 
-		String query = getQuery(search);
+		String query = ServiceUtils.getQuery(search);
 
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 
@@ -168,7 +163,7 @@ public class ProductWebService {
 		try {
 			productsCategories = productsCategoryDAO.getFromQuery(query);
 		} catch (DaoException ex) {
-			handleDAOException(ex, response);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
 		try {
@@ -206,37 +201,7 @@ public class ProductWebService {
 		try {
 			productDAO.addProduct(product);
 		} catch (DaoException ex) {
-			handleDAOException(ex, response);
-		}
-	}
-
-	protected static String getQuery(String search) {
-		StringTokenizer filter = null;
-		String query = "";
-		if (search != null) {
-			filter = new StringTokenizer(search, "-");
-			while (filter.hasMoreTokens()) {
-				// TODO add sql wildcard
-				query += filter.nextToken();
-			}
-		}
-		return query;
-	}
-
-	protected static void handleDAOException(DaoException ex, HttpServletResponse response) {
-		Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
-		if (ex instanceof RecordNotFoundDaoException) {
-			try {
-				response.sendError(404, "The resource was not found on our system");
-			} catch (IOException ex1) {
-				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex1);
-			}
-		} else {
-			try {
-				response.sendError(500, "Something went wrong, please try again");
-			} catch (IOException ex1) {
-				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex1);
-			}
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 

@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -55,12 +56,13 @@ public class ListViewFilter implements ContainerRequestFilter {
 			try {
 				if (!user.getId().equals(listDAO.getList(listId).getOwner().getId()) &&
 						!listDAO.hasViewPermission(listId, user.getId())) {
-					servletResponse.sendError(401, "YOU SHALL NOT PASS!");
+					if (!servletResponse.isCommitted()) {
+						servletResponse.sendError(401, "YOU SHALL NOT PASS!");
+					}
 				}
 			} catch (DaoException ex) {
-				Logger.getLogger(ListProductEditFilter.class.getName()).log(Level.SEVERE, null, ex);
-				// TODO redirect to oops page
-				servletResponse.sendError(404, "The list you are trying to access does not exist");
+				// TODO add correct redirection to error page ?
+				ServiceUtils.handleDAOException(ex, servletResponse);
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.AddDeletePermission;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ import javax.ws.rs.ext.Provider;
 
 /**
  * Filter that checks whether the user has the right to edit the products of a
- * list 
+ * list
  *
  * @author Giulia Carocari
  */
@@ -42,25 +43,28 @@ public class ListProductEditFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		ListDAO listDAO = ((DAOFactory)servletContext.getAttribute("daoFactory")).getListDAO();
-		
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+
 		HttpSession session = servletRequest.getSession();
 		User user = null;
 		if (session != null) {
 			user = (User) session.getAttribute("user");
 		}
-		
+
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
 			uri = uri.substring(uri.lastIndexOf("permission/") + "permission/".length());
 			Integer listId = Integer.parseInt(uri.substring(0, uri.indexOf("/")));
 			try {
-				if(!listDAO.hasAddDeletePermission(listId, user.getId())) {
-					servletResponse.sendError(401, "YOU SHALL NOT PASS!");
+				if (!listDAO.hasAddDeletePermission(listId, user.getId())) {
+					// TODO add correct redirection to error page ?
+					if (!servletResponse.isCommitted()) {
+						servletResponse.sendError(401, "YOU SHALL NOT PASS!");
+					}
 				}
 			} catch (DaoException ex) {
-				Logger.getLogger(ListProductEditFilter.class.getName()).log(Level.SEVERE, null, ex);
-				// TODO redirect to oops page
+				// TODO add correct redirection to error page ?
+				ServiceUtils.handleDAOException(ex, servletResponse);
 			}
 		}
 	}
