@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application {
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ListWebService.class);
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ProductFilter.class);
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ProductWebService.class);
+		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.UserAuthenticationFilter.class);
 	}
 	
 }

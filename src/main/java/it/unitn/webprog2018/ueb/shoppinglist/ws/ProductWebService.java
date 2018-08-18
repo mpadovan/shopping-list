@@ -17,6 +17,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -107,6 +108,7 @@ public class ProductWebService {
 	@GET
 	@Path("/restricted/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Authentication
 	public String getProducts(@PathParam("userId") int userId, @QueryParam("search") String search,
 			@QueryParam("compact") String compact, @QueryParam("privateOnly") String privateOnly) {
 
@@ -184,6 +186,7 @@ public class ProductWebService {
 	@POST
 	@Path("restricted/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Authentication
 	public void addProduct(String content, @PathParam("userId") Integer userId) {
 		Product product = null;
 		try {
