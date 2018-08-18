@@ -15,6 +15,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -99,6 +100,7 @@ public class ListWebService {
 	@GET
 	@Path("/restricted/{userId}/permission/{listId}/products")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ViewPermission
 	public String getProductsOnList(@PathParam("listId") int listId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> publicProductsOnList = null;

@@ -9,7 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.AddDeletePermission;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,14 +23,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Filter that checks whether the user has the right to edit the products of a
- * list 
  *
  * @author Giulia Carocari
  */
 @Provider
-@AddDeletePermission
-public class ListProductEditFilter implements ContainerRequestFilter {
+@ViewPermission
+public class ListViewFilter implements ContainerRequestFilter {
 
 	@Context
 	private ServletContext servletContext;
@@ -55,7 +53,8 @@ public class ListProductEditFilter implements ContainerRequestFilter {
 			uri = uri.substring(uri.lastIndexOf("permission/") + "permission/".length());
 			Integer listId = Integer.parseInt(uri.substring(0, uri.indexOf("/")));
 			try {
-				if(!listDAO.hasAddDeletePermission(listId, user.getId())) {
+				if (!user.getId().equals(listDAO.getList(listId).getOwner().getId()) &&
+						!listDAO.hasViewPermission(listId, user.getId())) {
 					servletResponse.sendError(401, "YOU SHALL NOT PASS!");
 				}
 			} catch (DaoException ex) {
@@ -64,5 +63,4 @@ public class ListProductEditFilter implements ContainerRequestFilter {
 			}
 		}
 	}
-
 }

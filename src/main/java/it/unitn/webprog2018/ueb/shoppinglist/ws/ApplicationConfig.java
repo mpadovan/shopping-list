@@ -31,7 +31,9 @@ public class ApplicationConfig extends Application {
 	private void addRestResourceClasses(Set<Class<?>> resources) {
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.GeolocationWebService.class);
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ListProductEditFilter.class);
+		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ListViewFilter.class);
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ListWebService.class);
+		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ProductFilter.class);
 		resources.add(it.unitn.webprog2018.ueb.shoppinglist.ws.ProductWebService.class);
 	}
 	

@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 import javax.ws.rs.NameBinding;
 
 /**
+ * Name binding annotation to map the ListProductEditFilter to its methods
  *
  * @author Giulia Carocari
  */
