@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.AddDeletePermission;
 import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
@@ -63,6 +64,7 @@ public class ListWebService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCategories(@QueryParam("search") String search,
 			@QueryParam("compact") String compact) {
+		
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
 		String query = ProductWebService.getQuery(search);
@@ -97,7 +99,7 @@ public class ListWebService {
 	@GET
 	@Path("/restricted/{userId}/permission/{listId}/products")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getProductsOnPersonalList(@PathParam("listId") int listId) {
+	public String getProductsOnList(@PathParam("listId") int listId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> publicProductsOnList = null;
 		String json = "{ \"publicProducts\" : [";
@@ -126,6 +128,7 @@ public class ListWebService {
 				json = new String(tmp);
 			}
 		}
+		json += ",\"products\" : [";
 		Map<Product, Integer> productsOnList = null;
 		try {
 			productsOnList = listDAO.getProductsOnList(listId);
@@ -136,7 +139,6 @@ public class ListWebService {
 			json += "]";
 		} else {
 			Gson gson = CustomGsonBuilder.create(false);
-			json += ", \"products\" : [";
 			for (Map.Entry<Product, Integer> entry : productsOnList.entrySet()) {
 				try {
 					json += "{\"product\":" + gson.toJson(entry.getKey()) + ","
@@ -166,7 +168,8 @@ public class ListWebService {
 	@POST
 	@Path("/restricted/{userId}/permission/{listId}/products/public")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addPublicProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	@AddDeletePermission
+	public void addPublicProductOnList(@PathParam("listId") int listId, String content) {
 		try {
 			PublicProduct product = null;
 			try {
@@ -205,7 +208,8 @@ public class ListWebService {
 	@POST
 	@Path("/restricted/{userId}/permission/{listId}/products/personal")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	@AddDeletePermission
+	public void addProductOnList(@PathParam("listId") int listId, String content) {
 		Product product = null;
 		try {
 			Gson gson = new Gson();
@@ -237,7 +241,8 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void editProductOnPersonalList(@PathParam("listId") int listId,
+	@AddDeletePermission
+	public void editProductOnList(@PathParam("listId") int listId,
 			@PathParam("productId") int productId, String content) {
 		Integer newAmount = -1;
 		try {
@@ -272,6 +277,7 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@AddDeletePermission
 	public void editPublicProductOnList(@PathParam("listId") int listId, 
 			@PathParam("productId") int productId, String content) {
 		Integer newAmount = -1;
@@ -303,6 +309,7 @@ public class ListWebService {
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
+	@AddDeletePermission
 	public void deleteProductOnList(@PathParam("listId") int listId, @PathParam("productId") int productId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		try {
@@ -323,6 +330,7 @@ public class ListWebService {
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
+	@AddDeletePermission
 	public void deletePublicProductOnList(@PathParam("listId") int listId, @PathParam("productId") int productId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		try {

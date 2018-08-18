@@ -54,6 +54,7 @@ public class UserFilter implements Filter {
 					contextPath += "/";
 				}
 				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
+				return;
 			}
 
 			String uri = ((HttpServletRequest) request).getRequestURI();
