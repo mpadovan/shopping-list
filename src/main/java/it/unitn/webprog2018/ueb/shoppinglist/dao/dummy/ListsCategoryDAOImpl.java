@@ -88,7 +88,12 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
 	@Override
 	public ListsCategory getByName(String name) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		for (ListsCategory c : listsCategories) {
+			if (c.getName().equals(name)) {
+				return c;
+			}
+		}
+		throw new RecordNotFoundDaoException("List category with name: " + name + " not found");
 	}
 
 	@Override

@@ -5,10 +5,16 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import java.util.List;
+
 /**
  *
  * @author simon
  */
 public interface ListsCategoryImagesDAO {
-	
+	public Boolean addListsCategoriesImage(ListsCategoriesImage listCategoriesImage) throws DaoException;
+	public List<ListsCategoriesImage> getAll() throws DaoException;
 }

@@ -6,10 +6,15 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +55,31 @@ public class NewListsCategoryServlet extends HttpServlet {
 		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+		String image = request.getParameter("image");
+		
+		ListsCategory listsCategory = new ListsCategory();
+		listsCategory.setName(name);
+		listsCategory.setDescription(description);
+		ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
+		listsCategoriesImage.setImage(image);
+		
+		try {
+			if (listsCategoryDAO.addListCategory(listsCategory)) {
+				listsCategory = listsCategoryDAO.getByName(name);
+				listsCategoriesImage.setCategory(listsCategory);
+				if(listsCategoryImagesDAO.addListsCategoriesImage(listsCategoriesImage)){
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
+				}
+				
+			} else {
+				request.setAttribute("listsCategory", listsCategory);
+				request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(NewListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
+		}
+		
 		
 		
 		
