@@ -15,12 +15,14 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
@@ -211,6 +213,7 @@ public class ListWebService {
 	@Path("/restricted/{userId}/permission/{listId}/products/personal")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@AddDeletePermission
+	@ProductPermission
 	public void addProductOnList(@PathParam("listId") int listId, String content) {
 		Product product = null;
 		try {
@@ -244,6 +247,7 @@ public class ListWebService {
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@AddDeletePermission
+	@ProductPermission
 	public void editProductOnList(@PathParam("listId") int listId,
 			@PathParam("productId") int productId, String content) {
 		Integer newAmount = -1;
@@ -312,6 +316,7 @@ public class ListWebService {
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
 	@AddDeletePermission
+	@ProductPermission
 	public void deleteProductOnList(@PathParam("listId") int listId, @PathParam("productId") int productId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		try {

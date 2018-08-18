@@ -43,6 +43,11 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+	@Override
+	public Product getProduct(Integer productId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 	
 	
 }
