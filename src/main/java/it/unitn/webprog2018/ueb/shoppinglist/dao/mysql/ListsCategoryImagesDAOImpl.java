@@ -32,5 +32,15 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 	public List<ListsCategoriesImage> getAll() throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public Boolean updateListsCategoriesImage(Integer categoryId, ListsCategoriesImage listCategoriesImage) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public ListsCategoriesImage getById(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

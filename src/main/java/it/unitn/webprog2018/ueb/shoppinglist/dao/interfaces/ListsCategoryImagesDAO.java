@@ -7,7 +7,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import java.util.List;
 
 /**
@@ -17,4 +16,6 @@ import java.util.List;
 public interface ListsCategoryImagesDAO {
 	public Boolean addListsCategoriesImage(ListsCategoriesImage listCategoriesImage) throws DaoException;
 	public List<ListsCategoriesImage> getAll() throws DaoException;
+	public Boolean updateListsCategoriesImage(Integer categoryId, ListsCategoriesImage listCategoriesImage) throws DaoException;
+	public ListsCategoriesImage getById(Integer id) throws DaoException;
 }

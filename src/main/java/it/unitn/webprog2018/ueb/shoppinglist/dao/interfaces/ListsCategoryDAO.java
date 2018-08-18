@@ -26,4 +26,6 @@ public interface ListsCategoryDAO {
 	public ListsCategory getById(Integer id) throws DaoException ;
 	
 	public Boolean deleteListsCategory(Integer id) throws DaoException; 
+	
+	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategorys) throws DaoException;
 }

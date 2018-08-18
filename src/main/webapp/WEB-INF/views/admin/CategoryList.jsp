@@ -50,7 +50,7 @@
 										<c:if test="${c.id==i.category.id}">${i.image}</c:if>
 									</c:forEach>
 								<td>
-									<span><a href="#"><i class="fas fa-pen-square"></i></a></span>
+									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a></span>
 									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a></span>
 								</td>
 							</tr>

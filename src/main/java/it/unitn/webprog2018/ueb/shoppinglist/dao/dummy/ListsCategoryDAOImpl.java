@@ -9,8 +9,9 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,5 +115,25 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	}
 	private synchronized void removeListsCategory(ListsCategory c) {
 		listsCategories.remove(c);
+	}
+
+	@Override
+	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategory) throws DaoException {
+		getById(categoryId);
+
+		Boolean valid = listsCategory.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			updateListsCategorydummy(categoryId, listsCategory);
+		}
+		return valid;
+	}
+	
+	private synchronized void updateListsCategorydummy(Integer id, ListsCategory c) throws DaoException {
+		ListsCategory found = getById(id);
+
+		found.setId(c.getId());
+		found.setName(c.getName());
+		found.setDescription(c.getDescription());
+
 	}
 }
