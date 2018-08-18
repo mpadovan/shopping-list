@@ -40,7 +40,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				user.setName(rs.getString("name"));
 				user.setLastname(rs.getString("lastname"));
 				user.setImage(rs.getString("image"));
-				user.setAdministrator(rs.getInt("administrator") == 0 ? false : true);
+				user.setAdministrator(rs.getInt("administrator") != 0);
 
 				rs.close();
 				st.close();
@@ -69,7 +69,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				user.setName(rs.getString("name"));
 				user.setLastname(rs.getString("lastname"));
 				user.setImage(rs.getString("image"));
-				user.setAdministrator(rs.getInt("administrator") == 0 ? false : true);
+				user.setAdministrator(rs.getInt("administrator") != 0);
 
 				rs.close();
 				st.close();
@@ -88,13 +88,13 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 		if(valid)
 		{
 			try{
-				String query = "INSERT INTO users (email,name,lastname,administrator,image,password) VALUES ("+
-						user.getEmail()+","+
-						user.getName()+","+
-						user.getLastname()+","+
-						(user.isAdministrator()? 1 : 0)+","+
-						user.getImage()+","+
-						user.getPassword()+")";
+				String query = "INSERT INTO users (email,name,lastname,administrator,image,password) VALUES (\""+
+						user.getEmail()+"\",\""+
+						user.getName()+"\",\""+
+						user.getLastname()+"\","+
+						(user.isAdministrator()? 1 : 0)+",\""+
+						user.getImage()+"\",\""+
+						user.getPassword()+"\")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
@@ -102,7 +102,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 			}
 			catch(SQLException ex){
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new DaoException(ex);
+				throw new UpdateException(ex);
 			}
 		}
 		return valid;
@@ -115,12 +115,12 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 		{
 			try{
 				String query = "UPDATE users " +
-						"SET email = " + user.getEmail() +
-						", password = " + user.getPassword() +
-						", name = " + user.getName() +
-						", lastname = " + user.getLastname() +
-						", image = " + user.getImage() +
-						", administrator = " + (user.isAdministrator()? 1 : 0) +
+						"SET email = \"" + user.getEmail() +
+						"\", password = \"" + user.getPassword() +
+						"\", name = \"" + user.getName() +
+						"\", lastname = \"" + user.getLastname() +
+						"\", image = \"" + user.getImage() +
+						"\", administrator = " + (user.isAdministrator()? 1 : 0) +
 						" WHERE id = " + id;
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
@@ -129,7 +129,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 			}
 			catch(SQLException ex){
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new DaoException(ex);
+				throw new UpdateException(ex);
 			}
 		}
 		return valid;
