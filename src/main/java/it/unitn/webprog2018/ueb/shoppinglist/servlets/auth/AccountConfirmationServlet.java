@@ -87,12 +87,22 @@ public class AccountConfirmationServlet extends HttpServlet {
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
+					// Creating directories for the new user
+					File avatarDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId() + File.separator);
+					File productImageDirectory = new File(avatarDir.getParent() + "productImage");
+					File productLogoDirectory = new File(avatarDir.getParent() + "productImage");
+					if (!productImageDirectory.exists() && !avatarDir.exists() && !productLogoDirectory.exists()) {
+						if (!avatarDir.mkdirs() || !productImageDirectory.mkdir() || productLogoDirectory.mkdir()) {
+							System.out.println("Something went wrong while creating the directories");
+						}
+					}
 					if (!user.getImage().equals("")) {
 						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
 
-						File src = new File(uploadFolder + "/restricted/tmp/" + avatarName);
+						File src = new File(uploadFolder + File.separator + "restricted" + File.separator + "tmp"
+								+ File.separator + avatarName);
 						String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
-						File dest = new File(uploadFolder + "/restricted/avatar/" + avatarName2);
+						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
 						Files.copy(src.toPath(), dest.toPath());
 						src.delete();
 					}
