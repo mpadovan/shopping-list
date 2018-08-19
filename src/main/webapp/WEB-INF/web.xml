@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+	<!--
 	<context-param>
 		<param-name>uploadFolder</param-name>
-		<param-value>/home/giulia/Desktop/WebProject/ProgettoDefinitivo/ShoppingList/uploads</param-value>
+		<param-value>...../ShoppingList/uploads</param-value>
 	</context-param>
+	-->
 	<filter>
 		<filter-name>RootFilter</filter-name>
 		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
@@ -66,6 +68,11 @@
 		<description>ServletContextListener that initializes the timer that cleans the 
 			database from unused expired authentication tokens</description>
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBCleaningListener</listener-class>
+	</listener>
+	<listener>
+		<description>ServletContextListener that initializes the upload path attribute to 
+			make it portable from one system to the other</description>
+		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.PathSetter</listener-class>
 	</listener>
 	<servlet>
 		<servlet-name>EditListServlet</servlet-name>
