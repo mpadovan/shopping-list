@@ -133,20 +133,30 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
+			var isPrivate = (item.item.owner) ? 'personal' : 'public';
+			this.ajaxSettings = {
+				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + isPrivate,
+				"method": 'POST',
+				"async": true,
+				"crossDomain": true,
+				"data": "{\"id\": \"1\"}",
+				"headers": {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			console.log(this.ajaxSettings);
+			this.operation = 5;
+			this.ajaxComponent = 'ajaxComponent';
 			toastr["success"](item.item.name + ' aggiunto')
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
-					this.updateLocalStorage();
 					return;
 				}
 			}
-			item.amount = 1;
 			this.items.push(item);
 			console.log(this.items);
-		},
-		updateLocalStorage: function () {
-			localStorage.setItem("items", JSON.stringify(this.items));
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
@@ -190,7 +200,7 @@ var app = new Vue({
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
 					console.log(this.results[j].category);
-					if (this.results[j].category == undefined) this.results[j].category = {
+					if (this.results[j].category.id == 0 || typeof this.results[j].category == undefined) this.results[j].category = {
 						name: 'Default'
 					};
 				}
@@ -200,7 +210,7 @@ var app = new Vue({
 				var arr = [];
 				console.log(data);
 				for (var i = 0; data.length > i; i++) {
-					if (typeof data[i].category == 'undefined') {
+					if (data[i].category.id == 0|| typeof data[i].category == undefined) {
 						arr.push('Default');
 					} else {
 						arr.push(data[i].category.name);
@@ -254,6 +264,15 @@ var app = new Vue({
 					this.addResultsToIstance(data);
 					break;
 				case 4:
+					data = data.publicProducts.concat(data.products);
+					//_.sortBy(data,['product.category.name', 'product.name']);
+					for (var i = 0; data.length > i; i++) {
+						data[i].item = data[i].product;
+						data[i].product = undefined;
+						this.items.push(data[i]);
+					}
+					break;
+				case 5:
 					console.log(data);
 					break;
 				default:
@@ -285,9 +304,6 @@ var app = new Vue({
 				$('#search-input').focus();
 			}
 		},
-		items: function (val) {
-			this.updateLocalStorage();
-		},
 		selected: function (val) {
 			if (val == 'all') {
 				this.resultsSorted = this.results;
@@ -300,15 +316,14 @@ var app = new Vue({
 		}
 	},
 	created: function () {
-		var self = this;
-		$.get('/ShoppingList/services/lists/restricted/' + this.user + '/personal/' + this.list + '/products').done(function (data) {
-			data = data.publicProducts.concat(data.products); 
-			//_.sortBy(data,['product.category.name', 'product.name']);
-			for(var i = 0; data.length > i; i++) {
-				data[i].item = data[i].product;
-				data[i].product = undefined;
-				self.items.push(data[i]);
-			}
-		});
+		this.user = window.location.href.split('HomePageLogin/')[1];
+		this.ajaxSettings = {
+			"async": true,
+			"crossDomain": true,
+			"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
+			"method": "GET",
+		};
+		this.operation = 4;
+		this.ajaxComponent = 'ajaxComponent';
 	}
 });
