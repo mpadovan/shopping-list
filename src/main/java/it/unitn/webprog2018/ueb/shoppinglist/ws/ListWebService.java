@@ -217,7 +217,6 @@ public class ListWebService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
 	@AddDeletePermission
-	@ProductPermission
 	public void addProductOnList(@PathParam("listId") int listId,
 			@PathParam("userId") int userId, String content) {
 		Product product = null;
