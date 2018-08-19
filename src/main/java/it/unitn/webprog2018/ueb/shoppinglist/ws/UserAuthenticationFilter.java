@@ -19,6 +19,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Filter that checks if a user has the right to access user-specific information in a web service.
+ * If the user is trying to access information different than his own he will be sent an Error 401.
  *
  * @author Giulia Carocari
  */
@@ -45,6 +47,9 @@ public class UserAuthenticationFilter implements ContainerRequestFilter {
 
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
+			if(!uri.endsWith("/")) {
+				uri += "/";
+			}
 			if (!Pattern.matches(".*/restricted/" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				if (!servletResponse.isCommitted()) {

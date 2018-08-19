@@ -17,7 +17,7 @@
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>UserFilter</filter-name>
+        <filter-name>HomePageLoginFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.HomePageLoginFilter</filter-class>
     </filter>
     <filter-mapping>
@@ -45,7 +45,7 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>UserFilter</filter-name>
+        <filter-name>HomePageLoginFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
