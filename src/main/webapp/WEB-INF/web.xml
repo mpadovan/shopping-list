@@ -18,9 +18,8 @@
     </filter>
     <filter>
         <filter-name>UserFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UserFilter</filter-class>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.HomePageLoginFilter</filter-class>
     </filter>
-    
     <filter-mapping>
         <filter-name>RootFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -48,9 +47,6 @@
     <filter-mapping>
         <filter-name>UserFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
-        <url-pattern>/services/lists/restricted/*</url-pattern>
-        <url-pattern>/services/geolocation/restricted/*</url-pattern>
-        <url-pattern>/services/products/restricted/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>

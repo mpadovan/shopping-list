@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
@@ -22,6 +23,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -205,6 +208,7 @@ public class ListWebService {
 	 * amount on the list is incremented by 1.
 	 *
 	 * @param listId id of the list that is to be modified
+	 * @param userId id of the user making the request
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
@@ -214,7 +218,8 @@ public class ListWebService {
 	@Authentication
 	@AddDeletePermission
 	@ProductPermission
-	public void addProductOnList(@PathParam("listId") int listId, String content) {
+	public void addProductOnList(@PathParam("listId") int listId,
+			@PathParam("userId") int userId, String content) {
 		Product product = null;
 		try {
 			Gson gson = new Gson();
@@ -222,15 +227,26 @@ public class ListWebService {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		try {
-			if (listDAO.isOnList(listId, product)) {
-				listDAO.updateAmount(listId, product);
-			} else {
-				listDAO.addProduct(listId, product);
+		if (product != null) {
+			try {
+				if (!productDAO.getProduct(product.getId()).getOwner().getId().equals(userId)) {
+					if (!response.isCommitted()) {
+						response.sendError(401, "The product you are trying to use does not belong to you, you thief!");
+					}
+				} else {
+					if (listDAO.isOnList(listId, product)) {
+						listDAO.updateAmount(listId, product);
+					} else {
+						listDAO.addProduct(listId, product);
+					}
+				}
+			} catch (DaoException ex) {
+				ServiceUtils.handleDAOException(ex, response);
+			} catch (IOException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 			}
-		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 

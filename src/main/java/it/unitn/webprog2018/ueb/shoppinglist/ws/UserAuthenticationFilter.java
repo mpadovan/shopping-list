@@ -45,7 +45,7 @@ public class UserAuthenticationFilter implements ContainerRequestFilter {
 
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
-			if (!Pattern.matches(".*/restricted/" + user.getId() + ".*", uri)) {
+			if (!Pattern.matches(".*/restricted/" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				if (!servletResponse.isCommitted()) {
 					((HttpServletResponse) servletResponse).sendError(401, "YOU SHALL NOT PASS!\n"

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class UserFilter implements Filter {
+public class HomePageLoginFilter implements Filter {
 	
 	/**
 	 * FilterConfig object associated with this filter
@@ -58,11 +58,15 @@ public class UserFilter implements Filter {
 			}
 
 			String uri = ((HttpServletRequest) request).getRequestURI();
-			if (!Pattern.matches(".*/restricted/[a-zA-Z]*/?" + user.getId() + ".*", uri)) {
+			if(!uri.endsWith("/")) {
+				uri += "/";
+			}
+			if (!Pattern.matches(".*/restricted/HomePageLogin/" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 						+ "The resource you are trying to access is none of your business.\n"
 						+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
+				return;
 			}
 			if (!response.isCommitted()) {
 				Throwable problem = null;
