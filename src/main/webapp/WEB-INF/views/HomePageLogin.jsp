@@ -78,6 +78,7 @@
 					</transition>
 				</div>
 			</div>
+			<test-component></test-component>
 			<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
 			<div id="item-modal" class="modal" tabindex="-1" role="dialog">
 				<div class="modal-dialog" role="document">

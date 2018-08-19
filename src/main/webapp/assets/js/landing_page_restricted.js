@@ -12,6 +12,7 @@ Vue.component('ajaxComponent', {
 		};
 	},
 	created: function () {
+		console.log('AjaxComponent Created');
 		var self = this;
 		$.ajax(this.settings)
 			.done(function (data) {
@@ -60,6 +61,7 @@ Vue.component('list-item', {
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
+
 Vue.component('search-item', {
 	props: ['item'],
 	computed: {
@@ -82,6 +84,30 @@ Vue.component('search-item', {
 				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
 					</div> \
 				</li>'
+});
+
+Vue.component('testComponent', {
+	props: ['item'],
+	data: function () {
+		return {
+			results: 0
+		};
+	},
+	created: function () {
+		console.log("TestComponent created");
+	},
+	computed: {
+		capitalized: function () {
+			var capitalized = _.capitalize(this.item.name);
+			return capitalized;
+		}
+	},
+	methods: {
+		test: function () {
+			console.log("TestingOK");
+		}
+	},
+	template: "<div style=\"display:none;\"></div>"
 });
 
 var app = new Vue({
