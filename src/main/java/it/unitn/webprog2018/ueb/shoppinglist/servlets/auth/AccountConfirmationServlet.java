@@ -13,9 +13,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,13 +86,19 @@ public class AccountConfirmationServlet extends HttpServlet {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
 					// Creating directories for the new user
-					File avatarDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId() + File.separator);
-					File productImageDirectory = new File(avatarDir.getParent() + "productImage");
-					File productLogoDirectory = new File(avatarDir.getParent() + "productImage");
-					if (!productImageDirectory.exists() && !avatarDir.exists() && !productLogoDirectory.exists()) {
-						if (!avatarDir.mkdirs() || !productImageDirectory.mkdir() || productLogoDirectory.mkdir()) {
-							System.out.println("Something went wrong while creating the directories");
+					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
+					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
+					File productImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "productImage");
+					File productLogoDirectory = new File(userDir.getAbsolutePath() + File.separator + "productLogo");
+					if (!userDir.exists()) {
+						if (userDir.mkdir()) {
+							avatarDir.mkdir();
+							productImageDirectory.mkdir();
+							productLogoDirectory.mkdir();
 						}
+					} else {
+						// TODO report error of already existing user
+						// Should not happen thanks to validation
 					}
 					if (!user.getImage().equals("")) {
 						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);

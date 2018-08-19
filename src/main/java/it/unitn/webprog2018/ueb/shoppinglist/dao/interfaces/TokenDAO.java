@@ -14,10 +14,11 @@ import java.util.List;
  * @author Giulia Carocari
  */
 public interface TokenDAO {
-	
 	Token getByTokenString(String token);
+	
+	Token getByEmail(String token);
 
-	void addToken(Token token);
+	boolean addToken(Token token);
 	
 	void removeExpiredTokens();
 	
