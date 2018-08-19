@@ -36,9 +36,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public List getList(Integer id) throws DaoException {
 		try{
 			List list = new List();
-			String query = "SELECT 	l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"		u.name,u.lastname,u.administrator," +
-					"        lc.name,lc.description" +
+			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
+					"u.name,u.lastname,u.administrator," +
+					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
 					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
@@ -85,7 +85,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			List list = new List();
 			String query = "SELECT l.id,l.idcategory,l.description,l.image," +
-					"		lc.name,lc.description " +
+					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
 					"WHERE l.name = \""+name+"\" AND l.iduser = "+owner.getId();
@@ -167,7 +167,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public Map<Product, Integer> getProductsOnList(Integer listId) throws DaoException {
 		Map<Product, Integer> list = new HashMap<>();
 		try{
-			String query =	"SELECT 	p.id,p.name,p.note,p.logo,p.photography,pl.quantity," +
+			String query =	"SELECT p.id,p.name,p.note,p.logo,p.photography,pl.quantity," +
 					"p.iduser,u.name,u.lastname,u.administrator," +
 					"p.idproductscategory,pc.name,pc.category,pc.description,pc.logo " +
 					"FROM productsonlists pl " +
@@ -296,7 +296,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			String query = "SELECT EXISTS(SELECT 1 " +
 					"FROM productsonlists " +
-					"WHERE idlist = "+listId+" AND idpublicproduct = "+product.getId()+") AS exist";
+					"WHERE idlist = "+listId+" AND idproduct = "+product.getId()+") AS exist";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if(rs.first())
@@ -348,7 +348,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				String query = "UPDATE productsonlists " +
 						"SET quantity = "+newAmount+
 						" WHERE idlist = " + listId+
-						" AND idpublicproduct = " + product.getId();
+						" AND idproduct = " + product.getId();
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
@@ -396,9 +396,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		{
 			try{
 				String query = "UPDATE productsonlists " +
-						"SET quantity = quantity + 1 "+
-						"WHERE idlist = " + listId+
-						" AND idpublicproduct = " + product.getId();
+						"SET quantity = quantity + 1"+
+						" WHERE idlist = " + listId+
+						" AND idproduct = " + product.getId();
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
