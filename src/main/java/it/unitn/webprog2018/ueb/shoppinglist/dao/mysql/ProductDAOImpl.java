@@ -1,8 +1,3 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -10,6 +5,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.*;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Michele
  */
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
@@ -33,9 +28,6 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	
 	/**
 	 * aggiunge un prodotto al DB
-	 * @param product
-	 * @return true se l'operazione andata a buon fine, false altrimenti
-	 * @throws DaoException
 	 */
 	@Override
 	public Boolean addProduct(Product product) throws DaoException {
@@ -65,9 +57,6 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	
 	/**
 	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire la Query (dato che il chiamante conosce giá l'utente)
-	 * @param userId
-	 * @return lista dei prodotti privati di un utente
-	 * @throws DaoException
 	 */
 	@Override
 	public List<Product> getByUser(Integer userId) throws DaoException {
@@ -124,18 +113,22 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 						"   idproductscategory = "+product.getCategory().getId()+
 						"WHERE id = "+productId;
 				PreparedStatement st = this.getCon().prepareStatement(query);
-				st.executeUpdate();
+				int count = st.executeUpdate();
 				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("product: "+productId+" not found");
 				return valid;
 			}
 			catch(SQLException ex){
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new UpdateException(ex);
+				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+	/**
+	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire la Query (dato che il chiamante conosce giá l'utente)
+	 */
 	@Override
 	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
 		List<Product> list = new ArrayList<>();
@@ -175,12 +168,53 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	/**
+	 * ATTENZIONE: non da e-mail, password e image degli owner
+	 */
 	@Override
 	public Product getProduct(Integer productId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			Product p = new Product();
+			String query = "SELECT 	p.name,p.note,p.logo,p.photography," +
+					"p.iduser,u.name,u.lastname,u.administrator," +
+					"p.idproductscategory,pc.name,pc.category,pc.description,pc.logo " +
+					"FROM products p " +
+					"INNER JOIN users u ON p.iduser = u.id " +
+					"INNER JOIN productscategories pc ON p.idproductscategory = pc.id " +
+					"WHERE p.id = "+productId;
+					Statement st = this.getCon().createStatement();
+					ResultSet rs = st.executeQuery(query);
+					User u = new User();
+					ProductsCategory pc = new ProductsCategory();
+					if(rs.first())
+					{
+						int i = 1;
+						p.setId(productId);
+						p.setName(rs.getString(i++));
+						p.setNote(rs.getString(i++));
+						p.setLogo(rs.getString(i++));
+						p.setPhotography(rs.getString(i++));
+						u.setId(rs.getInt(i++));
+						u.setName(rs.getString(i++));
+						u.setLastname(rs.getString(i++));
+						u.setAdministrator(rs.getInt(i++) != 0);
+						pc.setId(rs.getInt(i++));
+						pc.setName(rs.getString(i++));
+						pc.setCategory(rs.getInt(i++));
+						pc.setDescription(rs.getString(i++));
+						pc.setLogo(rs.getString(i++));
+						p.setOwner(u);
+						p.setCategory(pc);
+						
+						rs.close();
+						st.close();
+						return p;
+					}
+					throw new RecordNotFoundDaoException("Product with id: " + productId + " not found");
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
-
-	
-	
 }

@@ -96,7 +96,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 						user.getImage()+"\",\""+
 						user.getPassword()+"\")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
-				int count = st.executeUpdate();
+				st.executeUpdate();
 				st.close();
 				return valid;
 			}
@@ -125,11 +125,13 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("user: "+id+" not found");
 				return valid;
 			}
 			catch(SQLException ex){
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new UpdateException(ex);
+				throw new DaoException(ex);
 			}
 		}
 		return valid;
