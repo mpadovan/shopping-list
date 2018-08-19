@@ -22,7 +22,7 @@ public class PathSetter implements ServletContextListener {
 		for (int i = 0; i < 3; i++) {
 			path = path.substring(0, path.lastIndexOf(File.separator));
 		}
-		path += "/" + uploadPath;
+		path += File.separator + uploadPath;
 		sce.getServletContext().setInitParameter("uploadFolder", path);
 	}
 
