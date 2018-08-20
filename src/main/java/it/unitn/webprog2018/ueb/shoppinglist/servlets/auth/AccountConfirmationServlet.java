@@ -100,7 +100,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 						// TODO report error of already existing user
 						// Should not happen thanks to validation
 					}
-					if (!user.getImage().equals("")) {
+					if (user.getImage() != null && !user.getImage().equals("")) {
 						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
 
 						File src = new File(uploadFolder + File.separator + "restricted" + File.separator + "tmp"

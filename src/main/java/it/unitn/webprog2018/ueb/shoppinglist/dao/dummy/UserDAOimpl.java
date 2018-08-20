@@ -36,7 +36,7 @@ public class UserDAOimpl implements UserDAO {
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
-		user.setImage("/uploads/restricted/avatar/445.png");
+		user.setImage("/uploads/restricted/1/avatar/1.png");
 
 		users.add(user);
 		
