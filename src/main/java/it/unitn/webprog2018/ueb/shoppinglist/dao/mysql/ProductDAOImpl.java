@@ -70,21 +70,23 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			ResultSet rs = st.executeQuery(query);
 			Product p;
 			ProductsCategory pc;
+			int i;
 			while(rs.next())
 			{
+				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
-				p.setId(rs.getInt(1));
-				p.setName(rs.getString(2));
-				p.setNote(rs.getString(3));
-				p.setLogo(rs.getString(4));
-				p.setPhotography(rs.getString(5));
+				p.setId(rs.getInt(i++));
+				p.setName(rs.getString(i++));
+				p.setNote(rs.getString(i++));
+				p.setLogo(rs.getString(i++));
+				p.setPhotography(rs.getString(i++));
 				p.setOwner(null);
-				pc.setId(rs.getInt(6));
-				pc.setName(rs.getString(7));
-				pc.setCategory(rs.getInt(8));
-				pc.setDescription(rs.getString(9));
-				pc.setLogo(rs.getString(10));
+				pc.setId(rs.getInt(i++));
+				pc.setName(rs.getString(i++));
+				pc.setCategory(rs.getInt(i++));
+				pc.setDescription(rs.getString(i++));
+				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				list.add(p);
 			}
@@ -141,21 +143,23 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			ResultSet rs = st.executeQuery(query);
 			Product p;
 			ProductsCategory pc;
+			int i;
 			while(rs.next())
 			{
+				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
-				p.setId(rs.getInt(1));
-				p.setName(rs.getString(2));
-				p.setNote(rs.getString(3));
-				p.setLogo(rs.getString(4));
-				p.setPhotography(rs.getString(5));
+				p.setId(rs.getInt(i++));
+				p.setName(rs.getString(i++));
+				p.setNote(rs.getString(i++));
+				p.setLogo(rs.getString(i++));
+				p.setPhotography(rs.getString(i++));
 				p.setOwner(null);
-				pc.setId(rs.getInt(6));
-				pc.setName(rs.getString(7));
-				pc.setCategory(rs.getInt(8));
-				pc.setDescription(rs.getString(9));
-				pc.setLogo(rs.getString(10));
+				pc.setId(rs.getInt(i++));
+				pc.setName(rs.getString(i++));
+				pc.setCategory(rs.getInt(i++));
+				pc.setDescription(rs.getString(i++));
+				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				list.add(p);
 			}
