@@ -78,7 +78,7 @@
 					</transition>
 				</div>
 			</div>
-			<test-component></test-component>
+			<fetch-list-component  @done="fetchListDone" v-bind:settings="fetchListSettings" v-if="fetchListComponent"></fetch-list-component>
 			<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
 			<div id="item-modal" class="modal" tabindex="-1" role="dialog">
 				<div class="modal-dialog" role="document">
