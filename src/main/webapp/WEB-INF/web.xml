@@ -22,6 +22,10 @@
 		<filter-name>UserFilter</filter-name>
 		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UserFilter</filter-class>
 	</filter>
+	<filter>
+		<filter-name>UploadFilter</filter-name>
+		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UploadFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>RootFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -43,6 +47,15 @@
 	<filter-mapping>
 		<filter-name>AdministrationFilter</filter-name>
 		<url-pattern>/restricted/admin/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>UploadFilter</filter-name>
+		<url-pattern>/uploads/restricted/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>

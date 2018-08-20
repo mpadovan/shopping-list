@@ -10,11 +10,13 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
+ * Sets up the path to the upload folder of the app at servlet context initialization.
+ * Distinguishes between Windows and Linux/Mac-OS through the Files.separator attribute.
  *
- * @author giulia
+ * @author Giulia Carocari
  */
 public class PathSetter implements ServletContextListener {
-	private static final String uploadPath = "uploads/";
+	private static final String UPLOAD_PATH = "uploads/";
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -22,7 +24,7 @@ public class PathSetter implements ServletContextListener {
 		for (int i = 0; i < 3; i++) {
 			path = path.substring(0, path.lastIndexOf(File.separator));
 		}
-		path += File.separator + uploadPath;
+		path += File.separator + UPLOAD_PATH;
 		sce.getServletContext().setInitParameter("uploadFolder", path);
 	}
 
