@@ -80,6 +80,9 @@ public class LoginServlet extends HttpServlet {
 						for (Cookie cookie : request.getCookies()) {
 							if (cookie.getName().equals("remember")) {
 								found = true;
+								cookie.setValue(CookieCipher.encrypt(email));
+								cookie.setMaxAge(COOKIE_EXP);
+								response.addCookie(cookie);
 							}
 						}
 					}
