@@ -8,10 +8,12 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,14 +39,19 @@ public class UploadsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		String filename = request.getPathInfo().substring(1);
-		String uploadPath = getServletContext().getInitParameter("uploadFolder");
-		File file = new File(uploadPath, filename);
-		response.setHeader("Content-Type", getServletContext().getMimeType(filename));
-		response.setHeader("Content-Length", String.valueOf(file.length()));
-		response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-		Files.copy(file.toPath(), response.getOutputStream());
+		try {
+			String filename = request.getPathInfo().substring(1);
+			String uploadPath = getServletContext().getInitParameter("uploadFolder");
+			File file = new File(uploadPath, filename);
+			response.setHeader("Content-Type", getServletContext().getMimeType(filename));
+			response.setHeader("Content-Length", String.valueOf(file.length()));
+			response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+			Files.copy(file.toPath(), response.getOutputStream());
+		} catch (FileNotFoundException ex) {
+			response.sendError(404, "The resource you are lookin for does not exist in our system");
+		} catch (NoSuchFileException ex) { //Exception thrown by Files.copy()
+			response.sendError(404, "The resource you are lookin for does not exist in our system");
+		}
 	}
 
 	/**

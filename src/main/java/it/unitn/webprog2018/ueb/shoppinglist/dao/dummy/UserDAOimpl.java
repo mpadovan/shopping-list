@@ -36,11 +36,12 @@ public class UserDAOimpl implements UserDAO {
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
-		user.setImage("/uploads/restricted/avatar/445.png");
+		user.setImage("/uploads/restricted/1/avatar/1.png");
 
 		users.add(user);
 		
 		User user2 = new User();
+		user2.setId(2);
 		user2.setEmail("luigibianchi@gmail.com");
 		user2.setPassword(Sha256.doHash("ciaone"));
 		user2.setName("Luigi");
