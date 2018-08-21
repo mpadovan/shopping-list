@@ -1,8 +1,9 @@
 <%-- 
-    Document   : Login
-    Created on : 19-giu-2018, 10.52.56
-    Author     : giuliapeserico
+    Document   : SetNewPassword
+    Created on : 18-ago-2018, 11.51.54
+    Author     : simon
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
@@ -42,6 +43,3 @@
 		</div>
 	</jsp:attribute>
 </layouts:auth>
-
-
-

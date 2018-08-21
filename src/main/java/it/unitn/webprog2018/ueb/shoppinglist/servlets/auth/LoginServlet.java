@@ -104,6 +104,7 @@ public class LoginServlet extends HttpServlet {
 		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
 			System.err.println("ERRORE DAOEXCEPTION");
+			response.sendError(500, ex.getMessage());
 			//pagina di errore OPSS
 		}
 	}
