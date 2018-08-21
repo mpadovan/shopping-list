@@ -142,7 +142,11 @@ public class User extends AbstractEntity {
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {
 				userDAO.getByEmail(email);
-				setError("email", "email già esistente");
+				User user = userDAO.getById(id);
+				if(id!=user.getId())
+				{
+					setError("email", "email già esistente");
+				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}
