@@ -10,36 +10,45 @@
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2">
 			<div class="card login-card">
-				<div class="card-title">
-					<h3 class="text-center">Login</h3>
-				</div>
 				<div class="card-body">
-					<form action="Login" method="POST">
-						<div class="form-group">
+					<div class="text-center mb-4">
+							<h1 class="h3 mb-3 font-weight-normal">Login</h1>
+						</div>
+					<form class="form-signin" action="Login" method="POST">
+						<div class="form-label-group">
+							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control" placeholder="Email" required="required">
 							<label for="email">Email</label>
-							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required="required">
+						</div>
 
-						</div>
-						<div class="form-group">
+						<div class="form-label-group">
+							<input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
 							<label for="password">Password</label>
-							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
 						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="remember" name="remember">
-							<label class="form-check-label" for="remember">Ricordami</label>
+
+						<div class="checkbox mb-2">
+							<label>
+								<input type="checkbox" id="remember" name="remember"> Ricordami
+							</label>
 						</div>
-						<div>
-							<a href="#">Password dimenticata?</a><br>
+						<button type="submit" class="btn btn-lg btn-block form-signin-btn">Accedi</button>
+						<div class="mt-3">
+							<a href="${pageContext.servletContext.contextPath}/home">Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/ResetPassword"class="float-right">Password dimenticata?</a>
 						</div>
-						<div class="float-right">
-							<a href="${pageContext.servletContext.contextPath}/home" class="btn btn-outline-dark">Annulla</a>
-						</div>
-						<button type="submit" class="btn btn-outline-dark">Accedi</button>
-						<!-- <a href="HomePageLogin.jsp" class="btn btn-outline-dark">Accedi</a> -->
 					</form>
 				</div>
 			</div>
 		</div>
+	</jsp:attribute>
+	<jsp:attribute name="customJs">
+		<script>
+			$(document).ready(function () {
+				setTimeout(function () {
+					var $Input = $('input:-webkit-autofill');
+					$Input.next("label").addClass('active');
+				}, 100);
+			});
+		</script>
 	</jsp:attribute>
 </layouts:auth>
 
