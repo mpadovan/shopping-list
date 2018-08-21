@@ -1,6 +1,10 @@
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatSessionHandler;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
+import javax.inject.Inject;
 //import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
 //import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
 import javax.servlet.ServletContextEvent;
@@ -12,7 +16,7 @@ import javax.servlet.ServletContextListener;
  * @author giuliapeserico
  */
 public class DBListener implements ServletContextListener {
-
+	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 //		String dburl = "jdbc:mysql://localhost:3306/ShoppingListGp";
@@ -21,8 +25,9 @@ public class DBListener implements ServletContextListener {
 //
 //		DatabaseManager dbManager = new DatabaseManager(dburl, dbUsername, dbPassword);
 //		sce.getServletContext().setAttribute("daoFactory", new DAOFactoryImpl(dbManager.getCon()));
-		sce.getServletContext().setAttribute("daoFactory", new DAOFactoryImpl());
-		
+		DAOFactory factory = new DAOFactoryImpl();
+		sce.getServletContext().setAttribute("daoFactory", factory);
+		SessionHandler.setDaoFactory(factory);
 	}
 
 	@Override
