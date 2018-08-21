@@ -17,7 +17,7 @@
 					</div>
 					<div class="col">
 						<h4 class="card-title text-center">Modifica utente ${sessionScope.user.name} ${sessionScope.user.lastname}</h4>
-						<form action="EditAdmin">
+						<form action="EditAdmin" method="POST">
 							<div class="form-group row">
 								<label for="name" class="col-sm-3 col-form-label">Nome</label>
 								<div class="col-sm-9">
@@ -39,24 +39,24 @@
 							<div class="form-group row">
 								<label for="password" class="col-sm-3 col-form-label">Password attuale</label>
 								<div class="col-sm-9">
-									<input type="password" class="form-control" id="password" name="password" required>
+									<input type="password" class="form-control" id="password" name="password">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="password" class="col-sm-3 col-form-label">Nuova password </label>
+								<label for="newPassword" class="col-sm-3 col-form-label">Nuova password </label>
 								<div class="col-sm-9">
-									<input type="password" class="form-control" id="password" name="password" required>
+									<input type="password" class="form-control" id="newPassword" name="newPassword">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="checkPassword" class="col-sm-3 col-form-label">Conferma nuova password</label>
 								<div class="col-sm-9">
-									<input type="password" class="form-control" id="checkPassword" name="checkPassword" required>
+									<input type="password" class="form-control" id="checkPassword" name="checkPassword">
 								</div>
 							</div>
+								<button type="submit" class="btn btn-primary float-right mx-2">Conferma</button>
 						</form>
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-						<button type="submit" class="btn btn-primary float-right mx-2">Conferma</button>
 					</div>
 				</div>
 			</div>

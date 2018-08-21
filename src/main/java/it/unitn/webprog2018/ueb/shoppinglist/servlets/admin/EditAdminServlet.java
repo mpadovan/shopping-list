@@ -5,11 +5,13 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import com.mysql.cj.Session;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -58,7 +61,53 @@ public class EditAdminServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		HttpSession session = request.getSession();
+		User usersession = (User) (session.getAttribute("user"));
+		Integer id = usersession.getId();
+		try {
+			User user = userDAO.getById(id);
+			String name = request.getParameter("name");
+			String lastName = request.getParameter("lastName");
+			String email = request.getParameter("email");
+			//user.setEmail(email);
+			user.setName(name);
+			user.setLastname(lastName);
+			String password = request.getParameter("password");
+			if(password!=null && !password.equals(""))
+			{
+				System.out.println("Non é nulll è nuuuuuuuullllllll");
+				String newPassword = request.getParameter("newPassword");
+				String checkPassword = request.getParameter("checkPassword");
+				System.out.println(password + " " + user.getPassword());
+				if(Sha256.doHash(password).equals(user.getPassword()))
+				{
+					user.setPassword(Sha256.doHash(newPassword));
+					user.setCheckpassword(Sha256.doHash(checkPassword));
+					if(!userDAO.updateUser(id, user))
+					{
+						System.out.println("What??");
+					}
+				}
+				else
+				{
+					request.setAttribute("passworderrata", "la password non è corretta");
+					request.getRequestDispatcher("/WEB-INF/views/admin/EditAdmin.jsp").forward(request, response);
+				}
+			}
+			else{
+				if(!userDAO.updateUser(id, user))
+				{
+					System.out.println("What2.0??");
+				}
+			}
+			request.getRequestDispatcher("/WEB-INF/views/admin/InfoAdmin.jsp").forward(request, response);
+		} catch (RecordNotFoundDaoException ex) {
+			Logger.getLogger(EditAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
+		} catch (DaoException ex) {
+			Logger.getLogger(EditAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
+		}
 	}
 
 	/**

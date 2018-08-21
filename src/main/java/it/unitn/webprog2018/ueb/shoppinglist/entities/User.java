@@ -27,6 +27,7 @@ public class User extends AbstractEntity {
 	private String lastname;
 	private String image;
 	private Boolean administrator;
+	private String tokenpassword;
 	
 	public User() {
 		
@@ -126,6 +127,14 @@ public class User extends AbstractEntity {
 		this.administrator = administrator;
 	}
 	
+	public String getTokenpassword() {
+		return tokenpassword;
+	}
+
+	public void setTokenpassword(String tokenpassword) {
+		this.tokenpassword = tokenpassword;
+	}
+	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name == null || name.equals("")) {
@@ -146,9 +155,11 @@ public class User extends AbstractEntity {
 				if(id!=user.getId())
 				{
 					setError("email", "email già esistente");
+					System.out.println("ciao");
 				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
+				System.out.println("RNFDE");
 			}
 		}
 	}
