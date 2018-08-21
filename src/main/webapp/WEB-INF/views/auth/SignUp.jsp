@@ -44,12 +44,6 @@
 								<input type="checkbox" id="privacy" name="privacy" required="required"> Normativa privacy
 							</label>
 						</div>
-						<!--<div class="form-group">
-							<div class="form-check">
-								<input type="checkbox" class="form-check-input" id="privacy" name="privacy" required="required">
-								<label class="form-check-label" for="privacy">Normativa privacy</label>
-							</div>
-						</div>-->
 						<button type="submit" class="btn btn-lg btn-block form-signin-btn">Registrati</button>
 						<div class="mt-3">
 							<a href="${pageContext.servletContext.contextPath}/home">Indietro</a>
