@@ -14,6 +14,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Dummy implementation of user DAO Persistence is handled during runtime
@@ -36,6 +38,7 @@ public class UserDAOimpl implements UserDAO {
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
+		user.setTokenpassword(null);
 		user.setImage("/uploads/restricted/1/avatar/1.png");
 
 		users.add(user);
@@ -47,8 +50,21 @@ public class UserDAOimpl implements UserDAO {
 		user2.setName("Luigi");
 		user2.setLastname("Bianchi");
 		user2.setAdministrator(true);
+		user2.setTokenpassword(null);
 
 		users.add(user2);
+		
+		User user3 = new User();
+		user3.setId(127);
+		user3.setEmail("zwisl0j5.lsn@20minutemail.it");
+		user3.setPassword(Sha256.doHash("c"));
+		user3.setName("c");
+		user3.setLastname("c");
+		user3.setAdministrator(false);
+		user3.setTokenpassword(null);
+
+		users.add(user3);
+		
 	}
 
 	@Override
@@ -81,22 +97,31 @@ public class UserDAOimpl implements UserDAO {
 				return u;
 			}
 		}
-		throw new RecordNotFoundDaoException("User with email: " + id + " not found");
+		throw new RecordNotFoundDaoException("User with id: " + id + " not found");
 	}
 
 	@Override
 	public Boolean updateUser(Integer id, User user) throws DaoException{
-		if(user.isVaildOnUpdate(dAOFactory))
-		{
-			for (User p : users) {
-				if (p.getId().equals(user.getId())) {
-					p = user;
-					return true;
-				}
-			}
-			throw new RecordNotFoundDaoException("The user with id: " + user.getId() + " does not exist");
-		}
-		return false;
+		getById(id);
+		update(id, user);
+		return true;
 	}
+	
+	private synchronized void update(Integer id, User p) throws DaoException{
+		try {
+			User found = getById(id);
 
+			found.setId(p.getId());
+			found.setEmail(p.getEmail());
+			found.setPassword(p.getPassword());
+			found.setCheckpassword(p.getCheckpassword());
+			found.setTokenpassword(p.getTokenpassword());
+			found.setName(p.getName());
+			found.setLastname(p.getLastname());
+			found.setAdministrator(p.isAdministrator());
+			found.setImage(p.getImage());
+		} catch (DaoException ex) {
+			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 }

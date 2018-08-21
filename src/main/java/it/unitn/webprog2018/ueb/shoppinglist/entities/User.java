@@ -27,6 +27,7 @@ public class User extends AbstractEntity {
 	private String lastname;
 	private String image;
 	private Boolean administrator;
+	private String tokenpassword;
 	
 	public User() {
 		
@@ -126,6 +127,14 @@ public class User extends AbstractEntity {
 		this.administrator = administrator;
 	}
 	
+	public String getTokenpassword() {
+		return tokenpassword;
+	}
+
+	public void setTokenpassword(String tokenpassword) {
+		this.tokenpassword = tokenpassword;
+	}
+	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name == null || name.equals("")) {
@@ -137,7 +146,7 @@ public class User extends AbstractEntity {
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		/*if(errors.isEmpty())
 		{
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {
@@ -150,7 +159,7 @@ public class User extends AbstractEntity {
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}
-		}
+		}*/
 	}
 
 	@Override
