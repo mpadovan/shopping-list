@@ -73,7 +73,11 @@ public class ProductsCategory extends AbstractEntity {
 			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
 			try {
 				productsCategoryDAO.getByName(name);
-				setError("name", "Nome già esistente");
+				ProductsCategory productsCategory = productsCategoryDAO.getById(id);
+				if(id!=productsCategory.getId())
+				{
+					setError("name", "Nome già esistente");
+				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}
