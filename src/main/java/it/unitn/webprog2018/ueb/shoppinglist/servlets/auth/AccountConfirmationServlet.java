@@ -13,13 +13,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Giulia Carocari
  */
+@WebServlet("/AccountConfirmation")
 public class AccountConfirmationServlet extends HttpServlet {
 
 	private UserDAO userDAO;
@@ -85,12 +85,28 @@ public class AccountConfirmationServlet extends HttpServlet {
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
-					if (!user.getImage().equals("")) {
+					// Creating directories for the new user
+					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
+					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
+					File productImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "productImage");
+					File productLogoDirectory = new File(userDir.getAbsolutePath() + File.separator + "productLogo");
+					if (!userDir.exists()) {
+						if (userDir.mkdir()) {
+							avatarDir.mkdir();
+							productImageDirectory.mkdir();
+							productLogoDirectory.mkdir();
+						}
+					} else {
+						// TODO report error of already existing user
+						// Should not happen thanks to validation
+					}
+					if (user.getImage() != null && !user.getImage().equals("")) {
 						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
 
-						File src = new File(uploadFolder + "/restricted/tmp/" + avatarName);
+						File src = new File(uploadFolder + File.separator + "restricted" + File.separator + "tmp"
+								+ File.separator + avatarName);
 						String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
-						File dest = new File(uploadFolder + "/restricted/avatar/" + avatarName2);
+						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
 						Files.copy(src.toPath(), dest.toPath());
 						src.delete();
 					}

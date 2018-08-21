@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ import javax.servlet.http.Part;
  *
  * @author Giulia Carocari
  */
+@WebServlet("/SignUp")
 @MultipartConfig
 public class SignUpServlet extends HttpServlet {
 
@@ -68,7 +70,7 @@ public class SignUpServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
 		String avatarURI = "";
-		
+
 		User user = new User();
 		user.setName(name);
 		user.setLastname(lastName);
@@ -77,10 +79,9 @@ public class SignUpServlet extends HttpServlet {
 		user.setCheckpassword(Sha256.doHash(checkPassword));
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
-		
+
 		try {
-			if(user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")))
-			{
+			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory"))) {
 				// Retrieving user avatar
 				File file = null;
 				String avatarFileName = "";
@@ -96,7 +97,7 @@ public class SignUpServlet extends HttpServlet {
 						Files.copy(fileContent, file.toPath());
 						avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
 								+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
-						
+
 					} catch (FileAlreadyExistsException ex) {
 						response.sendError(500, "Server could not store your avatar, "
 								+ "please retry the sign up process. "
@@ -106,29 +107,35 @@ public class SignUpServlet extends HttpServlet {
 				}
 				if (!response.isCommitted()) {
 					user.setImage(avatarURI);
-					
+
 					// Creating the token for the account confirmation
 					Token token = new Token();
-					
+
 					token.generateToken();
 					token.setExpirationFromNow(TOKEN_EXP);
 					token.setUser(user);
-					
+
 					String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
-					if (EmailSender.send(user.getEmail(), "Account Confirmation",
-							"Hello " + name + ",\nPlease click on the following link to valiate your account:\n" + link)) {
-						tokenDAO.addToken(token);
-						response.sendRedirect("Login");
+
+					if (tokenDAO.addToken(token)) {
+						if (EmailSender.send(user.getEmail(), "Conferma account",
+								"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
+							response.sendRedirect("Login");
+						} else {
+							response.sendError(500, "The server could not reach your email address. Please try again later.");
+							if (file != null) {
+								file.delete();
+							}
+						}
 					} else {
-						response.sendError(500, "The server could not reach your email address. Please try again later.");
-						if(file != null) {
+						response.sendError(429, "You already have a pending sign up request for this email."
+								+ " Please check your mailbox");
+						if (file != null) {
 							file.delete();
 						}
 					}
 				}
-			}
-			else
-			{
+			} else {
 				request.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 			}

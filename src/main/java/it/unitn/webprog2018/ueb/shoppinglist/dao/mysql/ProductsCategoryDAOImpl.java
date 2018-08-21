@@ -106,4 +106,9 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
+	@Override
+	public ProductsCategory getByName(String name) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
 }

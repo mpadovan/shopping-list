@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,13 +26,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class AdministrationFilter implements Filter {
-
+public class UserFilter implements Filter {
+	
 	/**
 	 * FilterConfig object associated with this filter
 	 */
 	private FilterConfig filterConfig = null;
-
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
@@ -40,7 +41,6 @@ public class AdministrationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
-
 			ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
 			HttpSession session = ((HttpServletRequest) request).getSession(false);
 			User user = null;
@@ -48,29 +48,30 @@ public class AdministrationFilter implements Filter {
 				user = (User) session.getAttribute("user");
 			}
 
-			String contextPath = servletContext.getContextPath();
-			if (!contextPath.endsWith("/")) {
-				contextPath += "/";
+			if (user == null) { // Should never happen, but just in case
+				String contextPath = servletContext.getContextPath();
+				if (!contextPath.endsWith("/")) {
+					contextPath += "/";
+				}
+				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
 			}
 
-			if (user == null) { // Should never happen, but just in case
-				((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "Login"));
-				return;
-			} else {
-				if (!user.isAdministrator()) {
-					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "notAuthorized.html"));
-					return;
-				}
+			String uri = ((HttpServletRequest) request).getRequestURI();
+			if (!Pattern.matches(".*/restricted/[a-zA-Z]*/?" + user.getId() + ".*", uri)) {
+				// TODO add redirection to correct error page.
+				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
+						+ "The resource you are trying to access is none of your business.\n"
+						+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
 			}
-		}
-		if (!response.isCommitted()) {
-			Throwable problem = null;
-			try {
-				chain.doFilter(request, response);
-			} catch (Throwable t) {
-				problem = t;
-				t.printStackTrace();
-				sendProcessingError(problem, response);
+			if (!response.isCommitted()) {
+				Throwable problem = null;
+				try {
+					chain.doFilter(request, response);
+				} catch (Throwable t) {
+					problem = t;
+					t.printStackTrace();
+					sendProcessingError(problem, response);
+				}
 			}
 		}
 	}

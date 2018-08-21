@@ -138,4 +138,14 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	private synchronized void removeProductsCategoryFromList(ProductsCategory c) {
 		productsCategories.remove(c);
 	}
+
+	public ProductsCategory getByName(String name) throws DaoException {
+		for (ProductsCategory u : productsCategories) {
+			if (u.getName().equals(name)) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product category with name: " + name + " not found");
+	}
+
 }
