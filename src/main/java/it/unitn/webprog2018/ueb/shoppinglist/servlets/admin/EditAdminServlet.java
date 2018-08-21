@@ -5,8 +5,15 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +26,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EditAdminServlet", urlPatterns = {"/restricted/admin/EditAdmin"})
 public class EditAdminServlet extends HttpServlet {
+	private UserDAO userDAO;
 
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		userDAO = factory.getUserDAO();
+	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *

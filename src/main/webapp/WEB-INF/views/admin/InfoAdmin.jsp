@@ -9,14 +9,14 @@
 
 <layouts:admin pageTitle="Profile">
     <jsp:attribute name="pageContent">
-		<div class="card info-list-card">
+		<div class="card card-info">
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3">
 						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" alt="Nome Cognome" title="Immagine profilo">
 					</div>
 					<div class="col">
-						<h5 class="card-title text-center">Informazioni utente "Luigi Bianchi"</h5>
+						<h4 class="card-title text-center">Informazioni utente ${sessionScope.user.name} ${sessionScope.user.lastname}</h4>
 						<table class="table">
 							<tbody>
 								<tr>
