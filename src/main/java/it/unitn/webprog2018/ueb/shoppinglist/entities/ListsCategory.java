@@ -50,7 +50,11 @@ public class ListsCategory extends AbstractEntity {
 			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
 			try {
 				listsCategoryDAO.getByName(name);
-				setError("name", "name già esistente");
+				ListsCategory listsCategory = listsCategoryDAO.getById(id);
+				if(id!=listsCategory.getId())
+				{
+					setError("name", "name già esistente");
+				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}

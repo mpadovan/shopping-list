@@ -8,6 +8,8 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -86,6 +88,21 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 
 	@Override
 	public ListsCategory getByName(String name) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public ListsCategory getById(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean deleteListsCategory(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategory) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

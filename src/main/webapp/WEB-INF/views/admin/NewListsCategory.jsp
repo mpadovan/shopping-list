@@ -1,6 +1,6 @@
 <%-- 
-    Document   : NewCategoryProduct
-    Created on : 17-ago-2018, 12.48.40
+    Document   : NewListsCategory
+    Created on : 17-ago-2018, 22.31.44
     Author     : giulia
 --%>
 
@@ -8,12 +8,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:admin pageTitle="New Product Category">
+<layouts:admin pageTitle="New List Category">
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
-				<h1 class="card-title">Nuovo categoria di prodotto</h1>
-				<form method="POST" action="NewProductsCategory">
+				<h1 class="card-title">Nuovo categoria di lista</h1>
+				<form method="POST" action="NewListsCategory">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
@@ -31,29 +31,19 @@
 							   required>
 					</div>
 					<div>
-						<label for="logo">Logo</label>
-						<input type="text"
-							   class="form-control"
-							   id="logo"
-							   name="logo" 
-							   required>
-					</div>
-					<div>
-						<label for="category">Categoria padre</label>
-						<select class="select2 js-example-basic-single form-control py-3"
-								name="category"
-								id="category"
-								name="category" 
-								required
-								>
-							<option selected value="-1">Nessuna</option>
-							<c:forEach var="c" items="${requestScope.productsCategory}">
-								<option value="${c.id}">${c.name}</option>
-							</c:forEach>
-						</select>
+						<label for="image">Fotografia</label>
+						<div class="custom-file">
+							<input type="file"
+								   class="custom-file-input form-control"
+								   id="image"
+								   name="image"
+								   aria-describedby="image"
+								   value="${listsCategoryImage.image}">
+							<label class="custom-file-label" for="image">Scegli file</label>
+						</div>
 					</div>
 					<div class="float-right mt-3">
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory" class="btn btn-light">Annulla</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>
 					</div>
 				</form>
@@ -70,4 +60,3 @@
 
 	</jsp:attribute>
 </layouts:admin>
-

@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class NewProductsCategoryServlet extends HttpServlet {
+public class EditProductsCategoryServlet extends HttpServlet {
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -37,14 +38,22 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
+		Integer categoryId = Integer.parseInt(request.getParameter("id"));
+
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
+			ProductsCategory productCategory = productsCategoryDAO.getById(categoryId);
 			request.setAttribute("productsCategory", productsCategory);
-			request.getRequestDispatcher("/WEB-INF/views/admin/NewCategoryProduct.jsp").forward(request, response);
+			request.setAttribute("productCategory", productCategory);
+			request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
+
+		} catch (RecordNotFoundDaoException ex) {
+			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
 		} catch (DaoException ex) {
-			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
-		
 
 	}
 
@@ -60,6 +69,8 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
+		Integer productCategoryId = Integer.parseInt(request.getParameter("id"));
+
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
 		String description = request.getParameter("description");
@@ -67,29 +78,28 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		try {
 			ProductsCategory productCategory = new ProductsCategory();
 			ProductsCategory subCategory = new ProductsCategory();
-			if(categoryId >= 0){
+			if (categoryId >= 0) {
 				subCategory = productsCategoryDAO.getById(categoryId);
 			} else {
 				subCategory.setId(null);
 			}
 			productCategory.setName(name);
-			productCategory.setLogo(logo);
 			productCategory.setDescription(description);
+			productCategory.setLogo(logo);
+			productCategory.setId(productCategoryId);
 			productCategory.setCategory(subCategory);
 			
-			if (productsCategoryDAO.addProductsCategory(productCategory)) {
+			if (productsCategoryDAO.updateProductsCategory(productCategoryId,productCategory)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {
 				request.setAttribute("productCategory", productCategory);
-				request.getRequestDispatcher("/WEB-INF/views/admin/NewProductsCategory.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
 			}
-			
 		} catch (RecordNotFoundDaoException ex) {
-			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
-		}catch (DaoException ex) {
-			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(500, ex.getMessage());
+		} catch (DaoException ex) {
+			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -100,6 +110,6 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "New category product servlet";
+		return "Edit products category servlet";
 	}
 }

@@ -17,7 +17,7 @@ import java.util.Set;
 public abstract class AbstractEntity implements Serializable {
 
 	@Expose
-	private Integer id;
+	protected Integer id;
 
 	public Integer getId() {
 		return id;

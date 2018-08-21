@@ -173,7 +173,12 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	}
 	@Override
 	public PublicProduct getByName(String name) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		for (PublicProduct u : publicProducts) {
+			if (u.getName().equals(name)) {
+				return u;
+			}
+		}
+		throw new RecordNotFoundDaoException("Public product with name: " + name + " not found");
 	}
 	
 	private synchronized void update(Integer id, PublicProduct p) {

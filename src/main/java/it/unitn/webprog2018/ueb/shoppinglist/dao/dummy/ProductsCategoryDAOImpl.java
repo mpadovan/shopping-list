@@ -13,6 +13,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,7 +38,6 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc2.setId(2);
 		pc2.setName("Frutta surgelata");
 		pc2.setDescription("Vegetali dal sapore dolce, ma surgelati");
-		pc2.setCategory(-1);
 		productsCategories.add(pc2);
 
 		ProductsCategory pc3 = new ProductsCategory();
@@ -49,7 +50,6 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		pc4.setId(4);
 		pc4.setName("Protezioni solari");
 		pc4.setDescription("Creme per il corpo che proteggono contro l'azione dei raggi solari");
-		pc4.setCategory(-1);
 		
 		productsCategories.add(pc4);
 
@@ -81,7 +81,14 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 
 	@Override
 	public Boolean addProductsCategory(ProductsCategory productCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		productCategory.setId((int)(Math.random() * 10000));
+		for(ProductsCategory c : productsCategories) {
+			if (c.getName().equals(productCategory.getName())) {
+				return false;
+			}
+		}
+		productsCategories.add(productCategory);
+		return true;
 	}
 
 
@@ -100,6 +107,38 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	}
 
 	@Override
+	public Boolean deleteProductsCategory(Integer id) throws DaoException {
+		ProductsCategory c = getById(id);
+		removeProductsCategoryFromList(c);
+		return true;
+	}
+	
+	
+
+	@Override
+	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException {
+		getById(id);
+
+		Boolean valid = productsCategory.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			updateProduct(id, productsCategory);
+		}
+		return valid;
+	}
+	private synchronized void updateProduct(Integer id, ProductsCategory c) throws DaoException {
+		ProductsCategory found = getById(id);
+
+		found.setId(c.getId());
+		found.setName(c.getName());
+		found.setLogo(c.getLogo());
+		found.setDescription(c.getDescription());
+		found.setCategory(c.getCategory());
+
+	}
+	private synchronized void removeProductsCategoryFromList(ProductsCategory c) {
+		productsCategories.remove(c);
+	}
+
 	public ProductsCategory getByName(String name) throws DaoException {
 		for (ProductsCategory u : productsCategories) {
 			if (u.getName().equals(name)) {

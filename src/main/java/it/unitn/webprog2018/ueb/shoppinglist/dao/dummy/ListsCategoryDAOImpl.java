@@ -9,6 +9,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,14 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
 	@Override
 	public Boolean addListCategory(ListsCategory listCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		listCategory.setId((int)(Math.random() * 10000));
+		for(ListsCategory c : listsCategories) {
+			if (c.getName().equals(listCategory.getName())) {
+				return false;
+			}
+		}
+		listsCategories.add(listCategory);
+		return true;
 	}
 	
 	public List<ListsCategory> getAll() throws DaoException{
@@ -80,12 +89,51 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 
 	@Override
 	public ListsCategory getByName(String name) throws DaoException {
-		for (ListsCategory u : listsCategories) {
-			if (u.getName().equals(name)) {
-				return u;
+		for (ListsCategory c : listsCategories) {
+			if (c.getName().equals(name)) {
+				return c;
 			}
 		}
 		throw new RecordNotFoundDaoException("List category with name: " + name + " not found");
 	}
 
+	@Override
+	public ListsCategory getById(Integer id) throws DaoException {
+		for (ListsCategory c : listsCategories) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product category with id: " + id + " not found");
+	}
+
+	@Override
+	public Boolean deleteListsCategory(Integer id) throws DaoException {
+		ListsCategory c = getById(id);
+		removeListsCategory(c);
+		return true;
+	}
+	private synchronized void removeListsCategory(ListsCategory c) {
+		listsCategories.remove(c);
+	}
+
+	@Override
+	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategory) throws DaoException {
+		getById(categoryId);
+
+		Boolean valid = listsCategory.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			updateListsCategorydummy(categoryId, listsCategory);
+		}
+		return valid;
+	}
+	
+	private synchronized void updateListsCategorydummy(Integer id, ListsCategory c) throws DaoException {
+		ListsCategory found = getById(id);
+
+		found.setId(c.getId());
+		found.setName(c.getName());
+		found.setDescription(c.getDescription());
+
+	}
 }

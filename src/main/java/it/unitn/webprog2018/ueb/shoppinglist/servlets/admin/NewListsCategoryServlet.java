@@ -12,7 +12,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesD
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-public class ListCategoryServlet extends HttpServlet {
+public class NewListsCategoryServlet extends HttpServlet {
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -37,38 +37,7 @@ public class ListCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
-		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
-		String searchParam = request.getParameter("search");
-		Integer checkParam = 0;
-
-		List<ListsCategory> listsCategory = null;
-		List<ListsCategoriesImage> listsCategoryImage = null;
-		if (searchParam == null) {
-			searchParam = "";
-		}
-		if (searchParam.equals("")) {
-			checkParam = 0;
-			try {
-				listsCategory = listsCategoryDAO.getAll();
-				listsCategoryImage = listsCategoryImagesDAO.getAll();
-			} catch (DaoException ex) {
-				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		} else {
-			checkParam = 1;
-			try {
-				listsCategory = listsCategoryDAO.getFromQuery(searchParam);
-				
-			} catch (DaoException ex) {
-				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-		request.setAttribute("listsCategory", listsCategory);
-		request.setAttribute("listsCategoryImage", listsCategoryImage);
-		request.setAttribute("searchParam", searchParam);
-		request.setAttribute("checkParam", checkParam);
-		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);
 	}
 
 	/**
@@ -82,7 +51,38 @@ public class ListCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
+		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
+		String name = request.getParameter("name");
+		String description = request.getParameter("description");
+		String image = request.getParameter("image");
+		
+		ListsCategory listsCategory = new ListsCategory();
+		listsCategory.setName(name);
+		listsCategory.setDescription(description);
+		ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
+		listsCategoriesImage.setImage(image);
+		
+		try {
+			if (listsCategoryDAO.addListCategory(listsCategory)) {
+				listsCategory = listsCategoryDAO.getByName(name);
+				listsCategoriesImage.setCategory(listsCategory);
+				if(listsCategoryImagesDAO.addListsCategoriesImage(listsCategoriesImage)){
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
+				}
+				
+			} else {
+				request.setAttribute("listsCategory", listsCategory);
+				request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(NewListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
+		}
+		
+		
+		
+		
 	}
 
 	/**
@@ -92,6 +92,7 @@ public class ListCategoryServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Servlet for admin category list";
+		return "Short description";
 	}
+
 }

@@ -52,7 +52,7 @@
 								<td>${p.category.name}</td>
 								<td>
 									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
-									<span class="ml-4"><a href="${pageContext.servletContext.contextPath}/restricted/admin/DeletePublicProduct?id=${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
+									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
 								</td>
 							</tr>
 							<!-- Modal -->

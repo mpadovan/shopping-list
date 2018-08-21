@@ -94,7 +94,7 @@ public class UserDAOimpl implements UserDAO {
 					return true;
 				}
 			}
-			throw new RecordNotFoundDaoException("The product with id: " + user.getId() + " does not exist");
+			throw new RecordNotFoundDaoException("The user with id: " + user.getId() + " does not exist");
 		}
 		return false;
 	}
