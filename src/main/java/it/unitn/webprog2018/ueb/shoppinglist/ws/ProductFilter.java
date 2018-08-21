@@ -53,8 +53,11 @@ public class ProductFilter implements ContainerRequestFilter {
 
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
+			if (uri.endsWith("/")) {
+				// removed final / character
+				uri = uri.substring(0, uri.lastIndexOf("/"));
+			}
 			Integer productId = Integer.parseInt(uri.substring(uri.lastIndexOf("/")+1, uri.length()));
-			
 			try {
 				if(!productDAO.getProduct(productId).getOwner().getId().equals(user.getId())) {
 					// TODO USE CORRECT ERROR PAGE

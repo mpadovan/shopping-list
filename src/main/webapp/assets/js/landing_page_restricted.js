@@ -12,6 +12,7 @@ Vue.component('ajaxComponent', {
 		};
 	},
 	created: function () {
+		console.log('AjaxComponent Created');
 		var self = this;
 		$.ajax(this.settings)
 			.done(function (data) {
@@ -19,10 +20,14 @@ Vue.component('ajaxComponent', {
 			})
 			.fail(function (err) {
 				console.log(err);
-				alert('Errore nel caricamento AJAX, dettagli in console');
+				toastr["error"]('Errore AJAX, dettagli in console');
+				self.$emit('done', 'error');
 			});
 	},
-	template: "<div style=\"display:none;\"></div>"
+	template: "<div style=\"display:none;\"></div>",
+	destroyed: function () {
+		console.log('destroyed', this._inactive, this.item);
+	}
 });
 
 Vue.component('list-item', {
@@ -56,6 +61,7 @@ Vue.component('list-item', {
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
+
 Vue.component('search-item', {
 	props: ['item'],
 	computed: {
@@ -78,6 +84,31 @@ Vue.component('search-item', {
 				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
 					</div> \
 				</li>'
+});
+
+Vue.component('fetchListComponent', {
+	props: ['settings'],
+	data: function () {
+		return {
+			results: []
+		};
+	},
+	created: function () {
+		var self = this;
+		$.ajax(this.settings)
+			.done(function (data) {
+				self.$emit('done', data);
+			})
+			.fail(function (err) {
+				console.log(err);
+				toastr["error"]('Errore AJAX, dettagli in console');
+				return;
+			});
+	},
+	template: "<div style=\"display:none;\"></div>",
+	destroyed: function () {
+		console.log('fetch destroyed', this._inactive, this.item);
+	}
 });
 
 var app = new Vue({
@@ -104,7 +135,7 @@ var app = new Vue({
 		item_id: null,
 		showAutocompleteList: false,
 		ajaxSettings: {},
-		ajaxComponent: null,
+		ajaxComponent: false,
 		operation: null,
 		list: 1
 	},
@@ -119,7 +150,7 @@ var app = new Vue({
 					"crossDomain": true
 				};
 				this.operation = 3;
-				this.ajaxComponent = 'ajaxComponent';
+				this.ajaxComponent = true;
 				this.showAutocomplete = false;
 			}
 		},
@@ -133,50 +164,67 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
-			toastr["success"](item.item.name + ' aggiunto')
-			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
-					this.items[i].amount++;
-					this.updateLocalStorage();
-					return;
+			var isPrivate = (item.item.owner) ? 'personal' : 'public';
+			this.ajaxSettings = {
+				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + isPrivate,
+				"method": 'POST',
+				"async": true,
+				"crossDomain": true,
+				"data": "{\"id\": \"" + item.item.id + "\"}",
+				"headers": {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
 				}
-			}
-			item.amount = 1;
-			this.items.push(item);
-			console.log(this.items);
-		},
-		updateLocalStorage: function () {
-			localStorage.setItem("items", JSON.stringify(this.items));
+			};
+			this.operation = 5;
+			this.ajaxComponent = true;
+			this.operationData = {
+				product_name: item.item.name
+			};
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
 			this.item_name = val.item.item.name;
 			this.item_id = val.item.item.id;
 			this.item_amount = val.item.amount;
+			this.item_owner = (val.item.item.owner) ? 'personal' : 'public';
 		},
 		updateComponent: function () {
-			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
-					this.updateLocalStorage();
-					return;
+			this.ajaxSettings = {
+				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
+				"method": 'PUT',
+				"async": true,
+				"crossDomain": true,
+				"data": this.item_amount,
+				"headers": {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
 				}
-			}
+			};
+			this.operation = 6;
+			this.ajaxComponent = true;
+			this.operationData = {
+				product_name: this.item_name
+			};
 		},
 		deleteWithModal: function (val) {
 			this.updatingItem = false;
 			this.item_name = val.item.item.name;
 			this.item_id = val.item.item.id;
-			this.item_amount = undefined;
+			this.item_owner = (val.item.item.owner) ? 'personal' : 'public';
 		},
 		deleteComponent: function () {
-			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					this.items.splice(i, 1);
-					this.updateLocalStorage();
-					return;
-				}
-			}
+			this.ajaxSettings = {
+				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
+				"method": 'DELETE',
+				"async": true,
+				"crossDomain": true
+			};
+			this.operation = 7;
+			this.ajaxComponent = true;
+			this.operationData = {
+				product_name: this.item_name
+			};
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
@@ -189,8 +237,7 @@ var app = new Vue({
 			} else {
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
-					console.log(this.results[j].category);
-					if (this.results[j].category == undefined) this.results[j].category = {
+					if (this.results[j].category.id == 0 || typeof this.results[j].category == undefined) this.results[j].category = {
 						name: 'Default'
 					};
 				}
@@ -198,9 +245,8 @@ var app = new Vue({
 				if (this.results.length == 0) this.noResults = true;
 				else this.noResults = false;
 				var arr = [];
-				console.log(data);
 				for (var i = 0; data.length > i; i++) {
-					if (typeof data[i].category == 'undefined') {
+					if (data[i].category.id == 0 || typeof data[i].category == undefined) {
 						arr.push('Default');
 					} else {
 						arr.push(data[i].category.name);
@@ -234,37 +280,77 @@ var app = new Vue({
 				}
 			};
 			this.operation = 2;
-			this.ajaxComponent = 'ajaxComponent';
+			this.ajaxComponent = true;
 			this.operationData = {
 				product_name: this.query
 			};
 		},
+		fetchList: function () {
+			this.fetchListSettings = {
+				"async": true,
+				"crossDomain": true,
+				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
+				"method": "GET",
+			};
+			this.fetchListComponent = true;
+		},
 		ajaxDone: function (data) {
-			this.ajaxComponent = null;
-			switch (this.operation) {
-				case 1:
-					data = data.products.concat(data.publicProducts);
-					this.addResultsToIstance(data);
-					break;
-				case 2:
-					toastr['success'](this.operationData.product_name + ' aggiunto ai propri prodotti');
-					break;
-				case 3:
-					data = data.products.concat(data.publicProducts);
-					this.addResultsToIstance(data);
-					break;
-				case 4:
-					console.log(data);
-					break;
-				default:
-					break;
+			this.ajaxComponent = false;
+			if (data === 'error') return;
+			else {
+				switch (this.operation) {
+					case 1:
+						data = data.products.concat(data.publicProducts);
+						this.addResultsToIstance(data);
+						break;
+					case 2:
+						toastr['success'](this.operationData.product_name + ' aggiunto ai propri prodotti');
+						break;
+					case 3:
+						data = data.products.concat(data.publicProducts);
+						this.addResultsToIstance(data);
+						break;
+					case 4:
+						data = data.publicProducts.concat(data.products);
+						//_.sortBy(data,['product.category.name', 'product.name']);
+						for (var i = 0; data.length > i; i++) {
+							data[i].item = data[i].product;
+							data[i].product = undefined;
+							this.items.push(data[i]);
+						}
+						break;
+					case 5:
+						toastr["success"](this.operationData.product_name + ' aggiunto');
+						break;
+					case 6:
+						toastr["success"](this.operationData.product_name + ' aggiornato');
+						break;
+					case 7:
+						toastr["success"](this.operationData.product_name + ' cancellato');
+						break;
+					default:
+						break;
+				}
+				this.operation = null;
 			}
-			this.operation = null;
+			this.fetchList();
 		},
 		sortBasedOnCategories: function (val) {
 			if (this.selected == 'all') return true;
 			else if (val == this.selected) return true;
 			else return false;
+		},
+		fetchListDone: function (data) {
+			this.fetchListComponent = false;
+			data = data.publicProducts.concat(data.products);
+			//_.sortBy(data,['product.category.name', 'product.name']);
+			this.items = [];
+			for (var i = 0; data.length > i; i++) {
+				data[i].item = data[i].product;
+				data[i].product = undefined;
+				this.items.push(data[i]);
+			}
+			console.log(this.items);
 		}
 	},
 	watch: {
@@ -281,12 +367,9 @@ var app = new Vue({
 					"crossDomain": true
 				};
 				this.operation = 1;
-				this.ajaxComponent = 'ajaxComponent';
+				this.ajaxComponent = true;
 				$('#search-input').focus();
 			}
-		},
-		items: function (val) {
-			this.updateLocalStorage();
 		},
 		selected: function (val) {
 			if (val == 'all') {
@@ -300,15 +383,7 @@ var app = new Vue({
 		}
 	},
 	created: function () {
-		var self = this;
-		$.get('/ShoppingList/services/lists/restricted/' + this.user + '/personal/' + this.list + '/products').done(function (data) {
-			data = data.publicProducts.concat(data.products); 
-			//_.sortBy(data,['product.category.name', 'product.name']);
-			for(var i = 0; data.length > i; i++) {
-				data[i].item = data[i].product;
-				data[i].product = undefined;
-				self.items.push(data[i]);
-			}
-		});
+		this.user = window.location.pathname.split('HomePageLogin/')[1];
+		this.fetchList();
 	}
 });
