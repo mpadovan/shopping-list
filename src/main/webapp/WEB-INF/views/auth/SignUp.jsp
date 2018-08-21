@@ -37,7 +37,7 @@
 						</div>
 						<div class="form-label-group">
 							<input type="checkPassword" id="checkPassword" name="checkPassword" class="form-control" placeholder="Conferma password" required="required">
-							<label for="password">Conferma password</label>
+							<label for="checkPassword">Conferma password</label>
 						</div>
 						<div class="checkbox mb-2">
 							<label>
