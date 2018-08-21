@@ -18,27 +18,17 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class ChatSessionHandler extends SessionHandler {
 
-	public boolean persistMessage(Message message) {
-		try {
-			SessionHandler.getDaoFactory().getMessageDAO().addMessage(message);
-			return true;
-		} catch (DaoException ex) {
-			return false;
-		}
+	public boolean persistMessage(Message message) throws DaoException {
+		SessionHandler.getDaoFactory().getMessageDAO().addMessage(message);
+		return true;
 	}
-	
-	public List<Message> getMessages(Integer userId, Integer listId) {
+
+	public List<Message> getMessages(Integer userId, Integer listId) throws DaoException {
 		User user = new User();
 		user.setId(userId);
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setId(listId);
-		try {
-			return SessionHandler.getDaoFactory().getMessageDAO().getLastMessages(list, user);
-		} catch (DaoException ex) {
-			return null;
-		}
+		return SessionHandler.getDaoFactory().getMessageDAO().getLastMessages(list, user);
 	}
-	
-	
 
 }

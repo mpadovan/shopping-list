@@ -44,6 +44,10 @@ public abstract class SessionHandler {
 		return sessions.containsKey(userId);
 	}
 	
+	public Session getSession(Integer userId) {
+		return sessions.get(userId);
+	}
+	
 	public void subscribe(Integer userId, Session session) {
 		sessions.put(userId, session);
 	}

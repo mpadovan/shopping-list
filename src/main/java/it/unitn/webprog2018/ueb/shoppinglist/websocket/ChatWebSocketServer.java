@@ -5,6 +5,13 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.websocket.*;
@@ -34,12 +41,43 @@ public class ChatWebSocketServer {
 	}
 
 	@OnError
-	public void onError(Throwable error) {
-		error.printStackTrace();
+	public void onError(Throwable error, @PathParam("userId") Integer userId) {
+		try {
+			chatSessionHandler.getSession(userId).getBasicRemote().sendText(error.getMessage());
+		} catch (IOException ex) {
+			Logger.getLogger(ChatWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 	@OnMessage
-	public void handleMessage(String message, Session session) {
+	public void handleMessage(String message, Session session, @PathParam("userId") Integer userId) throws DaoException {
+		Gson gson = new Gson();
+		try {
+			ChatWebSocketMessage entering = gson.fromJson(message, ChatWebSocketMessage.class);
+			Message msg;
+			Integer listId = 0;
+			switch (entering.getOperation()) {
+				case ADD_MESSAGE: 
+					msg = gson.fromJson(entering.getPayload(), Message.class);
+					if (chatSessionHandler.persistMessage(msg)) {
+						listId = msg.getList().getId();
+					}
+					break;
+				case FETCH_CHAT:
+					listId = Integer.parseInt(entering.getPayload());
+					break;
+				default: break;
+			}
+			String payload = gson.toJson(chatSessionHandler.getMessages(userId, listId));
+			ChatWebSocketMessage exiting = new ChatWebSocketMessage();
+			exiting.setOperation(ChatWebSocketMessage.Operation.SEND_CHAT);
+			exiting.setPayload(payload);
+			session.getBasicRemote().sendText(gson.toJson(exiting));
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			Logger.getLogger(ChatWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		
 	}
 }
