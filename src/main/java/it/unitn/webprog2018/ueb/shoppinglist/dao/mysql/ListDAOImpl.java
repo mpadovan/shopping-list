@@ -129,7 +129,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			PublicProduct p;
-			ProductsCategory pc;
+			ProductsCategory pc,pcp;
 			Integer quantity;
 			int i = 1;
 			while(rs.next())
@@ -137,6 +137,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				i = 1;
 				p = new PublicProduct();
 				pc = new ProductsCategory();
+				pcp = new ProductsCategory();
 				p.setId(rs.getInt(i++));
 				p.setName(rs.getString(i++));
 				p.setNote(rs.getString(i++));
@@ -145,7 +146,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				quantity = rs.getInt(i++);
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
@@ -178,7 +180,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Product p;
-			ProductsCategory pc;
+			ProductsCategory pc,pcp;
 			User u;
 			Integer quantity;
 			int i = 1;
@@ -187,6 +189,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
+				pcp = new ProductsCategory();
 				u = new User();
 				p.setId(rs.getInt(i++));
 				p.setName(rs.getString(i++));
@@ -201,7 +204,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				u.setAdministrator(rs.getInt(i++) != 0);
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);

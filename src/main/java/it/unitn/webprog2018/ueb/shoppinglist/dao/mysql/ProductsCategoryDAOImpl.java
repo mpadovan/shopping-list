@@ -66,7 +66,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 			try{
 				String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""+
 						pc.getName()+ "\"," +
-						(pc.getCategory() < 0 ? "null" : pc.getCategory())+ ",\"" +
+						(pc.getCategory().getId() < 0 ? "null" : pc.getCategory().getId())+ ",\"" +
 						pc.getDescription()+ "\",\"" +
 						pc.getLogo()+"\")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
@@ -90,15 +90,17 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 					"FROM productscategories";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
-			ProductsCategory pc;
+			ProductsCategory pc,pcp;
 			int i;
 			while(rs.next())
 			{
 				i = 1;
 				pc = new ProductsCategory();
+				pcp = new ProductsCategory();
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				list.add(pc);
@@ -117,6 +119,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	public ProductsCategory getById(Integer id) throws DaoException {
 		try{
 			ProductsCategory pc = new ProductsCategory();
+			ProductsCategory pcp = new ProductsCategory();
 			String query = "SELECT name,category,description,logo " +
 					"FROM productscategories " +
 					"WHERE id = "+id;
@@ -127,7 +130,8 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				int i = 1;
 				pc.setId(id);
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				
@@ -157,6 +161,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	public ProductsCategory getByName(String name) throws DaoException {
 		try{
 			ProductsCategory pc = new ProductsCategory();
+			ProductsCategory pcp = new ProductsCategory();
 			String query = "SELECT id,category,description,logo " +
 					"FROM productscategories " +
 					"WHERE name = "+name;
@@ -167,7 +172,8 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				int i = 1;
 				pc.setId(rs.getInt(i++));
 				pc.setName(name);
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				

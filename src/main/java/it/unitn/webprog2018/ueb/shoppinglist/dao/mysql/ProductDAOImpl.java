@@ -69,13 +69,14 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Product p;
-			ProductsCategory pc;
+			ProductsCategory pc,pcp;
 			int i;
 			while(rs.next())
 			{
 				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
+				pcp = new ProductsCategory();
 				p.setId(rs.getInt(i++));
 				p.setName(rs.getString(i++));
 				p.setNote(rs.getString(i++));
@@ -84,7 +85,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				p.setOwner(null);
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
@@ -142,13 +144,14 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Product p;
-			ProductsCategory pc;
+			ProductsCategory pc,pcp;
 			int i;
 			while(rs.next())
 			{
 				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
+				pcp = new ProductsCategory();
 				p.setId(rs.getInt(i++));
 				p.setName(rs.getString(i++));
 				p.setNote(rs.getString(i++));
@@ -157,7 +160,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				p.setOwner(null);
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				pc.setCategory(rs.getInt(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
@@ -190,6 +194,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 					ResultSet rs = st.executeQuery(query);
 					User u = new User();
 					ProductsCategory pc = new ProductsCategory();
+					ProductsCategory pcp = new ProductsCategory();
 					if(rs.first())
 					{
 						int i = 1;
@@ -204,7 +209,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 						u.setAdministrator(rs.getInt(i++) != 0);
 						pc.setId(rs.getInt(i++));
 						pc.setName(rs.getString(i++));
-						pc.setCategory(rs.getInt(i++));
+						pcp.setId(rs.getInt(i++));
+						pc.setCategory(pcp);
 						pc.setDescription(rs.getString(i++));
 						pc.setLogo(rs.getString(i++));
 						p.setOwner(u);
