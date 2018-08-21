@@ -120,7 +120,7 @@ public class SignUpServlet extends HttpServlet {
 					if (tokenDAO.addToken(token)) {
 						if (EmailSender.send(user.getEmail(), "Conferma account",
 								"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
-							response.sendRedirect("Login");
+							request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
 						} else {
 							response.sendError(500, "The server could not reach your email address. Please try again later.");
 							if (file != null) {
