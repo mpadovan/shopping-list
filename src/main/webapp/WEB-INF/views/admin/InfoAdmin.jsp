@@ -21,21 +21,15 @@
 							<tbody>
 								<tr>
 									<th scope="row">Nome</th>
-									<td>Luigi</td>
+									<td>${sessionScope.user.name}</td>
 								</tr>
 								<tr>
 									<th scope="row">Cognome</th>
-									<td>Bianchi</td>
+									<td>${sessionScope.user.lastname}</td>
 								</tr>
 								<tr>
 									<th scope="row">Email</th>
-									<td>luigibianchi@gmail.com</td>
-								</tr>
-								<tr>
-									<th scope="row">Password</th>
-									<td>
-										******
-									</td>
+									<td>${sessionScope.user.email}</td>
 								</tr>
 							</tbody>
 						</table>

@@ -19,33 +19,39 @@
 						<h4 class="card-title text-center">Modifica utente ${sessionScope.user.name} ${sessionScope.user.lastname}</h4>
 						<form action="EditAdmin">
 							<div class="form-group row">
-								<label for="name" class="col-sm-2 col-form-label">Nome</label>
-								<div class="col-sm-10">
+								<label for="name" class="col-sm-3 col-form-label">Nome</label>
+								<div class="col-sm-9">
 									<input type="text" class="form-control" id="name" name="name" value="${sessionScope.user.name}">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="lastName" class="col-sm-2 col-form-label">Cognome</label>
-								<div class="col-sm-10">
+								<label for="lastName" class="col-sm-3 col-form-label">Cognome</label>
+								<div class="col-sm-9">
 									<input type="text" class="form-control" id="lastName" name="lastName" value="${sessionScope.user.lastname}" required>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="email" class="col-sm-2 col-form-label">Email</label>
-								<div class="col-sm-10">
+								<label for="email" class="col-sm-3 col-form-label">Email</label>
+								<div class="col-sm-9">
 									<input type="email" class="form-control" id="email" name="email"value="${sessionScope.user.email}" required>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="password" class="col-sm-2 col-form-label">Password</label>
-								<div class="col-sm-10">
-									<input type="password" class="form-control" id="password" name="password" value="${sessionScope.user.password}" required>
+								<label for="password" class="col-sm-3 col-form-label">Password attuale</label>
+								<div class="col-sm-9">
+									<input type="password" class="form-control" id="password" name="password" required>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="checkPassword" class="col-sm-2 col-form-label">Conferma Password</label>
-								<div class="col-sm-10">
-									<input type="password" class="form-control" id="checkPassword" name="checkPassword" value="${sessionScope.user.password}" required>
+								<label for="password" class="col-sm-3 col-form-label">Nuova password </label>
+								<div class="col-sm-9">
+									<input type="password" class="form-control" id="password" name="password" required>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="checkPassword" class="col-sm-3 col-form-label">Conferma nuova password</label>
+								<div class="col-sm-9">
+									<input type="password" class="form-control" id="checkPassword" name="checkPassword" required>
 								</div>
 							</div>
 						</form>
