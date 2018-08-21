@@ -97,6 +97,9 @@ public class LoginServlet extends HttpServlet {
 					path += "restricted/HomePageLogin/" + user.getId();
 					response.sendRedirect(path);
 				}
+			} else {
+				request.setAttribute("user", user);
+				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			request.setAttribute("user", user);
