@@ -11,12 +11,16 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,13 +82,23 @@ public class ResetPasswordServlet extends HttpServlet {
 			Logger.getLogger(ResetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-
-		String link = "http://localhost:8080" + context + "SetNewPassword?id=" + user.getId();
-		if (EmailSender.send(user.getEmail(), "Reset Password",
-				"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {
-			request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmSendEmail.jsp").forward(request, response);
-		} else {
-			response.sendError(500, "The server could not reach your email address. Please try again later.");
+		int time = (int) System.currentTimeMillis();
+		String token = UUID.randomUUID().toString();
+		user.setTokenpassword(token);
+		try {
+			if(userDAO.updateUser(user.getId(), user))
+			{
+				String link = "http://localhost:8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" +token;
+				if (EmailSender.send(user.getEmail(), "Reset Password",
+						"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {
+					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmSendEmail.jsp").forward(request, response);
+				} else {
+					response.sendError(500, "The server could not reach your email address. Please try again later.");
+				}
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ResetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
 	}
 

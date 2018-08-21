@@ -7,36 +7,26 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:auth pageTitle="Login">
+<layouts:auth pageTitle="Change Password">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2">
 			<div class="card login-card">
 				<div class="card-title">
-					<h3 class="text-center">Login</h3>
+					<h3 class="text-center">Change Password</h3>
 				</div>
 				<div class="card-body">
-					<form action="Login" method="POST">
-						<div class="form-group">
-							<label for="email">Email</label>
-							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required="required">
-
-						</div>
+					<form action="SetNewPassword" method="POST">
+						<input type="hidden" name="id" value="${param.id}">
+						<input type="hidden" name="token" value="${param.token}">
 						<div class="form-group">
 							<label for="password">Password</label>
 							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
 						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="remember" name="remember">
-							<label class="form-check-label" for="remember">Ricordami</label>
+						<div class="form-group">
+							<label for="checkPassword">Confirm password</label>
+							<input type="password" class="form-control" id="checkPassword" name="checkPassword" placeholder="Password" required="required">
 						</div>
-						<div>
-							<a href="${pageContext.servletContext.contextPath}/ResetPassword">Password dimenticata?</a><br>
-						</div>
-						<div class="float-right">
-							<a href="${pageContext.servletContext.contextPath}/home" class="btn btn-outline-dark">Annulla</a>
-						</div>
-						<button type="submit" class="btn btn-outline-dark">Accedi</button>
-						<!-- <a href="HomePageLogin.jsp" class="btn btn-outline-dark">Accedi</a> -->
+						<button type="submit" class="btn btn-outline-dark">Prosegui</button>
 					</form>
 				</div>
 			</div>

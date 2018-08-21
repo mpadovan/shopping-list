@@ -1,6 +1,6 @@
 <%-- 
-    Document   : ConfirmSendEmail
-    Created on : 18-ago-2018, 11.40.28
+    Document   : ConfirmChangePassword
+    Created on : 21-ago-2018, 19.02.37
     Author     : simon
 --%>
 
@@ -13,11 +13,11 @@
 		<div class="container-fluid px-2">
 			<div class="card login-card">
 				<div class="card-title text-center">
-					<h3>Reset Password</h3>
+					<h3>Confirm changed password</h3>
 				</div>
 				<div class="card-body">
 					<div class="alert alert-success" role="alert">
-						<h5>è stata inviata un'email al tuo indirizzo per resettare la tua password, apri il link e procedi se vuoi continuare</h5>
+						<h5>Hai modificato correttamente la tua password. Torna al <a href="${pageContext.servletContext.contextPath}/Login" class="badge badge-light">Login</a></h5>
 					</div>
 				</div>
 			</div>

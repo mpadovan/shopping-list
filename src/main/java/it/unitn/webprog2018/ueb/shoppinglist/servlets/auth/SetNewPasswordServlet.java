@@ -6,9 +6,15 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,8 +47,7 @@ public class SetNewPasswordServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String iduser = (String) request.getAttribute("id");
-		request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp?id="+iduser).forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/auth/SetNewPassword.jsp").forward(request, response);
 	}
 
 	/**
@@ -56,7 +61,44 @@ public class SetNewPasswordServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
+		}
 		
+		Integer id = Integer.parseInt(request.getParameter("id"));
+		String token = request.getParameter("token");
+		String password = Sha256.doHash(request.getParameter("password"));
+		String checkPassword = Sha256.doHash(request.getParameter("checkPassword"));
+		User user = null;
+		try {
+			user = userDAO.getById(id);
+			if(user.getTokenpassword().equals(token) && token!=null)
+			{
+				user.setPassword(password);
+				user.setCheckpassword(checkPassword);
+				
+				if(userDAO.updateUser(id, user))
+				{
+					user.setTokenpassword(null);
+					userDAO.updateUser(user.getId(), user);
+					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmChangePassword.jsp").forward(request, response);
+				}
+				else 
+				{
+					request.setAttribute("user", user);
+					request.getRequestDispatcher("/WEB-INF/views/auth/SetNewPassword.jsp").forward(request, response);
+				}
+			}
+		} catch (RecordNotFoundDaoException ex) {
+			Logger.getLogger(SetNewPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, ex.getMessage());
+		} 
+		catch (DaoException ex) {
+			Logger.getLogger(SetNewPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
+		}
+				
 	}
 
 	/**
