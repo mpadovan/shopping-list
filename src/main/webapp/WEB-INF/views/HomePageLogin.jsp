@@ -65,7 +65,7 @@
 									</a>
 								</h5>
 								<div class="d-flex justify-content-end">
-									<p>Chat
+									<p class="pointer" @click="chat = !chat">Chat
 										<a href="#">
 											<i class="far fa-comments"></i>
 										</a>
@@ -116,10 +116,22 @@
 						</div>
 					</div>
 				</div>
-				<div class="col" id="chat">
+				<div class="chat col-lg-5" id="chat">
 					<div class="card">
 						<div class="card-body">
-							{{ name }}
+							<div class="d-flex justify-content-end">
+								<button type="button" class="close " data-dismiss="modal" aria-label="Close" @click="chat = !chat">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="input-group mb-0 mt-4">
+								<input type="text" class="form-control" placeholder="Scrivi qualcosa...">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button">
+										<i class="far fa-paper-plane"></i>
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
