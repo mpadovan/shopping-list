@@ -7,6 +7,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -53,5 +54,22 @@ public class Token extends AbstractEntity {
 	public void setExpirationFromNow(long delay) {
 		Date date = new Date(System.currentTimeMillis() + delay);
 		expirationDate = date;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == this.getClass()) {
+			if (this.user.getEmail().equals(((Token)o).getUser().getEmail())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 83 * hash + Objects.hashCode(this.user.getEmail());
+		return hash;
 	}
 }

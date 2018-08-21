@@ -51,5 +51,7 @@ public interface ListDAO {
 	
 	public Boolean hasDeletePermission(Integer listId, Integer userId) throws DaoException;
 	
+	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException;
+	
 	public java.util.List<List> getByUser(Integer userId) throws DaoException;
 }

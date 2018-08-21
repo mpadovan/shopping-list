@@ -5,20 +5,28 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.AddDeletePermission;
 import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission;
+import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
@@ -44,6 +52,8 @@ public class ListWebService {
 	private UriInfo context;
 	@Context
 	private ServletContext servletContext;
+	@Context
+	private HttpServletResponse response;
 
 	/**
 	 * Creates a new instance of ListWebService
@@ -57,15 +67,17 @@ public class ListWebService {
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
 	 * @return an instance of java.lang.String
+	 * @throws java.io.IOException
 	 */
 	@GET
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCategories(@QueryParam("search") String search,
-			@QueryParam("compact") String compact) {
+			@QueryParam("compact") String compact) throws IOException {
+
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
-		String query = ProductWebService.getQuery(search);
+		String query = ServiceUtils.getQuery(search);
 		List<ListsCategory> listsCategories = null;
 		try {
 			if (query.equals("")) {
@@ -74,7 +86,8 @@ public class ListWebService {
 				listsCategories = listsCategoryDAO.getFromQuery(query);
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
+			return null;
 		}
 		if (listsCategories == null || listsCategories.isEmpty()) {
 			return "{[]}";
@@ -97,14 +110,16 @@ public class ListWebService {
 	@GET
 	@Path("/restricted/{userId}/permission/{listId}/products")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getProductsOnPersonalList(@PathParam("listId") int listId) {
+	@Authentication
+	@ViewPermission
+	public String getProductsOnList(@PathParam("listId") int listId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> publicProductsOnList = null;
 		String json = "{ \"publicProducts\" : [";
 		try {
 			publicProductsOnList = listDAO.getPublicProductsOnList(listId);
 		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 		if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
 			json += "]";
@@ -126,17 +141,17 @@ public class ListWebService {
 				json = new String(tmp);
 			}
 		}
+		json += ",\"products\" : [";
 		Map<Product, Integer> productsOnList = null;
 		try {
 			productsOnList = listDAO.getProductsOnList(listId);
 		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 		if (productsOnList == null || productsOnList.isEmpty()) {
 			json += "]";
 		} else {
 			Gson gson = CustomGsonBuilder.create(false);
-			json += ", \"products\" : [";
 			for (Map.Entry<Product, Integer> entry : productsOnList.entrySet()) {
 				try {
 					json += "{\"product\":" + gson.toJson(entry.getKey()) + ","
@@ -157,8 +172,8 @@ public class ListWebService {
 	}
 
 	/**
-	 * Adds a PUBLIC product to a list. If the product is already
-	 * present, its amount on the list is incremented by 1.
+	 * Adds a PUBLIC product to a list. If the product is already present, its
+	 * amount on the list is incremented by 1.
 	 *
 	 * @param listId
 	 * @param content body of the request
@@ -166,7 +181,9 @@ public class ListWebService {
 	@POST
 	@Path("/restricted/{userId}/permission/{listId}/products/public")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addPublicProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	@Authentication
+	@AddDeletePermission
+	public void addPublicProductOnList(@PathParam("listId") int listId, String content) {
 		try {
 			PublicProduct product = null;
 			try {
@@ -177,35 +194,31 @@ public class ListWebService {
 			}
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			if (!listDAO.isOnList(listId, product)) {
-				if (listDAO.addPublicProduct(listId, product)) {
-					System.out.println("Added new product");
-				} else {
-					System.out.println("Could not add product on list");
-				}
+				listDAO.addPublicProduct(listId, product);
 			} else {
-				if (listDAO.updateAmount(listId, product)) {
-					System.out.println("Added new product");
-				} else {
-					System.out.println("Could not update product amount");
-				}
+				listDAO.updateAmount(listId, product);
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 
 	/**
-	 * Adds a PERSONAL product to a	 list. If the product is already
-	 * present, its amount on the list is incremented by 1.
+	 * Adds a PERSONAL product to a	list. If the product is already present, its
+	 * amount on the list is incremented by 1.
 	 *
 	 * @param listId id of the list that is to be modified
+	 * @param userId id of the user making the request
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
 	@POST
 	@Path("/restricted/{userId}/permission/{listId}/products/personal")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProductOnPersonalList(@PathParam("listId") int listId, String content) {
+	@Authentication
+	@AddDeletePermission
+	public void addProductOnList(@PathParam("listId") int listId,
+			@PathParam("userId") int userId, String content) {
 		Product product = null;
 		try {
 			Gson gson = new Gson();
@@ -213,21 +226,32 @@ public class ListWebService {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		try {
-			if (listDAO.addProduct(listId, product)) {
-				System.out.println("Added new product");
-			} else {
-				System.out.println("Could not add this product to the list");
+		if (product != null) {
+			try {
+				if (!productDAO.getProduct(product.getId()).getOwner().getId().equals(userId)) {
+					if (!response.isCommitted()) {
+						response.sendError(401, "The product you are trying to use does not belong to you, you thief!");
+					}
+				} else {
+					if (listDAO.isOnList(listId, product)) {
+						listDAO.updateAmount(listId, product);
+					} else {
+						listDAO.addProduct(listId, product);
+					}
+				}
+			} catch (DaoException ex) {
+				ServiceUtils.handleDAOException(ex, response);
+			} catch (IOException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 			}
-		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
 	/**
-	 * Edits the amount of a PERSONAL product on a list. If the product
-	 * is already present, its amount on the list is incremented by 1.
+	 * Edits the amount of a PERSONAL product on a list. If the product is
+	 * already present, its amount on the list is incremented by 1.
 	 *
 	 * @param listId
 	 * @param productId
@@ -237,7 +261,9 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void editProductOnPersonalList(@PathParam("listId") int listId,
+	@Authentication
+	@AddDeletePermission
+	public void editProductOnList(@PathParam("listId") int listId,
 			@PathParam("productId") int productId, String content) {
 		Integer newAmount = -1;
 		try {
@@ -250,19 +276,23 @@ public class ListWebService {
 		try {
 			Product p = new Product();
 			p.setId(productId);
-			if (newAmount > 0) {
-				listDAO.updateAmount(listId, p, newAmount);
-			} else if (newAmount == 0) {
-				listDAO.deleteFromList(listId, p);
+			if (listDAO.isOnList(listId, p)) {
+				if (newAmount > 0) {
+					listDAO.updateAmount(listId, p, newAmount);
+				} else if (newAmount == 0) {
+					listDAO.deleteFromList(listId, p);
+				}
+			} else {
+
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 
 	/**
-	 * Edits the amount of a PUBLIC product on a list. If the product
-	 * is already present, its amount on the list is incremented by 1.
+	 * Edits the amount of a PUBLIC product on a list. If the product is already
+	 * present, its amount on the list is incremented by 1.
 	 *
 	 * @param listId
 	 * @param productId
@@ -272,7 +302,9 @@ public class ListWebService {
 	@PUT
 	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void editPublicProductOnList(@PathParam("listId") int listId, 
+	@Authentication
+	@AddDeletePermission
+	public void editPublicProductOnList(@PathParam("listId") int listId,
 			@PathParam("productId") int productId, String content) {
 		Integer newAmount = -1;
 		try {
@@ -285,13 +317,17 @@ public class ListWebService {
 		try {
 			PublicProduct p = new PublicProduct();
 			p.setId(productId);
-			if (newAmount > 0) {
-				listDAO.updateAmount(listId, p, newAmount);
-			} else if (newAmount == 0) {
-				listDAO.deleteFromList(listId, p);
+			if (listDAO.isOnList(listId, p)) {
+				if (newAmount > 0) {
+					listDAO.updateAmount(listId, p, newAmount);
+				} else if (newAmount == 0) {
+					listDAO.deleteFromList(listId, p);
+				}
+			} else {
+
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 
@@ -303,34 +339,37 @@ public class ListWebService {
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
+	@Authentication
+	@AddDeletePermission
 	public void deleteProductOnList(@PathParam("listId") int listId, @PathParam("productId") int productId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		try {
 			Product p = new Product();
 			p.setId(productId);
 			listDAO.deleteFromList(listId, p);
-		} catch(DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (DaoException ex) {
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
-	
+
 	/**
-	 * Removes a public product from a list. If the product
-	 * is already present, its amount on the list is incremented by 1.
+	 * Removes a public product from a list.
 	 *
 	 * @param listId
 	 * @param productId
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
+	@Authentication
+	@AddDeletePermission
 	public void deletePublicProductOnList(@PathParam("listId") int listId, @PathParam("productId") int productId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		try {
 			PublicProduct p = new PublicProduct();
 			p.setId(productId);
-			listDAO.deleteFromList(listId, p);	
-		} catch(DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			listDAO.deleteFromList(listId, p);
+		} catch (DaoException ex) {
+			ServiceUtils.handleDAOException(ex, response);
 		}
 	}
 }

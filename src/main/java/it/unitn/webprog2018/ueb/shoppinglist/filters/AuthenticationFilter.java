@@ -38,8 +38,6 @@ import javax.servlet.http.HttpSession;
  */
 public class AuthenticationFilter implements Filter {
 
-	private UserDAO userDAO;
-
 	/**
 	 * FilterConfig object associated with this filter
 	 */
@@ -48,8 +46,6 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		DAOFactory factory = (DAOFactory) this.filterConfig.getServletContext().getAttribute("daoFactory");
-		userDAO = factory.getUserDAO();
 	}
 
 	@Override
@@ -68,14 +64,6 @@ public class AuthenticationFilter implements Filter {
 					contextPath += "/";
 				}
 				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
-			} else { // user is logged in and is trying to access some personal resources
-				String uri = ((HttpServletRequest) request).getRequestURI();
-				if (!Pattern.matches(".*/restricted/[a-zA-Z]*/?" + user.getId() + ".*", uri)) {
-					// TODO add redirection to correct error page.
-					((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
-							+ "The resource you are trying to access is none of your business.\n"
-							+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
-				}
 			}
 		}
 		if (!response.isCommitted()) {

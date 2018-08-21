@@ -34,24 +34,35 @@ public class ProductDAOImpl implements ProductDAO {
 		user.setId(1);
 		products = new LinkedList<>();
 		Product product = new Product();
+		product.setId(1);
 		product.setCategory(new ProductsCategory());
 		product.getCategory().setId(1);
 		product.getCategory().setName("Frutta");
 		product.setOwner(user);
 		product.setName("Ananas");
-		product.setLogo("Sole");
 		product.setNote("Ananas maturo e dolce");
 		products.add(product);
 
 		Product product2 = new Product();
+		product2.setId(2);
 		product2.setCategory(new ProductsCategory());
 		product2.getCategory().setId(3);
 		product2.getCategory().setName("Verdura");
 		product2.setOwner(user);
 		product2.setName("Zucchine");
-		product2.setLogo("Contadino di fiducia");
 		product2.setNote("Zucchine fresche di stagione");
 		products.add(product2);
+		
+		Product product3 = new Product();
+		product3.setId(3);
+		product3.setCategory(new ProductsCategory());
+		product3.getCategory().setId(3);
+		product3.getCategory().setName("Verdura");
+		product3.setOwner(new User());
+		product3.getOwner().setId(2);
+		product3.setName("Pomodori pachino");
+		product3.setNote("Pomodori rossi dalla forma allungata (?)");
+		products.add(product3);
 	}
 
 	@Override
@@ -83,7 +94,7 @@ public class ProductDAOImpl implements ProductDAO {
 		List<Product> matching = new LinkedList<>();
 
 		for (Product p : products) {
-			if (p.getOwner().getId() == id) {
+			if (p.getOwner().getId().equals(id)) {
 				if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 					matching.add(p);
 				}
@@ -102,5 +113,15 @@ public class ProductDAOImpl implements ProductDAO {
 			}
 		}
 		return matching;
+	}
+
+	@Override
+	public Product getProduct(Integer productId) throws DaoException {
+		for (Product p : products) {
+			if (p.getId().equals(productId)) {
+				return p;
+			}
+		}
+		throw new RecordNotFoundDaoException("Product " + productId + " does not exist");
 	}
 }

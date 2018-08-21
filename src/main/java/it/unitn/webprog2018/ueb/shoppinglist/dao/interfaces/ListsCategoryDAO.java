@@ -22,4 +22,10 @@ public interface ListsCategoryDAO {
 	List<ListsCategory> getAll() throws DaoException;
 	
 	public ListsCategory getByName(String name) throws DaoException;
+	
+	public ListsCategory getById(Integer id) throws DaoException ;
+	
+	public Boolean deleteListsCategory(Integer id) throws DaoException; 
+	
+	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategorys) throws DaoException;
 }

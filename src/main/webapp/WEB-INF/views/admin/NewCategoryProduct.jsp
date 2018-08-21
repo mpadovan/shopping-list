@@ -13,23 +13,21 @@
 		<div class="card card-new">
 			<div class="card-body">
 				<h1 class="card-title">Nuovo categoria di prodotto</h1>
-				<form method="POST" action="NewProductCategory">
+				<form method="POST" action="NewProductsCategory">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
 							   class="form-control" 
 							   id="name"
 							   name="name" 
-							   value="${productsCategory.name}"
 							   required />
 					</div>
 					<div>
-						<label for="note">Note</label>
+						<label for="note">Descrizione</label>
 						<input type="text"
 							   class="form-control"
 							   id="note"
-							   name="note" 
-							   value="${productsCategory.description}"
+							   name="description" 
 							   required>
 					</div>
 					<div>
@@ -38,7 +36,6 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   value="${productsCategory.logo}"
 							   required>
 					</div>
 					<div>
@@ -49,14 +46,14 @@
 								name="category" 
 								required
 								>
-							<option selected>Nessuna</option>
+							<option selected value="-1">Nessuna</option>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
 								<option value="${c.id}">${c.name}</option>
 							</c:forEach>
 						</select>
 					</div>
 					<div class="float-right mt-3">
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList" class="btn btn-light">Annulla</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>
 					</div>
 				</form>

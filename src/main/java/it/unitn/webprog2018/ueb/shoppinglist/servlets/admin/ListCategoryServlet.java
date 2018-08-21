@@ -8,6 +8,8 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
 import java.util.List;
@@ -36,10 +38,12 @@ public class ListCategoryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
+		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
 		String searchParam = request.getParameter("search");
 		Integer checkParam = 0;
 
 		List<ListsCategory> listsCategory = null;
+		List<ListsCategoriesImage> listsCategoryImage = null;
 		if (searchParam == null) {
 			searchParam = "";
 		}
@@ -47,6 +51,7 @@ public class ListCategoryServlet extends HttpServlet {
 			checkParam = 0;
 			try {
 				listsCategory = listsCategoryDAO.getAll();
+				listsCategoryImage = listsCategoryImagesDAO.getAll();
 			} catch (DaoException ex) {
 				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -54,11 +59,13 @@ public class ListCategoryServlet extends HttpServlet {
 			checkParam = 1;
 			try {
 				listsCategory = listsCategoryDAO.getFromQuery(searchParam);
+				
 			} catch (DaoException ex) {
 				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 		request.setAttribute("listsCategory", listsCategory);
+		request.setAttribute("listsCategoryImage", listsCategoryImage);
 		request.setAttribute("searchParam", searchParam);
 		request.setAttribute("checkParam", checkParam);
 		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);

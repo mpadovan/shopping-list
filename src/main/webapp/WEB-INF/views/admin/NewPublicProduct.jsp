@@ -42,7 +42,7 @@
 							   >
 					</div>
 					<div>
-						<label for="photo">Fotografia</label>
+						<label for="photography">Fotografia</label>
 						<div class="custom-file">
 							<input type="file"
 								   class="custom-file-input form-control"

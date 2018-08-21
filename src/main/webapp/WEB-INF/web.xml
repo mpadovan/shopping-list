@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+	<!--
 	<context-param>
 		<param-name>uploadFolder</param-name>
-		<param-value>/home/giulia/Desktop/WebProject/ProgettoDefinitivo/ShoppingList/uploads</param-value>
+		<param-value>...../ShoppingList/uploads</param-value>
 	</context-param>
+	-->
 	<filter>
 		<filter-name>RootFilter</filter-name>
 		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.RootFilter</filter-class>
@@ -15,6 +17,14 @@
 	<filter>
 		<filter-name>AdministrationFilter</filter-name>
 		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.AdministrationFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>HomePageLoginFilter</filter-name>
+		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.HomePageLoginFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>UploadFilter</filter-name>
+		<filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UploadFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>RootFilter</filter-name>
@@ -28,9 +38,6 @@
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/restricted/*</url-pattern>
-		<url-pattern>/services/lists/restricted/*</url-pattern>
-		<url-pattern>/services/geolocation/restricted/*</url-pattern>
-		<url-pattern>/services/products/restricted/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
@@ -45,6 +52,24 @@
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>UploadFilter</filter-name>
+		<url-pattern>/uploads/restricted/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>HomePageLoginFilter</filter-name>
+		<url-pattern>/restricted/HomePageLogin/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
 	<listener>
 		<description>ServletContextListener</description>
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBListener</listener-class>
@@ -53,6 +78,11 @@
 		<description>ServletContextListener that initializes the timer that cleans the 
 			database from unused expired authentication tokens</description>
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBCleaningListener</listener-class>
+	</listener>
+	<listener>
+		<description>ServletContextListener that initializes the upload path attribute to 
+			make it portable from one system to the other</description>
+		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.PathSetter</listener-class>
 	</listener>
 	<servlet>
 		<servlet-name>EditListServlet</servlet-name>
@@ -88,7 +118,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>CategoryListServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryListServlet</servlet-class>
+		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ListCategoryServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>ProductListServlet</servlet-name>
@@ -96,13 +126,44 @@
 	</servlet>
 	<servlet>
 		<servlet-name>CategoryProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.CategoryProductServlet</servlet-class>
+		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductsCategoryServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>AvatarServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads.UploadsServlet</servlet-class>
 	</servlet>
-	
+	<servlet>
+        <servlet-name>NewPublicProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewPublicProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditPublicProduct</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.EditPublicProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeletePublicProductServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeletePublicProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewProductsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewProductsCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeleteProductsCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProductsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.EditProductsCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteListCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeleteListCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewListsCategoryServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewListsCategoryServlet</servlet-class>
+    </servlet>
 	<servlet-mapping>
 		<servlet-name>EditListServlet</servlet-name>
 		<url-pattern>/restricted/permission/EditList</url-pattern>
@@ -137,7 +198,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CategoryListServlet</servlet-name>
-		<url-pattern>/restricted/admin/CategoryList</url-pattern>
+		<url-pattern>/restricted/admin/ListCategory</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ProductListServlet</servlet-name>
@@ -145,8 +206,40 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CategoryProductServlet</servlet-name>
-		<url-pattern>/restricted/admin/CategoryProduct</url-pattern>
+		<url-pattern>/restricted/admin/ProductsCategory</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+        <servlet-name>NewPublicProductServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewPublicProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditPublicProduct</servlet-name>
+        <url-pattern>/restricted/admin/EditPublicProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeletePublicProductServlet</servlet-name>
+        <url-pattern>/restricted/admin/DeletePublicProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewProductsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewProductsCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/DeleteProductsCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProductsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/EditProductsCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteListCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/DeleteListCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewListsCategoryServlet</servlet-name>
+        <url-pattern>/restricted/admin/NewListsCategory</url-pattern>
+    </servlet-mapping>
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>

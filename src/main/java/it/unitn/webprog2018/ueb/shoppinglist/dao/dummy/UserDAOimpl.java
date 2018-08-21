@@ -38,8 +38,8 @@ public class UserDAOimpl implements UserDAO {
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
-		user.setImage("/uploads/restricted/avatar/445.png");
 		user.setTokenpassword(null);
+		user.setImage("/uploads/restricted/1/avatar/1.png");
 
 		users.add(user);
 		
@@ -97,7 +97,7 @@ public class UserDAOimpl implements UserDAO {
 				return u;
 			}
 		}
-		throw new RecordNotFoundDaoException("User with email: " + id + " not found");
+		throw new RecordNotFoundDaoException("User with id: " + id + " not found");
 	}
 
 	@Override
