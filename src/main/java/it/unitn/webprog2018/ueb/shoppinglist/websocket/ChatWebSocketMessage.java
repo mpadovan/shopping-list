@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.AbstractMap;
 
 /**
  * Representation of the message sent by the ChatWebSocket.

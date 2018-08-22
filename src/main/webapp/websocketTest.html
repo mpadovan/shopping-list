@@ -5,16 +5,36 @@
 
 	var wsUri = "ws://localhost:8080/ShoppingList/restricted/messages/1";
 	var output;
+	var message = {
+		operation: 1,
+		payload: {
+			sender: {
+				name: "Mario",
+				lastname: "Rossi",
+				id: 1, 
+				errors: {}
+			},
+			list: {
+				id: 1,
+				errors: {}
+			},
+			sendTime: "Aug 22, 2018",
+			text: "Ciao luigi, come stai?",
+			read: false,
+			id: 1,
+			errors: {}
+		}
+	};
 
 	function init()
 	{
 		output = document.getElementById("output");
+		websocket = new WebSocket(wsUri);
 		testWebSocket();
 	}
 
 	function testWebSocket()
 	{
-		websocket = new WebSocket(wsUri);
 		websocket.onopen = function (evt) {
 			onOpen(evt)
 		};
@@ -23,8 +43,6 @@
 		};
 		websocket.onmessage = function (evt) {
 			onMessage(evt)
-			doSend('{ "operation" : 1,\n\
-						payload: [] }'))
 		};
 		websocket.onerror = function (evt) {
 			onError(evt)
@@ -51,10 +69,10 @@
 		writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
 	}
 
-	function doSend(message)
+	function doSend()
 	{
-		writeToScreen("SENT: " + message);
-		websocket.send(message);
+		writeToScreen("SENT: " + JSON.stringify(message));
+		websocket.send(JSON.stringify(message));
 	}
 
 	function writeToScreen(message)
@@ -69,6 +87,6 @@
 
 </script>
 
+<button value="Send request" onclick="doSend()">Send Request</button>
 <h2>WebSocket Test</h2>
-
 <div id="output"></div>
