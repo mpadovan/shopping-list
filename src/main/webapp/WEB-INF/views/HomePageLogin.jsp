@@ -118,13 +118,17 @@
 				</div>
 				<div class="chat col-lg-5" id="chat">
 					<div class="card">
-						<div class="card-body">
-							<div class="d-flex justify-content-end">
-								<button type="button" class="close " data-dismiss="modal" aria-label="Close" @click="chat = !chat">
+						<div class="card-body" style="height:90%">
+							<div class="d-flex justify-content-end mb-2">
+								<button type="button" class="close" aria-label="Close" @click="chat = !chat">
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<div class="input-group mb-0 mt-4">
+							<div class="messages-container">
+								<message-component v-for="message in messages" v-bind:message="message"></message-component>
+							</div>
+						</div>
+							<div class="input-group" style="height:10%;">
 								<input type="text" class="form-control" placeholder="Scrivi qualcosa...">
 								<div class="input-group-append">
 									<button class="btn btn-outline-secondary" type="button">
@@ -132,7 +136,6 @@
 									</button>
 								</div>
 							</div>
-						</div>
 					</div>
 				</div>
 			</div>

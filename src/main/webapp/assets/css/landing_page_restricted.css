@@ -25,7 +25,8 @@
     display: block;
 }
 
-.chat .card, .chat .card .card-body {
+.chat .card,
+.chat .card .card-body {
     height: 100%;
 }
 
@@ -33,6 +34,19 @@
     min-height: 30rem;
 }
 
-.row {
-    margin-bottom: 3rem;
+.message-r {
+    float: left;
+    max-width: 70%;
+}
+
+.message-s {
+    float: right;
+    max-width: 70%;
+}
+
+.messages-container {
+    width: fit-content;
+    height: 95%;
+    padding-bottom: 5%;
+    overflow: auto;
 }
