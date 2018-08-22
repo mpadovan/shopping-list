@@ -5,11 +5,18 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
+import javax.websocket.Session;
 
 /**
  *
@@ -17,9 +24,14 @@ import javax.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class ChatSessionHandler extends SessionHandler {
-
+	
+	@PostConstruct
+    public void afterCreate() {
+        System.out.println("ChatSessionandler created");
+    }
+	
 	public boolean persistMessage(Message message) throws DaoException {
-		SessionHandler.getDaoFactory().getMessageDAO().addMessage(message);
+		getDaoFactory().getMessageDAO().addMessage(message);
 		return true;
 	}
 
@@ -28,7 +40,11 @@ public class ChatSessionHandler extends SessionHandler {
 		user.setId(userId);
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setId(listId);
-		return SessionHandler.getDaoFactory().getMessageDAO().getLastMessages(list, user);
+		return getDaoFactory().getMessageDAO().getLastMessages(list, user);
+	}
+	
+	public Map<Integer, Integer> getUnreadCount(Integer userId) throws DaoException {
+		return getDaoFactory().getMessageDAO().getUnreadCount(userId);
 	}
 
 }

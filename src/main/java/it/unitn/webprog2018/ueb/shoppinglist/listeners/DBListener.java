@@ -4,7 +4,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatSessionHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
-import javax.inject.Inject;
 //import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
 //import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
 import javax.servlet.ServletContextEvent;
