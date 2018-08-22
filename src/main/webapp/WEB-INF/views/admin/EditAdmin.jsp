@@ -33,7 +33,7 @@
 							<div class="form-group row">
 								<label for="email" class="col-sm-3 col-form-label">Email</label>
 								<div class="col-sm-9">
-									<input type="email" class="form-control" id="email" name="email"value="${sessionScope.user.email}" required>
+									<input type="email" readonly class="form-control" id="email" name="email"value="${sessionScope.user.email}" required>
 								</div>
 							</div>
 							<div class="form-group row" style="display: none" id="divPassword">

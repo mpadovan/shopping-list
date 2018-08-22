@@ -14,7 +14,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -73,11 +72,8 @@ public class EditAdminServlet extends HttpServlet {
 		Integer id = usersession.getId();
 		try {
 			User user = userDAO.getById(id);
-			System.out.println("email: " + user.getEmail());
 			String name = request.getParameter("name");
 			String lastName = request.getParameter("lastName");
-			String email = request.getParameter("email");
-			user.setEmail(email);
 			user.setName(name);
 			user.setLastname(lastName);
 			String password = request.getParameter("password");
@@ -123,7 +119,6 @@ public class EditAdminServlet extends HttpServlet {
 			}
 			if(redirect)
 			{
-				changeRememberCookie(request, response, user);
 				path += "restricted/admin/InfoAdmin";
 				response.sendRedirect(path);
 			}
@@ -140,25 +135,21 @@ public class EditAdminServlet extends HttpServlet {
 		}
 	}
 	
-	private void changeRememberCookie(HttpServletRequest req, HttpServletResponse resp, User user) {
-		Cookie rememberCookie = getRememberCookie(req);
-		if (rememberCookie != null) {
-			rememberCookie.setValue(CookieCipher.encrypt(user.getEmail()));
-			resp.addCookie(rememberCookie);
-		}
-	}
-	
-	private Cookie getRememberCookie(HttpServletRequest request) {
+	/*private void deleteRememberCookie(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equals("remember")) {
-					return cookie;
+					cookie.setValue("");
+					cookie.setPath("/");
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+					System.out.println("true");
 				}
 			}
 		}
-		return null;
-	}
+		System.out.println("false");
+	}*/
 
 	/**
 	 * Returns a short description of the servlet.
