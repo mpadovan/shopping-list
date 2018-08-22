@@ -23,6 +23,8 @@
 		};
 		websocket.onmessage = function (evt) {
 			onMessage(evt)
+			doSend('{ "operation" : 1,\n\
+						payload: [] }'))
 		};
 		websocket.onerror = function (evt) {
 			onError(evt)

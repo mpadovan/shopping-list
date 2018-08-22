@@ -8,21 +8,16 @@ package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import java.util.Map.Entry;
 
 /**
  *
  * @author Giulia Carocari
  */
 public class ChatSessionHandler extends SessionHandler {
-	
-    public ChatSessionHandler() {
-        System.out.println("ChatSessionandler created");
-    }
 	
 	public boolean persistMessage(Message message) throws DaoException {
 		getDaoFactory().getMessageDAO().addMessage(message);
@@ -37,8 +32,13 @@ public class ChatSessionHandler extends SessionHandler {
 		return getDaoFactory().getMessageDAO().getLastMessages(list, user);
 	}
 	
-	public Map<Integer, Integer> getUnreadCount(Integer userId) throws DaoException {
-		return getDaoFactory().getMessageDAO().getUnreadCount(userId);
+	public List<ChatWebSocketUnreadCount> getUnreadCount(Integer userId) throws DaoException {
+		Map<Integer,Integer> map = getDaoFactory().getMessageDAO().getUnreadCount(userId);
+		List<ChatWebSocketUnreadCount> ret = new LinkedList<>();
+		for (Entry<Integer,Integer> entry : map.entrySet()) {
+			ret.add(new ChatWebSocketUnreadCount(entry.getKey(), entry.getValue()));
+		}
+		return ret;
 	}
 
 }

@@ -34,10 +34,6 @@ public class ChatWebSocketServer {
 		ChatWebSocketServer.chatSessionHandler = chatSessionHandler;
 	}
 
-	public ChatWebSocketServer() {
-		System.out.println("ChatServer created");
-	}
-	
 	@OnOpen
 	public void open(Session session, @PathParam("userId") Integer userId) throws DaoException {
 		chatSessionHandler.subscribe(userId, session);
@@ -69,26 +65,25 @@ public class ChatWebSocketServer {
 		try {
 			ChatWebSocketMessage entering = gson.fromJson(message, ChatWebSocketMessage.class
 			);
-			Message msg = null;
+			Message msg;
 			Integer listId = 0;
 
 			switch (entering.getOperation()) {
 				case ADD_MESSAGE:
-					// msg = gson.fromJson(entering.getPayload(), Message.class);
+					msg = gson.fromJson((String)entering.getPayload(), Message.class);
 					if (chatSessionHandler.persistMessage(msg)) {
 						listId = msg.getList().getId();
 					}
 					break;
 				case FETCH_CHAT:
-					// listId = Integer.parseInt(entering.getPayload());
+					listId = Integer.parseInt((String)entering.getPayload());
 					break;
 				default:
 					break;
 			}
-			String payload = gson.toJson(chatSessionHandler.getMessages(userId, listId));
 			ChatWebSocketMessage exiting = new ChatWebSocketMessage();
 			exiting.setOperation(ChatWebSocketMessage.Operation.SEND_CHAT);
-			exiting.setPayload(payload);
+			exiting.setPayload(chatSessionHandler.getMessages(userId, listId));
 			session.getBasicRemote().sendText(gson.toJson(exiting));
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
