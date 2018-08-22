@@ -14,3 +14,9 @@ CREATE TABLE if not exists messages(
 ALTER TABLE sharedlists
 ADD lastchataccess datetime not null default CURRENT_TIMESTAMP;
 
+delimiter //
+CREATE PROCEDURE setLastAccess(_iduser integer,_idlist integer,lastaccess datetime)
+BEGIN
+	update sharedlists SET lastchataccess = lastaccess WHERE iduser = _iduser AND idlist = _idlist;
+END//
+delimiter ;

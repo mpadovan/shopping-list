@@ -15,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,6 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	
 	/**
 	 * dopo molteplici bestemmie ho scelto per la query piú ovvia anche se probabilmente molto lenta perché (in teoria) deve fare una query annidata per ogni record
-	 * TODO: settare il nuovo lastchataccess e usare l'index
 	 */
 	@Override
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
@@ -45,7 +46,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 					"ORDER BY sendtime limit 30)";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
-			Message m;
+			Message m = null;
 			int i;
 			while(rs.next())
 			{
@@ -58,6 +59,10 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 				m.setSender(user);
 				
 				listOut.add(m);
+			}
+			if(m != null){
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.S");
+				st.executeUpdate("CALL setLastAccess("+user.getId()+","+list.getId()+",\""+dateFormat.format(m.getSendTime())+"\")");
 			}
 			rs.close();
 			st.close();
