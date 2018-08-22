@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -121,6 +123,7 @@ public class EditAdminServlet extends HttpServlet {
 			}
 			if(redirect)
 			{
+				changeRememberCookie(request, response, user);
 				path += "restricted/admin/InfoAdmin";
 				response.sendRedirect(path);
 			}
@@ -135,6 +138,26 @@ public class EditAdminServlet extends HttpServlet {
 			Logger.getLogger(EditAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
+	}
+	
+	private void changeRememberCookie(HttpServletRequest req, HttpServletResponse resp, User user) {
+		Cookie rememberCookie = getRememberCookie(req);
+		if (rememberCookie != null) {
+			rememberCookie.setValue(CookieCipher.encrypt(user.getEmail()));
+			resp.addCookie(rememberCookie);
+		}
+	}
+	
+	private Cookie getRememberCookie(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("remember")) {
+					return cookie;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
