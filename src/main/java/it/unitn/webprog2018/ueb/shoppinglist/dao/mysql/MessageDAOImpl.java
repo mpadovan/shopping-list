@@ -36,6 +36,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	
 	/**
 	 * dopo molteplici bestemmie ho scelto per la query piú ovvia anche se probabilmente molto lenta perché (in teoria) deve fare una query annidata per ogni record
+	 * quando scarica gli ultimi messaggi viene settata la data di accesso = al sendtime del messaggio piú vecchio scaricato
 	 */
 	@Override
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
@@ -77,6 +78,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	/**
 	 * ATTENZIONE: il sendtime di message non viene guardato dato che l'orario viene preso dal DB attraverso now(1)
 	 * serve solo l'id del sender e l'id della lista
+	 * quando invia un messaggio in una certa chat viene settato il tempo di accesso a quel momento
 	 */
 	@Override
 	public Boolean addMessage(Message message) throws DaoException {
@@ -85,7 +87,8 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 		{
 			try{
 				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES " +
-						"("+message.getSender().getId()+","+message.getList().getId()+",now(1),\""+message.getText()+"\");";
+						"("+message.getSender().getId()+","+message.getList().getId()+",now(1),\""+message.getText()+"\");\n";
+				query += "CALL setLastAccess("+message.getSender().getId()+","+message.getList().getId()+",now(1))";
 				
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();
