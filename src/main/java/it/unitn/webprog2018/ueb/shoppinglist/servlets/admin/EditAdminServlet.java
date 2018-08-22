@@ -61,46 +61,73 @@ public class EditAdminServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String path = getServletContext().getContextPath();
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
+		Boolean redirect = false;
 		HttpSession session = request.getSession();
 		User usersession = (User) (session.getAttribute("user"));
 		Integer id = usersession.getId();
 		try {
 			User user = userDAO.getById(id);
+			System.out.println("email: " + user.getEmail());
 			String name = request.getParameter("name");
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");
-			//user.setEmail(email);
+			user.setEmail(email);
 			user.setName(name);
 			user.setLastname(lastName);
 			String password = request.getParameter("password");
 			if(password!=null && !password.equals(""))
 			{
-				System.out.println("Non é nulll è nuuuuuuuullllllll");
+				System.out.println("password equal");
 				String newPassword = request.getParameter("newPassword");
 				String checkPassword = request.getParameter("checkPassword");
-				System.out.println(password + " " + user.getPassword());
 				if(Sha256.doHash(password).equals(user.getPassword()))
 				{
 					user.setPassword(Sha256.doHash(newPassword));
 					user.setCheckpassword(Sha256.doHash(checkPassword));
-					if(!userDAO.updateUser(id, user))
+					if(userDAO.updateUser(id, user))
 					{
-						System.out.println("What??");
+						session.setAttribute("user", user);
+						redirect=true;
+						System.out.println("utente modificato con password");
+					}
+					else
+					{
+						request.setAttribute("user", user);
+						System.out.println("validation utente modificato con password");
 					}
 				}
 				else
 				{
 					request.setAttribute("passworderrata", "la password non è corretta");
-					request.getRequestDispatcher("/WEB-INF/views/admin/EditAdmin.jsp").forward(request, response);
+					System.out.println("password errata");
 				}
 			}
 			else{
-				if(!userDAO.updateUser(id, user))
+				if(userDAO.updateUser(id, user))
 				{
-					System.out.println("What2.0??");
+					session.setAttribute("user", user);
+					redirect=true;
+					System.out.println("utente modificato senza password");
+				}
+				else
+				{
+					request.setAttribute("user", user);
+					System.out.println("validation utente modificato senza password");
 				}
 			}
-			request.getRequestDispatcher("/WEB-INF/views/admin/InfoAdmin.jsp").forward(request, response);
+			if(redirect)
+			{
+				path += "restricted/admin/InfoAdmin";
+				response.sendRedirect(path);
+			}
+			else
+			{
+				request.getRequestDispatcher("/WEB-INF/views/admin/EditAdmin.jsp").forward(request, response);
+			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
