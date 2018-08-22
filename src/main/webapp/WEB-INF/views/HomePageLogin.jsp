@@ -65,7 +65,7 @@
 									</a>
 								</h5>
 								<div class="d-flex justify-content-end">
-									<p>Chat
+									<p class="pointer" @click="chat = !chat">Chat
 										<a href="#">
 											<i class="far fa-comments"></i>
 										</a>
@@ -116,11 +116,26 @@
 						</div>
 					</div>
 				</div>
-				<div class="col" id="chat">
+				<div class="chat col-lg-5" id="chat">
 					<div class="card">
-						<div class="card-body">
-							{{ name }}
+						<div class="card-body" style="height:90%">
+							<div class="d-flex justify-content-end mb-2">
+								<button type="button" class="close" aria-label="Close" @click="chat = !chat">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="messages-container">
+								<message-component v-for="message in messages" v-bind:message="message"></message-component>
+							</div>
 						</div>
+							<div class="input-group" style="height:10%;">
+								<input type="text" class="form-control" placeholder="Scrivi qualcosa...">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button">
+										<i class="far fa-paper-plane"></i>
+									</button>
+								</div>
+							</div>
 					</div>
 				</div>
 			</div>

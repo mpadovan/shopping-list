@@ -10,3 +10,43 @@
 .autocomplete-li {
     padding-left: .5rem;
 }
+
+.chat {
+    display: none;
+    position: absolute;
+    z-index: 100000;
+    right: 0;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+.show-chat {
+    opacity: 100;
+    display: block;
+}
+
+.chat .card,
+.chat .card .card-body {
+    height: 100%;
+}
+
+#list {
+    min-height: 30rem;
+}
+
+.message-r {
+    float: left;
+    max-width: 70%;
+}
+
+.message-s {
+    float: right;
+    max-width: 70%;
+}
+
+.messages-container {
+    width: fit-content;
+    height: 95%;
+    padding-bottom: 5%;
+    overflow: auto;
+}
