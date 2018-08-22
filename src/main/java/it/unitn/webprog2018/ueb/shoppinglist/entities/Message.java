@@ -6,7 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -15,7 +15,7 @@ import java.sql.Date;
 public class Message extends AbstractEntity {
 	private User sender;
 	private List list;
-	private Date sendTime;
+	private Timestamp sendTime;
 	private String text;
 	private boolean read;
 
@@ -37,11 +37,11 @@ public class Message extends AbstractEntity {
 		this.list = list;
 	}
 
-	public Date getSendTime() {
+	public Timestamp getSendTime() {
 		return sendTime;
 	}
 
-	public void setSendTime(Date sendTime) {
+	public void setSendTime(Timestamp sendTime) {
 		this.sendTime = sendTime;
 	}
 

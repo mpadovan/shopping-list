@@ -53,7 +53,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 				i = 1;
 				m = new Message();
 				m.setId(rs.getInt(i++));
-				m.setSendTime(rs.getDate(i++));
+				m.setSendTime(rs.getTimestamp(i++));
 				m.setText(rs.getString(i++));
 				m.setList(list);
 				m.setSender(user);
@@ -61,7 +61,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 				listOut.add(m);
 			}
 			if(m != null){
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.S");
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
 				st.executeUpdate("CALL setLastAccess("+user.getId()+","+list.getId()+",\""+dateFormat.format(m.getSendTime())+"\")");
 			}
 			rs.close();
