@@ -594,7 +594,21 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 
 	@Override
 	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		java.util.List<Integer> list = new ArrayList<>();
+		try{
+			String query =	"select iduser from sharedlists where idlist = "+listId;
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+				list.add(rs.getInt(1));
+			rs.close();
+			st.close();
+			return list;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
 	
 }
