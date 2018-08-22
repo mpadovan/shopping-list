@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.MessageDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
@@ -58,7 +57,8 @@ public class MessageDAOImpl implements MessageDAO {
 			chat.add(m2);
 			chat.add(m3);
 			unreadCount.put(new AbstractMap.SimpleEntry<>(1,1), 0);
-			unreadCount.put(new AbstractMap.SimpleEntry<>(1,1), 1);
+			unreadCount.put(new AbstractMap.SimpleEntry<>(1,2), 3);
+			unreadCount.put(new AbstractMap.SimpleEntry<>(2,1), 1);
 		} catch (DaoException ex) {
 			Logger.getLogger(MessageDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}

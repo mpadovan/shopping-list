@@ -26,7 +26,6 @@ public class DBListener implements ServletContextListener {
 //		sce.getServletContext().setAttribute("daoFactory", new DAOFactoryImpl(dbManager.getCon()));
 		DAOFactory factory = new DAOFactoryImpl();
 		sce.getServletContext().setAttribute("daoFactory", factory);
-		SessionHandler.setDaoFactory(factory);
 	}
 
 	@Override

@@ -5,28 +5,22 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import javax.websocket.Session;
 
 /**
  *
  * @author Giulia Carocari
  */
-@ApplicationScoped
 public class ChatSessionHandler extends SessionHandler {
 	
-	@PostConstruct
-    public void afterCreate() {
+    public ChatSessionHandler() {
         System.out.println("ChatSessionandler created");
     }
 	

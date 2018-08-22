@@ -9,13 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
-import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatSessionHandler;	
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.bean.ApplicationScoped;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -24,23 +23,27 @@ import javax.websocket.server.ServerEndpoint;
  *
  * @author Giulia Carocari
  */
-@ApplicationScoped
 @ServerEndpoint("/restricted/messages/{userId}")
 public class ChatWebSocketServer {
 
 	private static final Gson GSON = new Gson();
-	private static ChatSessionHandler chatSessionHandler = new ChatSessionHandler();
+	
+	private static ChatSessionHandler chatSessionHandler;
+
+	public static void setChatSessionHandler(ChatSessionHandler chatSessionHandler) {
+		ChatWebSocketServer.chatSessionHandler = chatSessionHandler;
+	}
+
+	public ChatWebSocketServer() {
+		System.out.println("ChatServer created");
+	}
 	
 	@OnOpen
 	public void open(Session session, @PathParam("userId") Integer userId) throws DaoException {
 		chatSessionHandler.subscribe(userId, session);
 		ChatWebSocketMessage msg = new ChatWebSocketMessage();
 		msg.setOperation(ChatWebSocketMessage.Operation.SEND_UNREAD_COUNT);
-		String payload =
-				GSON.toJson(chatSessionHandler.getUnreadCount(userId), Map.class);
-				// GSON.toJson(chatSessionHandler.getMessages(userId, 1), java.util.List.class);
-				// "hello";
-		msg.setPayload(payload);
+		msg.setPayload(chatSessionHandler.getUnreadCount(userId));
 		try {
 			session.getBasicRemote().sendText(GSON.toJson(msg, ChatWebSocketMessage.class));
 		} catch (IOException ex) {
@@ -66,19 +69,18 @@ public class ChatWebSocketServer {
 		try {
 			ChatWebSocketMessage entering = gson.fromJson(message, ChatWebSocketMessage.class
 			);
-			Message msg;
+			Message msg = null;
 			Integer listId = 0;
 
 			switch (entering.getOperation()) {
 				case ADD_MESSAGE:
-					msg = gson.fromJson(entering.getPayload(), Message.class
-					);
+					// msg = gson.fromJson(entering.getPayload(), Message.class);
 					if (chatSessionHandler.persistMessage(msg)) {
 						listId = msg.getList().getId();
 					}
 					break;
 				case FETCH_CHAT:
-					listId = Integer.parseInt(entering.getPayload());
+					// listId = Integer.parseInt(entering.getPayload());
 					break;
 				default:
 					break;

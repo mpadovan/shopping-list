@@ -8,8 +8,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import java.util.HashMap;
 import java.util.Map;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.websocket.Session;
 
 /**
