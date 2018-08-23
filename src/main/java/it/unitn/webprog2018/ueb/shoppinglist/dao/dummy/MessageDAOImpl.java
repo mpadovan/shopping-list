@@ -88,7 +88,7 @@ public class MessageDAOImpl implements MessageDAO {
 		if (message.getSender().getId().equals(1)) {
 			unreadCount.put(new AbstractMap.SimpleEntry<>(2,1), unreadCount.get(new AbstractMap.SimpleEntry<>(2,1))+1);
 			return true;
-		} else if(message.getSender().getId().equals(1)) {
+		} else if(message.getSender().getId().equals(2)) {
 			unreadCount.put(new AbstractMap.SimpleEntry<>(1,1), unreadCount.get(new AbstractMap.SimpleEntry<>(1,1))+1);
 			return true;
 		}
