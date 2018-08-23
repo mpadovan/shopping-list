@@ -25,7 +25,7 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/restricted/messages/{userId}")
 public class ChatWebSocketServer {
 
-	private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
+	private static final Gson GSON = new Gson().newBuilder().create();
 	private static final JsonParser GSON_PARSER = new JsonParser();
 	
 	private static ChatSessionHandler chatSessionHandler;

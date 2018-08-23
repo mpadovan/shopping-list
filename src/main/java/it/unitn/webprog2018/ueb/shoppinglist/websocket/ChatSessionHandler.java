@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;

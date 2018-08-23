@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,21 +36,21 @@ public class MessageDAOImpl implements MessageDAO {
 			Message m1 = new Message();
 			m1.setId(1);
 			m1.setList(factory.getListDAO().getList(1));
-			m1.setSendTime(new Date(System.currentTimeMillis()));
+			m1.setSendTime(new Timestamp(System.currentTimeMillis()));
 			m1.setSender(factory.getUserDAO().getById(1));
 			m1.setText("Ciao Luigi, sto andando a fare la spesa, ti manca qualcosa?");
 			
 			Message m2 = new Message();
 			m2.setId(2);
 			m2.setList(factory.getListDAO().getList(1));
-			m2.setSendTime(new Date(System.currentTimeMillis()));
+			m2.setSendTime(new Timestamp(System.currentTimeMillis()));
 			m2.setSender(factory.getUserDAO().getById(2));
 			m2.setText("Ciao Mario, sì grazie, prendi una motosega. Appena ci vediamo ti do i soldi");
 			
 			Message m3 = new Message();
 			m3.setId(3);
 			m3.setList(factory.getListDAO().getList(1));
-			m3.setSendTime(new Date(System.currentTimeMillis()));
+			m3.setSendTime(new Timestamp(System.currentTimeMillis()));
 			m3.setSender(factory.getUserDAO().getById(1));
 			m3.setText("Sarà fatto, ci vediamo a casa ;)");
 			

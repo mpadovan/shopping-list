@@ -5,7 +5,6 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
-import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 import java.sql.Timestamp;
 
