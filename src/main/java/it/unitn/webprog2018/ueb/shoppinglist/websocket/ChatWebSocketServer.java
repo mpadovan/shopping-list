@@ -7,16 +7,13 @@ package it.unitn.webprog2018.ueb.shoppinglist.websocket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
-import static it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatWebSocketMessage.Operation.ADD_MESSAGE;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ApplicationScoped;
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -29,7 +26,8 @@ import javax.websocket.server.ServerEndpoint;
 public class ChatWebSocketServer {
 
 	private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
-
+	private static final JsonParser GSON_PARSER = new JsonParser();
+	
 	private static ChatSessionHandler chatSessionHandler;
 
 	public static void setChatSessionHandler(ChatSessionHandler chatSessionHandler) {
@@ -62,21 +60,21 @@ public class ChatWebSocketServer {
 
 	@OnMessage
 	public void handleMessage(String message, Session session, @PathParam("userId") Integer userId) throws DaoException, IOException {
-
-		JsonElement jsonElement = GSON.toJsonTree(message);
-		Integer operation = jsonElement.getAsJsonObject().get("operation").getAsInt();
+		JsonObject jsonMessage = GSON_PARSER.parse(message).getAsJsonObject();
+		Integer operation = jsonMessage.get("operation").getAsInt();
 		Message msg;
 		Integer listId = 0;
 
 		switch (operation) {
 			case 0:
-				msg = GSON.fromJson(jsonElement.getAsJsonObject().get("payload"), Message.class);
+				msg = GSON.fromJson(jsonMessage.get("payload"), Message.class);
 				if (chatSessionHandler.persistMessage(msg)) {
 					listId = msg.getList().getId();
+					chatSessionHandler.notifyNewMessage(userId, listId);
 				}
 				break;
 			case 1:
-				listId = jsonElement.getAsJsonObject().get("payload").getAsInt();
+				listId = jsonMessage.get("payload").getAsInt();
 				break;
 			default:
 				break;
