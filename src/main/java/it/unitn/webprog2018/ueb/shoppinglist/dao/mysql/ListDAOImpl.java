@@ -125,7 +125,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"FROM publicproductsonlists ppl " +
 					"INNER JOIN publicproducts pp ON ppl.idpublicproduct = pp.id " +
 					"INNER JOIN productscategories pc ON pc.id = pp.idproductscategory " +
-					"WHERE ppl.idlist = "+listId;
+					"WHERE ppl.quantity >= 0 AND ppl.idlist = "+listId;
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			PublicProduct p;
@@ -176,7 +176,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"INNER JOIN products p ON pl.idproduct = p.id " +
 					"INNER JOIN productscategories pc ON pc.id = p.idproductscategory " +
 					"INNER JOIN users u ON p.iduser = u.id " +
-					"WHERE pl.idlist = "+listId;
+					"WHERE pl.quantity >= 0 AND pl.idlist = "+listId;
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Product p;
@@ -230,9 +230,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "INSERT INTO productsonlists (idlist,idproduct,quantity) VALUES ("+
-						listId+","+
-						product.getId()+",1)";
+				String query = "CALL addProductOnList("+product.getId()+","+listId+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();
 				st.close();
@@ -254,9 +252,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "INSERT INTO publicproductsonlists (idlist,idpublicproduct,quantity) VALUES ("+
-						listId+","+
-						product.getId()+",1)";
+				String query = "CALL addPublicProductOnList("+product.getId()+","+listId+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();
 				st.close();
@@ -276,7 +272,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			String query = "SELECT EXISTS(SELECT 1 " +
 					"FROM publicproductsonlists " +
-					"WHERE idlist = "+listId+" AND idpublicproduct = "+product.getId()+") AS exist";
+					"WHERE idlist = "+listId+" AND idpublicproduct = "+product.getId()+" AND quantity >= 0) AS exist";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if(rs.first())
@@ -300,7 +296,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			String query = "SELECT EXISTS(SELECT 1 " +
 					"FROM productsonlists " +
-					"WHERE idlist = "+listId+" AND idproduct = "+product.getId()+") AS exist";
+					"WHERE idlist = "+listId+" AND idproduct = "+product.getId()+" AND quantity >= 0) AS exist";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if(rs.first())
@@ -321,6 +317,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product, Integer newAmount) throws DaoException {
 		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		if(newAmount < 0)
+			throw new DaoException("invalid quantity value");
 		if(valid)
 		{
 			try{
@@ -346,6 +344,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	@Override
 	public Boolean updateAmount(Integer listId, Product product, Integer newAmount) throws DaoException {
 		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		if(newAmount < 0)
+			throw new DaoException("invalid quantity value");
 		if(valid)
 		{
 			try{
@@ -532,7 +532,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "DELETE FROM publicproductsonlists WHERE idlist = "+listId+" AND idproduct = "+product.getId();
+				String query = "CALL deletePublicProductOnList("+product.getId()+","+listId+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
@@ -554,7 +554,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "DELETE FROM productsonlists WHERE idlist = "+listId+" AND idproduct = "+product.getId();
+				String query = "CALL deleteProductOnList("+product.getId()+","+listId+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
