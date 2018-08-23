@@ -2,11 +2,12 @@ CREATE TABLE if not exists productsnotification(
 	id integer auto_increment,
 	time datetime(1) not null,
     idlist integer not null,
-    idproduct integer,			# id del prodotto o del prodotto pubblico
-    ispublicproduct tinyint(1),	# 1 se il prodotto é un prodotto pubblico, 0 se é privato
+    idproduct integer,
+    idpublicproduct integer,
     text varchar(255),
     isread tinyint(1) default 0,
     foreign key(idproduct) references products,
+    foreign key(idpublicproduct) references publicproducts,
     primary key(id)
 );
 
