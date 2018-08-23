@@ -137,7 +137,8 @@ var app = new Vue({
 		ajaxSettings: {},
 		ajaxComponent: false,
 		operation: null,
-		list: 1
+		list: 1,
+		chat: false,
 	},
 	methods: {
 		searching: function () {
@@ -351,6 +352,7 @@ var app = new Vue({
 				this.items.push(data[i]);
 			}
 			console.log(this.items);
+			$('#chat').height($('#app').height());
 		}
 	},
 	watch: {
@@ -380,7 +382,10 @@ var app = new Vue({
 			for (var i = 0; this.results.length > i; i++) {
 				if (this.results[i].category.name == val) this.resultsSorted.push(this.results[i]);
 			}
-		}
+		},
+		chat: function(val) {
+			$('#chat').toggleClass('show-chat');
+		} 
 	},
 	created: function () {
 		this.user = window.location.pathname.split('HomePageLogin/')[1];

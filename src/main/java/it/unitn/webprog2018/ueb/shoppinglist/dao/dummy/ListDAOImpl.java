@@ -379,4 +379,18 @@ public class ListDAOImpl implements ListDAO {
 				throw new RecordNotFoundDaoException("List " + listId + " not found");
 		}
 	}
+
+	@Override
+	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
+		java.util.List<Integer> list = new LinkedList<>();
+		if (listId == 1) {
+			list.add(1);
+			list.add(2);
+			return list;
+		} else if (listId == 2) {
+			list.add(1);
+			return list;
+		}
+		throw new RecordNotFoundDaoException("List does not exist");
+	}
 }

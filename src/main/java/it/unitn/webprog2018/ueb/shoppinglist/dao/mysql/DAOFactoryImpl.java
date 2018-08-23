@@ -5,6 +5,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.MessageDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -19,54 +20,78 @@ import java.sql.Connection;
 public class DAOFactoryImpl implements DAOFactory {
 
 	private final Connection con;
-
+	private final ExampleDAO EXAMPLE_DAO;
+	private final UserDAO USER_DAO;
+	private final TokenDAO TOKEN_DAO = new TokenDAOImpl();
+	private final ProductDAO PRODUCT_DAO;
+	private final PublicProductDAO PUBLIC_PRODUCT_DAO;
+	private final ListsCategoryDAO LISTS_CATEGORY_DAO;
+	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO;
+	private final ListDAO LIST_DAO;
+	private final ListsCategoryImagesDAO LISTS_CATEGORY_IMAGE_DAO;
+	// private final MessageDAOImpl MESSAGE_DAO;
+	
 	public DAOFactoryImpl(Connection con) {
+		this.LISTS_CATEGORY_IMAGE_DAO = new ListsCategoryImagesDAOImpl(con, this);
+		this.LIST_DAO = new ListDAOImpl(con, this);
+		this.PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl(con, this);
+		this.LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl(con, this);
+		this.PUBLIC_PRODUCT_DAO = new PublicProductDAOImpl(con, this);
+		this.PRODUCT_DAO = new ProductDAOImpl(con, this);
+		this.USER_DAO = new UserDAOimpl(con, this);
+		this.EXAMPLE_DAO = new ExampleDAOImpl(con, this);
+		// TODO ADD this.MESSAGE_DAO = new MessageDAOImpl(con, this);
 		this.con = con;
 	}
 
 	@Override
 	public ExampleDAO getExampleDAO() {
-		return new ExampleDAOImpl(con, this);
+		return EXAMPLE_DAO;
 	}
 
 	@Override
 	public UserDAO getUserDAO() {
-		return new UserDAOimpl(con, this);
+		return USER_DAO;
 	}
 
 	@Override
 	public TokenDAO getTokenDAO() {
-		return new TokenDAOImpl();
+		return TOKEN_DAO;
 	}
 
 	@Override
 	public ProductDAO getProductDAO() {
-		return new ProductDAOImpl(con, this);
+		return PRODUCT_DAO;
 	}
 
 	@Override
 	public PublicProductDAO getPublicProductDAO() {
-		return new PublicProductDAOImpl(con, this);
+		return PUBLIC_PRODUCT_DAO;
 	}
 
 	@Override
 	public ListsCategoryDAO getListsCategoryDAO() {
-		return new ListsCategoryDAOImpl(con, this);
+		return LISTS_CATEGORY_DAO;
 	}
 
 	@Override
 	public ProductsCategoryDAO getProductsCategoryDAO() {
-		return new ProductsCategoryDAOImpl(con, this);
+		return PRODUCTS_CATEGORY_DAO;
 	}
 
 	@Override
 	public ListDAO getListDAO() {
-		return new ListDAOImpl(con, this);
+		return LIST_DAO;
 	}
 
 	@Override
 	public ListsCategoryImagesDAO getListsCategoryImageDAO() {
-		return new ListsCategoryImagesDAOImpl(con, this);
+		return LISTS_CATEGORY_IMAGE_DAO;
+	}
+
+	@Override
+	public MessageDAO getMessageDAO() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }
