@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.websocket;
+package it.unitn.webprog2018.ueb.shoppinglist.websocket.chat;
 
 import com.google.gson.Gson;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;

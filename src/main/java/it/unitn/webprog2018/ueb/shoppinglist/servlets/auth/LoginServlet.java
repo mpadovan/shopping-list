@@ -13,7 +13,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
-import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatSessionHandler;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatSessionHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

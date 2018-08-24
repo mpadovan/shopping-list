@@ -6,8 +6,8 @@
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatSessionHandler;
-import it.unitn.webprog2018.ueb.shoppinglist.websocket.ChatWebSocketServer;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatSessionHandler;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatWebSocketServer;
 import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

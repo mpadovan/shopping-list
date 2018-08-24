@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.websocket;
+package it.unitn.webprog2018.ueb.shoppinglist.websocket.chat;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
