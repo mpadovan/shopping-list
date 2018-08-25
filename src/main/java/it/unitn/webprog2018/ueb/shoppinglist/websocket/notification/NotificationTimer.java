@@ -5,34 +5,31 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.websocket.notification;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
- * @author giulia
+ * @author Giulia Carocari
  */
 public class NotificationTimer extends ScheduledThreadPoolExecutor {
-	private static DAOFactory dAOFactory;
 	private static final int POLLING_RATE = 60 * 1000; // every minute
 	private static NotificationSessionHandler notificationSessionHandler;
 
 	public NotificationTimer(int i) {
 		super(i);
-		// TODO schedule DatabaseQueryTask every minute
+		this.scheduleAtFixedRate(new DatabaseQueryTask(), 0, POLLING_RATE, TimeUnit.MILLISECONDS);
 	}
 	
 	
 	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
 		NotificationTimer.notificationSessionHandler = notificationSessionHandler;
-	}
-	
-	
-	public static void setdAOFactory(DAOFactory dAOFactory) {
-		NotificationTimer.dAOFactory = dAOFactory;
 	}
 	
 	/**
@@ -43,8 +40,9 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 
 		@Override
 		public void run() {
-			List<Notification> notifications = dAOFactory.getNotificationDAO().getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
+			List<Notification> notifications = NotificationSessionHandler.getDaoFactory().getNotificationDAO().getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
 			for (Notification n : notifications) {
+				NotificationTimer.this.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 			}
 		}
 
@@ -55,10 +53,25 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 	 * connected at time of execution, via the web-site.
 	 */
 	private class NotificationTask implements Runnable {
+		private final Notification notification;
 
+		public NotificationTask(Notification notification) {
+			this.notification = notification;
+		}
+		
 		@Override
 		public void run() {
-			// TODO send notification via email and on the web portal.
+			String productName =(notification.getProduct() instanceof Product ? ((Product)notification.getProduct()).getName() : ((PublicProduct)notification.getProduct()).getName());
+			// If it fails, deal with it.
+			EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
+					"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
+							notification.getList().getName() + "?\n"
+									+ "Clicca qui per connetterti subito al portale:"
+									+ "http://localhost:8080/ShoppingList/HomePageLogin/" + notification.getUser().getId() + "?list=" +
+									+ notification.getList().getId());
+			if (notificationSessionHandler.isConnected(notification.getUser().getId())) {
+				// SEND UNREAD NOTIFICATION COUNT TO THE USER
+			} // else DO NOTHING, WAIT FOR THE USER TO CONNECT
 		}
 
 	}
