@@ -9,8 +9,8 @@
 			<img src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
 		</div>
 		<div class="text-center div-info-user">
-			<h6>Mario Rossi</h6>
-			<a href="#"><span style="font-size: 15px;">Logout </span><i class="fas fa-sign-out-alt"></i></a>
+			<h6>${sessionScope.user.name} ${sessionScope.user.lastname}</h6>
+			<a href="${pageContext.servletContext.contextPath}/restricted/Logout"><span style="font-size: 15px;">Logout </span><i class="fas fa-sign-out-alt"></i></a>
 		</div>
 	</div>
 
