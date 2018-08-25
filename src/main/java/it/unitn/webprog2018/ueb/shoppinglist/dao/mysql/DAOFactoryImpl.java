@@ -6,6 +6,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.MessageDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.NotificationDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -29,7 +30,8 @@ public class DAOFactoryImpl implements DAOFactory {
 	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO;
 	private final ListDAO LIST_DAO;
 	private final ListsCategoryImagesDAO LISTS_CATEGORY_IMAGE_DAO;
-	// private final MessageDAOImpl MESSAGE_DAO;
+	private final MessageDAO MESSAGE_DAO;
+	// private final NotificationDAO NOTIFICATION_DAO;
 	
 	public DAOFactoryImpl(Connection con) {
 		this.LISTS_CATEGORY_IMAGE_DAO = new ListsCategoryImagesDAOImpl(con, this);
@@ -40,7 +42,8 @@ public class DAOFactoryImpl implements DAOFactory {
 		this.PRODUCT_DAO = new ProductDAOImpl(con, this);
 		this.USER_DAO = new UserDAOimpl(con, this);
 		this.EXAMPLE_DAO = new ExampleDAOImpl(con, this);
-		// TODO ADD this.MESSAGE_DAO = new MessageDAOImpl(con, this);
+		this.MESSAGE_DAO = new MessageDAOImpl(con, this);
+		// this.NOTIFICATION_DAO = new NotificationDaoImpl(con,this);
 		this.con = con;
 	}
 
@@ -91,7 +94,13 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public MessageDAO getMessageDAO() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return MESSAGE_DAO;
+	}
+
+	@Override
+	public NotificationDAO getNotificationDAO() {
+		// return NOTIFICATION_DAO;
+		throw new UnsupportedOperationException("Operation not supported");
 	}
 
 }

@@ -6,6 +6,9 @@
 package it.unitn.webprog2018.ueb.shoppinglist.websocket.notification;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
@@ -15,11 +18,18 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 public class NotificationTimer extends ScheduledThreadPoolExecutor {
 	private static DAOFactory dAOFactory;
 	private static final int POLLING_RATE = 60 * 1000; // every minute
-	
+	private static NotificationSessionHandler notificationSessionHandler;
+
 	public NotificationTimer(int i) {
 		super(i);
 		// TODO schedule DatabaseQueryTask every minute
 	}
+	
+	
+	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
+		NotificationTimer.notificationSessionHandler = notificationSessionHandler;
+	}
+	
 	
 	public static void setdAOFactory(DAOFactory dAOFactory) {
 		NotificationTimer.dAOFactory = dAOFactory;
@@ -33,7 +43,9 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 
 		@Override
 		public void run() {
-
+			List<Notification> notifications = dAOFactory.getNotificationDAO().getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
+			for (Notification n : notifications) {
+			}
 		}
 
 	}
@@ -46,7 +58,7 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 
 		@Override
 		public void run() {
-			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			// TODO send notification via email and on the web portal.
 		}
 
 	}
