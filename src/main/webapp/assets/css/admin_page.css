@@ -18,3 +18,11 @@ body{
 	background-color: #2a5788;
 	color: white;
 }
+.card-edit{
+	margin: 100px auto;
+	max-width: 1000px;	
+}
+.card-info{
+	max-width: 1000px;	
+	margin: 100px auto;
+}

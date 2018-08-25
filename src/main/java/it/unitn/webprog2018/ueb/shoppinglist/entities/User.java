@@ -155,9 +155,11 @@ public class User extends AbstractEntity {
 				if(id!=user.getId())
 				{
 					setError("email", "email già esistente");
+					System.out.println("ciao");
 				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
+				System.out.println("RNFDE");
 			}
 		}*/
 	}
