@@ -26,8 +26,8 @@
 		</div>
 		<ul class="list-unstyled components">
 			<li>
-				<span style="font-size: 25px;">
-					<b> Liste personali</b>
+				<span class="font-weight-bold" style="font-size: 25px;">
+					 Liste personali
 				</span>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 					<li>
@@ -54,8 +54,8 @@
 				</ul>
 			</li>
 			<li>
-				<span style="font-size: 25px;">
-					<b> Liste condivise</b>
+				<span class="font-weight-bold" style="font-size: 25px;">
+					Liste condivise
 				</span>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
 					<li>
