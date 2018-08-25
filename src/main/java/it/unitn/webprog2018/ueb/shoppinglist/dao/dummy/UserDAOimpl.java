@@ -55,6 +55,18 @@ public class UserDAOimpl implements UserDAO {
 		user2.setTokenpassword(null);
 
 		users.add(user2);
+		
+		User user3 = new User();
+		user3.setId(127);
+		user3.setEmail("zwisl0j5.lsn@20minutemail.it");
+		user3.setPassword(Sha256.doHash("c"));
+		user3.setName("c");
+		user3.setLastname("c");
+		user3.setAdministrator(false);
+		user3.setTokenpassword(null);
+
+		users.add(user3);
+		
 	}
 
 	@Override
@@ -87,7 +99,7 @@ public class UserDAOimpl implements UserDAO {
 				return u;
 			}
 		}
-		throw new RecordNotFoundDaoException("User with email: " + id + " not found");
+		throw new RecordNotFoundDaoException("User with id: " + id + " not found");
 	}
 
 	@Override
@@ -118,5 +130,4 @@ public class UserDAOimpl implements UserDAO {
 			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
 }

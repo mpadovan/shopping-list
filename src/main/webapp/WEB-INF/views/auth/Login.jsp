@@ -24,7 +24,6 @@
 							<input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
 							<label for="password">Password</label>
 						</div>
-
 						<div class="checkbox mb-2">
 							<label>
 								<input type="checkbox" id="remember" name="remember"> Ricordami

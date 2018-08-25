@@ -146,7 +146,7 @@ public class User extends AbstractEntity {
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		/*if(errors.isEmpty())
 		{
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {
@@ -161,7 +161,7 @@ public class User extends AbstractEntity {
 				//tutto andato a buon fine, nessun duplicato
 				System.out.println("RNFDE");
 			}
-		}
+		}*/
 	}
 
 	@Override
