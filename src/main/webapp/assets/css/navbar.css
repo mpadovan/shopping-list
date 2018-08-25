@@ -38,6 +38,7 @@ a:focus {
     border: none;
 	background-color: transparent;
 	color: white;
+	border-radius: 20px;
 }
 .navbar-light .navbar-nav .nav-link {
     color: white;
