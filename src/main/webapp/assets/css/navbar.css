@@ -25,6 +25,8 @@ a:focus {
 	width: calc(100% - 250px);
 	transition: width 0.3s;
 	position: fixed;
+	padding: 8px 10px;
+	margin-bottom: 0px;
 }
 
 #content.active #main-navbar {
