@@ -6,7 +6,12 @@
 	</div>
     <div class="sidebar-header" id="header">
 		<div class="text-center">
-			<img src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+		<c:if test="${not empty sessionScope.user.image}">
+			<img style="width: 300px; height: 300px;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+		</c:if>
+			<c:if test="${empty sessionScope.user.image}">
+			<img style="width: 300px; height: 300px;"src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo" title="Immagine profilo">
+		</c:if>
 		</div>
 		<div class="text-center div-info-user">
 			<h6>${sessionScope.user.name} ${sessionScope.user.lastname}</h6>
