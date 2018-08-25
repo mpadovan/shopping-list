@@ -37,7 +37,7 @@ public class NotificationDaoImpl implements NotificationDAO {
 		n.setUser(new User());
 		n.getUser().getId();
 		try {
-			n.setProduct(factory.getProductDAO().getByUser(1).get(1));
+			n.setProduct(factory.getProductDAO().getByUser(1).get(0));
 		} catch (DaoException ex) {
 			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -50,7 +50,7 @@ public class NotificationDaoImpl implements NotificationDAO {
 		n2.setUser(new User());
 		n2.getUser().getId();
 		try {
-			n2.setProduct(factory.getProductDAO().getByUser(1).get(2));
+			n2.setProduct(factory.getProductDAO().getByUser(1).get(1));
 		} catch (DaoException ex) {
 			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}

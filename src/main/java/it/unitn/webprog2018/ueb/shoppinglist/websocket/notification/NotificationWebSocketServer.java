@@ -9,9 +9,13 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 /**
+ * Websocket server endpoint to notify a user when he has a new notification about expiring products.
+ * Messages are sent in Json format.
  *
  * @author Giulia Carocari
  */
@@ -24,8 +28,17 @@ public class NotificationWebSocketServer {
 		NotificationWebSocketServer.notificationSessionHandler = notificationSessionHandler;
 	}
 	
+	/**
+	 * Method executed at the opening of the connection.
+	 * Adds the user's session to session handler and sends the first update about the notification count
+	 *
+	 * @param session
+	 * @param userId
+	 */
 	@OnOpen
-	public void onOpen() {
+	public void onOpen(Session session, @PathParam("userId") Integer userId) {
+		notificationSessionHandler.subscribe(userId, session);
+		// TODO send uread notification count
 	}
 
 	@OnError
@@ -33,11 +46,13 @@ public class NotificationWebSocketServer {
 	}
 
 	@OnClose
-	public void onClose() {
+	public void onClose(Session session, @PathParam("userId") Integer userId) {
+		notificationSessionHandler.unsubscribe(userId);
 	}
 
 	@OnMessage
-	public void onMessage() {
+	public void onMessage(String message, Session session, @PathParam("userId") Integer userId) {
+		// TODO send unread notifications
 	}
 	
 }
