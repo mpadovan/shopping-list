@@ -7,20 +7,47 @@ and open the template in the editor.
     Created on : 26-lug-2018, 14.30.32
     Author     : Giulia Peserico
 */
-.navbar-color{
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#main-navbar {
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0px 1px 3px #0c2646;
 	background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+	color: white;
+	width: calc(100% - 250px);
+	transition: width 0.3s;
+	position: fixed;
 }
-.navbar-brand {
-    display: inline-block;
-    padding-top: .3125rem;
-    padding-bottom: .3125rem;
-    margin-right: 1rem;
-    font-size: 1.25rem;
-    line-height: inherit;
-    white-space: nowrap;
+
+#content.active #main-navbar {
+	width: 100%;
+	transition: all 0.3s;
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+	background-color: transparent;
 	color: white;
 }
-.nav-link{
-	color: white;
+.navbar-light .navbar-nav .nav-link {
+    color: white;
+}
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+    color: white;
+}
+@media (max-width: 768px) {
+	#main-navbar{
+		width: calc(100% - 1px);
+	}
 }
 
