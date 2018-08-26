@@ -54,4 +54,8 @@ public interface ListDAO {
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException;
 	
 	public java.util.List<List> getByUser(Integer userId) throws DaoException;
+
+	public java.util.List<List> getPersonalLists(Integer id);
+
+	public java.util.List<List> getSharedLists(Integer id);
 }
