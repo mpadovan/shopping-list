@@ -28,6 +28,7 @@
 		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 		<!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/sidebar.css">
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/product_form.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
 
 		<jsp:invoke fragment="customCss" />
