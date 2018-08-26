@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.websocket.notification;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
@@ -13,6 +14,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,9 +43,13 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 
 		@Override
 		public void run() {
-			List<Notification> notifications = NotificationSessionHandler.getDaoFactory().getNotificationDAO().getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
-			for (Notification n : notifications) {
-				NotificationTimer.this.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+			try {
+				List<Notification> notifications = notificationSessionHandler.getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
+				for (Notification n : notifications) {
+					NotificationTimer.this.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+				}
+			} catch (DaoException ex) { // if DAO fails then we try again on the next poll
+				Logger.getLogger(NotificationTimer.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 
@@ -70,7 +77,7 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 									+ "http://localhost:8080/ShoppingList/HomePageLogin/" + notification.getUser().getId() + "?list=" +
 									+ notification.getList().getId());
 			if (notificationSessionHandler.isConnected(notification.getUser().getId())) {
-				// SEND UNREAD NOTIFICATION COUNT TO THE USER
+				notificationSessionHandler.notifyUser(notification.getUser().getId());
 			} // else DO NOTHING, WAIT FOR THE USER TO CONNECT
 		}
 

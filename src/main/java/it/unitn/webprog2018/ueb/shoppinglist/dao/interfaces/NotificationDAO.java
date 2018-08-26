@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
 import java.sql.Timestamp;
 import java.util.List;
@@ -22,8 +23,9 @@ public interface NotificationDAO {
 	 * 
 	 * @param nextRequest time at which the next poll to the database will be performed
 	 * @return a list of the notifications that will expire before the next poll
+	 * @throws it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException
 	*/
-	public List<Notification> getNextNotifications(Timestamp nextRequest);
+	public List<Notification> getNextNotifications(Timestamp nextRequest) throws DaoException;
 	
 	/**
 	 * Retrieves all notifications that expired since the last time the user has accessed the notification system.
@@ -33,16 +35,18 @@ public interface NotificationDAO {
 	 * 
 	 * @param userId id of the User that needs the notifications
 	 * @return The notifications that the user needs to read
+	 * @throws it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException
 	 */
-	public List<Notification> getUnreadNotifications(Integer userId);
+	public List<Notification> getUnreadNotifications(Integer userId) throws DaoException;
 	
 	/**
 	 * Retrieves the number of unread expired notifications the user has.
 	 * 
 	 * @param userId Id of the user that needs the notifications
 	 * @return The number of unread expired notifications for the user
+	 * @throws it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException
 	 */
-	public Integer getNotificationCount(Integer userId);
+	public Integer getNotificationCount(Integer userId) throws DaoException;
 	
 	// Not necessary I guess
 	// public boolean setLastAccess(Integer userId,)

@@ -48,13 +48,27 @@ public class ChatWebSocketServer {
 
 	@OnClose
 	public void close(Session session, @PathParam("userId") Integer userId) {
-		chatSessionHandler.unsubscribe(userId);
+		if (session.isOpen()) {
+			chatSessionHandler.unsubscribe(userId);
+		}
 	}
 
 	@OnError
-	public void onError(Throwable error, @PathParam("userId") Integer userId) {
-		Logger.getLogger(ChatWebSocketServer.class
-				.getName()).log(Level.SEVERE, null, error);
+	public void onError(Session session, Throwable error, @PathParam("userId") Integer userId) {
+		try {
+			error.printStackTrace();
+			session.close(new CloseReason(new CloseReason.CloseCode() {
+				@Override
+				public int getCode() {
+					return 500;
+				}
+			}, error.getMessage()));
+		} catch (IOException ex) {
+			Logger.getLogger(ChatWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		if (session.isOpen()) {
+			chatSessionHandler.unsubscribe(userId);
+		}
 	}
 
 	@OnMessage
