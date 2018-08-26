@@ -26,7 +26,7 @@ delimiter //
 CREATE FUNCTION exp_average_func(_lastinsert datetime(1),_exp_average_prec integer) returns integer deterministic# minuti di intervallo di previsione per il prossimo inserimento
 BEGIN
 	set @alpha = 0.5;
-	set @minutes = TIMESTAMPDIFF(MINUTE,now(1),_lastinsert);
+	set @minutes = abs(timestampdiff(MINUTE,now(1),_lastinsert));
     return if(_exp_average_prec < 0, @minutes , @minutes*@alpha + _exp_average_prec*(1-@alpha));
 END//
 delimiter ;
