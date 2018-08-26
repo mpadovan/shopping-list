@@ -379,4 +379,24 @@ public class ListDAOImpl implements ListDAO {
 				throw new RecordNotFoundDaoException("List " + listId + " not found");
 		}
 	}
+
+	@Override
+	public java.util.List<List> getPersonalLists(Integer id) {
+		if (id == 1) {
+			java.util.List<List> l = new LinkedList<>();
+			l.add(lists.get(1));
+			return l;
+		}
+		return new LinkedList<>();
+	}
+
+	@Override
+	public java.util.List<List> getSharedLists(Integer id) {
+		if (id == 1) {
+			java.util.List<List> l = new LinkedList<>();
+			l.add(lists.get(0));
+			return l;
+		}
+		return new LinkedList<>();
+	}
 }

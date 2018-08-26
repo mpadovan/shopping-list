@@ -14,7 +14,7 @@
 					<div class="text-center mb-4">
 							<h1 class="h3 mb-3 font-weight-normal">Login</h1>
 						</div>
-					<form class="form-signin" action="Login" method="POST">
+					<form class="form-signin" action="${pageContext.servletContext.contextPath}/Login" method="POST">
 						<div class="form-label-group">
 							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control" placeholder="Email" required="required">
 							<label for="email">Email</label>
