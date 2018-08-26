@@ -12,11 +12,26 @@ body {
     background: #fafafa;
 }
 
-.p-sidebar{
+.p-new-sidebar{
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
     color: #999;
+	margin: 0 20px;
+	margin-top: 20px;
+}
+.p-new-sidebar:hover{
+	color: #204065;
+}
+.p-products-sidebar{
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #fafafa;
+	margin: 0 20px;
+	font-size: 20px;
+}
+.p-products-sidebar:hover{
+	color: #204065;
 }
 .user-image{
 	max-width: 80px;
@@ -30,6 +45,7 @@ a:focus {
     transition: all 0.3s;
 	font-family: sans-serif;
 }
+
 .navbar {
     padding: 15px 10px;
     background: #fff;
@@ -45,11 +61,10 @@ a:focus {
     border: none;
 }
 
-.line {
+.divider {
     width: 100%;
     height: 1px;
-    border-bottom: 1px dashed #ddd;
-    margin: 40px 0;
+    border-bottom: 1px solid #ddd;
 }
 /* ---------------------------------------------------
     SIDEBAR STYLE

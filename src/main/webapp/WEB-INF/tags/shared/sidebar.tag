@@ -21,14 +21,15 @@
 
     <div class="sidebar-body">
 		<div>
-			<a href="#"><p style="margin: 0 20px; margin-bottom: 20px; color: whitesmoke;" class="font-weight-bold">I tuoi prodotti</p></a>
-			<a href="#"><p class="p-sidebar" style="margin: 0 20px;">Nuova Lista <i class="fas fa-plus-circle"></i></p></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/Products"><p  class="font-weight-bold p-products-sidebar">I tuoi prodotti</p></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/NewList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
 			<li>
-				<span class="font-weight-bold" style="font-size: 25px;">
+				<span class="font-weight-bold" style="font-size: 20px;">
 					 Liste personali
 				</span>
+				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 					<li>
 						<a href="#">Ferramenta</a>
@@ -54,9 +55,10 @@
 				</ul>
 			</li>
 			<li>
-				<span class="font-weight-bold" style="font-size: 25px;">
+				<span class="font-weight-bold" style="font-size: 20px;">
 					Liste condivise
 				</span>
+				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
 					<li>
 						<a href="#">Supermercato</a>
