@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.websocket;
+package it.unitn.webprog2018.ueb.shoppinglist.websocket.chat;
 
 /**
  *
