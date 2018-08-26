@@ -22,12 +22,12 @@ ADD exp_average integer default -1,
 ADD add_count mediumint unsigned default 0;
 
 delimiter //
-create function timeThreshold() returns integer deterministic
+create function timeThreshold() returns integer deterministic # tempo in minuti nel quale se un prodotto viene aggiunto in un tempo minore (in minuti) si ignora la stima del tempo per la notifica
 begin
 	return 60;
 end//
 
-create function countThreshold() returns integer deterministic
+create function countThreshold() returns integer deterministic # numero di inserimenti prima di creare una nuova notifica (se countThreshold = 3 al terzo inserimento si notifica per la prossima volta)
 begin
 	return 3;
 end//
@@ -44,14 +44,20 @@ BEGIN
 	if exists (select 1 from productsonlists where idproduct = _idproduct and idlist = _idlist limit 1)
     then
 		set @lastinsert = (select lastinsert from productsonlists where idproduct = _idproduct and idlist = _idlist);
-		UPDATE productsonlists set 	quantity = 1,
-									exp_average = @exp_average := exp_average_func(lastinsert,exp_average),
-                                    add_count = @add_count := if(abs(timestampdiff(MINUTE,now(1),lastinsert)) >= timeThreshold(),add_count + 1,add_count),
-                                    lastinsert = @now := now(1)
-		where idproduct = _idproduct and idlist = _idlist;
-		if abs(timestampdiff(MINUTE,@now,@lastinsert)) >= timeThreshold() and @add_count > countThreshold() then 
-			insert into productsnotification (time,idlist,idproduct,idpublicproduct) values (timestampadd(minute,@exp_average,@now),_idlist,_idproduct,null);
+        if abs(timestampdiff(MINUTE,now(1),@lastinsert)) >= timeThreshold() then
+			UPDATE productsonlists set 	quantity = 1,
+										exp_average = @exp_average := exp_average_func(lastinsert,exp_average),
+										add_count = @add_count := add_count + 1,
+										lastinsert = @now := now(1)
+			where idproduct = _idproduct and idlist = _idlist;
+			if @add_count >= countThreshold() then 
+				insert into productsnotification (time,idlist,idproduct,idpublicproduct) values (timestampadd(minute,@exp_average,@now),_idlist,_idproduct,null);
+			end if;
+		else
+			UPDATE productsonlists set quantity = 1 where idproduct = _idproduct and idlist = _idlist;
 		end if;
+		
+        
     else
 		INSERT INTO productsonlists (idproduct,idlist,quantity,add_count) VALUES (_idproduct,_idlist,1,1);
 	end if;
@@ -62,13 +68,17 @@ BEGIN
 	if exists (select 1 from publicproductsonlists where idpublicproduct = _idproduct and idlist = _idlist limit 1)
     then
 		set @lastinsert = (select lastinsert from publicproductsonlists where idpublicproduct = _idproduct and idlist = _idlist);
-		UPDATE publicproductsonlists set 	quantity = 1,
-											exp_average = @exp_average := exp_average_func(lastinsert,exp_average),
-                                            add_count = @add_count := if(abs(timestampdiff(MINUTE,now(1),lastinsert)) >= timeThreshold(),add_count + 1,add_count),
-                                            lastinsert = @now := now(1)
-		where idpublicproduct = _idproduct and idlist = _idlist;
-        if abs(timestampdiff(MINUTE,@now,@lastinsert)) >= timeThreshold() and @add_count > countThreshold() then 
-			insert into productsnotification (time,idlist,idproduct,idpublicproduct) values (timestampadd(minute,@exp_average,@now),_idlist,null,_idproduct);
+        if abs(timestampdiff(MINUTE,now(1),@lastinsert)) >= timeThreshold() then
+			UPDATE publicproductsonlists set 	quantity = 1,
+												exp_average = @exp_average := exp_average_func(lastinsert,exp_average),
+												add_count = @add_count := add_count + 1,
+												lastinsert = @now := now(1)
+			where idpublicproduct = _idproduct and idlist = _idlist;
+			if @add_count >= countThreshold() then 
+				insert into productsnotification (time,idlist,idproduct,idpublicproduct) values (timestampadd(minute,@exp_average,@now),_idlist,null,_idproduct);
+			end if;
+		else
+			UPDATE publicproductsonlists set quantity = 1 where idpublicproduct = _idproduct and idlist = _idlist;
 		end if;
     else
 		INSERT INTO publicproductsonlists (idpublicproduct,idlist,quantity,add_count) VALUES (_idproduct,_idlist,1,1);
