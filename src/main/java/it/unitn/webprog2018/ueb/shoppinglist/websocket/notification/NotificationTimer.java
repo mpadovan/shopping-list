@@ -45,7 +45,9 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 		public void run() {
 			try {
 				List<Notification> notifications = notificationSessionHandler.getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
+				System.out.println("Querying database");
 				for (Notification n : notifications) {
+					System.out.println("Scheduled notification " + n.getId());
 					NotificationTimer.this.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 				}
 			} catch (DaoException ex) { // if DAO fails then we try again on the next poll
@@ -68,14 +70,17 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 		
 		@Override
 		public void run() {
+			System.out.println("Sending notification " + notification.getId());
 			String productName =(notification.getProduct() instanceof Product ? ((Product)notification.getProduct()).getName() : ((PublicProduct)notification.getProduct()).getName());
 			// If it fails, deal with it.
-			EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
+			if (!EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
 					"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
 							notification.getList().getName() + "?\n"
 									+ "Clicca qui per connetterti subito al portale:"
 									+ "http://localhost:8080/ShoppingList/HomePageLogin/" + notification.getUser().getId() + "?list=" +
-									+ notification.getList().getId());
+									+ notification.getList().getId())) {
+				System.out.println("Could not reach email address");
+			}
 			if (notificationSessionHandler.isConnected(notification.getUser().getId())) {
 				notificationSessionHandler.notifyUser(notification.getUser().getId());
 			} // else DO NOTHING, WAIT FOR THE USER TO CONNECT
