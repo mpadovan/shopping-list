@@ -14,7 +14,7 @@
 				<div class="col">
 					<div class="card">
 						<div class="card-body">
-							<div class="float-right mb-2"><a href="NewProduct.jsp"><u>Crea prodotto</u></a></div>
+							<div class="float-right mb-2"><a href="${pageContext.servletContext.contextPath}/restricted/NewProduct"><u>Crea prodotto</u></a></div>
 							<div class="input-group mb-0">
 								<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 								<div class="input-group-append">
