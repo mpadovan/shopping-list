@@ -21,7 +21,7 @@ import javax.servlet.ServletContextListener;
  *
  * @author Giulia Carocari
  */
-public class DBCleaningListener implements ServletContextListener {
+public class TokenListener implements ServletContextListener {
 
 	private static final long CLEANING_RATE = 1000 * 60 * 60 * 24;	// 24 hours in milliseconds
 	private TokenDAO tokenDAO;
@@ -31,7 +31,7 @@ public class DBCleaningListener implements ServletContextListener {
 		ServletContext sc = sce.getServletContext();
 		DAOFactory factory = (DAOFactory) sc.getAttribute("daoFactory");
 		tokenDAO = factory.getTokenDAO();
-		Timer expiredTokenScheduler = new Timer();
+		Timer expiredTokenScheduler = new Timer(true);
 		String path = sc.getInitParameter("uploadFolder");
 		expiredTokenScheduler.scheduleAtFixedRate(new CleanDBTask(path), CLEANING_RATE, CLEANING_RATE);
 
@@ -41,6 +41,7 @@ public class DBCleaningListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		Timer timer = (Timer) sce.getServletContext().getAttribute("expiredTokenScheduler");
+		timer.purge();
 		timer.cancel();
 	}
 

@@ -61,7 +61,7 @@ public class HomePageLoginFilter implements Filter {
 			if(!uri.endsWith("/")) {
 				uri += "/";
 			}
-			if (!Pattern.matches(".*/restricted/HomePageLogin/" + user.getId() + "/.*", uri)) {
+			if (!Pattern.matches(".*/restricted/[a-zA-Z]*/?" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 						+ "The resource you are trying to access is none of your business.\n"

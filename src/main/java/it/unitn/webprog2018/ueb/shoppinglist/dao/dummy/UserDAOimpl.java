@@ -31,10 +31,10 @@ public class UserDAOimpl implements UserDAO {
 
 		User user = new User();
 		user.setId(1);
-		user.setEmail("mariorossi@gmail.com");
+		user.setEmail("giuliacarocari@gmail.com");
 		user.setPassword(Sha256.doHash("ciao"));
-		user.setName("Mario");
-		user.setLastname("Rossi");
+		user.setName("Giulia");
+		user.setLastname("Carocari");
 		user.setAdministrator(false);
 		user.setImage("/uploads/restricted/1/avatar/1.png");
 
