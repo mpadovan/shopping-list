@@ -77,7 +77,7 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 					"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
 							notification.getList().getName() + "?\n"
 									+ "Clicca qui per connetterti subito al portale:"
-									+ "http://localhost:8080/ShoppingList/HomePageLogin/" + notification.getUser().getId() + "?list=" +
+									+ "http://localhost:8080/ShoppingList/restricted/ HomePageLogin/" + notification.getUser().getId() + "?list=" +
 									+ notification.getList().getId())) {
 				System.out.println("Could not reach email address");
 			}

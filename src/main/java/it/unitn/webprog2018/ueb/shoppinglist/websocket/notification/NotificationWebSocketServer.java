@@ -81,7 +81,7 @@ public class NotificationWebSocketServer {
 			NotificationWebSocketMessage msg = new NotificationWebSocketMessage();
 			msg.setOperation(NotificationWebSocketMessage.Operation.SEND_NOTIFICATIONS);
 			try {
-				msg.setPayload(notificationSessionHandler.getUnreadCount(userId));
+				msg.setPayload(notificationSessionHandler.getNotifications(userId));
 				session.getBasicRemote().sendText(GSON.toJson(msg));
 			} catch (DaoException | IOException ex) {
 				Logger.getLogger(NotificationWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
