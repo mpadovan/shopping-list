@@ -15,7 +15,7 @@
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
 					</div>
-					<form class="form-product" action="NewSharedList" method="POST" enctype='multipart/form-data'>
+					<form class="form-list" action="NewSharedList" method="POST" enctype='multipart/form-data'>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -72,6 +72,7 @@
 							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Crea</button>
 						</div> 
+					</form>
 				</div>
 			</div>
 		</div>				
