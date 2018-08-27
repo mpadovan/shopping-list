@@ -10,3 +10,15 @@
 .autocomplete-li {
     padding-left: .5rem;
 }
+
+.no-list {
+    background-image: url(https://kathytemean.files.wordpress.com/2017/12/mike-cicthe_patient_panda-post.jpg);
+    background-position: center;
+    background-size: cover;
+    width: calc(100vw - 250px);
+    height: 100vh;
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index: 1;
+}

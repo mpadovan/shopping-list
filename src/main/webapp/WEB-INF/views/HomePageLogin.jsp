@@ -10,7 +10,7 @@
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid mt-3" id="app">
-			<div class="row justify-content-center">
+			<div class="row justify-content-center" v-if="list">
 				<div class="col">
 					<div class="card">
 						<div class="card-body">
@@ -77,32 +77,35 @@
 						</div>
 					</transition>
 				</div>
-			</div>
-			<fetch-list-component  @done="fetchListDone" v-bind:settings="fetchListSettings" v-if="fetchListComponent"></fetch-list-component>
-			<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
-			<div id="item-modal" class="modal" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 v-show="updatingItem" class="modal-title">Modifica {{ item_name }}</h5>
-							<h5 v-show="!updatingItem" class="modal-title">Elimina {{ item_name }}</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<p v-show="updatingItem">Modifica la quantità di {{ item_name }}
-								<input type="number" name="item-amount" id="item-amount" v-model="item_amount"
-									   min="1">
-							</p>
-							<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
-						</div>
-						<div class="modal-footer">
-							<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
-							<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
+				<fetch-list-component  @done="fetchListDone" v-bind:settings="fetchListSettings" v-if="fetchListComponent"></fetch-list-component>
+				<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
+				<div id="item-modal" class="modal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 v-show="updatingItem" class="modal-title">Modifica {{ item_name }}</h5>
+								<h5 v-show="!updatingItem" class="modal-title">Elimina {{ item_name }}</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p v-show="updatingItem">Modifica la quantità di {{ item_name }}
+									<input type="number" name="item-amount" id="item-amount" v-model="item_amount"
+										   min="1">
+								</p>
+								<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
+							</div>
+							<div class="modal-footer">
+								<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
+								<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+			<div v-if="!list" class="no-list">
+				<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><h3 class="text-xs-center mt-5" style="text-align:center;">Crea una nuova lista cliccando qui, Panda è annoiato!</h3></a>
 			</div>
 		</div>
 	</jsp:attribute>
