@@ -53,7 +53,7 @@ public class HomePageLoginFilter implements Filter {
 				if (!contextPath.endsWith("/")) {
 					contextPath += "/";
 				}
-				((HttpServletResponse) response).sendRedirect(contextPath + "Login");
+				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 				return;
 			}
 

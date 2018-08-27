@@ -610,5 +610,15 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
+
+	@Override
+	public java.util.List<List> getPersonalLists(Integer id) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public java.util.List<List> getSharedLists(Integer id) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

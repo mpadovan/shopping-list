@@ -12,33 +12,36 @@
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
-					<h4 class="text-center">Modifica lista condivisa</h4>
-					<form class="form-signin" method="POST" action="login">
-						<div class="form-label-group mb-2">
-							<label for="name">Nome lista</label>
-							<input type="text" class="form-control" id="nameList" name="nameList">
+					<div class="text-center mb-4">
+						<h1 class="h3 mb-3 font-weight-normal">Modifica lista</h1>
+					</div>
+					<form class="form-list" method="POST" action="EditList">
+						<div>
+							<label for="nameList">Nome lista</label>
+							<input type="text"
+								   class="form-control" 
+								   id="nameList"
+								   name="nameList" 
+								   value="${requestScope.list.name}"
+								   required />
 						</div>
-						<div class="form-label-group my-2">
-							<label for="description">Descrizione</label>
-							<input type="text" class="form-control" id="description" name="description">
-						</div>
-						<br>
-						<div class="custom-file my-2">
-							<input type="file" class="custom-file-input" id="image" name="image">
-							<label class="custom-file-label" for="image">Scegli immagine</label>
-						</div>
-						<br>
-						<div class="my-2">
-							<label for="class">Categoria</label>
-							<select class="select2 js-example-basic-single form-control py-3" name="class">
-								<option value="Fa">Farmacia</option>
-								<option value="Su">Supermercato</option>
-								<option value="Fe">Ferramenta</option>
+						<div>
+							<label for="category">Categoria</label>
+							<select class="select2 form-control py-3"
+									name="category"
+									id="category"
+									name="category" 
+									required
+									>
+								<option selected value="-1">Nessuna</option>
+								<c:forEach var="c" items="${requestScope.listsCategory}">
+									<option value="${c.id}">${c.name}</option>
+								</c:forEach>
 							</select>
 						</div>
 						<div>
 							<label for="shared">Condividi con: </label>
-							<select class="select2 js-example-basic-multiple form-control" name="email[]" multiple="multiple">
+							<select class="select2 js-example-basic-multiple form-control" name="shared" multiple="multiple">
 								<option>giuliacarocari@gmail.com</option>
 								<option>simonelever@gmail.com</option>
 								<option>matteopadovan@gmail.com</option>
@@ -46,11 +49,31 @@
 								<option>micheletessari@gmail.com</option>
 							</select>
 						</div>
-						<br>
 						<div>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Conferma</a>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Annulla</a>
+							<label for="description">Descrizione</label>
+							<input type="text"
+								   class="form-control"
+								   id="description"
+								   name="description"
+								   value="${requestScope.list.description}"
+								   required>
 						</div>
+						<div>
+							<label for="image">Immagine</label>
+							<div class="custom-file">
+								<input type="file"
+									   class="custom-file-input form-control"
+									   id="image"
+									   name="image"
+									   aria-describedby="image"
+									   value="${product.photography}">
+								<label class="custom-file-label" for="image">Scegli file</label>
+							</div>
+						</div>
+						<div class="float-right mt-3">
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
+							<button class="btn btn-new ml-2" type="submit">Modifica</button>
+						</div> 
 					</form>
 				</div>
 			</div>
@@ -66,12 +89,16 @@
 		<!--<script src="assets/js/landing_page.js"></script>-->
 		<script>
 			$(document).ready(function () {
-				$('.js-example-basic-single').select2({
-//					theme: 'bootstrap4'
+				$(document).ready(function () {
+				$('select').each(function () {
+					$(this).select2({
+						theme: 'bootstrap4'
+					});
 				});
 				$('.js-example-basic-multiple').select2({
-//					theme: 'bootstrap4'
+
 				});
+			});
 			});
 
 		</script>

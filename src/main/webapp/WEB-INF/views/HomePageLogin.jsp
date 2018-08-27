@@ -9,16 +9,12 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid">
+		<div class="container-fluid mt-3" id="app">
 			<div class="row justify-content-center">
 				<div class="col" id="app">
 					<div class="card">
 						<div class="card-body">
-							<div class="float-right mb-2">
-								<a href="NewProduct.jsp">
-									<u>Crea prodotto</u>
-								</a>
-							</div>
+							<div class="float-right mb-2"><a href="${pageContext.servletContext.contextPath}/restricted/NewProduct"><u>Crea prodotto</u></a></div>
 							<div class="input-group mb-0">
 								<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 								<div class="input-group-append">
@@ -59,11 +55,7 @@
 					<transition name="fade" v-on:after-leave="listHided">
 						<div class="card" id="list" v-if="showList">
 							<div class="card-body">
-								<h5 class="card-title text-center">Lista corrente:
-									<a href="InfoList.jsp">
-										<u>Supermercato</u>
-									</a>
-								</h5>
+								<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList"><u>Supermercato</u></a></h5>
 								<div class="d-flex justify-content-end">
 									<p class="pointer" @click="chat = !chat">Chat
 										<a href="#">

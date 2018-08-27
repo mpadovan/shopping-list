@@ -25,10 +25,10 @@
 
 <!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 
-		
-		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar.css" />
+
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar_admin.css" />
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/admin_page.css" />
-		
+
 		<jsp:invoke fragment="customCss" />
 
 		<title><c:out value="${pageTitle}" /></title>
@@ -55,20 +55,25 @@
 					</li>
 				</ul>
 				<div class="btn-group">
-					<img src="${pageContext.servletContext.contextPath}/assets/images/avatar.png" class="float-right rounded-circle" alt="..." style="max-width: 40px; max-height: 40px;">
+					<c:if test="${not empty sessionScope.user.image}">
+						<img style="max-width: 40px; max-height: 40px;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+					</c:if>
+					<c:if test="${empty sessionScope.user.image}">
+						<img style="max-width: 40px; max-height: 40px;"src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+					</c:if>
 
 					<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
 						Luigi Bianchi
 					</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Profilo</a>
-						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin">Vai al sito</a>
+						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Profilo</a>
+						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}">Vai al sito</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/Logout">Logout</a>
 					</div>
 				</div>
 			</div>
-			
+
 		</nav>
 		<div class="container-fluid">
 			<jsp:invoke fragment="pageContent" />
@@ -87,6 +92,6 @@
 		<!-- development version, includes helpful console warnings -->
 		<script src="${pageContext.servletContext.contextPath}/assets/js/admin_page.js"></script>
 		<jsp:invoke fragment="customJs" />
-		
+
 	</body>
 </html>

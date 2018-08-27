@@ -3,9 +3,9 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 
 <%-- any content can be specified here e.g.: --%>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="main-navbar">
 	<div class="container-fluid">
-		<button type="button" id="sidebarCollapse" class="btn btn-light">
+		<button type="button" id="sidebarCollapse" class="btn navbar-btn">
 			<i class="fas fa-bars"></i>
 		</button>
 		<div class="float-right">

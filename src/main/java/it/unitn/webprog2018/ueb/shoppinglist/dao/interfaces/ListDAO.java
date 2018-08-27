@@ -62,4 +62,8 @@ public interface ListDAO {
 	 * @throws DaoException 
 	 */
 	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException;
+
+	public java.util.List<List> getPersonalLists(Integer id);
+
+	public java.util.List<List> getSharedLists(Integer id);
 }

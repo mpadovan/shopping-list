@@ -64,7 +64,7 @@
 										<div class="card-body">
 											<nav class="navbar navbar-dark bg-primary">
 													<div class="form-group" style="margin-bottom:0;">
-      													<categories></categories>
+      													<categories @done="showCat"></categories>
 													</div>
 												</nav>
 											<div class="table-wrapper-2 table-responsive-md">
@@ -87,6 +87,7 @@
 									</div>
 								</transition>
 							</div>
+							<get-cat v-if="showLocals" v-bind:cat="category" v-bind:lat="lat" v-bind:lon="lon"></get-cat>
 						</div>
 						<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:url="url"></component>
 						<div id="item-modal" class="modal" tabindex="-1" role="dialog">
