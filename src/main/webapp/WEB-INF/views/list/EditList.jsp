@@ -48,8 +48,8 @@
 						</div>
 						<br>
 						<div>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Conferma</a>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Annulla</a>
+							<a href="#" class="btn btn-light">Conferma</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
 						</div>
 					</form>
 				</div>

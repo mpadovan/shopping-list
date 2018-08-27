@@ -14,3 +14,11 @@ and open the template in the editor.
     margin-left: auto;
     margin-right: auto;
 }
+.new-list-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
+.info-list-card{
+	max-width: 1000px;	
+	margin: 100px auto;
+}
