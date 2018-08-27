@@ -9,10 +9,14 @@
 			<i class="fas fa-bars"></i>
 		</button>
 		<div class="float-right">
-			<a href="#" style="padding-right: 5px;"><i class="fas fa-map-marker-alt"></i></a>
-			<a href="#"><i class="fas fa-bell" style="font-size: larger"></i><span class="badge badge-danger">2</span></a>
+			<button id="geolocBtn" style="background-color: transparent; border-style: none;"><i class="fas fa-map-marker-alt" style="font-size: 1.5em;"></i></button>
+			<%-- <a href="#"><i class="fas fa-bell" style="font-size: larger"></i><span class="badge badge-danger">2</span></a> --%>
 		</div>
 		
-		
+		<div style="position:absolute; right: -100000000px" id="geo">
+			<div id="geolocContent">
+				<geores v-if="showRes" v-bind:data="msg" v-bind:ok="ok"></geores>
+			</div>
+		</div>
 	</div>
 </nav>
