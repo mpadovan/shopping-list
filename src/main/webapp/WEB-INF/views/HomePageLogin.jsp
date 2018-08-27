@@ -9,7 +9,7 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid" id="app">
+		<div class="container-fluid" id="app" style="margin-top: 68px;">
 			<div class="row justify-content-center">
 				<div class="col">
 					<div class="card">

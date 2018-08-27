@@ -40,7 +40,7 @@ public class UserDAOimpl implements UserDAO {
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
 		user.setTokenpassword(null);
-		user.setImage("/uploads/restricted/1/avatar/1.png");
+		user.setImage("/uploads/restricted/1/avatar/1.jpg");
 
 		users.add(user);
 		
@@ -53,6 +53,7 @@ public class UserDAOimpl implements UserDAO {
 		user2.setLastname("Bianchi");
 		user2.setAdministrator(true);
 		user2.setTokenpassword(null);
+		user2.setImage("/uploads/restricted/2/avatar/2.png");
 
 		users.add(user2);
 		
