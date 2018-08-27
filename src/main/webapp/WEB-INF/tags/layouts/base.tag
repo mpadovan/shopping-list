@@ -29,6 +29,7 @@
 		<!--<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/application.css" />-->
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/sidebar.css">
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar.css">
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/product_form.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
 
 		<jsp:invoke fragment="customCss" />

@@ -3,7 +3,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.filters;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpSession;
 public class RootFilter implements Filter {
 
 	private UserDAO userDAO;
+	private ListDAO listDAO;
 
 	private FilterConfig filterConfig;
 
@@ -35,6 +38,7 @@ public class RootFilter implements Filter {
 		this.filterConfig = filterConfig;
 		DAOFactory factory = (DAOFactory) this.filterConfig.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
+		listDAO = factory.getListDAO();
 	}
 
 	@Override
@@ -46,7 +50,7 @@ public class RootFilter implements Filter {
 				contextPath += "/";
 			}
 			String path = req.getRequestURI().substring(req.getContextPath().length());
-			
+
 			if (req.getSession(false) == null) {
 				Cookie rememberCookie = getRememberCookie(req);
 				if (rememberCookie != null) {
@@ -55,7 +59,14 @@ public class RootFilter implements Filter {
 					try {
 						User user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
 						newSession.setAttribute("user", user);
-						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId());
+						java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
+						java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
+
+						newSession.setAttribute("personalLists", personalLists);
+						newSession.setAttribute("sharedLists", sharedLists);
+
+						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId() + "/" + 
+								(!personalLists.isEmpty() ? personalLists.get(0).getId() : ""));
 						return;
 					} catch (RecordNotFoundDaoException ex) {
 						//redirect alla pagina di Login - esiste un remember cookie che però non corrisponde all'email dell'utente (es: cambio email)
@@ -67,7 +78,7 @@ public class RootFilter implements Filter {
 					}
 				}
 			}
-			
+
 			if (path.equals("/")) {
 				request.getRequestDispatcher("/home").forward(request, response);
 			} else {

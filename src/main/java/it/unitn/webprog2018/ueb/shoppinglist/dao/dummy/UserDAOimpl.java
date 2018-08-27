@@ -35,6 +35,7 @@ public class UserDAOimpl implements UserDAO {
 		user.setId(1);
 		user.setEmail("mariorossi@gmail.com");
 		user.setPassword(Sha256.doHash("ciao"));
+		user.setCheckpassword(Sha256.doHash("ciao"));
 		user.setName("Mario");
 		user.setLastname("Rossi");
 		user.setAdministrator(false);
@@ -47,6 +48,7 @@ public class UserDAOimpl implements UserDAO {
 		user2.setId(2);
 		user2.setEmail("luigibianchi@gmail.com");
 		user2.setPassword(Sha256.doHash("ciaone"));
+		user2	.setCheckpassword(Sha256.doHash("ciaone"));
 		user2.setName("Luigi");
 		user2.setLastname("Bianchi");
 		user2.setAdministrator(true);
@@ -103,9 +105,13 @@ public class UserDAOimpl implements UserDAO {
 
 	@Override
 	public Boolean updateUser(Integer id, User user) throws DaoException{
-		getById(id);
-		update(id, user);
-		return true;
+		Boolean valid = user.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			getById(id);
+			update(id, user);
+		}
+		return valid;
 	}
 	
 	private synchronized void update(Integer id, User p) throws DaoException{
