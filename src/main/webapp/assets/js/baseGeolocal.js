@@ -91,6 +91,10 @@ var geo = new Vue({
                                 }
                             });
                         }
+                    },
+                    error: function() {
+                        self.msg = 'Abilita i servizi di geolocalizzazione per avere suggerimenti';
+                        self.showRes = true;
                     }
                 });
             }, function (error) {
