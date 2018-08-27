@@ -179,16 +179,15 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 			String query = "select count(*) from productsnotification pn inner join lists l on pn.idlist = l.id where pn.time <= now(1) and pn.isread = 0 and l.iduser = "+userId;
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
-			Integer count;
+			Integer count = 0;
 			if(rs.first())
 			{
 				count = rs.getInt(1);
 				
 				rs.close();
 				st.close();
-				return count;
 			}
-			throw new RecordNotFoundDaoException("user "+userId+" not found");
+			return count;
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
