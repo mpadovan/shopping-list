@@ -1,0 +1,19 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 27-ago-2018, 13.49.04
+    Author     : giulia
+*/
+.info-user-card{
+	max-width: 1000px;	
+	margin: 100px auto;
+}
+.form-user {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+}

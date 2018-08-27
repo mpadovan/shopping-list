@@ -13,7 +13,7 @@
 			<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/eurospar.jpg" alt="image" title="Supermercato">
 			<div class="card-body">
 				<h5 class="card-title text-center">Informazioni lista "Supermercato"</h5>
-				<table class="table table-hover">
+				<table class="table table-responsive-md">
 					<tbody>
 						<tr>
 							<th scope="row">Nome</th>

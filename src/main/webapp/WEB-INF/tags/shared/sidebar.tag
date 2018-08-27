@@ -14,7 +14,7 @@
 		</c:if>
 		</div>
 		<div class="text-center div-info-user">
-			<h6>${sessionScope.user.name} ${sessionScope.user.lastname}</h6>
+			<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser"><h6>${sessionScope.user.name} ${sessionScope.user.lastname}</h6></a>
 			<a href="${pageContext.servletContext.contextPath}/restricted/Logout"><span style="font-size: 15px;">Logout </span><i class="fas fa-sign-out-alt"></i></a>
 		</div>
 	</div>
