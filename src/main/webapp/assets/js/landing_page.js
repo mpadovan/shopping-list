@@ -4,33 +4,101 @@
  * and open the template in the editor.
  */
 
-Vue.component('categories', {
-	data: function() {
+Vue.component('getCat', {
+	props: ['cat', 'lat', 'lon'],
+	data: function () {
 		return {
-			categories: [],
-			cat: null
-		};
+			data: null
+		};	
 	},
 	created: function () {
 		var self = this;
 		$.get({
-			url: '/ShoppingList/services/lists/categories',
+			url: '/ShoppingList/services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
-				data = _.sortBy(data, ['name']);
-				self.categories = data;
-			},
-			error: function (error) {
-				alert('Errore nel caricamento delle categorie');
-				console.log(error);
+				self.data = data;
+				if (!("Notification" in window)) {
+					toastr['error']("This browser does not support desktop notification");
+				  }
+				
+				  // Let's check whether notification permissions have already been granted
+				  else if (Notification.permission === "granted") {
+					// If it's okay let's create a notification
+					var notification = new Notification(self.data[0].category + 'vicino a te!');
+				  }
+				
+				  // Otherwise, we need to ask the user for permission
+				  else if (Notification.permission !== "denied") {
+					Notification.requestPermission(function (permission) {
+					  // If the user accepts, let's create a notification
+					  if (permission === "granted") {
+						var notification = new Notification(self.data[0].category + 'vicino a te!');
+					  }
+					});
+				  }
 			}
 		});
 	},
-	template: ' <div>Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
+	template: '<div class="col-md-3 mt-4"> \
+					<div class="card"> \
+						<div class="card-body"> \
+							<div>{{ data[0].category }} vicini a te:</div> \
+							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>\
+						</div> \
+					</div> \
+				</div>'
+});
+
+Vue.component('categories', {
+	data: function () {
+		return {
+			categories: [],
+			cat: null,
+			geoOK: false,
+			category: null
+		};
+	},
+	template: ' <div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> \
 					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
-				</select></div>',
+				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> \
+				<div v-show="!category">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
+				</select></div></div>',
 	watch: {
-		cat: function(val) {
+		cat: function (val) {
+			localStorage.setItem("category", val.name);
 			toastr['success']('Notifiche attivate per ' + val.name);
+			window.location.reload();
+		}
+	},
+	methods: {
+		error: function (error) {
+			this.geoOK = false;
+		}
+	},
+	created: function () {
+		var self = this;
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function (position) {
+				self.geoOK = true;
+				self.category = localStorage.getItem("category");
+				$.get({
+					url: '/ShoppingList/services/lists/categories',
+					success: function (data) {
+						data = _.sortBy(data, ['name']);
+						self.categories = data;
+						self.$emit('done', {
+							cat: self.category,
+							lat: position.coords.latitude,
+							lon: position.coords.longitude
+						});
+					},
+					error: function (error) {
+						alert('Errore nel caricamento delle categorie');
+						console.log(error);
+					}
+				});
+			}, self.error);
 		}
 	}
 });
@@ -137,7 +205,10 @@ var app = new Vue({
 		url: null,
 		autocompleteList: [],
 		user: 'anon',
-		item_id: null
+		item_id: null,
+		categoriesResults: null,
+		categoryFull: null,
+		showLocals: false
 	},
 	methods: {
 		searching: function () {
@@ -158,7 +229,7 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
-			toastr["success"](item.item.name + ' aggiunto')
+			toastr["success"](item.item.name + ' aggiunto');
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
@@ -181,7 +252,7 @@ var app = new Vue({
 		updateComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
+					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
 					this.updateLocalStorage();
 					return;
 				}
@@ -205,7 +276,9 @@ var app = new Vue({
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
 				console.log(data);
-				(data.length == 0) ? this.autocompleteList = [{name: 'Nessun risultato'}] : this.autocompleteList = data;
+				(data.length == 0) ? this.autocompleteList = [{
+					name: 'Nessun risultato'
+				}]: this.autocompleteList = data;
 			} else {
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
@@ -237,8 +310,14 @@ var app = new Vue({
 			this.selected = 'all';
 			this.showSearch = false;
 		},
-		replaceQuerySearch: function(val) {
+		replaceQuerySearch: function (val) {
 			this.query = val;
+		},
+		showCat: function (data) {
+			this.category = data.cat;
+			this.lat = data.lat;
+			this.lon = data.lon;
+			this.showLocals = true;
 		}
 	},
 	watch: {
