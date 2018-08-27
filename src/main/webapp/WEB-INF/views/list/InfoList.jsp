@@ -37,9 +37,9 @@
 					</tbody>
 				</table>
 
-				<a href="HomePageLogin.jsp" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 				<a href="#" class="btn btn-light float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
-				<a href="EditList.jsp" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+				<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditList" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
 			</div>
 		</div>
 		<!--Modal-->
@@ -57,7 +57,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">Annulla</button>
-						<a href="NoListPage.jsp" class="btn btn-light">Conferma</a>
+						<a href="#" class="btn btn-danger">Conferma</a>
 					</div>
 				</div>
 			</div>

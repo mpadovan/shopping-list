@@ -53,7 +53,7 @@
 					<transition name="fade" v-on:after-leave="listHided">
 						<div class="card" id="list" v-if="showList">
 							<div class="card-body">
-								<h5 class="card-title text-center">Lista corrente: <a href="InfoList.jsp"><u>Supermercato</u></a></h5>
+								<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList"><u>Supermercato</u></a></h5>
 								<div class="d-flex justify-content-end">
 									<p>Chat <a href="#"><i class="far fa-comments"></i></a></p>
 								</div>
