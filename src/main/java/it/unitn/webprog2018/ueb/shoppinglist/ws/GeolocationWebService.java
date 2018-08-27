@@ -67,7 +67,7 @@ public class GeolocationWebService {
 	public String getShopsByUser(@PathParam("userId") int userId,
 			@QueryParam("location") String location) throws DaoException {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-
+		
 		Set<String> categories = new HashSet<>();
 		java.util.List<List> lists = listDAO.getByUser(userId);
 		for (List l : lists) {
