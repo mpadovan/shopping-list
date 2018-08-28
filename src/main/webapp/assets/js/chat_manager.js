@@ -51,7 +51,7 @@ var chat = new Vue({
     },
     watch: {
         chat: function (val) {
-            $('#chat').toggleClass('show-chat');
+            $('#chat').css('display', 'none');
         },
     },
     created: function () {
@@ -96,7 +96,6 @@ var chat = new Vue({
         manageMessages: function (data) {
             this.messages = data;
             for (var j = 0; this.messages.length > j; j++) {
-                console.log(this.messages[j].sender.id);
                 if (this.messages[j].sender.id == this.user) this.messages[j].isMine = 'message-s';
                 else this.messages[j].isMine = 'message-r';
             }
