@@ -69,7 +69,7 @@ public class MessageDAOImpl implements MessageDAO {
 	public java.util.List<Message> getLastMessages(List list, User user) throws DaoException {
 		Map<Integer, Integer> unread = getUnreadCount(user.getId());
 		Integer count = unread.get(list.getId());
-		java.util.List<Message> sublist = chat.subList(Math.max(0, chat.size() - 30), chat.size()-1);
+		java.util.List<Message> sublist = chat.subList(Math.max(0, chat.size() - 30), chat.size());
 		for (Message m : sublist) {
 			m.setRead(true);
 		}
