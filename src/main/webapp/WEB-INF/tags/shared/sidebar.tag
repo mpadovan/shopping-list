@@ -31,27 +31,11 @@
 				</span>
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
-					<li>
-						<a href="#">Ferramenta</a>
+					<c:forEach items="${sessionScope.personalLists}" var="list">
+						<li>
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
-					<li>
-						<a href="#">Farmacia</a>
-					</li>
-					<li>
-						<a href="#">Unieuro</a>
-					</li>
-					<li>
-						<a href="#">Lista 1</a>
-					</li>
-					<li>
-						<a href="#">Lista 2</a>
-					</li>
-					<li>
-						<a href="#">Lista 3</a>
-					</li>
-					<li>
-						<a href="#">Lista 4</a>
-					</li>
+					</c:forEach>
 				</ul>
 			</li>
 			<li>
@@ -60,24 +44,11 @@
 				</span>
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
-					<li>
-						<a href="#">Supermercato</a>
+					<c:forEach items="${sessionScope.sharedLists}" var="list">
+						<li>
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
-					<li>
-						<a href="#">Lista 3</a>
-					</li>
-					<li>
-						<a href="#">Lista 4</a>
-					</li>
-					<li>
-						<a href="#">Lista 5</a>
-					</li>
-					<li>
-						<a href="#">Lista 6</a>
-					</li>
-					<li>
-						<a href="#">Lista 7</a>
-					</li>
+					</c:forEach>
 				</ul>
 			</li>
 		</ul>

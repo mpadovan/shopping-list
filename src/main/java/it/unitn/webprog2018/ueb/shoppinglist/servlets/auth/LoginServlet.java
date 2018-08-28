@@ -15,9 +15,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatSessionHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +37,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 
+	@Inject
+	private ChatSessionHandler chatSessionHandler;
+	
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
 	private UserDAO userDAO;
 	private ListDAO listDAO;
@@ -101,18 +106,18 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("sharedLists", sharedLists);
 				
 				if (user.isAdministrator()) {
-					path += "restricted/admin/ProductList";
+					path += "restricted/admin/PublicProductList";
 					response.sendRedirect(path);
 				} else {
 					path += "restricted/HomePageLogin/" + user.getId() + "/" + (!personalLists.isEmpty() ? personalLists.get(0).getId() : "");
 					response.sendRedirect(path);
 				}
 			} else {
-				request.setAttribute("user", user);
+				request.setAttribute("errorLogin", "Email o password validi");
 				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
-			request.setAttribute("user", user);
+			request.setAttribute("errorLogin", "Email o password validi");
 			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);

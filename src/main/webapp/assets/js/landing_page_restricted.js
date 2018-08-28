@@ -1,3 +1,5 @@
+/* jshint esversion:6 */
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -140,7 +142,8 @@ var app = new Vue({
 		ajaxSettings: {},
 		ajaxComponent: false,
 		operation: null,
-		list: null
+		list: null,
+		chat: false
 	},
 	methods: {
 		searching: function () {
@@ -361,6 +364,7 @@ var app = new Vue({
 				this.items.push(data[i]);
 			}
 			console.log(this.items);
+			$('#chat').height($('#app').height());
 		}
 	},
 	watch: {
@@ -391,12 +395,22 @@ var app = new Vue({
 				if (this.results[i].category.name == val)
 					this.resultsSorted.push(this.results[i]);
 			}
-		}
+		},
+		chat: function(val) {
+			$('#chat').css('display', 'block');
+			console.log($('#chat'));
+		} 
 	},
 	created: function () {
-		this.user = window.location.pathname.split('HomePageLogin/')[1].split("/")[0];
-		this.list = window.location.pathname.split('HomePageLogin/')[1].split("/")[1];
-		if(this.list == undefined) this.list = false;
-		else this.fetchList();
+		this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
+		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
+		this.fetchList();
+		if(typeof(Worker) !== "undefined") {
+			if(typeof(w) == "undefined") {
+				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
+			}
+		} else {
+			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
+		}
 	}
 });

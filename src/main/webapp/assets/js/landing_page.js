@@ -9,33 +9,34 @@ Vue.component('getCat', {
 	data: function () {
 		return {
 			data: null
-		};	
+		};
 	},
 	created: function () {
 		var self = this;
+		console.log(self.lat + ',' + self.lon);
 		$.get({
 			url: '/ShoppingList/services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
 				self.data = data;
 				if (!("Notification" in window)) {
 					toastr['error']("This browser does not support desktop notification");
-				  }
-				
-				  // Let's check whether notification permissions have already been granted
-				  else if (Notification.permission === "granted") {
+				}
+
+				// Let's check whether notification permissions have already been granted
+				else if (Notification.permission === "granted") {
 					// If it's okay let's create a notification
 					var notification = new Notification(self.data[0].category + 'vicino a te!');
-				  }
-				
-				  // Otherwise, we need to ask the user for permission
-				  else if (Notification.permission !== "denied") {
+				}
+
+				// Otherwise, we need to ask the user for permission
+				else if (Notification.permission !== "denied") {
 					Notification.requestPermission(function (permission) {
-					  // If the user accepts, let's create a notification
-					  if (permission === "granted") {
-						var notification = new Notification(self.data[0].category + 'vicino a te!');
-					  }
+						// If the user accepts, let's create a notification
+						if (permission === "granted") {
+							var notification = new Notification(self.data[0].category + 'vicino a te!');
+						}
 					});
-				  }
+				}
 			}
 		});
 	},
@@ -87,18 +88,25 @@ Vue.component('categories', {
 					success: function (data) {
 						data = _.sortBy(data, ['name']);
 						self.categories = data;
-						self.$emit('done', {
-							cat: self.category,
-							lat: position.coords.latitude,
-							lon: position.coords.longitude
-						});
+						console.log(self.category);
+						if (self.category != null) {
+							self.$emit('done', {
+								cat: self.category,
+								lat: position.coords.latitude,
+								lon: position.coords.longitude
+							});
+						}
 					},
 					error: function (error) {
 						alert('Errore nel caricamento delle categorie');
 						console.log(error);
 					}
 				});
-			}, self.error);
+			}, self.error, {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			  });
 		}
 	}
 });
