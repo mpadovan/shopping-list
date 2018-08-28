@@ -45,7 +45,7 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a id="productList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList">Prodotti</a>
+						<a id="productList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList">Prodotti</a>
 					</li>
 					<li class="nav-item">
 						<a id="categoryProduct" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory">Categorie di prodotto</a>

@@ -46,7 +46,7 @@ public class UserDAOimpl implements UserDAO {
 		
 		User user2 = new User();
 		user2.setId(2);
-		user2.setEmail("luigibianchi@gmail.com");
+		user2.setEmail("giu.peserico@gmail.com");
 		user2.setPassword(Sha256.doHash("ciaone"));
 		user2.setCheckpassword(Sha256.doHash("ciaone"));
 		user2.setName("Luigi");

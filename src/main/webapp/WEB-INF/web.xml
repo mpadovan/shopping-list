@@ -116,8 +116,8 @@
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ListCategoryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ProductListServlet</servlet-name>
-        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductListServlet</servlet-class>
+        <servlet-name>PublicProductListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.PublicProductListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CategoryProductServlet</servlet-name>
@@ -196,8 +196,8 @@
         <url-pattern>/restricted/admin/ListCategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProductListServlet</servlet-name>
-        <url-pattern>/restricted/admin/ProductList</url-pattern>
+        <servlet-name>PublicProductListServlet</servlet-name>
+        <url-pattern>/restricted/admin/PublicProductList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CategoryProductServlet</servlet-name>

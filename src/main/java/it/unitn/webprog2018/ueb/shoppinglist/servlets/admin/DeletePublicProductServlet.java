@@ -41,7 +41,7 @@ public class DeletePublicProductServlet extends HttpServlet {
 		try {
 			PublicProduct publicProduct = publicProductDAO.getById(productId);
 			if (publicProductDAO.deleteProduct(publicProduct.getId())) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductList");
+				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
 				request.setAttribute("product", publicProduct);
 				request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
