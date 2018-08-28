@@ -224,17 +224,9 @@ public class ListDAOImpl implements ListDAO {
 	@Override
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		if (listId == 1) {
-			if (userId == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return userId == 1;
 		} else if (listId == 2) {
-			if (userId == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return userId == 1;
 		}
 		return false;
 	}

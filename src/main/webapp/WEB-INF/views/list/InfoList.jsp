@@ -32,7 +32,7 @@
 						</tr>
 						<tr>
 							<th scope="row">Proprietario</th>
-							<td>${requestScope.currentList.owner.name}</td>
+							<td>${requestScope.currentList.owner.email}</td>
 						</tr>
 						<c:if test="${!empty requestScope.sharedUsers}">
 							<tr>
@@ -50,8 +50,13 @@
 				</table>
 
 				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-				<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
-				<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditList" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+
+				<c:if test="${requestScope.hasDeletePermission}">
+					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
+				</c:if>
+				<c:if test="${requestScope.hasModifyPermission}">
+					<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditList" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+				</c:if>
 			</div>
 		</div>
 		<!--Modal-->

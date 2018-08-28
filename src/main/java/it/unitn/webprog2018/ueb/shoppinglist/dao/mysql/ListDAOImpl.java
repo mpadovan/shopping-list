@@ -37,7 +37,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			List list = new List();
 			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"u.name,u.lastname,u.administrator," +
+					"u.name,u.lastname,u.administrator,u.email" +
 					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
@@ -61,6 +61,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				user.setLastname(rs.getString(i++));
 				//user.setImage(rs.getString(i++));
 				user.setAdministrator(rs.getInt(i++) != 0);
+				user.setEmail(rs.getString(i++));
 				lc.setName(rs.getString(i++));
 				lc.setDescription(rs.getString(i++));
 				user.setEmail("");
