@@ -78,37 +78,40 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		String avatarURI = "";
 		File file = null;
 		String avatarFileName = "";
-		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/" + user.getId() + "/avatar/";
+		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
 			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-			try (InputStream fileContent = avatar.getInputStream()) {
+			avatarFileName = avatarsFolder + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
+			InputStream fileContent = null;
+			try {
+				ext = avatarFileName.lastIndexOf(".");
+				noExt = avatarFileName.lastIndexOf(File.separator);
+				fileContent = avatar.getInputStream();
 				file = new File(avatarFileName);
 				Files.copy(fileContent, file.toPath());
-				avatarURI = "localhost:8080" + context + "uploads/restricted/" + user.getId() + "/avatar/"
-						+ user.getId();
+				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" +
+					File.separator	+ user.getId()+ (ext > noExt ? avatarFileName.substring(ext) : "");
 				
 				System.out.println(avatarFileName + " \n" + avatarURI);
 
 			} catch (FileAlreadyExistsException ex) {
-				response.sendError(500, "Server could not store your avatar, "
-						+ "please retry the sign up process. "
-						+ "Notice that you can also upload the image later in you user page.");
-				getServletContext().log("impossible to upload the file", ex);
+				file.delete();
+				Files.copy(fileContent, file.toPath());
+				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" +
+					File.separator	+ user.getId()+ (ext > noExt ? avatarFileName.substring(ext) : "");
+				
 			}
 		}
 		if (!response.isCommitted()) {
 			user.setImage(avatarURI);
-			System.out.println("entrato");
 			try {
 				if(userDAO.updateUser(user.getId(), user))
 				{
 					session.setAttribute("user", user);
-					System.out.println("tutto perfetto");
-					response.sendRedirect(context+"restricted/admin/InfoAdminServlet");
+					response.sendRedirect(context+"restricted/admin/InfoAdmin");
 				}
 			} catch (DaoException ex) {
 				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
