@@ -48,25 +48,14 @@ public class UserDAOimpl implements UserDAO {
 		user2.setId(2);
 		user2.setEmail("luigibianchi@gmail.com");
 		user2.setPassword(Sha256.doHash("ciaone"));
-		user2	.setCheckpassword(Sha256.doHash("ciaone"));
+		user2.setCheckpassword(Sha256.doHash("ciaone"));
 		user2.setName("Luigi");
 		user2.setLastname("Bianchi");
 		user2.setAdministrator(true);
 		user2.setTokenpassword(null);
+		user2.setImage("/uploads/restricted/2/avatar/2.jpg");
 
 		users.add(user2);
-		
-		User user3 = new User();
-		user3.setId(127);
-		user3.setEmail("zwisl0j5.lsn@20minutemail.it");
-		user3.setPassword(Sha256.doHash("c"));
-		user3.setName("c");
-		user3.setLastname("c");
-		user3.setAdministrator(false);
-		user3.setTokenpassword(null);
-
-		users.add(user3);
-		
 	}
 
 	@Override
