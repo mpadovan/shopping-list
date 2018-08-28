@@ -24,7 +24,8 @@
 								</div>
 							</div>
 							<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
-								<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome <b> {{ query }}</b>. Clicca qui per crearlo.</li>
+								<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
+									<b> {{ query }}</b>. Clicca qui per crearlo.</li>
 								<li v-if="showAutocompleteList" class="pointer autocomplete-li" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 							</div>
 							<transition name="fade" v-on:after-leave="searchHided">
@@ -44,7 +45,8 @@
 										</div>
 									</div>
 									<ul class="search-results list-group list-group-flush">
-										<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id"  v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
+										<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"
+													 class="search-result pointer"></search-item>
 									</ul>
 								</div>
 							</transition>
@@ -55,7 +57,11 @@
 							<div class="card-body">
 								<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList"><u>Supermercato</u></a></h5>
 								<div class="d-flex justify-content-end">
-									<p>Chat <a href="#"><i class="far fa-comments"></i></a></p>
+									<p class="pointer" @click="chat = !chat">Chat
+										<a href="#">
+											<i class="far fa-comments"></i>
+										</a>
+									</p>
 								</div>
 								<div class="table-wrapper-2 table-responsive-md">
 									<table class="table table-striped">
@@ -101,6 +107,14 @@
 								<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
 							</div>
 						</div>
+							<div class="input-group" style="height:10%;">
+								<input type="text" class="form-control" placeholder="Scrivi qualcosa...">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button">
+										<i class="far fa-paper-plane"></i>
+									</button>
+								</div>
+							</div>
 					</div>
 				</div>
 			</div>
@@ -115,5 +129,6 @@
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
+		<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
 	</jsp:attribute>
 </layouts:base>

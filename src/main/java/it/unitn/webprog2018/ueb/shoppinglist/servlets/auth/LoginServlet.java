@@ -15,9 +15,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatSessionHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +37,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 
+	@Inject
+	private ChatSessionHandler chatSessionHandler;
+	
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
 	private UserDAO userDAO;
 	private ListDAO listDAO;

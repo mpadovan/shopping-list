@@ -399,4 +399,9 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return new LinkedList<>();
 	}
+
+	@Override
+	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

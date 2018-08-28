@@ -361,6 +361,7 @@ var app = new Vue({
 				this.items.push(data[i]);
 			}
 			console.log(this.items);
+			$('#chat').height($('#app').height());
 		}
 	},
 	watch: {
@@ -391,7 +392,10 @@ var app = new Vue({
 				if (this.results[i].category.name == val)
 					this.resultsSorted.push(this.results[i]);
 			}
-		}
+		},
+		chat: function(val) {
+			$('#chat').toggleClass('show-chat');
+		} 
 	},
 	created: function () {
 		this.user = window.location.pathname.split('HomePageLogin/')[1].split("/")[0];
