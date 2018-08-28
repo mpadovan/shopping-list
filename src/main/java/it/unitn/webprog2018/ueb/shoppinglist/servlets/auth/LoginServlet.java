@@ -106,7 +106,7 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("sharedLists", sharedLists);
 				
 				if (user.isAdministrator()) {
-					path += "restricted/admin/ProductList";
+					path += "restricted/admin/PublicProductList";
 					response.sendRedirect(path);
 				} else {
 					path += "restricted/HomePageLogin/" + user.getId() + "/" + (!personalLists.isEmpty() ? personalLists.get(0).getId() : "");
