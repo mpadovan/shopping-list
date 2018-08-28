@@ -14,7 +14,7 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3 text-center">
-						<a href="#"><img class="image-product" src="${pageContext.servletContext.contextPath}${requestScope.product.photography}" alt="Ananas" title="Ananas"></a>
+						<a href="#"><img class="image-product" src="${pageContext.servletContext.contextPath}${requestScope.product.photography}" alt="" title=""></a>
 					</div>
 						<div class="col">
 							<h5 class="card-title text-center">Informazioni prodotto "${requestScope.product.name}"</h5>
@@ -40,7 +40,7 @@
 
 								</tbody>
 							</table>
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 							<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditProduct" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i> Modifica</a>
 						</div>
 				</div>

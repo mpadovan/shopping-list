@@ -53,6 +53,7 @@ public class ProductDAOImpl implements ProductDAO {
 		product2.setOwner(user);
 		product2.setName("Zucchine");
 		product2.setNote("Zucchine fresche di stagione");
+		product2.setLogo("/uploads/restricted/1/productLogo/zucchini.png");
 		products.add(product2);
 		
 		Product product3 = new Product();
