@@ -261,7 +261,6 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
 		if (listId == 1) {
 			if (publicProductsOnList1.containsKey(product)) {
-				System.out.println("Updating product" + product.getId());
 				publicProductsOnList1.replace(product, publicProductsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -283,8 +282,6 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
-				
-				System.out.println("Updating product" + product.getId());
 				productsOnList1.replace(product, productsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -306,7 +303,6 @@ public class ListDAOImpl implements ListDAO {
 	public java.util.List<List> getByUser(Integer userID) throws DaoException {
 		java.util.List<List> match = new LinkedList<>();
 		for (List l : lists) {
-			System.out.println("checking list " + l.getName() + ", owner: " + l.getOwner().getId());
 			if (l.getOwner().getId() == userID) {
 				match.add(l);
 			}
@@ -401,7 +397,18 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
+		java.util.List<Integer> list = new LinkedList<>();
+		list.add(1);
+		list.add(2);
+		return list;
+	}
+
+	@Override
+	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
+		java.util.List<User> list = new LinkedList<>();
+		list.add(dAOFactory.getUserDAO().getById(1));
+		list.add(dAOFactory.getUserDAO().getById(2));
+		return list;
 	}
 }

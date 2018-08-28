@@ -66,7 +66,7 @@ public class ChatSessionHandler extends SessionHandler {
 		@Override
 		public void run() {
 			try {
-				List<Integer> sharedListUsers = getDaoFactory().getListDAO().getConnectedUsers(listId);
+				List<Integer> sharedListUsers = getDaoFactory().getListDAO().getConnectedUsersIds(listId);
 				for (Integer userId : sharedListUsers) {
 					if (!Objects.equals(userId, senderId) && isConnected(userId)) {
 						ChatWebSocketMessage msg = new ChatWebSocketMessage();

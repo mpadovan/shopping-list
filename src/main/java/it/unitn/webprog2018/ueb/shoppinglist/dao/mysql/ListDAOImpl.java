@@ -593,7 +593,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	}
 	
 	@Override
-	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
+	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
 		try{
 			String query =	"select iduser from sharedlists where idlist = "+listId;
@@ -687,6 +687,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
+	}
+
+	@Override
+	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 }

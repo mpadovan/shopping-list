@@ -11,7 +11,13 @@
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/eurospar.jpg" alt="image" title="Supermercato">
+			<c:if test="!${empty sessionScope.user.image}">
+				<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
+			</c:if>
+			<c:if test="${empty sessionScope.user.image}">
+				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
+			</c:if>
+			<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			<div class="card-body">
 				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
 				<table class="table table-responsive-md">
@@ -29,14 +35,16 @@
 							<td>${requestScope.currentList.owner.name}</td>
 						</tr>
 						<c:if test="${!empty requestScope.sharedUsers}">
-							<c:forEach items="${requestScope.sharedUsers}" var="user">
-								<tr>
-									<th scope="row">Condivisa con</th>
-									<td>
+							<tr>
+								<th scope="column">Condivisa con</th>
+
+								<td>
+									<c:forEach items="${requestScope.sharedUsers}" var="user">
 										${user.email}
-									</td>
-								</tr>
-							</c:forEach>
+										<br>
+									</c:forEach>
+								</td>
+							</tr>
 						</c:if>
 					</tbody>
 				</table>

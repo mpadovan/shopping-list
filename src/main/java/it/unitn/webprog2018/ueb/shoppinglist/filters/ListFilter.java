@@ -64,8 +64,8 @@ public class ListFilter implements Filter {
 			if (!uri.endsWith("/")) {
 				uri += "/";
 			}
-			String listIdString = uri.substring(uri.lastIndexOf("HomePageLogin/" + user.getId() + "/") + ("HomePageLogin/" + user.getId() + "/").length(), uri.lastIndexOf("/"));
-			if (!listIdString.isEmpty() && !uri.contains("HomePageLogin")) {
+			String listIdString = "1";// uri.substring(uri.lastIndexOf("/" + user.getId() + "/") + ("/" + user.getId() + "/").length(), uri.lastIndexOf("/"));
+			if (!listIdString.isEmpty() || !uri.contains("HomePageLogin")) {
 				try {
 					Integer listId = Integer.parseInt(listIdString);
 					if (!listDAO.hasViewPermission(listId, user.getId())) {
@@ -97,16 +97,26 @@ public class ListFilter implements Filter {
 				} catch (DaoException | NumberFormatException ex) {
 					ex.printStackTrace();
 					((HttpServletResponse) response).sendRedirect("ops");
+					return;
 				}
 			} else {
-				((HttpServletResponse)response).sendError(404, "The resource you are trying to access does not exist");
+				// ((HttpServletResponse) response).sendError(404, "The resource you are trying to access does not exist");
+			}
+			if (!response.isCommitted()) {
+				Throwable problem = null;
+				try {
+					chain.doFilter(request, response);
+				} catch (Exception ex) {
+					if (response instanceof HttpServletResponse) {
+						((HttpServletResponse) response).sendError(500, ex.getMessage());
+					}
+				}
 			}
 		}
 	}
 
 	@Override
 	public void destroy() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

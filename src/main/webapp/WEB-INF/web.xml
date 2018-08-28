@@ -68,7 +68,7 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 	 <filter-mapping>
-        <filter-name>UserFilter</filter-name>
+        <filter-name>ListFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
 		<url-pattern>/restricted/InfoList/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
