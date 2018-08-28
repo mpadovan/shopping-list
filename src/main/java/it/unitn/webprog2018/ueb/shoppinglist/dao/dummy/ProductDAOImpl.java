@@ -41,6 +41,8 @@ public class ProductDAOImpl implements ProductDAO {
 		product.setOwner(user);
 		product.setName("Ananas");
 		product.setNote("Ananas maturo e dolce");
+		product.setLogo("/uploads/restricted/1/productLogo/ananas.png");
+		product.setPhotography("/uploads/restricted/1/productImage/ananas.jpg");
 		products.add(product);
 
 		Product product2 = new Product();
@@ -51,6 +53,7 @@ public class ProductDAOImpl implements ProductDAO {
 		product2.setOwner(user);
 		product2.setName("Zucchine");
 		product2.setNote("Zucchine fresche di stagione");
+		product2.setLogo("/uploads/restricted/1/productLogo/zucchini.png");
 		products.add(product2);
 		
 		Product product3 = new Product();

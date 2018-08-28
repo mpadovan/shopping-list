@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +26,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author simon
+ * @author giulia
  */
-public class InfoProductServlet extends HttpServlet {
-
+@WebServlet(name = "ProductListServlet", urlPatterns = {"/restricted/ProductList"})
+public class ProductListServlet extends HttpServlet {
 	private ProductDAO productDAO;
 	
 	@Override
@@ -48,12 +49,12 @@ public class InfoProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Integer productId = Integer.parseInt(request.getParameter("id"));
-		System.out.println(productId);
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
 		try {
-			Product product = productDAO.getProduct(productId);
-			request.setAttribute("product", product);
-			request.getRequestDispatcher("/WEB-INF/views/product/InfoProduct.jsp").forward(request, response);
+			List<Product> products = productDAO.getByUser(user.getId());
+			request.setAttribute("products", products);
+			request.getRequestDispatcher("/WEB-INF/views/product/ProductList.jsp").forward(request, response);
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
@@ -65,25 +66,12 @@ public class InfoProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
-	 *
-	 * @param request servlet request
-	 * @param response servlet response
-	 * @throws ServletException if a servlet-specific error occurs
-	 * @throws IOException if an I/O error occurs
-	 */
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-	}
-
-	/**
 	 * Returns a short description of the servlet.
 	 *
 	 * @return a String containing servlet description
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Info Product Servlet";
-	}// </editor-fold>
+		return "Custom product list servlet";
+	}
 }

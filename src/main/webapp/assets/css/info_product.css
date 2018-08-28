@@ -19,8 +19,19 @@ and open the template in the editor.
 	max-height: 40px;
 	margin-top: 4px;
 }
+.info-product-image{
+	background-color: white ;
+	max-width: 50px;
+	min-height: 50px;
+	border-radius: 10px;
+}
 .image-product{
 	max-width: 200px;
 	max-height: 200px;
+	margin: auto;
+}
+.image-product-list{
+	max-width: 50px;
+	max-height: 50px;
 	margin: auto;
 }
