@@ -71,6 +71,7 @@ public class ListFilter implements Filter {
 				Integer listId;
 				if (uri.endsWith("/" + user.getId() + "/")) { // handles the case in which userId and listId have the same value
 					listId = user.getId();
+					request.setAttribute("currentListId", listId);
 				} else {
 					try {
 						listId = Integer.parseInt(uri.substring(uri.lastIndexOf("/", uri.length() - 2) + 1, uri.length() - 1));

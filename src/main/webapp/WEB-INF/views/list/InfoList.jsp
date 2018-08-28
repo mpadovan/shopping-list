@@ -49,7 +49,7 @@
 					</tbody>
 				</table>
 
-				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 
 				<c:if test="${requestScope.hasDeletePermission}">
 					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>

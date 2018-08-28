@@ -25,6 +25,7 @@
 			<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
+			<c:if test="${!empty sessionScope.personalLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					 Liste personali
@@ -38,6 +39,8 @@
 					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
+			<c:if test="${!empty sessionScope.sharedLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					Liste condivise
@@ -51,6 +54,7 @@
 					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
 		</ul>
 	</div>
 

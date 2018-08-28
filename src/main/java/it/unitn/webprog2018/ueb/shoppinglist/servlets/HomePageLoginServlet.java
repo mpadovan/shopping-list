@@ -61,6 +61,7 @@ public class HomePageLoginServlet extends HttpServlet {
 			if (sharedLists != null) {
 				for (List l : (java.util.List<List>) request.getSession().getAttribute("sharedLists")) {
 					if (l.getId().equals(request.getAttribute("currentListId"))) {
+						System.out.println("List match");
 						request.setAttribute("currentList", l);
 						try {
 							request.setAttribute("sharedUsers", listDAO.getConnectedUsers(l.getId()));

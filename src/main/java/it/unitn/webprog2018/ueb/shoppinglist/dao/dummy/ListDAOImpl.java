@@ -17,6 +17,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,7 +103,7 @@ public class ListDAOImpl implements ListDAO {
 	@Override
 	public List getList(Integer id) throws DaoException {
 		for (List l : lists) {
-			if (l.getId() == id) {
+			if (Objects.equals(l.getId(), id)) {
 				return l;
 			}
 		}
