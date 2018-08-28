@@ -16,3 +16,12 @@ and open the template in the editor.
 	max-width: 1000px;	
 	margin: 100px auto;
 }
+#content{
+	background-color: lightgray;
+}
+.form-list {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+}

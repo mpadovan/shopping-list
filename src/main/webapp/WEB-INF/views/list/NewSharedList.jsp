@@ -5,40 +5,42 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <layouts:base pageTitle="Add shered list">
-    <jsp:attribute name="pageContent">
+    <jsp:attribute name="pageContent">	
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
-					<h4 class="text-center">Nuova lista condivisa</h4>
-					<form class="form-signin" method="POST" action="login">
-						<div class="form-label-group mb-2">
-							<label for="name">Nome lista</label>
-							<input type="text" class="form-control" id="nameList" name="nameList">
+					<div class="text-center mb-4">
+						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
+					</div>
+					<form class="form-list" action="NewSharedList" method="POST" enctype='multipart/form-data'>
+						<div>
+							<label for="nameList">Nome lista</label>
+							<input type="text"
+								   class="form-control" 
+								   id="nameList"
+								   name="nameList" 
+								   required />
 						</div>
-						<div class="form-label-group my-2">
-							<label for="description">Descrizione</label>
-							<input type="text" class="form-control" id="description" name="name">
-						</div>
-						<br>
-						<div class="custom-file my-2">
-							<input type="file" class="custom-file-input" id="image" name="image">
-							<label class="custom-file-label" for="image">Scegli immagine</label>
-						</div>
-						<br>
-						<div class="my-2">
-							<label for="class">Categoria</label>
-							<!-- name="state"? -->
-							<select class="select2 js-example-basic-single form-control py-3" name="state">
-								<option value="Fa">Farmacia</option>
-								<option value="Su">Supermercato</option>
-								<option value="Fe">Ferramenta</option>
+						<div>
+							<label for="category">Categoria</label>
+							<select class="select2 form-control py-3"
+									name="category"
+									id="category"
+									name="category" 
+									required
+									>
+								<option selected value="-1">Nessuna</option>
+								<c:forEach var="c" items="${requestScope.listsCategory}">
+									<option value="${c.id}">${c.name}</option>
+								</c:forEach>
 							</select>
 						</div>
 						<div>
 							<label for="shared">Condividi con: </label>
-							<select class="select2 js-example-basic-multiple form-control" name="states[]" multiple="multiple">
+							<select class="select2 js-example-basic-multiple form-control" name="shared" multiple="multiple">
 								<option>giuliacarocari@gmail.com</option>
 								<option>simonelever@gmail.com</option>
 								<option>matteopadovan@gmail.com</option>
@@ -46,16 +48,34 @@
 								<option>micheletessari@gmail.com</option>
 							</select>
 						</div>
-						<br>
 						<div>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Aggiungi</a>
-							<a href="HomePageLogin.jsp" class="btn btn-light">Annulla</a>
+							<label for="description">Descrizione</label>
+							<input type="text"
+								   class="form-control"
+								   id="description"
+								   name="description"
+								   required>
 						</div>
+						<div>
+							<label for="image">Immagine</label>
+							<div class="custom-file">
+								<input type="file"
+									   class="custom-file-input form-control"
+									   id="image"
+									   name="image"
+									   aria-describedby="image"
+									   value="${product.photography}">
+								<label class="custom-file-label" for="image">Scegli file</label>
+							</div>
+						</div>
+						<div class="float-right mt-3">
+							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light">Annulla</a>
+							<button class="btn btn-new ml-2" type="submit">Crea</button>
+						</div> 
 					</form>
 				</div>
 			</div>
-		</div>
-
+		</div>				
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
@@ -66,11 +86,13 @@
 		<!--<script src="assets/js/landing_page.js"></script>-->
 		<script>
 			$(document).ready(function () {
-				$('.js-example-basic-single').select2({
-//					theme: 'bootstrap4'
+				$('select').each(function () {
+					$(this).select2({
+						theme: 'bootstrap4'
+					});
 				});
 				$('.js-example-basic-multiple').select2({
-//					theme: 'bootstrap4'
+
 				});
 			});
 

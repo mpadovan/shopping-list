@@ -15,14 +15,14 @@ Vue.component('ajaxComponent', {
 		console.log('AjaxComponent Created');
 		var self = this;
 		$.ajax(this.settings)
-			.done(function (data) {
-				self.$emit('done', data);
-			})
-			.fail(function (err) {
-				console.log(err);
-				toastr["error"]('Errore AJAX, dettagli in console');
-				self.$emit('done', 'error');
-			});
+				.done(function (data) {
+					self.$emit('done', data);
+				})
+				.fail(function (err) {
+					console.log(err);
+					toastr["error"]('Errore AJAX, dettagli in console');
+					self.$emit('done', 'error');
+				});
 	},
 	template: "<div style=\"display:none;\"></div>",
 	destroyed: function () {
@@ -95,15 +95,18 @@ Vue.component('fetchListComponent', {
 	},
 	created: function () {
 		var self = this;
+		if (window.location.pathname.split('HomePageLogin/')[1].includes('/') &&
+				window.location.pathname.split('HomePageLogin/')[1].split("/")[1] !== '') {
 		$.ajax(this.settings)
-			.done(function (data) {
-				self.$emit('done', data);
-			})
-			.fail(function (err) {
-				console.log(err);
-				toastr["error"]('Errore AJAX, dettagli in console');
-				return;
-			});
+				.done(function (data) {
+					self.$emit('done', data);
+				})
+				.fail(function (err) {
+					console.log(err);
+					toastr["error"]('Errore AJAX, dettagli in console');
+					return;
+				});
+			}
 	},
 	template: "<div style=\"display:none;\"></div>",
 	destroyed: function () {
@@ -131,13 +134,13 @@ var app = new Vue({
 		showAutocomplete: false,
 		url: null,
 		autocompleteList: [],
-		user: 1,
+		user: null,
 		item_id: null,
 		showAutocompleteList: false,
 		ajaxSettings: {},
 		ajaxComponent: false,
 		operation: null,
-		list: 1
+		list: null
 	},
 	methods: {
 		searching: function () {
@@ -237,13 +240,16 @@ var app = new Vue({
 			} else {
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
-					if (this.results[j].category.id == 0 || typeof this.results[j].category == undefined) this.results[j].category = {
-						name: 'Default'
-					};
+					if (this.results[j].category.id == 0 || typeof this.results[j].category == undefined)
+						this.results[j].category = {
+							name: 'Default'
+						};
 				}
 				this.resultsSorted = this.results;
-				if (this.results.length == 0) this.noResults = true;
-				else this.noResults = false;
+				if (this.results.length == 0)
+					this.noResults = true;
+				else
+					this.noResults = false;
 				var arr = [];
 				for (var i = 0; data.length > i; i++) {
 					if (data[i].category.id == 0 || typeof data[i].category == undefined) {
@@ -296,7 +302,8 @@ var app = new Vue({
 		},
 		ajaxDone: function (data) {
 			this.ajaxComponent = false;
-			if (data === 'error') return;
+			if (data === 'error')
+				return;
 			else {
 				switch (this.operation) {
 					case 1:
@@ -336,9 +343,12 @@ var app = new Vue({
 			this.fetchList();
 		},
 		sortBasedOnCategories: function (val) {
-			if (this.selected == 'all') return true;
-			else if (val == this.selected) return true;
-			else return false;
+			if (this.selected == 'all')
+				return true;
+			else if (val == this.selected)
+				return true;
+			else
+				return false;
 		},
 		fetchListDone: function (data) {
 			this.fetchListComponent = false;
@@ -378,12 +388,15 @@ var app = new Vue({
 			}
 			this.resultsSorted = [];
 			for (var i = 0; this.results.length > i; i++) {
-				if (this.results[i].category.name == val) this.resultsSorted.push(this.results[i]);
+				if (this.results[i].category.name == val)
+					this.resultsSorted.push(this.results[i]);
 			}
 		}
 	},
 	created: function () {
-		this.user = window.location.pathname.split('HomePageLogin/')[1];
-		this.fetchList();
+		this.user = window.location.pathname.split('HomePageLogin/')[1].split("/")[0];
+		this.list = window.location.pathname.split('HomePageLogin/')[1].split("/")[1];
+		if(this.list == undefined) this.list = false;
+		else this.fetchList();
 	}
 });
