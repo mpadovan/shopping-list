@@ -31,7 +31,7 @@ public class UserDAOimpl implements UserDAO {
 
 		User user = new User();
 		user.setId(1);
-		user.setEmail("giuliacarocari@gmail.com");
+		user.setEmail("sdhfudshfh@dadadadada.com");
 		user.setPassword(Sha256.doHash("ciao"));
 		user.setName("Giulia");
 		user.setLastname("Carocari");
@@ -42,7 +42,7 @@ public class UserDAOimpl implements UserDAO {
 		
 		User user2 = new User();
 		user2.setId(2);
-		user2.setEmail("luigibianchi@gmail.com");
+		user2.setEmail("sdcsdsdfsdfsfdsfasdftbryjyhtd@sfmyudtrsdf.com");
 		user2.setPassword(Sha256.doHash("ciaone"));
 		user2.setName("Luigi");
 		user2.setLastname("Bianchi");
