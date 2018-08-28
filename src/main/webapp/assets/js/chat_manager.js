@@ -11,7 +11,7 @@ var message = {
             return this.message.sender.name + ' ' + this.message.sender.lastname;
         }
     },
-    template: ' <div class="alert alert-dark" v-bind:class="message.isMine" role="alert"> \
+    template:	' <div class="alert alert-dark" v-bind:class="message.isMine" role="alert"> \
                     <div style="font-size:.80rem" v-bind:style="{ color: message.color }">{{ fullName }} - {{ message.sendTime }}</div> \
                     <div>{{ message.text }}</div> \
                 </div>',

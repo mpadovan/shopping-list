@@ -142,7 +142,8 @@ var app = new Vue({
 		ajaxSettings: {},
 		ajaxComponent: false,
 		operation: null,
-		list: null
+		list: null,
+		chat: false
 	},
 	methods: {
 		searching: function () {
