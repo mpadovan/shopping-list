@@ -108,11 +108,11 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect(path);
 				}
 			} else {
-				request.setAttribute("user", user);
+				request.setAttribute("errorLogin", "Email o password validi");
 				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
-			request.setAttribute("user", user);
+			request.setAttribute("errorLogin", "Email o password validi");
 			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
