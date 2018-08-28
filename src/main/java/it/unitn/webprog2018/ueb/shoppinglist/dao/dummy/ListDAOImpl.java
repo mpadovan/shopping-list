@@ -17,6 +17,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -398,5 +399,22 @@ public class ListDAOImpl implements ListDAO {
 			return l;
 		}
 		return new LinkedList<>();
+	}
+
+	@Override
+	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean addList(List list) throws DaoException {
+		Random rand = new Random();
+		list.setId(rand.nextInt());
+		boolean valid = list.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			lists.add(list);
+		}
+		return valid;
 	}
 }

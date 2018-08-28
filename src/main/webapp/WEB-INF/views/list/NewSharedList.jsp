@@ -32,7 +32,6 @@
 									name="category" 
 									required
 									>
-								<option selected value="-1">Nessuna</option>
 								<c:forEach var="c" items="${requestScope.listsCategory}">
 									<option value="${c.id}">${c.name}</option>
 								</c:forEach>
@@ -63,8 +62,7 @@
 									   class="custom-file-input form-control"
 									   id="image"
 									   name="image"
-									   aria-describedby="image"
-									   value="${product.photography}">
+									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
 						</div>

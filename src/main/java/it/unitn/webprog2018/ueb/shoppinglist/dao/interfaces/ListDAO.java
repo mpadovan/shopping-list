@@ -55,7 +55,11 @@ public interface ListDAO {
 	
 	public java.util.List<List> getByUser(Integer userId) throws DaoException;
 
-	public java.util.List<List> getPersonalLists(Integer id);
+	public java.util.List<List> getPersonalLists(Integer id) throws DaoException;
 
-	public java.util.List<List> getSharedLists(Integer id);
+	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
+	
+	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException;
+
+	public Boolean addList (List list) throws DaoException;
 }
