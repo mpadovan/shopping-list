@@ -14,35 +14,35 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3 text-center">
-						<a href="#"><img class="image-product" src="${pageContext.servletContext.contextPath}/assets/images/latte_zymil.jpg" alt="Latte" title="Latte"></a>
+						<a href="#"><img class="image-product" src="${pageContext.servletContext.contextPath}${requestScope.product.photography}" alt="Ananas" title="Ananas"></a>
 					</div>
-					<div class="col">
-						<h5 class="card-title text-center">Informazioni prodotto "Latte Zymil"</h5>
-						<table class="table table-hover">
-							<tbody>
-								<tr>
-									<th scope="row">Nome</th>
-									<td>Latte Zymil</td>
-								</tr>
-								<tr>
-									<th scope="row">Note</th>
-									<td>Senza lattosio</td>
-								</tr>
-								<tr>
-									<th scope="row">Logo</th>
-									<td><div class="text-center info-product"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}/assets/images/milch.png" alt="Logo" title="Logo"></div></td>
-								</tr>
-								<tr>
-									<th scope="row">Categoria</th>
-									<td>
-										Latticini
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<a href="HomePageLogin.jsp" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-						<a href="EditProduct.jsp" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i> Modifica</a>
-					</div>
+						<div class="col">
+							<h5 class="card-title text-center">Informazioni prodotto "${requestScope.product.name}"</h5>
+							<table class="table table-responsive-md">
+								<tbody>
+
+									<tr>
+										<th scope="row">Nome</th>
+										<td>${requestScope.product.name}</td>
+									</tr>
+									<tr>
+										<th scope="row">Note</th>
+										<td>${requestScope.product.note}</td>
+									</tr>
+									<tr>
+										<th scope="row">Logo</th>
+										<td><div class="text-center info-product"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${requestScope.product.logo}" alt="Logo" title="Logo"></div></td>
+									</tr>
+									<tr>
+										<th scope="row">Categoria</th>
+										<td>${requestScope.product.category.name}</td>
+									</tr>
+
+								</tbody>
+							</table>
+							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditProduct" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i> Modifica</a>
+						</div>
 				</div>
 			</div>
 		</div>
