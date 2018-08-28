@@ -31,7 +31,7 @@
 							</div>
 						</div>
 						<div class="form-label-group">
-							<input type="text"  id="lastName" name="lastName" class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}" placeholder="Cognome" required="required">
+							<input type="text"  id="lastName" name="lastName" class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}" placeholder="Cognome" required>
 							<label for="lastName">Cognome</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="lastname" />
@@ -42,30 +42,37 @@
 							<input type="file" class="custom-file-input" id="image" name="image">
 						</div>
 						<div class="form-label-group mt-3">
-							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control ${(user.getFieldErrors("email") != null ? "is-invalid" : "")}" placeholder="Email" required="required">
+							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control ${(user.getFieldErrors("email") != null ? "is-invalid" : "")}" placeholder="Email" required>
 							<label for="email">Email</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="email" />
 							</div>
 						</div>
 						<div class="form-label-group">
-							<input type="password" id="password" name="password" class="form-control ${(user.getFieldErrors("password") != null ? "is-invalid" : "")}" placeholder="Password" required="required">
+							<input type="password" id="password" name="password" class="form-control ${(user.getFieldErrors("password") != null ? "is-invalid" : "")}" placeholder="Password" required>
 							<label for="password">Password</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="password" />
 							</div>
 						</div>
 						<div class="form-label-group">
-							<input type="password" id="checkPassword" name="checkPassword" class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}" placeholder="Conferma password" required="required">
+							<input type="password" id="checkPassword" name="checkPassword" class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}" placeholder="Conferma password" required>
 							<label for="checkPassword">Conferma password</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="checkpassword" />
 							</div>
 						</div>
-						<div class="checkbox mb-2">
-							<label>
-								<input type="checkbox" id="privacy" name="privacy" required="required"> Normativa privacy
-							</label>
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input ${ requestScope.privacy != null ? "is-invalid" : ""}"
+									   type="checkbox" value="" name="privacy" id="privacy" required >
+								<label class="form-check-label" for="privacy">
+									Normativa privacy
+								</label>
+								<div class="invalid-feedback">
+									${requestScope.privacy}
+								</div>
+							</div>
 						</div>
 						<button type="submit" class="btn btn-lg btn-block form-signin-btn">Registrati</button>
 						<div class="mt-3">

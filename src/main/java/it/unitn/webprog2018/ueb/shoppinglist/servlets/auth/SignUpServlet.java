@@ -69,6 +69,7 @@ public class SignUpServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String checkPassword = request.getParameter("checkPassword");
+		String privacy = request.getParameter("privacy");
 		String avatarURI = "";
 
 		User user = new User();
@@ -81,7 +82,7 @@ public class SignUpServlet extends HttpServlet {
 		user.setAdministrator(false);
 
 		try {
-			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory"))) {
+			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
 				user.setPassword(Sha256.doHash(password));
 				user.setCheckpassword(Sha256.doHash(checkPassword));
 				// Retrieving user avatar
@@ -138,6 +139,9 @@ public class SignUpServlet extends HttpServlet {
 					}
 				}
 			} else {
+				if (privacy == null || privacy.equals("")) {
+					request.setAttribute("privacy", "Confermare privacy");
+				}
 				request.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 			}
