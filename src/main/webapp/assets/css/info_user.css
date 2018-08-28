@@ -4,21 +4,16 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 8-ago-2018, 15.57.13
+    Created on : 27-ago-2018, 13.49.04
     Author     : giulia
 */
-
-.card-img-top{
-	max-width: 500px;
-    max-height: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-.new-list-card{
-	max-width: 500px;	
-	margin: 100px auto;
-}
-.info-list-card{
+.info-user-card{
 	max-width: 1000px;	
 	margin: 100px auto;
+}
+.form-user {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
 }

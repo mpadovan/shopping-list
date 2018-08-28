@@ -3,20 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
+package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
-import it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewPublicProductServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +17,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author simon
  */
-public class NewProductServlet extends HttpServlet {
-/**
+@WebServlet(name = "ChangeImageAdminServlet", urlPatterns = {"/restricted/admin/ChangeImageAdmin"})
+public class ChangeImageAdminServlet extends HttpServlet {
+
+	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
 	 * @param request servlet request
@@ -37,14 +31,7 @@ public class NewProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
-		try {
-			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
-			request.setAttribute("productsCategory", productsCategory);
-			request.getRequestDispatcher("/WEB-INF/views/product/NewProduct.jsp").forward(request, response);
-		} catch (DaoException ex) {
-			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		request.getRequestDispatcher("/WEB-INF/views/admin/ChangeImageAdmin.jsp").forward(request, response);
 	}
 
 	/**
@@ -58,6 +45,7 @@ public class NewProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 	}
 
 	/**
@@ -67,6 +55,7 @@ public class NewProductServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "New Product Servlet";
+		return "Short description";
 	}// </editor-fold>
+
 }

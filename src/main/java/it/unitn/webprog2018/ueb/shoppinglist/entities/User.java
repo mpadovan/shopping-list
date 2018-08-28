@@ -27,6 +27,7 @@ public class User extends AbstractEntity {
 	private String lastname;
 	private String image;
 	private Boolean administrator;
+	private String tokenpassword;
 	
 	public User() {
 		
@@ -126,10 +127,18 @@ public class User extends AbstractEntity {
 		this.administrator = administrator;
 	}
 	
+	public String getTokenpassword() {
+		return tokenpassword;
+	}
+
+	public void setTokenpassword(String tokenpassword) {
+		this.tokenpassword = tokenpassword;
+	}
+	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name == null || name.equals("")) {
-			setError("firstname", "Non può essere lasciato vuoto");
+			setError("name", "Non può essere lasciato vuoto");
 		}
 		if (lastname == null || lastname.equals("")) {
 			setError("lastname", "Non può essere lasciato vuoto");
@@ -137,7 +146,7 @@ public class User extends AbstractEntity {
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		/*if(errors.isEmpty())
 		{
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {
@@ -146,17 +155,19 @@ public class User extends AbstractEntity {
 				if(id!=user.getId())
 				{
 					setError("email", "email già esistente");
+					System.out.println("ciao");
 				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
+				System.out.println("RNFDE");
 			}
-		}
+		}*/
 	}
 
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) {
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
-			setError("passwordconfirmation", "Deve coincidere con password");
+			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
 
@@ -166,10 +177,10 @@ public class User extends AbstractEntity {
 			setError("password", "Non può essere lasciato vuoto");
 		}
 		if (checkpassword == null || checkpassword.equals("")) {
-			setError("passwordconfirmation", "Non può essere lasciato vuoto");
+			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
-			setError("passwordconfirmation", "Deve coincidere con password");
+			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
 }

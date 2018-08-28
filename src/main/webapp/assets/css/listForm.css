@@ -11,10 +11,17 @@ and open the template in the editor.
 .new-list-card{
 	max-width: 500px;	
 	margin: 100px auto;
-	padding-top: 10px;
 }
 .info-list-card{
 	max-width: 1000px;	
 	margin: 100px auto;
-	padding-top: 10px;
+}
+#content{
+	background-color: lightgray;
+}
+.form-list {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
 }

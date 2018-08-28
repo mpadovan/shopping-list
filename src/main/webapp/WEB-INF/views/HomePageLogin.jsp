@@ -9,16 +9,12 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid">
-			<div class="row justify-content-center">
-				<div class="col" id="app">
+		<div class="container-fluid mt-3" id="app">
+			<div class="row justify-content-center" v-if="list">
+				<div class="col">
 					<div class="card">
 						<div class="card-body">
-							<div class="float-right mb-2">
-								<a href="NewProduct.jsp">
-									<u>Crea prodotto</u>
-								</a>
-							</div>
+							<div class="float-right mb-2"><a href="${pageContext.servletContext.contextPath}/restricted/NewProduct"><u>Crea prodotto</u></a></div>
 							<div class="input-group mb-0">
 								<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 								<div class="input-group-append">
@@ -59,11 +55,7 @@
 					<transition name="fade" v-on:after-leave="listHided">
 						<div class="card" id="list" v-if="showList">
 							<div class="card-body">
-								<h5 class="card-title text-center">Lista corrente:
-									<a href="InfoList.jsp">
-										<u>Supermercato</u>
-									</a>
-								</h5>
+								<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList"><u>Supermercato</u></a></h5>
 								<div class="d-flex justify-content-end">
 									<p class="pointer" @click="chat = !chat">Chat
 										<a href="#">
@@ -90,42 +82,29 @@
 							</div>
 						</div>
 					</transition>
-					<fetch-list-component @done="fetchListDone" v-bind:settings="fetchListSettings" v-if="fetchListComponent"></fetch-list-component>
-					<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
-					<div id="item-modal" class="modal" tabindex="-1" role="dialog">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 v-show="updatingItem" class="modal-title">Modifica {{ item_name }}</h5>
-									<h5 v-show="!updatingItem" class="modal-title">Elimina {{ item_name }}</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<p v-show="updatingItem">Modifica la quantità di {{ item_name }}
-										<input type="number" name="item-amount" id="item-amount" v-model="item_amount" min="1">
-									</p>
-									<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
-								</div>
-								<div class="modal-footer">
-									<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
-									<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
-				<div class="chat col-lg-5" id="chat">
-					<div class="card">
-						<div class="card-body" style="height:90%">
-							<div class="d-flex justify-content-end mb-2">
-								<button type="button" class="close" aria-label="Close" @click="chat = !chat">
+				<fetch-list-component  @done="fetchListDone" v-bind:settings="fetchListSettings" v-if="fetchListComponent"></fetch-list-component>
+				<ajax-component @done="ajaxDone" v-bind:settings="ajaxSettings" v-if="ajaxComponent"></ajax-component>
+				<div id="item-modal" class="modal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 v-show="updatingItem" class="modal-title">Modifica {{ item_name }}</h5>
+								<h5 v-show="!updatingItem" class="modal-title">Elimina {{ item_name }}</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<div class="messages-container">
-								<message-component v-for="message in messages" v-bind:message="message"></message-component>
+							<div class="modal-body">
+								<p v-show="updatingItem">Modifica la quantità di {{ item_name }}
+									<input type="number" name="item-amount" id="item-amount" v-model="item_amount"
+										   min="1">
+								</p>
+								<p v-show="!updatingItem">Elimina dalla lista {{ item_name }}</p>
+							</div>
+							<div class="modal-footer">
+								<button v-show="updatingItem" type="button" class="btn btn-primary" @click="updateComponent" data-dismiss="modal">Salva</button>
+								<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
 							</div>
 						</div>
 							<div class="input-group" style="height:10%;">
@@ -138,6 +117,9 @@
 							</div>
 					</div>
 				</div>
+			</div>
+			<div v-if="!list" class="no-list">
+				<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><h3 class="text-xs-center mt-5" style="text-align:center;">Crea una nuova lista cliccando qui, Panda è annoiato!</h3></a>
 			</div>
 		</div>
 	</jsp:attribute>

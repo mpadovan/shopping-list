@@ -381,16 +381,27 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
-		java.util.List<Integer> list = new LinkedList<>();
-		if (listId == 1) {
-			list.add(1);
-			list.add(2);
-			return list;
-		} else if (listId == 2) {
-			list.add(1);
-			return list;
+	public java.util.List<List> getPersonalLists(Integer id) {
+		if (id == 1) {
+			java.util.List<List> l = new LinkedList<>();
+			l.add(lists.get(1));
+			return l;
 		}
-		throw new RecordNotFoundDaoException("List does not exist");
+		return new LinkedList<>();
+	}
+
+	@Override
+	public java.util.List<List> getSharedLists(Integer id) {
+		if (id == 1) {
+			java.util.List<List> l = new LinkedList<>();
+			l.add(lists.get(0));
+			return l;
+		}
+		return new LinkedList<>();
+	}
+
+	@Override
+	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

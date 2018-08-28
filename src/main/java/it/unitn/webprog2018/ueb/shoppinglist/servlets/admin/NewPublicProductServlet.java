@@ -90,7 +90,7 @@ public class NewPublicProductServlet extends HttpServlet {
 
 		try {
 			if (publicProductDAO.addProduct(product)) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductList");
+				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
 				request.setAttribute("product", product);
 				request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);

@@ -6,17 +6,27 @@
 
 $(document).ready(function () {
 
-    $("#sidebar").mCustomScrollbar({
-         theme: "minimal"
-    });
+	$(document).ready(function () {
+		$('#dismiss, .overlay').on('click', function () {
+			$('#sidebar').removeClass('active');
+			$('#content').removeClass('active');
+			$('.overlay').removeClass('active');
+		});
+		$('#sidebarCollapse').on('click', function () {
+			$('#sidebar, #content').toggleClass('active');
+			$('.collapse.in').toggleClass('in');
+			$('a[aria-expanded=true]').attr('aria-expanded', 'false');
+			$('.overlay').addClass('active');
+		});
 
-    $('#sidebarCollapse').on('click', function () {
-        // open or close navbar
-        $('#sidebar, #content').toggleClass('active');
-        // close dropdowns
-        $('.collapse.in').toggleClass('in');
-        // and also adjust aria-expanded attributes we use for the open/closed arrows
-        // in our CSS
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    });
+		$(window).resize(function () {
+			if ($(window).width() < 768) {
+				$('#sidebar').removeClass('active');
+				$('#content').removeClass('active');
+				$('.overlay').removeClass('active');
+			}
+		});
+
+	});
+
 });

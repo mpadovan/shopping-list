@@ -91,7 +91,7 @@ public class EditPublicProductServlet extends HttpServlet {
 			product.setPhotography(photography);
 			product.setCategory(productsCategory);
 			if (publicProductDAO.updateProduct(productId,product)) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductList");
+				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
 				request.setAttribute("product", product);
 				request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);

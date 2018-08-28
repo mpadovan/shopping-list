@@ -14,7 +14,7 @@
 		<div class="card" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
 			<div class="card-body">
 				<h1 class="card-title">Prodotti</h1>
-				<p><a href="${pageContext.servletContext.contextPath}/restricted/admin/NewPublicProduct">Nuovo prodotto <i class="fas fa-plus-circle"></i></a></p>
+				<p><a class="a-admin"href="${pageContext.servletContext.contextPath}/restricted/admin/NewPublicProduct">Nuovo prodotto <i class="fas fa-plus-circle"></i></a></p>
 				<form>
 					<label class="sr-only" for="search">Cerca</label>
 					<div class="input-group mb-2">
@@ -84,7 +84,7 @@
 					</tbody>
 				</table>
 				<c:if test="${requestScope.checkParam > 0}">
-					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList"><p>Torna alla lista</p></a></div>
+					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><p>Torna alla lista</p></a></div>
 				</c:if>
 			</div>
 		</div>
