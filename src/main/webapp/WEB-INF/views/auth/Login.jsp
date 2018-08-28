@@ -4,6 +4,7 @@
     Author     : giuliapeserico
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
 <layouts:auth pageTitle="Login">
@@ -11,9 +12,14 @@
 		<div class="container-fluid px-2">
 			<div class="card login-card">
 				<div class="card-body">
-					<div class="text-center mb-4">
-							<h1 class="h3 mb-3 font-weight-normal">Login</h1>
+					<c:if test="${!empty errorLogin}">
+						<div class="alert alert-danger" role="alert">
+							<p>Email o password errati.</p>
 						</div>
+					</c:if>
+					<div class="text-center mb-4">
+						<h1 class="h3 mb-3 font-weight-normal">Login</h1>
+					</div>
 					<form class="form-signin" action="${pageContext.servletContext.contextPath}/Login" method="POST">
 						<div class="form-label-group">
 							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control" placeholder="Email" required="required">
