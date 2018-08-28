@@ -86,6 +86,7 @@ public class MessageDAOImpl implements MessageDAO {
 	public Boolean addMessage(Message message) throws DaoException {
 		message.setId(chat.size() + 1);
 		message.setSender(factory.getUserDAO().getById(message.getSender().getId()));
+		chat.add(message);
 		if (message.getSender().getId().equals(1)) {
 			unreadCount.put(new AbstractMap.SimpleEntry<>(2,1), unreadCount.get(new AbstractMap.SimpleEntry<>(2,1))+1);
 			return true;
