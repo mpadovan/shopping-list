@@ -1,21 +1,22 @@
-<%--
-    Document   : NewSharedList
-    Created on : 16-lug-2018, 14.30.53
-    Author     : giuliapeserico
+<%-- 
+    Document   : NewList
+    Created on : 28-ago-2018, 21.56.13
+    Author     : giulia
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<layouts:base pageTitle="Add shered list">
-    <jsp:attribute name="pageContent">	
+<layouts:base pageTitle="New list">
+    <jsp:attribute name="pageContent">
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
 					</div>
-					<form class="form-list" action="NewSharedList" method="POST" enctype='multipart/form-data'>
+					<form class="form-list" method="POST" action="NewList">
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -67,13 +68,14 @@
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light">Annulla</a>
-							<button class="btn btn-new ml-2" type="submit">Crea</button>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
+							<button class="btn btn-new ml-2" type="submit">Modifica</button>
 						</div> 
 					</form>
 				</div>
 			</div>
-		</div>				
+		</div>
+
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
@@ -84,6 +86,7 @@
 		<!--<script src="assets/js/landing_page.js"></script>-->
 		<script>
 			$(document).ready(function () {
+				$(document).ready(function () {
 				$('select').each(function () {
 					$(this).select2({
 						theme: 'bootstrap4'
@@ -93,10 +96,9 @@
 
 				});
 			});
+			});
 
 		</script>
 	</jsp:attribute>
 
 </layouts:base>
-
-

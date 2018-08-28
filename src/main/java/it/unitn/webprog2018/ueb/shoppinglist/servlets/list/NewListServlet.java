@@ -15,11 +15,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,10 +29,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author simon
+ * @author giulia
  */
-public class NewSharedListServlet extends HttpServlet {
-
+@WebServlet(name = "NewListServlet", urlPatterns = {"/restricted/NewList"})
+public class NewListServlet extends HttpServlet {
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
@@ -42,7 +44,6 @@ public class NewSharedListServlet extends HttpServlet {
 		listDAO = factory.getListDAO();
 		userDAO = factory.getUserDAO();
 	}
-
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -58,10 +59,10 @@ public class NewSharedListServlet extends HttpServlet {
 			List<ListsCategory> listsCategory = listsCategoryDAO.getAll();
 			request.setAttribute("listsCategory", listsCategory);
 		} catch (DaoException ex) {
-			Logger.getLogger(NewSharedListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-		request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 	}
 
 	/**
@@ -82,24 +83,19 @@ public class NewSharedListServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		User me = (User) session.getAttribute("user");
-
-		String namelist = (String) request.getParameter("nameList");
-		
-		String categoryid = request.getParameter("category");
-		System.out.println("categoryid " + categoryid);
-		Integer cat = Integer.parseInt(categoryid);
+		String name =  request.getParameter("nameList");
+		Integer categoryId = Integer.parseInt(request.getParameter("category"));
+		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared");
-		String description = (String) request.getParameter("description");
-		//Immagine
-
+		
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
-		list.setName(namelist);
+		list.setName(name);
 		list.setOwner(me);
 		list.setDescription(description);
 		ListsCategory listCategory = null;
 		try {
 			System.out.println("before getByName");
-			listCategory = listsCategoryDAO.getById(cat);
+			listCategory = listsCategoryDAO.getById(categoryId);
 			System.out.println("after getByName");
 			list.setCategory(listCategory);
 
@@ -122,11 +118,11 @@ public class NewSharedListServlet extends HttpServlet {
 			request.setAttribute("list", list);
 			request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 		} catch (DaoException ex) {
-			Logger.getLogger(NewSharedListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
 
-		/*if (shared != null && shared.length != 0) {
+		if (shared != null && shared.length != 0) {
 			System.out.println("shared!");
 			LinkedList<User> listashared = new LinkedList();
 			for (int i = 0; i < shared.length; i++) {
@@ -138,7 +134,7 @@ public class NewSharedListServlet extends HttpServlet {
 					request.setAttribute("list", list);
 					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				} catch (DaoException ex) {
-					Logger.getLogger(NewSharedListServlet.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 					response.sendError(500, ex.getMessage());
 				}
 			}
@@ -156,10 +152,10 @@ public class NewSharedListServlet extends HttpServlet {
 					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				}
 			} catch (DaoException ex) {
-				Logger.getLogger(NewSharedListServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 				response.sendError(500, ex.getMessage());
 			}
-		}*/
+		}
 	}
 
 	/**
@@ -169,7 +165,7 @@ public class NewSharedListServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "New Shared List Servlet";
-	}// </editor-fold>
+		return "New list servlet";
+	}
 
 }
