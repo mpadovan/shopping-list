@@ -400,7 +400,8 @@ var app = new Vue({
 		} 
 	},
 	created: function () {
-		this.user = window.location.pathname.split('HomePageLogin/')[1];
+		this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
+		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
 		this.fetchList();
 		if(typeof(Worker) !== "undefined") {
 			if(typeof(w) == "undefined") {

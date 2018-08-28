@@ -107,14 +107,6 @@
 								<button v-show="!updatingItem" type="button" class="btn btn-primary" @click="deleteComponent" data-dismiss="modal">Cancella</button>
 							</div>
 						</div>
-							<div class="input-group" style="height:10%;">
-								<input type="text" class="form-control" placeholder="Scrivi qualcosa..." v-model="text" @keyup.enter="send">
-								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" type="button" @click="send">
-										<i class="far fa-paper-plane"></i>
-									</button>
-								</div>
-							</div>
 					</div>
 				</div>
 			</div>
