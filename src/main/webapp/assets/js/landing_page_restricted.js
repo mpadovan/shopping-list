@@ -396,7 +396,8 @@ var app = new Vue({
 			}
 		},
 		chat: function(val) {
-			$('#chat').toggleClass('show-chat');
+			$('#chat').css('display', 'block');
+			console.log($('#chat'));
 		} 
 	},
 	created: function () {
