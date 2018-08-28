@@ -4,6 +4,7 @@
     Author     : giuliapeserico
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
@@ -12,28 +13,31 @@
 		<div class="card info-list-card">
 			<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/eurospar.jpg" alt="image" title="Supermercato">
 			<div class="card-body">
-				<h5 class="card-title text-center">Informazioni lista "Supermercato"</h5>
+				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
 				<table class="table table-responsive-md">
 					<tbody>
 						<tr>
 							<th scope="row">Nome</th>
-							<td>Supermercato</td>
+							<td>${requestScope.currentList.name}</td>
 						</tr>
 						<tr>
 							<th scope="row">Descrizione</th>
-							<td>Spesa appartamento</td>
+							<td>${requestScope.currentList.description}</td>
 						</tr>
 						<tr>
 							<th scope="row">Proprietario</th>
-							<td>Simone Lever</td>
+							<td>${requestScope.currentList.owner.name}</td>
 						</tr>
-						<tr>
-							<th scope="row">Condivisa con</th>
-							<td>
-								giulia@gmail.com
-							</td>
-
-						</tr>
+						<c:if test="${!empty requestScope.sharedUsers}">
+							<c:forEach items="${requestScope.sharedUsers}" var="user">
+								<tr>
+									<th scope="row">Condivisa con</th>
+									<td>
+										${user.email}
+									</td>
+								</tr>
+							</c:forEach>
+						</c:if>
 					</tbody>
 				</table>
 

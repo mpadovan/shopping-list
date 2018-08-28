@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.filters;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -31,9 +32,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class HomePageLoginFilter implements Filter {
-
-	private ListDAO listDAO;
+public class UserFilter implements Filter {
 
 	/**
 	 * FilterConfig object associated with this filter
@@ -43,7 +42,6 @@ public class HomePageLoginFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		listDAO = ((DAOFactory) filterConfig.getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
 
 	@Override
@@ -76,23 +74,7 @@ public class HomePageLoginFilter implements Filter {
 						+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
 				return;
 			} else if (Pattern.matches(".*/restricted/HomePageLogin/" + user.getId() + "/.+", uri)) {
-				String listIdString = uri.substring(uri.lastIndexOf("HomePageLogin/" + user.getId() + "/") + ("HomePageLogin/" + user.getId() + "/").length(), uri.lastIndexOf("/"));
-				try {
-					Integer listId = Integer.parseInt(listIdString);
-					if (!listDAO.hasViewPermission(listId, user.getId())) {
-						((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
-								+ "The resource you are trying to access is none of your business.\n"
-								+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
-						return;
-					}
-				} catch (NumberFormatException ex) {
-					((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
-							+ "The resource " + listIdString + " you are trying to access is not a list.\n");
-					return;
-				} catch (DaoException ex) {
-					((HttpServletResponse) response).sendError(500, "Something went wrong with our server, sorry"); 
-					return;
-				}
+				// TODO remove condition
 			}
 			if (!response.isCommitted()) {
 				Throwable problem = null;

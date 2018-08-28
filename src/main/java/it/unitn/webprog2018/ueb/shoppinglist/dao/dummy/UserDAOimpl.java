@@ -33,7 +33,7 @@ public class UserDAOimpl implements UserDAO {
 
 		User user = new User();
 		user.setId(1);
-		user.setEmail("sdhfudshfh@dadadadada.com");
+		user.setEmail("ciao@providerimprobabile.com");
 		user.setPassword(Sha256.doHash("ciao"));
 		user.setCheckpassword(Sha256.doHash("ciao"));
 		user.setName("Mario");
