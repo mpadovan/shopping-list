@@ -1,3 +1,5 @@
+/* jshint esversion:6 */
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -398,9 +400,14 @@ var app = new Vue({
 		} 
 	},
 	created: function () {
-		this.user = window.location.pathname.split('HomePageLogin/')[1].split("/")[0];
-		this.list = window.location.pathname.split('HomePageLogin/')[1].split("/")[1];
-		if(this.list == undefined) this.list = false;
-		else this.fetchList();
+		this.user = window.location.pathname.split('HomePageLogin/')[1];
+		this.fetchList();
+		if(typeof(Worker) !== "undefined") {
+			if(typeof(w) == "undefined") {
+				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
+			}
+		} else {
+			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
+		}
 	}
 });

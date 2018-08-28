@@ -56,6 +56,7 @@
         <filter-name>HomePageLoginFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
         <url-pattern>/restricted/messages/*</url-pattern>
+		<url-pattern>/restricted/notifications/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>

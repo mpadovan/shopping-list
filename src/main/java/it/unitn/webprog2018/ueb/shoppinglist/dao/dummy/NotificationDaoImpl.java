@@ -8,8 +8,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.NotificationDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,14 +28,23 @@ public class NotificationDaoImpl implements NotificationDAO {
 	private final boolean[] sent = new boolean[3];
 
 	public NotificationDaoImpl(DAOFactoryImpl aThis) {
+		Arrays.fill(read, false);
+		Arrays.fill(sent, false);
 		factory = aThis;
 		notifications = new LinkedList<>();
-
+		// Notification 1: second to be sent
 		Notification n = new Notification();
 		n.setId(1);
-		n.setList(new it.unitn.webprog2018.ueb.shoppinglist.entities.List());
-		n.getList().setId(0);
-		n.setUser(new User());
+		try {
+			n.setList(factory.getListDAO().getList(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			n.setUser(factory.getUserDAO().getById(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		n.getUser().getId();
 		try {
 			n.setProduct(factory.getProductDAO().getByUser(1).get(0));
@@ -42,33 +52,44 @@ public class NotificationDaoImpl implements NotificationDAO {
 			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		n.setTime(new Timestamp(System.currentTimeMillis() + 62 * 1000));
-
+		
+		// Notification 2: first to be sent
 		Notification n2 = new Notification();
-		n2.setId(1);
-		n2.setList(new it.unitn.webprog2018.ueb.shoppinglist.entities.List());
-		n2.getList().setId(1);
-		n2.setUser(new User());
-		n2.getUser().getId();
+		n2.setId(2);
+		try {
+			n2.setList(factory.getListDAO().getList(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			n2.setUser(factory.getUserDAO().getById(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		try {
 			n2.setProduct(factory.getProductDAO().getByUser(1).get(1));
 		} catch (DaoException ex) {
 			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		n2.setTime(new Timestamp(System.currentTimeMillis() + 95 * 1000));
-
 		Notification n3 = new Notification();
-		n3.setId(2);
-		n3.setList(new it.unitn.webprog2018.ueb.shoppinglist.entities.List());
-		n3.getList().setId(1);
-		n3.setUser(new User());
-		n3.getUser().getId();
+		n3.setId(3);
+		try {
+			n3.setList(factory.getListDAO().getList(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			n3.setUser(factory.getUserDAO().getById(1));
+		} catch (DaoException ex) {
+			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		try {
 			n3.setProduct(factory.getPublicProductDAO().getById(3));
 		} catch (DaoException ex) {
 			Logger.getLogger(NotificationDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		n3.setTime(new Timestamp(System.currentTimeMillis() + 20 * 1000));
-
 		notifications.add(n);
 		notifications.add(n2);
 		notifications.add(n3);
@@ -90,7 +111,7 @@ public class NotificationDaoImpl implements NotificationDAO {
 	public List<Notification> getUnreadNotifications(Integer userId) {
 		List<Notification> ret = new LinkedList<>();
 		for (Notification n : notifications) {
-			if (!read[notifications.indexOf(n)] && userId.equals(n.getUser().getId())) {
+			if (!read[notifications.indexOf(n)] && userId.equals(n.getUser().getId()) && n.getTime().before(new Date(System.currentTimeMillis()))) {
 				ret.add(n);
 				read[notifications.indexOf(n)] = true;
 			}
@@ -102,7 +123,7 @@ public class NotificationDaoImpl implements NotificationDAO {
 	public Integer getNotificationCount(Integer userId) {
 		int count = 0;
 		for (Notification n : notifications) {
-			if (!read[notifications.indexOf(n)] && userId.equals(n.getUser().getId())) {
+			if (!read[notifications.indexOf(n)] && userId.equals(n.getUser().getId()) && n.getTime().before(new Date(System.currentTimeMillis()))) {
 				count++;
 			}
 		}

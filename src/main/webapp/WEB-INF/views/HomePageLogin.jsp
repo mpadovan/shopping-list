@@ -108,9 +108,9 @@
 							</div>
 						</div>
 							<div class="input-group" style="height:10%;">
-								<input type="text" class="form-control" placeholder="Scrivi qualcosa...">
+								<input type="text" class="form-control" placeholder="Scrivi qualcosa..." v-model="text" @keyup.enter="send">
 								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" type="button">
+									<button class="btn btn-outline-secondary" type="button" @click="send">
 										<i class="far fa-paper-plane"></i>
 									</button>
 								</div>
