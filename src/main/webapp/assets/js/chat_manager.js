@@ -55,9 +55,8 @@ var chat = new Vue({
         },
     },
     created: function () {
-        this.user = window.location.pathname.split('HomePageLogin/')[1];
+        this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
         this.arrColor = [];
-
     },
     methods: {
         getRandomColor: function () {
@@ -131,7 +130,7 @@ $(document).ready(function () {
             errors: {}
         }
     };
-    Socket = new WebSocket('ws://localhost:8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1]);
+    Socket = new WebSocket('ws://localhost:8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
     Socket.onopen = function (evt) {
         Socket.send(JSON.stringify({
             operation: '1',
