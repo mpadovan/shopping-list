@@ -11,7 +11,7 @@ var message = {
             return this.message.sender.name + ' ' + this.message.sender.lastname;
         }
     },
-    template: ' <div class="alert alert-dark message-r" v-bind:class="message.isMine" role="alert"> \
+    template: ' <div class="alert alert-dark" v-bind:class="message.isMine" role="alert"> \
                     <div style="font-size:.80rem" v-bind:style="{ color: message.color }">{{ fullName }} - {{ message.sendTime }}</div> \
                     <div>{{ message.text }}</div> \
                 </div>',
@@ -86,7 +86,7 @@ var chat = new Vue({
             }
         },
         send: function () {
-            if (this.text !== null || this.text !== '') {
+            if (this.text) {
                 this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
                 this.message.payload.list.id = app.list;
                 this.message.payload.sender.id = this.user;
@@ -95,9 +95,7 @@ var chat = new Vue({
             }
         },
         manageMessages: function (data) {
-            var self = this;
             this.messages = data;
-            console.log(this.messages)
             for (var j = 0; this.messages.length > j; j++) {
                 console.log(this.messages[j].sender.id);
                 if (this.messages[j].sender.id == this.user) this.messages[j].isMine = 'message-s';
