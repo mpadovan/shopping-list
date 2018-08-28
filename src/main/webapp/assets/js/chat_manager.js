@@ -56,7 +56,7 @@ var chat = new Vue({
     created: function () {
         this.user = window.location.pathname.split('HomePageLogin/')[1];
         this.arrColor = [];
-        
+
     },
     methods: {
         getRandomColor: function () {
@@ -85,15 +85,17 @@ var chat = new Vue({
                     break;
             }
         },
-        send: function() {
-            this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
-            this.message.payload.list.id = app.list;
-            this.message.payload.sender.id = this.user;
-            Socket.send(JSON.stringify(this.message));
+        send: function () {
+            if (this.text !== null || this.text !== '' || this.text !== ' ') {
+                this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
+                this.message.payload.list.id = app.list;
+                this.message.payload.sender.id = this.user;
+                Socket.send(JSON.stringify(this.message));
+            }
         },
-        manageMessages: function(data) {
+        manageMessages: function (data) {
             var self = this;
-            if(this.messages == null) {
+            if (this.messages == null) {
                 this.messages = data;
                 for (var i = 0; this.messages.length > i; i++) {
                     self.arrColor.push(this.messages[i].sender.id);
@@ -118,7 +120,7 @@ var chat = new Vue({
                 }
             } else {
                 for (var j = 0; this.messages.length > j; j++) {
-                    if(this.messages[j].color == undefined) {
+                    if (this.messages[j].color == undefined) {
                         for (var k = 0; self.arrColor.length > k; k++) {
                             if (self.arrColor[k].id == this.messages[j].sender.id) this.messages[j].color = self.arrColor[k].color;
                             else {
