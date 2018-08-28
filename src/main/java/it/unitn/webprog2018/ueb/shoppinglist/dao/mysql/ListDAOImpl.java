@@ -591,7 +591,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
@@ -610,15 +610,83 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
-	public java.util.List<List> getPersonalLists(Integer id) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public java.util.List<List> getPersonalLists(Integer id) throws DaoException{
+		java.util.List<List> list = new ArrayList<>();
+		try{
+			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image \n" +
+					"from lists l inner join sharedlists s on l.id != s.idlist\n" +
+					"where l.iduser = " + id;
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			List l;
+			User u;
+			ListsCategory lc;
+			int i;
+			while(rs.next()){
+				i =  1;
+				l = new List();
+				u = new User();
+				lc = new ListsCategory();
+				l.setId(rs.getInt(i++));
+				l.setName(rs.getString(i++));
+				u.setId(rs.getInt(i++));
+				lc.setId(rs.getInt(i++));
+				l.setDescription(rs.getString(i++));
+				l.setImage(rs.getString(i++));
+				
+				l.setOwner(u);
+				l.setCategory(lc);
+				list.add(l);
+			}
+			rs.close();
+			st.close();
+			return list;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
-
+	
 	@Override
-	public java.util.List<List> getSharedLists(Integer id) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public java.util.List<List> getSharedLists(Integer id)throws DaoException{
+		java.util.List<List> list = new ArrayList<>();
+		try{
+			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image\n" +
+					"from lists l inner join sharedlists s on l.id = s.idlist\n" +
+					"where l.iduser = " + id;
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			List l;
+			User u;
+			ListsCategory lc;
+			int i;
+			while(rs.next()){
+				i =  1;
+				l = new List();
+				u = new User();
+				lc = new ListsCategory();
+				l.setId(rs.getInt(i++));
+				l.setName(rs.getString(i++));
+				u.setId(rs.getInt(i++));
+				lc.setId(rs.getInt(i++));
+				l.setDescription(rs.getString(i++));
+				l.setImage(rs.getString(i++));
+				
+				l.setOwner(u);
+				l.setCategory(lc);
+				list.add(l);
+			}
+			rs.close();
+			st.close();
+			return list;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
 	
 }

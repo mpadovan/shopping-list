@@ -7,7 +7,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.NotificationDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
@@ -42,8 +41,8 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 		try{
 			String query =	"select pn.id,pn.time,pn.idlist,l.name,l.iduser,u.email,pn.idproduct,p.name,pn.idpublicproduct,pp.name\n" +
 					"from productsnotification pn\n" +
-					"left join lists l on pn.idlist = l.id\n" +
-					"left join users u on l.iduser = u.id\n" +
+					"inner join lists l on pn.idlist = l.id\n" +
+					"inner join users u on l.iduser = u.id\n" +
 					"left join products p on pn.idproduct = p.id\n" +
 					"left join publicproducts pp on pn.idpublicproduct = pp.id\n" +
 					"where time <= "+dateFormat.format(nextRequest);
@@ -108,7 +107,7 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 			String query =	"select pn.id,pn.time,pn.idlist,l.name,l.iduser,pn.idproduct,p.name,pn.idpublicproduct,pp.name\n" +
 					"from productsnotification pn\n" +
 					"inner join lists l on pn.idlist = l.id\n" +
-					"left join users u on l.iduser = u.id\n" +
+					"inner join users u on l.iduser = u.id\n" +
 					"left join products p on pn.idproduct = p.id\n" +
 					"left join publicproducts pp on pn.idpublicproduct = pp.id\n" +
 					"where pn.isread = 0 and pn.time <= now(1) and l.iduser = "+userId;
