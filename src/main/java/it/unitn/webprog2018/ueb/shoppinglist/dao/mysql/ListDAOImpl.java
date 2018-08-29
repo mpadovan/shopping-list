@@ -689,15 +689,47 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	
+	//Restituisce solo l'id dell'utente
 	@Override
 	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		java.util.List<User> list = new ArrayList<>();
+		try{
+			String query =	"select iduser from sharedlists where idlist = "+listId;
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			User u;
+			while(rs.next()){
+				u = new User();
+				u.setId(rs.getInt(1));
+				list.add(u);
+			}
+			
+			rs.close();
+			st.close();
+			return list;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
-
+	
 	@Override
 	public boolean deleteList(Integer listId) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			String query = "delete from lists where id = "+listId;
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			if(count != 1)
+				throw new RecordNotFoundDaoException("list "+listId+" not found");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
 
 	@Override

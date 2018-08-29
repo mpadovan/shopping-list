@@ -149,12 +149,46 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	
 	@Override
 	public Boolean deleteProductsCategory(Integer id) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			String query = "call deleteProductsCategory("+id+");";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			if(count < 1)
+				throw new RecordNotFoundDaoException("product category "+id+" not found ");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
-
+	
 	@Override
 	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = productsCategory.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String query = "update productscategories\n" +
+						"set name = \""+productsCategory.getName()+"\",\n" +
+						"	category = "+productsCategory.getCategory().getId()+",\n" +
+						"    description = \""+productsCategory.getDescription()+"\",\n" +
+						"    logo = \""+productsCategory.getLogo()+"\"\n" +
+						"where id = " + id;
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				int count = st.executeUpdate();
+				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("product cateogry "+productsCategory.getId()+" not found");
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
 	}
 	
 	@Override
