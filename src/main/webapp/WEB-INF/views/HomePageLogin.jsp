@@ -158,8 +158,8 @@
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<c:if test="${not empty requestScope.currentList}">
-			<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
-			<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
+		<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
+		<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
 		</c:if>
 	</jsp:attribute>
 </layouts:base>
