@@ -58,7 +58,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 	public User getByEmail(String email) throws DaoException{
 		try {
 			User user = new User();
-			String query = "SELECT id,password,name,lastname,image,administrator FROM users WHERE email = "+email;
+			String query = "SELECT id,password,name,lastname,image,administrator FROM users WHERE email = \""+email+"\"";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if(rs.first())
