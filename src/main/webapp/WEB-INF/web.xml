@@ -20,9 +20,13 @@
         <filter-name>UploadFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UploadFilter</filter-class>
     </filter>
-	 <filter>
-        <filter-name>ListFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListFilter</filter-class>
+    <filter>
+        <filter-name>ListViewFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListViewFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>ListDeleteFilter</filter-name>
+        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListDeleteFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>RootFilter</filter-name>
@@ -61,16 +65,25 @@
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
         <url-pattern>/restricted/messages/*</url-pattern>
         <url-pattern>/restricted/notifications/*</url-pattern>
-		<url-pattern>/restricted/InfoList/*</url-pattern>
+        <url-pattern>/restricted/InfoList/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-	 <filter-mapping>
-        <filter-name>ListFilter</filter-name>
+    <filter-mapping>
+        <filter-name>ListViewFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
-		<url-pattern>/restricted/InfoList/*</url-pattern>
+        <url-pattern>/restricted/InfoList/*</url-pattern>
+        <url-pattern>/restricted/DeleteList/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ListDeleteFilter</filter-name>
+        <servlet-name>DeleteListServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
@@ -174,9 +187,13 @@
         <servlet-name>NewListsCategoryServlet</servlet-name>
         <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewListsCategoryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.DeleteListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>EditListServlet</servlet-name>
-        <url-pattern>/restricted/permission/EditList</url-pattern>
+        <url-pattern>/restricted/EditList/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InfoListServlet</servlet-name>
@@ -249,6 +266,10 @@
     <servlet-mapping>
         <servlet-name>NewListsCategoryServlet</servlet-name>
         <url-pattern>/restricted/admin/NewListsCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteListServlet</servlet-name>
+        <url-pattern>/restricted/DeleteList/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

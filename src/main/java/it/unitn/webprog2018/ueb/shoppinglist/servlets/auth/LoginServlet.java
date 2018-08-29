@@ -109,15 +109,15 @@ public class LoginServlet extends HttpServlet {
 					path += "restricted/admin/PublicProductList";
 					response.sendRedirect(path);
 				} else {
-					path += "restricted/HomePageLogin/" + user.getId() + "/" + (!personalLists.isEmpty() ? personalLists.get(0).getId() : "");
+					path += "restricted/HomePageLogin/" + user.getId();
 					response.sendRedirect(path);
 				}
 			} else {
-				request.setAttribute("errorLogin", "Email o password validi");
+				request.setAttribute("errorLogin", "Email o password non validi");
 				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
-			request.setAttribute("errorLogin", "Email o password validi");
+			request.setAttribute("errorLogin", "Email o password non validi");
 			request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);

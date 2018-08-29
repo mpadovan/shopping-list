@@ -21,7 +21,7 @@
 
     <div class="sidebar-body">
 		<div>
-			<a href="${pageContext.servletContext.contextPath}/restricted/Products"><p  class="font-weight-bold p-products-sidebar">I tuoi prodotti</p></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/ProductList"><p  class="font-weight-bold p-products-sidebar">I tuoi prodotti</p></a>
 			<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
@@ -33,7 +33,7 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 					<c:forEach items="${sessionScope.personalLists}" var="list">
-						<li>
+						<li id="personal-list-${list.id}">
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>
@@ -48,7 +48,7 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
 					<c:forEach items="${sessionScope.sharedLists}" var="list">
-						<li>
+					<li id="shared-list-${list.id}" >
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>

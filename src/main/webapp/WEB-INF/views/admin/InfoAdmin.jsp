@@ -15,10 +15,10 @@
 				<div class="row">
 					<div class="col-3">
 						<c:if test="${not empty sessionScope.user.image}">
-							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${user.image}" alt="Nome Cognome" title="Immagine profilo">
+							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="Nome Cognome" title="Immagine profilo">
 						</c:if>
 						<c:if test="${empty sessionScope.user.image}">
-							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar.png" alt="Nome Cognome" title="Immagine profilo">
+							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar2.png" alt="Nome Cognome" title="Immagine profilo">
 						</c:if>
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ChangeImageAdmin" class="btn btn-light mx-2 mt-3">Cambia immagine</a>
 					</div>

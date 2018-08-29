@@ -18,7 +18,7 @@ import javax.servlet.ServletContextListener;
  */
 public class PathSetter implements ServletContextListener {
 
-	private static final String UPLOAD_PATH = "uploads/";
+	private static final String UPLOAD_PATH = "uploads";
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {

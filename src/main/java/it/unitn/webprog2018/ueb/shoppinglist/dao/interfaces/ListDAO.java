@@ -74,4 +74,6 @@ public interface ListDAO {
 	public java.util.List<List> getPersonalLists(Integer id) throws DaoException;
 
 	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
+
+	public boolean deleteList(Integer listId) throws DaoException;
 }

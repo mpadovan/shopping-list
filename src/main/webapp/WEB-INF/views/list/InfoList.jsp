@@ -11,13 +11,12 @@
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<c:if test="!${empty sessionScope.user.image}">
+			<c:if test="${!empty requestScope.currentList.image}">
 				<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			</c:if>
-			<c:if test="${empty sessionScope.user.image}">
+			<c:if test="${empty requestScope.currentList.image}">
 				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
 			</c:if>
-			<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			<div class="card-body">
 				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
 				<table class="table table-responsive-md">
@@ -55,7 +54,7 @@
 					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
 				</c:if>
 				<c:if test="${requestScope.hasModifyPermission}">
-					<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditList" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+					<a href="${pageContext.servletContext.contextPath}/restricted/EditList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
 				</c:if>
 			</div>
 		</div>
@@ -70,11 +69,11 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						Sei sicuro di volere eliminare la lista "NomeLista"?
+						Sei sicuro di volere eliminare la lista ${requestScope.currentList.name}?
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">Annulla</button>
-						<a href="#" class="btn btn-danger">Conferma</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/DeleteList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-danger">Conferma</a>
 					</div>
 				</div>
 			</div>
