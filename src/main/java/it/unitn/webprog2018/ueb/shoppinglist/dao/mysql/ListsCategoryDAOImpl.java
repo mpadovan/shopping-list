@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
@@ -65,19 +66,23 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	
 	@Override
 	public Boolean addListCategory(ListsCategory lc) throws DaoException {
-		try{
-			String query = "INSERT INTO listscategories (name,description) VALUES (\""+
-					lc.getName()+ "\",\"" +
-					lc.getDescription()+ "\")";
-			PreparedStatement st = this.getCon().prepareStatement(query);
-			int count = st.executeUpdate();
-			st.close();
-			return (count == 1);
+		Boolean valid = lc.isVaildOnCreate(dAOFactory);
+		if(valid){
+			try{
+				String query = "INSERT INTO listscategories (name,description) VALUES (\""+
+						lc.getName()+ "\",\"" +
+						lc.getDescription()+ "\")";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				int count = st.executeUpdate();
+				st.close();
+				return valid && (count == 1);
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
 		}
-		catch(SQLException ex){
-			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-			throw new DaoException(ex);
-		}
+		return valid;
 	}
 	
 	@Override
@@ -125,7 +130,7 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 				lc.setId(rs.getInt(i++));
 				lc.setName(name);
 				lc.setDescription(rs.getString(i++));
-								
+				
 				rs.close();
 				st.close();
 				return lc;
@@ -137,19 +142,72 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public ListsCategory getById(Integer id) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			ListsCategory lc = new ListsCategory();
+			String query = "select name,description from listscategories where id = "+id;
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			if(rs.first())
+			{
+				int i = 1;
+				lc.setId(id);
+				lc.setName(rs.getString(i++));
+				lc.setDescription(rs.getString(i++));
+				
+				rs.close();
+				st.close();
+				return lc;
+			}
+			throw new RecordNotFoundDaoException("list category with id: " + id + " not found");
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
 	}
-
+	
 	@Override
 	public Boolean deleteListsCategory(Integer id) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			String query = "call deleteListsCategory("+id+");";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			if(count < 1)
+				throw new RecordNotFoundDaoException("product category "+id+" not found ");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
-
+	
 	@Override
 	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategory) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = listsCategory.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String query = "update listscategories\n" +
+						"set name = \""+listsCategory.getName()+"\",\n" +
+						"	description = \""+listsCategory.getDescription()+"\"\n" +
+						"where id = " + categoryId;
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				int count = st.executeUpdate();
+				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("list category "+categoryId+" not found");
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
 	}
 }

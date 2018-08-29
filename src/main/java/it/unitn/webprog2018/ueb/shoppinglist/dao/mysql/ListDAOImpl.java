@@ -718,12 +718,12 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	@Override
 	public boolean deleteList(Integer listId) throws DaoException {
 		try{
-			String query = "";
+			String query = "delete from lists where id = "+listId;
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			int count = st.executeUpdate();
 			st.close();
 			if(count != 1)
-				throw new RecordNotFoundDaoException("product not found in list "+listId);
+				throw new RecordNotFoundDaoException("list "+listId+" not found");
 			return true;
 		}
 		catch(SQLException ex){

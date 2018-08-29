@@ -45,3 +45,31 @@ drop foreign key lists_ibfk_1;
 
 alter table lists
 add constraint lists_ibfk_1 foreign key(iduser) references users(id) on delete cascade;
+
+ALTER TABLE messages
+drop foreign key messages_ibfk_1,
+drop foreign key messages_ibfk_2;
+
+alter table messages
+add constraint messages_ibfk_1 foreign key(iduser) references users(id) on delete cascade,
+add constraint messages_ibfk_2 foreign key(idlist) references lists(id) on delete cascade;
+
+delimiter //
+CREATE PROCEDURE deleteProductsCategory(IN _id integer)
+BEGIN
+	if exists (select 1 from productscategories where id = _id limit 1) and _id != 1 then
+		update products set idproductscategory = 1 where idproductscategory = _id;
+		update publicproducts set idproductscategory = 1 where idproductscategory = _id;
+        update productscategories set category = 1 where category = _id;
+		delete from productscategories where id = _id;
+    end if;
+END//
+
+CREATE PROCEDURE deleteListsCategory(IN _id integer)
+BEGIN
+	if exists (select 1 from listscategories where id = _id limit 1) and _id != 1 then
+		update lists set idcategory = 1 where idcategory = _id;
+		delete from listscategories where id = _id;
+    end if;
+END//
+delimiter ;
