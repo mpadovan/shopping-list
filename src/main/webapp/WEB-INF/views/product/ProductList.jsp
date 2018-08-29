@@ -29,7 +29,7 @@
 								<th>Logo</th>
 								<th>Fotografia</th>
 								<th>Categoria</th>
-								<th>Gestisci</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -60,7 +60,6 @@
 
 									<td>${p.category.name}</td>
 									<td>
-										<span><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
 										<span class="ml-4"><a class="info-custom-product-a"href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
 									</td>
 								</tr>

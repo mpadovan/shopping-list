@@ -47,7 +47,7 @@
 							</tbody>
 						</table>
 						<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-						<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditProduct" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i> Modifica</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditProduct?id=${requestScope.product.id}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i> Modifica</a>
 					</div>
 				</div>
 			</div>

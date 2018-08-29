@@ -58,7 +58,6 @@ public class NewProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 			request.setAttribute("productsCategory", productsCategory);
