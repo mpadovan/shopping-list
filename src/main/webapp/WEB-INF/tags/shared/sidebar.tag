@@ -25,6 +25,7 @@
 			<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
+			<c:if test="${!empty sessionScope.personalLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					 Liste personali
@@ -32,12 +33,14 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 					<c:forEach items="${sessionScope.personalLists}" var="list">
-						<li>
+						<li id="personal-list-${list.id}">
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
+			<c:if test="${!empty sessionScope.sharedLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					Liste condivise
@@ -45,12 +48,13 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
 					<c:forEach items="${sessionScope.sharedLists}" var="list">
-						<li>
+					<li id="shared-list-${list.id}" >
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
 		</ul>
 	</div>
 

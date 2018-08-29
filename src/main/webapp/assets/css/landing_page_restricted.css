@@ -34,15 +34,17 @@
 .message-r {
     float: left;
     max-width: 70%;
+    min-width: 51%;
 }
 
 .message-s {
     float: right;
     max-width: 70%;
+    min-width: 51%;
 }
 
 .messages-container {
-    width: fit-content;
+    width: 100%;
     height: 95%;
     padding-bottom: 5%;
     overflow: auto;

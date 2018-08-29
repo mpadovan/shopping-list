@@ -65,8 +65,7 @@ public class RootFilter implements Filter {
 						newSession.setAttribute("personalLists", personalLists);
 						newSession.setAttribute("sharedLists", sharedLists);
 
-						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId() + "/" + 
-								(!personalLists.isEmpty() ? personalLists.get(0).getId() : ""));
+						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId());
 						return;
 					} catch (RecordNotFoundDaoException ex) {
 						//redirect alla pagina di Login - esiste un remember cookie che però non corrisponde all'email dell'utente (es: cambio email)

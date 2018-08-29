@@ -37,7 +37,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			List list = new List();
 			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"u.name,u.lastname,u.administrator," +
+					"u.name,u.lastname,u.administrator,u.email" +
 					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
@@ -61,6 +61,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				user.setLastname(rs.getString(i++));
 				//user.setImage(rs.getString(i++));
 				user.setAdministrator(rs.getInt(i++) != 0);
+				user.setEmail(rs.getString(i++));
 				lc.setName(rs.getString(i++));
 				lc.setDescription(rs.getString(i++));
 				user.setEmail("");
@@ -593,7 +594,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	}
 	
 	@Override
-	public java.util.List<Integer> getConnectedUsers(Integer listId) throws DaoException {
+	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
 		try{
 			String query =	"select iduser from sharedlists where idlist = "+listId;
@@ -687,6 +688,16 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
+	}
+
+	@Override
+	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean deleteList(Integer listId) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 }
