@@ -138,7 +138,7 @@ public class User extends AbstractEntity {
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name == null || name.equals("")) {
-			setError("firstname", "Non può essere lasciato vuoto");
+			setError("name", "Non può essere lasciato vuoto");
 		}
 		if (lastname == null || lastname.equals("")) {
 			setError("lastname", "Non può essere lasciato vuoto");
@@ -167,7 +167,7 @@ public class User extends AbstractEntity {
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) {
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
-			setError("passwordconfirmation", "Deve coincidere con password");
+			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
 
@@ -177,10 +177,10 @@ public class User extends AbstractEntity {
 			setError("password", "Non può essere lasciato vuoto");
 		}
 		if (checkpassword == null || checkpassword.equals("")) {
-			setError("passwordconfirmation", "Non può essere lasciato vuoto");
+			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
-			setError("passwordconfirmation", "Deve coincidere con password");
+			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
 }

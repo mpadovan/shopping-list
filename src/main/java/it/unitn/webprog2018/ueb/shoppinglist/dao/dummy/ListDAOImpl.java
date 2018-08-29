@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +58,7 @@ public class ListDAOImpl implements ListDAO {
 		l2.getCategory().setName("Ferrmenta");
 		l2.setDescription("Lista delle cose veramente importanti");
 		l2.setId(2);
-		l2.setImage("https://www.bricoman.it/media/foto_articoli/2016/01/10040619_HR_PRO_V01_2016_01_11_151504_original.JPG");
+		l2.setImage("");
 		l2.setName("EuroBrico");
 		l2.setOwner(user);
 
@@ -103,11 +104,11 @@ public class ListDAOImpl implements ListDAO {
 	@Override
 	public List getList(Integer id) throws DaoException {
 		for (List l : lists) {
-			if (l.getId() == id) {
+			if (Objects.equals(l.getId(), id)) {
 				return l;
 			}
 		}
-		throw new RecordNotFoundDaoException("List " + id + "does not exist");
+		throw new RecordNotFoundDaoException("List " + id + " does not exist");
 	}
 
 	@Override
@@ -225,17 +226,9 @@ public class ListDAOImpl implements ListDAO {
 	@Override
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		if (listId == 1) {
-			if (userId == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return userId == 1;
 		} else if (listId == 2) {
-			if (userId == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return userId == 1;
 		}
 		return false;
 	}
@@ -262,7 +255,6 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
 		if (listId == 1) {
 			if (publicProductsOnList1.containsKey(product)) {
-				System.out.println("Updating product" + product.getId());
 				publicProductsOnList1.replace(product, publicProductsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -284,8 +276,6 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		if (listId == 1) {
 			if (productsOnList1.containsKey(product)) {
-				
-				System.out.println("Updating product" + product.getId());
 				productsOnList1.replace(product, productsOnList1.get(product) + 1);
 				return true;
 			} else {
@@ -307,7 +297,6 @@ public class ListDAOImpl implements ListDAO {
 	public java.util.List<List> getByUser(Integer userID) throws DaoException {
 		java.util.List<List> match = new LinkedList<>();
 		for (List l : lists) {
-			System.out.println("checking list " + l.getName() + ", owner: " + l.getOwner().getId());
 			if (l.getOwner().getId() == userID) {
 				match.add(l);
 			}
@@ -371,32 +360,51 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		if (null == listId) {
 			throw new RecordNotFoundDaoException("List " + listId + " not found");
-		} else switch (listId) {
-			case 1:
-				return userId == 1;
-			case 2:
-				return userId == 1;
-			default:
-				throw new RecordNotFoundDaoException("List " + listId + " not found");
+		} else {
+			switch (listId) {
+				case 1:
+					return userId == 1;
+				case 2:
+					return userId == 1;
+				default:
+					throw new RecordNotFoundDaoException("List " + listId + " not found");
+			}
 		}
 	}
 
 	@Override
-	public java.util.List<List> getPersonalLists(Integer id) {
-		if (id == 1) {
-			java.util.List<List> l = new LinkedList<>();
-			l.add(lists.get(1));
-			return l;
+	public java.util.List<List> getPersonalLists(Integer id) throws DaoException {
+		try {
+			if (lists.contains(dAOFactory.getListDAO().getList(1))) {
+				java.util.List<List> l = new LinkedList<>();
+				try {
+					l.add(dAOFactory.getListDAO().getList(1));
+				} catch (DaoException ex) {
+					Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				return l;
+			}
+		} catch (DaoException ex) {
+
+			return new LinkedList<>();
 		}
 		return new LinkedList<>();
 	}
 
 	@Override
-	public java.util.List<List> getSharedLists(Integer id) {
-		if (id == 1) {
-			java.util.List<List> l = new LinkedList<>();
-			l.add(lists.get(0));
-			return l;
+	public java.util.List<List> getSharedLists(Integer id) throws DaoException {
+		try {
+			if (lists.contains(dAOFactory.getListDAO().getList(2))) {
+				java.util.List<List> l = new LinkedList<>();
+				try {
+					l.add(dAOFactory.getListDAO().getList(2));
+				} catch (DaoException ex) {
+					Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				return l;
+			}
+		} catch (DaoException ex) {
+			return new LinkedList<>();
 		}
 		return new LinkedList<>();
 	}
@@ -416,5 +424,40 @@ public class ListDAOImpl implements ListDAO {
 			lists.add(list);
 		}
 		return valid;
+	}
+		
+	@Override
+	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
+		java.util.List<Integer> list = new LinkedList<>();
+		list.add(1);
+		list.add(2);
+		return list;
+	}
+
+	@Override
+	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
+		java.util.List<User> list = new LinkedList<>();
+		list.add(dAOFactory.getUserDAO().getById(1));
+		list.add(dAOFactory.getUserDAO().getById(2));
+		return list;
+	}
+
+	@Override
+	public boolean deleteList(Integer listId) throws DaoException {
+		try {
+			switch (listId) {
+				case 1:
+					lists.remove(0);
+					return true;
+				case 2:
+					lists.remove(1);
+					return true;
+				default:
+					throw new DaoException("The list you are trying to delete does not exist");
+			}
+		} catch (IndexOutOfBoundsException ex) {
+			ex.printStackTrace();
+		}
+		return false;
 	}
 }

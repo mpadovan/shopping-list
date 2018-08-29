@@ -14,13 +14,39 @@ and open the template in the editor.
 	min-height: 50px;
 	border-radius: 10px;
 }
+.info-custom-product{
+	background-color: white;
+	max-width: 50px;
+	min-height: 50px;
+	border-radius: 10px;
+}
+.info-custom-product-a{
+	color: #007bff;
+}
 .logo-product{
 	max-width: 40px;
 	max-height: 40px;
 	margin-top: 4px;
 }
+.info-product-image{
+	background-color: white ;
+	max-width: 50px;
+	min-height: 50px;
+	border-radius: 10px;
+}
 .image-product{
 	max-width: 200px;
 	max-height: 200px;
 	margin: auto;
+	margin-top: 45px;
 }
+.image-product-list{
+	max-width: 50px;
+	max-height: 50px;
+	margin: auto;
+}
+.info-product-card{
+	max-width: 1000px;	
+	margin: 100px auto;
+}
+

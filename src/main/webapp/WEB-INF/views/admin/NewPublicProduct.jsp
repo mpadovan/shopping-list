@@ -68,7 +68,7 @@
 						</select>
 					</div>
 					<div class="float-right mt-3">
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList" class="btn btn-light">Annulla</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>
 					</div>
 				</form>

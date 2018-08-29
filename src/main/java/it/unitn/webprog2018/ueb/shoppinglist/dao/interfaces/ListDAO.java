@@ -54,12 +54,30 @@ public interface ListDAO {
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException;
 	
 	public java.util.List<List> getByUser(Integer userId) throws DaoException;
+	
+	/**
+	 * Returns a list of the users (aka their IDs) that have joined the shared list, including its owner
+	 * @param listId Id of the list to be inspected
+	 * @return A list of user ids for a given list
+	 * @throws DaoException 
+	 */
+	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException;
+	
+	/**
+	 * Returns a list of the users (aka their IDs) that have joined the shared list, including its owner
+	 * @param listId Id of the list to be inspected
+	 * @return A list of user ids for a given list
+	 * @throws DaoException 
+	 */
+	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException;
 
 	public java.util.List<List> getPersonalLists(Integer id) throws DaoException;
-
-	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
 	
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException;
 
 	public Boolean addList (List list) throws DaoException;
+
+	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
+
+	public boolean deleteList(Integer listId) throws DaoException;
 }

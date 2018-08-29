@@ -9,33 +9,34 @@ Vue.component('getCat', {
 	data: function () {
 		return {
 			data: null
-		};	
+		};
 	},
 	created: function () {
 		var self = this;
+		console.log(self.lat + ',' + self.lon);
 		$.get({
 			url: '/ShoppingList/services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
 				self.data = data;
 				if (!("Notification" in window)) {
 					toastr['error']("This browser does not support desktop notification");
-				  }
-				
-				  // Let's check whether notification permissions have already been granted
-				  else if (Notification.permission === "granted") {
+				}
+
+				// Let's check whether notification permissions have already been granted
+				else if (Notification.permission === "granted") {
 					// If it's okay let's create a notification
-					var notification = new Notification(self.data[0].category + 'vicino a te!');
-				  }
-				
-				  // Otherwise, we need to ask the user for permission
-				  else if (Notification.permission !== "denied") {
+					var notification = new Notification(self.data[0].category + ' vicino a te!');
+				}
+
+				// Otherwise, we need to ask the user for permission
+				else if (Notification.permission !== "denied") {
 					Notification.requestPermission(function (permission) {
-					  // If the user accepts, let's create a notification
-					  if (permission === "granted") {
-						var notification = new Notification(self.data[0].category + 'vicino a te!');
-					  }
+						// If the user accepts, let's create a notification
+						if (permission === "granted") {
+							var notification = new Notification(self.data[0].category + ' vicino a te!');
+						}
 					});
-				  }
+				}
 			}
 		});
 	},
@@ -87,18 +88,25 @@ Vue.component('categories', {
 					success: function (data) {
 						data = _.sortBy(data, ['name']);
 						self.categories = data;
-						self.$emit('done', {
-							cat: self.category,
-							lat: position.coords.latitude,
-							lon: position.coords.longitude
-						});
+						console.log(self.category);
+						if (self.category != null) {
+							self.$emit('done', {
+								cat: self.category,
+								lat: position.coords.latitude,
+								lon: position.coords.longitude
+							});
+						}
 					},
 					error: function (error) {
 						alert('Errore nel caricamento delle categorie');
 						console.log(error);
 					}
 				});
-			}, self.error);
+			}, self.error, {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			});
 		}
 	}
 });
@@ -156,12 +164,21 @@ Vue.component('list-item', {
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
+				<td>{{ item.item.note }}</td> \
+				<td>"logo"</td> \
+				<td>"fotografia"</td> \
+				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
 Vue.component('search-item', {
 	props: ['item'],
+	data: function() {
+		return {
+			show: false
+		};
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.name);
@@ -176,12 +193,19 @@ Vue.component('search-item', {
 			});
 		}
 	},
-	template: '<li class="list-group-item" @click="callParent"> \
-					<div class="row align-items-center"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
-					</div> \
-				</li>'
+	template: '<li class="list-group-item"> \
+	<div class="row align-items-center"> \
+		<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
+		 <div class="col align-self-center float-right"><div @click="show = !show"><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+	</div> \
+	<div class="row align-items-center" v-show="show"> \
+		<div class="col align-self-center float-left"> \
+			<div>{{item.logo }}</div> \
+			<div>{{item.note }}</div> \
+		</div> \
+		<div class="col align-self-center float-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
+	</div> \
+</li>'
 });
 
 var app = new Vue({
@@ -351,12 +375,15 @@ var app = new Vue({
 		if (localStorage.getItem("items")) {
 			this.items = JSON.parse(localStorage.getItem("items"));
 		} else {
-			this.items.push({
-				item: {
-					name: 'il tuo primo oggetto in lista',
-				},
-				amount: 1
-			});
+			// this.items.push({
+			// 	item: {
+			// 		name: 'il tuo primo oggetto in lista',
+			// 	},
+			// 	amount: 1,
+			// 	category: {
+			// 		name: 'default'
+			// 	}
+			// });
 		}
 	}
 });

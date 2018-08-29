@@ -19,21 +19,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 public class List extends AbstractEntity {
 
 	@Expose
-	private Integer id;
-	@Expose
 	private String name;
 	private User owner;
 	private ListsCategory category;
 	private String description;
 	private String image;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

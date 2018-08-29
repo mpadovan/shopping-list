@@ -84,7 +84,7 @@
 					</tbody>
 				</table>
 				<c:if test="${requestScope.checkParam > 0}">
-					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductList"><p>Torna alla lista</p></a></div>
+					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><p>Torna alla lista</p></a></div>
 				</c:if>
 			</div>
 		</div>

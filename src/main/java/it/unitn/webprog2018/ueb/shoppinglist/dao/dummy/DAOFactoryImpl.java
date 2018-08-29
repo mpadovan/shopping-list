@@ -6,12 +6,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.MessageDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.NotificationDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
-
 
 /**
  *
@@ -28,17 +29,23 @@ public class DAOFactoryImpl implements DAOFactory {
 	private final ProductsCategoryDAO PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl(this);
 	private final ListDAO LIST_DAO = new ListDAOImpl(this);
 	private final ListsCategoryImagesDAO LISTS_CATEGORY_IMAGE_DAO = new ListsCategoryImagesDAOImpl(this);
-	
+	private final MessageDAOImpl MESSAGE_DAO = new MessageDAOImpl(this);
+	private final NotificationDAO NOTIFICATION_DAO = new NotificationDaoImpl(this);
+
 	@Override
 	public ExampleDAO getExampleDAO() {
 		return EXAMPLE_DAO;
 	}
-	
+
+	public MessageDAOImpl getMESSAGE_DAO() {
+		return MESSAGE_DAO;
+	}
+
 	@Override
 	public UserDAO getUserDAO() {
 		return USER_DAO;
 	}
-	
+
 	@Override
 	public TokenDAO getTokenDAO() {
 		return TOKEN_DAO;
@@ -72,6 +79,16 @@ public class DAOFactoryImpl implements DAOFactory {
 	@Override
 	public ListsCategoryImagesDAO getListsCategoryImageDAO() {
 		return LISTS_CATEGORY_IMAGE_DAO;
+	}
+
+	@Override
+	public MessageDAO getMessageDAO() {
+		return MESSAGE_DAO;
+	}
+
+	@Override
+	public NotificationDAO getNotificationDAO() {
+		return NOTIFICATION_DAO;
 	}
 
 }

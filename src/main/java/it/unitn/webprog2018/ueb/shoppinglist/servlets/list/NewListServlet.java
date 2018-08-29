@@ -86,6 +86,7 @@ public class NewListServlet extends HttpServlet {
 		}
 
 		Boolean redirect = false;
+		Boolean isshared = false;
 		HttpSession session = request.getSession(false);
 		User me = (User) session.getAttribute("user");
 		String name = request.getParameter("nameList");
@@ -121,6 +122,7 @@ public class NewListServlet extends HttpServlet {
 				}
 			} else {
 				System.out.println("shared!");
+				isshared=true;
 				LinkedList<User> listashared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
 					try {
@@ -145,6 +147,16 @@ public class NewListServlet extends HttpServlet {
 			{
 				list = listDAO.getList(list.getName(), me);
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+				if(!isshared)
+				{
+					//set sessione liste not shared
+					//session.setAttribute(, );
+				}
+				else
+				{
+					//set sessione liste shared
+				}
+				System.out.println(me.getId() + "/" + list.getId());
 				response.sendRedirect(path);
 			}
 			else

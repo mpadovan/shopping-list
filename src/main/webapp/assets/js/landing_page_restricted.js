@@ -1,3 +1,5 @@
+/* jshint esversion:6 */
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -32,6 +34,9 @@ Vue.component('ajaxComponent', {
 
 Vue.component('list-item', {
 	props: ['item'],
+	created: function() {
+		console.log(this.item);
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.item.name);
@@ -57,6 +62,10 @@ Vue.component('list-item', {
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
+				<td>{{ item.item.note }}</td> \
+				<td>"logo"</td> \
+				<td>"fotografia"</td> \
+				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
@@ -64,6 +73,14 @@ Vue.component('list-item', {
 
 Vue.component('search-item', {
 	props: ['item'],
+	data: function() {
+		return {
+			show: false
+		};
+	},
+	created: function() {
+		console.log(this.item);
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.name);
@@ -78,10 +95,17 @@ Vue.component('search-item', {
 			});
 		}
 	},
-	template: '<li class="list-group-item" @click="callParent"> \
+	template: '<li class="list-group-item"> \
 					<div class="row align-items-center"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
+				 		<div class="col align-self-center float-right"><div @click="show = !show"><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+					</div> \
+					<div class="row align-items-center" v-show="show"> \
+						<div class="col align-self-center float-left"> \
+							<div>{{item.logo }}</div> \
+							<div>{{item.note }}</div> \
+						</div> \
+						<div class="col align-self-center float-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
 					</div> \
 				</li>'
 });
@@ -140,7 +164,8 @@ var app = new Vue({
 		ajaxSettings: {},
 		ajaxComponent: false,
 		operation: null,
-		list: null
+		list: null,
+		chat: false
 	},
 	methods: {
 		searching: function () {
@@ -361,6 +386,7 @@ var app = new Vue({
 				this.items.push(data[i]);
 			}
 			console.log(this.items);
+			$('#chat').height($('#app').height());
 		}
 	},
 	watch: {
@@ -391,12 +417,22 @@ var app = new Vue({
 				if (this.results[i].category.name == val)
 					this.resultsSorted.push(this.results[i]);
 			}
-		}
+		},
+		chat: function(val) {
+			$('#chat').css('display', 'block');
+			console.log($('#chat'));
+		} 
 	},
 	created: function () {
-		this.user = window.location.pathname.split('HomePageLogin/')[1].split("/")[0];
-		this.list = window.location.pathname.split('HomePageLogin/')[1].split("/")[1];
-		if(this.list == undefined) this.list = false;
-		else this.fetchList();
+		this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
+		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
+		this.fetchList();
+		if(typeof(Worker) !== "undefined") {
+			if(typeof(w) == "undefined") {
+				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
+			}
+		} else {
+			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
+		}
 	}
 });

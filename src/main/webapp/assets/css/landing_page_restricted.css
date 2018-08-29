@@ -11,14 +11,41 @@
     padding-left: .5rem;
 }
 
-.no-list {
-    background-image: url(https://kathytemean.files.wordpress.com/2017/12/mike-cicthe_patient_panda-post.jpg);
-    background-position: center;
-    background-size: cover;
-    width: calc(100vw - 250px);
-    height: 100vh;
+.chat {
+    display: none;
     position: absolute;
-    top:0;
-    left: 0;
-    z-index: 1;
+    z-index: 100000;
+    right: 0;
+}
+
+.show-chat {
+    display: block;
+}
+
+.chat .card,
+.chat .card .card-body {
+    height: 100%;
+}
+
+#list {
+    min-height: 30rem;
+}
+
+.message-r {
+    float: left;
+    max-width: 70%;
+    min-width: 51%;
+}
+
+.message-s {
+    float: right;
+    max-width: 70%;
+    min-width: 51%;
+}
+
+.messages-container {
+    width: 100%;
+    height: 95%;
+    padding-bottom: 5%;
+    overflow: auto;
 }

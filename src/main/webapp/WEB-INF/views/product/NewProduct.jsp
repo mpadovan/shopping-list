@@ -32,7 +32,6 @@
 									name="category"
 									id="category"
 									name="category" 
-									value="${product.category}"
 									required
 									>
 								<option selected value="-1">Nessuna</option>
@@ -47,7 +46,6 @@
 								   class="form-control"
 								   id="note"
 								   name="note" 
-								   value="${product.note}"
 								   required>
 						</div>
 						<div>
@@ -56,7 +54,6 @@
 								   class="form-control"
 								   id="logo"
 								   name="logo" 
-								   value="${product.logo}"
 								   >
 						</div>
 						<div>
@@ -66,13 +63,12 @@
 									   class="custom-file-input form-control"
 									   id="image"
 									   name="image"
-									   aria-describedby="image"
-									   value="${product.photography}">
+									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Crea</button>
 						</div>
 					</form>

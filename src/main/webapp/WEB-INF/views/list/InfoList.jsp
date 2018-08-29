@@ -4,42 +4,58 @@
     Author     : giuliapeserico
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/eurospar.jpg" alt="image" title="Supermercato">
+			<c:if test="${!empty requestScope.currentList.image}">
+				<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
+			</c:if>
+			<c:if test="${empty requestScope.currentList.image}">
+				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
+			</c:if>
 			<div class="card-body">
-				<h5 class="card-title text-center">Informazioni lista "Supermercato"</h5>
+				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
 				<table class="table table-responsive-md">
 					<tbody>
 						<tr>
 							<th scope="row">Nome</th>
-							<td>Supermercato</td>
+							<td>${requestScope.currentList.name}</td>
 						</tr>
 						<tr>
 							<th scope="row">Descrizione</th>
-							<td>Spesa appartamento</td>
+							<td>${requestScope.currentList.description}</td>
 						</tr>
 						<tr>
 							<th scope="row">Proprietario</th>
-							<td>Simone Lever</td>
+							<td>${requestScope.currentList.owner.email}</td>
 						</tr>
-						<tr>
-							<th scope="row">Condivisa con</th>
-							<td>
-								giulia@gmail.com
-							</td>
+						<c:if test="${!empty requestScope.sharedUsers}">
+							<tr>
+								<th scope="column">Condivisa con</th>
 
-						</tr>
+								<td>
+									<c:forEach items="${requestScope.sharedUsers}" var="user">
+										${user.email}
+										<br>
+									</c:forEach>
+								</td>
+							</tr>
+						</c:if>
 					</tbody>
 				</table>
 
-				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-				<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
-				<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditList" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+
+				<c:if test="${requestScope.hasDeletePermission}">
+					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
+				</c:if>
+				<c:if test="${requestScope.hasModifyPermission}">
+					<a href="${pageContext.servletContext.contextPath}/restricted/EditList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+				</c:if>
 			</div>
 		</div>
 		<!--Modal-->
@@ -53,11 +69,11 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						Sei sicuro di volere eliminare la lista "NomeLista"?
+						Sei sicuro di volere eliminare la lista ${requestScope.currentList.name}?
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">Annulla</button>
-						<a href="#" class="btn btn-danger">Conferma</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/DeleteList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-danger">Conferma</a>
 					</div>
 				</div>
 			</div>

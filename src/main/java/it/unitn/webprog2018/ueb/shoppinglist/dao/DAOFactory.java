@@ -4,6 +4,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.MessageDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.NotificationDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
@@ -34,4 +36,7 @@ public interface DAOFactory {
 	
 	public ListsCategoryImagesDAO getListsCategoryImageDAO();
 	
+	public MessageDAO getMessageDAO();
+	
+	public NotificationDAO getNotificationDAO();
 }

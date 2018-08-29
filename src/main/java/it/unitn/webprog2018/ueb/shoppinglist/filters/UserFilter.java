@@ -26,13 +26,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class HomePageLoginFilter implements Filter {
-	
+public class UserFilter implements Filter {
+
 	/**
 	 * FilterConfig object associated with this filter
 	 */
 	private FilterConfig filterConfig = null;
-	
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
@@ -56,12 +56,13 @@ public class HomePageLoginFilter implements Filter {
 				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 				return;
 			}
-
+			
 			String uri = ((HttpServletRequest) request).getRequestURI();
-			if(!uri.endsWith("/")) {
-				uri += "/";
+			if (!uri.endsWith("/")) {
+			uri += "/";
 			}
-			if (!Pattern.matches(".*/restricted/HomePageLogin/" + user.getId() + "/.*", uri)) {
+			
+			if (!Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 						+ "The resource you are trying to access is none of your business.\n"

@@ -21,65 +21,40 @@
 
     <div class="sidebar-body">
 		<div>
-			<a href="${pageContext.servletContext.contextPath}/restricted/Products"><p  class="font-weight-bold p-products-sidebar">I tuoi prodotti</p></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/ProductList"><p  class="font-weight-bold p-products-sidebar">I tuoi prodotti</p></a>
 			<a href="${pageContext.servletContext.contextPath}/restricted/NewList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
+			<c:if test="${!empty sessionScope.personalLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					 Liste personali
 				</span>
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
-					<li>
-						<a href="#">Ferramenta</a>
+					<c:forEach items="${sessionScope.personalLists}" var="list">
+						<li id="personal-list-${list.id}">
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
-					<li>
-						<a href="#">Farmacia</a>
-					</li>
-					<li>
-						<a href="#">Unieuro</a>
-					</li>
-					<li>
-						<a href="#">Lista 1</a>
-					</li>
-					<li>
-						<a href="#">Lista 2</a>
-					</li>
-					<li>
-						<a href="#">Lista 3</a>
-					</li>
-					<li>
-						<a href="#">Lista 4</a>
-					</li>
+					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
+			<c:if test="${!empty sessionScope.sharedLists}">
 			<li>
 				<span class="font-weight-bold" style="font-size: 20px;">
 					Liste condivise
 				</span>
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
-					<li>
-						<a href="#">Supermercato</a>
+					<c:forEach items="${sessionScope.sharedLists}" var="list">
+					<li id="shared-list-${list.id}" >
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
-					<li>
-						<a href="#">Lista 3</a>
-					</li>
-					<li>
-						<a href="#">Lista 4</a>
-					</li>
-					<li>
-						<a href="#">Lista 5</a>
-					</li>
-					<li>
-						<a href="#">Lista 6</a>
-					</li>
-					<li>
-						<a href="#">Lista 7</a>
-					</li>
+					</c:forEach>
 				</ul>
 			</li>
+			</c:if>
 		</ul>
 	</div>
 
