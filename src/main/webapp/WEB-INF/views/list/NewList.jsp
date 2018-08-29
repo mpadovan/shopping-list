@@ -38,19 +38,14 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div>
+						<div id="sharedList">
 							<label for="shared">Condividi con: </label>
 							<input type="text"
 								   class="form-control" 
-								   id="nameList"
 								   name="shared" 
-								   required />
-							<input type="text"
-								   class="form-control" 
-								   id="nameList"
-								   name="shared" 
-								   required />
+								   />
 						</div>
+						<button type="button" class="btn btn-light" onclick="aggiungiEmail()">Condividi con un'altra email</button>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
@@ -78,8 +73,6 @@
 				</div>
 			</div>
 		</div>
-
-
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css" type="text/css" rel="stylesheet"/>
@@ -100,7 +93,13 @@
 					});
 				});
 			});
-
+			function aggiungiEmail() {
+				var btn = document.createElement("INPUT");
+				btn.setAttribute("type", "text");
+				btn.setAttribute("name", "shared");
+				btn.classList.add("form-control");
+				document.getElementById("sharedList").appendChild(btn);
+			}
 		</script>
 	</jsp:attribute>
 

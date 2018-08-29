@@ -92,6 +92,9 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared");
+		for (int i = 0; i < shared.length; i++) {
+			System.out.print(shared[i] + " ");
+		}
 
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
@@ -105,7 +108,6 @@ public class NewListServlet extends HttpServlet {
 			} catch (RecordNotFoundDaoException ex) {
 				list.setError("category", "questa categoria non esiste");
 				request.setAttribute("list", list);
-				request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 			}
 			list.setCategory(listCategory);
 
@@ -116,7 +118,6 @@ public class NewListServlet extends HttpServlet {
 					redirect=true;
 				} else {
 					request.setAttribute("list", list);
-					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				}
 			} else {
 				System.out.println("shared!");
@@ -128,7 +129,6 @@ public class NewListServlet extends HttpServlet {
 					} catch (RecordNotFoundDaoException ex) {
 						list.setError("shared", "l'utente " + shared[i] + " non esiste");
 						request.setAttribute("list", list);
-						request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 					}
 				}
 				Boolean valid = listDAO.addList(list);
@@ -139,7 +139,6 @@ public class NewListServlet extends HttpServlet {
 					redirect=true;
 				} else {
 					request.setAttribute("list", list);
-					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				}
 			}
 			if(redirect)
@@ -147,6 +146,10 @@ public class NewListServlet extends HttpServlet {
 				list = listDAO.getList(list.getName(), me);
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
 				response.sendRedirect(path);
+			}
+			else
+			{
+				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);

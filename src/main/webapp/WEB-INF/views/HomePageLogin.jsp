@@ -105,7 +105,7 @@
 				</div>
 			</div>
 			<div v-if="!list" class="no-list">
-				<a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList"><h3 class="text-xs-center mt-5" style="text-align:center;">Crea una nuova lista cliccando qui, Panda è annoiato!</h3></a>
+				<a href="${pageContext.servletContext.contextPath}/restricted/NewList"><h3 class="text-xs-center mt-5" style="text-align:center;">Crea una nuova lista cliccando qui, Panda è annoiato!</h3></a>
 			</div>
 		</div>
 	</jsp:attribute>
