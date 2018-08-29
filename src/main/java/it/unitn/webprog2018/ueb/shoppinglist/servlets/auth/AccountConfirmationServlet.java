@@ -110,6 +110,9 @@ public class AccountConfirmationServlet extends HttpServlet {
 						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
 						Files.copy(src.toPath(), dest.toPath());
 						src.delete();
+						user.setImage("/uploads/restricted/" + user.getId() + "/avatar/" + avatarName2);
+						System.out.println(user.getImage());
+						userDAO.updateUser(user.getId(), user);
 					}
 					tokenDAO.removeToken(token);
 					path += "Login";
