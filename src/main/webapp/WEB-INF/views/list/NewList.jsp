@@ -1,21 +1,22 @@
-<%--
-    Document   : NewSharedList
-    Created on : 16-lug-2018, 14.30.53
-    Author     : giuliapeserico
+<%-- 
+    Document   : NewList
+    Created on : 28-ago-2018, 21.56.13
+    Author     : giulia
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<layouts:base pageTitle="Add shered list">
-    <jsp:attribute name="pageContent">	
+<layouts:base pageTitle="New list">
+    <jsp:attribute name="pageContent">
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
 					</div>
-					<form class="form-list" action="NewSharedList" method="POST" enctype='multipart/form-data'>
+					<form class="form-list" method="POST" action="NewList" enctype='multipart/form-data'>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -32,29 +33,26 @@
 									name="category" 
 									required
 									>
-								<option selected value="-1">Nessuna</option>
 								<c:forEach var="c" items="${requestScope.listsCategory}">
 									<option value="${c.id}">${c.name}</option>
 								</c:forEach>
 							</select>
 						</div>
-						<div>
+						<div id="sharedList">
 							<label for="shared">Condividi con: </label>
-							<select class="select2 js-example-basic-multiple form-control" name="shared" multiple="multiple">
-								<option>giuliacarocari@gmail.com</option>
-								<option>simonelever@gmail.com</option>
-								<option>matteopadovan@gmail.com</option>
-								<option>giu.peserico@gmail.com</option>
-								<option>micheletessari@gmail.com</option>
-							</select>
+							<input type="email"
+								   class="form-control" 
+								   name="shared" 
+								   />
 						</div>
+						<button type="button" class="btn btn-light" onclick="aggiungiEmail()">Condividi con un'altra email</button>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
 								   class="form-control"
 								   id="description"
 								   name="description"
-								   required>
+								   >
 						</div>
 						<div>
 							<label for="image">Immagine</label>
@@ -63,20 +61,18 @@
 									   class="custom-file-input form-control"
 									   id="image"
 									   name="image"
-									   aria-describedby="image"
-									   value="${product.photography}">
+									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}" class="btn btn-light">Annulla</a>
-							<button class="btn btn-new ml-2" type="submit">Crea</button>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
+							<button class="btn btn-new ml-2" type="submit">Modifica</button>
 						</div> 
 					</form>
 				</div>
 			</div>
-		</div>				
-
+		</div>
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css" type="text/css" rel="stylesheet"/>
@@ -86,19 +82,25 @@
 		<!--<script src="assets/js/landing_page.js"></script>-->
 		<script>
 			$(document).ready(function () {
-				$('select').each(function () {
-					$(this).select2({
-						theme: 'bootstrap4'
+				$(document).ready(function () {
+					$('select').each(function () {
+						$(this).select2({
+							theme: 'bootstrap4'
+						});
+					});
+					$('.js-example-basic-multiple').select2({
+
 					});
 				});
-				$('.js-example-basic-multiple').select2({
-
-				});
 			});
-
+			function aggiungiEmail() {
+				var btn = document.createElement("INPUT");
+				btn.setAttribute("type", "email");
+				btn.setAttribute("name", "shared");
+				btn.classList.add("form-control");
+				document.getElementById("sharedList").appendChild(btn);
+			}
 		</script>
 	</jsp:attribute>
 
 </layouts:base>
-
-

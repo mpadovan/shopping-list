@@ -699,5 +699,15 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public boolean deleteList(Integer listId) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean addList(List list) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

@@ -150,7 +150,7 @@
 					<div class="col">
 						<div class="card">
 							<div class="card-body" style="margin:auto;">
-								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList">clicca qui</a> per crearne una nuova<br>
+								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList">clicca qui</a> per crearne una nuova<br>
 								<div style="width: 300px; margin: auto;"><img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
 							</div>
 						</div>

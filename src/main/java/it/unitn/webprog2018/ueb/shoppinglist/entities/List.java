@@ -70,10 +70,6 @@ public class List extends AbstractEntity {
 		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if (image==null || image.equals(""))
-		{
-			setError("image", "image può essere lasciato vuoto");
-		}
 		if(errors.isEmpty())
 		{
 			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
