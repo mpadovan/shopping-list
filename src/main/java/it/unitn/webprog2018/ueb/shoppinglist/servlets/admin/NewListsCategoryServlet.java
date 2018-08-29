@@ -16,15 +16,28 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author giulia
  */
+@MultipartConfig
 public class NewListsCategoryServlet extends HttpServlet {
+
+	ListsCategoryDAO listsCategoryDAO;
+	ListsCategoryImagesDAO listsCategoryImagesDAO;
+
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
+		listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
+	}
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -51,29 +64,30 @@ public class NewListsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
-		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-		String image = request.getParameter("image");
+		Part image = request.getPart("image");
+		System.out.println();
 
 		ListsCategory listsCategory = new ListsCategory();
 		listsCategory.setName(name);
 		listsCategory.setDescription(description);
-		ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
-		listsCategoriesImage.setImage(image);
 
 		try {
 			if (listsCategoryDAO.addListCategory(listsCategory)) {
-				listsCategory = listsCategoryDAO.getByName(name);
-				listsCategoriesImage.setCategory(listsCategory);
 				if (image == null) {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
+				} else {
+					listsCategory = listsCategoryDAO.getByName(name);
+					ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
+					listsCategoriesImage.setImage("string");
+					listsCategoriesImage.setCategory(listsCategory);
+					if (listsCategoryImagesDAO.addListsCategoriesImage(listsCategoriesImage)) {
+						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
+					} else {
+						response.sendError(500, "qualcosa è andato storto");
+					}
 				}
-				else if (listsCategoryImagesDAO.addListsCategoriesImage(listsCategoriesImage)) {
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-				}
-
 			} else {
 				request.setAttribute("listsCategory", listsCategory);
 				request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);
