@@ -64,7 +64,7 @@
 							<button type="button" onclick="show()" class="btn btn-light	 float-right mx-2" id="btnLock">Modifica password <i class="fas fa-lock"></i></button>
 							<button type="button" onclick="hide()" class="btn btn-light	 float-right mx-2" id="btnUnLock" style="display: none;"> <i class="fas fa-unlock"></i></button>
 						</form>
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 					</div>
 				</div>
 			</div>
