@@ -40,7 +40,7 @@
 						</div>
 						<div id="sharedList">
 							<label for="shared">Condividi con: </label>
-							<input type="text"
+							<input type="email"
 								   class="form-control" 
 								   name="shared" 
 								   />
@@ -95,7 +95,7 @@
 			});
 			function aggiungiEmail() {
 				var btn = document.createElement("INPUT");
-				btn.setAttribute("type", "text");
+				btn.setAttribute("type", "email");
 				btn.setAttribute("name", "shared");
 				btn.classList.add("form-control");
 				document.getElementById("sharedList").appendChild(btn);
