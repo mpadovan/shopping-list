@@ -38,13 +38,13 @@
 									<td><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
 									<td>${p.note}</td>
 									<c:if test="${p.logo != ''}">
-									<td>
-										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
-									</td>
+										<td>
+											<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
+										</td>
 									</c:if>
 									<c:if test="${p.logo == ''}">
 										<td>
-											
+
 										</td>
 									</c:if>
 									<c:if test="${p.photography != null}">
@@ -54,7 +54,7 @@
 									</c:if>
 									<c:if test="${p.photography == null}">
 										<td>
-											
+
 										</td>
 									</c:if>
 
@@ -79,7 +79,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-											<a href="#" class="btn btn-danger">Elimina</a>
+											<a href="${pageContext.servletContext.contextPath}/restricted/DeleteProduct?id=${p.id}" class="btn btn-danger">Elimina</a>
 										</div>
 									</div>
 								</div>

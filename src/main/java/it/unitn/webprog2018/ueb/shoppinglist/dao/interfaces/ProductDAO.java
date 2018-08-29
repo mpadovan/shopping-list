@@ -24,4 +24,6 @@ public interface ProductDAO {
 	public Boolean updateProduct(Integer productId, Product product) throws DaoException;
 
 	public List<Product> getByUser(Integer id, String query) throws DaoException;
+	
+	public Boolean deleteProduct(Integer id) throws DaoException;
 }

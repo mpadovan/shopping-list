@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.util.LinkedList;
 import java.util.List;
@@ -128,5 +129,15 @@ public class ProductDAOImpl implements ProductDAO {
 			}
 		}
 		throw new RecordNotFoundDaoException("Product " + productId + " does not exist");
+	}
+
+	@Override
+	public Boolean deleteProduct(Integer id) throws DaoException {
+		Product p = getProduct(id);
+		removeProductFromList(p);
+		return true;
+	}
+	private synchronized void removeProductFromList(Product p) {
+		products.remove(p);
 	}
 }
