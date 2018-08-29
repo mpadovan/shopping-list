@@ -14,50 +14,52 @@
 			<div class="row justify-content-center">
 				<c:if test="${!empty requestScope.currentList}">
 					<div class="col" id="app">
-						<div class="card">
-							<div class="card-body">
-								<div class="float-right mb-2">
-									<a href="NewProduct.jsp">
-										<u>Crea prodotto</u>
-									</a>
-								</div>
-								<div class="input-group mb-0">
-									<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
-									<div class="input-group-append">
-										<button class="btn btn-outline-secondary" type="button" @click="searching">
-											<i class="fas fa-search"></i>
-										</button>
+						<c:if test="${!requestScope.addDeletePermission}">
+							<div class="card">
+								<div class="card-body">
+									<div class="float-right mb-2">
+										<a href="NewProduct.jsp">
+											<u>Crea prodotto</u>
+										</a>
 									</div>
-								</div>
-								<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
-									<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
-										<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-									<li v-if="showAutocompleteList" class="pointer autocomplete-li" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
-								</div>
-								<transition name="fade" v-on:after-leave="searchHided">
-									<div class="list-group" v-if="showSearch">
-										<nav class="navbar navbar-dark bg-primary mt-3">
-											<button @click="hideSearch" type="button" class="btn btn-outline-light">Torna alla lista</button>
-											<div class="form-group" style="margin-bottom:0;">
-												<select class="form-control" v-model="selected">
-													<option value="all">Tutte le categorie</option>
-													<option v-for="searchCategory in searchCategories">{{ searchCategory }}</option>
-												</select>
-											</div>
-										</nav>
-										<div id="row justify-content-center" v-show="noResults">
-											<div id="col mt-2 text-center">
-												Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
-											</div>
+									<div class="input-group mb-0">
+										<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
+										<div class="input-group-append">
+											<button class="btn btn-outline-secondary" type="button" @click="searching">
+												<i class="fas fa-search"></i>
+											</button>
 										</div>
-										<ul class="search-results list-group list-group-flush">
-											<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"
-														 class="search-result pointer"></search-item>
-										</ul>
 									</div>
-								</transition>
+									<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
+										<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
+											<b> {{ query }}</b>. Clicca qui per crearlo.</li>
+										<li v-if="showAutocompleteList" class="pointer autocomplete-li" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+									</div>
+									<transition name="fade" v-on:after-leave="searchHided">
+										<div class="list-group" v-if="showSearch">
+											<nav class="navbar navbar-dark bg-primary mt-3">
+												<button @click="hideSearch" type="button" class="btn btn-outline-light">Torna alla lista</button>
+												<div class="form-group" style="margin-bottom:0;">
+													<select class="form-control" v-model="selected">
+														<option value="all">Tutte le categorie</option>
+														<option v-for="searchCategory in searchCategories">{{ searchCategory }}</option>
+													</select>
+												</div>
+											</nav>
+											<div id="row justify-content-center" v-show="noResults">
+												<div id="col mt-2 text-center">
+													Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
+												</div>
+											</div>
+											<ul class="search-results list-group list-group-flush">
+												<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"
+															 class="search-result pointer"></search-item>
+											</ul>
+										</div>
+									</transition>
+								</div>
 							</div>
-						</div>
+						</c:if>
 						<transition name="fade" v-on:after-leave="listHided">
 							<div class="card" id="list" v-if="showList">
 								<div class="card-body">
