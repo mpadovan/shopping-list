@@ -75,7 +75,6 @@
         <filter-name>ListViewFilter</filter-name>
         <url-pattern>/restricted/HomePageLogin/*</url-pattern>
         <url-pattern>/restricted/InfoList/*</url-pattern>
-        <url-pattern>/restricted/DeleteList/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
