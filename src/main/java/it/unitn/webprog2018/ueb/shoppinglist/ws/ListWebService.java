@@ -18,7 +18,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
-import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.io.IOException;
 import java.util.List;
@@ -105,6 +104,7 @@ public class ListWebService {
 	 * Retrieves all the products in a list
 	 *
 	 * @param listId
+	 * @param userId
 	 * @return an instance of java.lang.String
 	 */
 	@GET
@@ -112,7 +112,7 @@ public class ListWebService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Authentication
 	@ViewPermission
-	public String getProductsOnList(@PathParam("listId") int listId) {
+	public String getProductsOnList(@PathParam("listId") int listId, @PathParam("userId") Integer userId) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> publicProductsOnList = null;
 		String json = "{ \"publicProducts\" : [";
@@ -167,7 +167,17 @@ public class ListWebService {
 				json = new String(tmp);
 			}
 		}
-		json += "}";
+		try {
+			json += ", \"editList\":";
+			if (listDAO.hasAddDeletePermission(listId, userId)) {
+				json += "true";
+			} else {
+				json += "false";
+			}
+			json += "}";
+		} catch (DaoException ex) {
+			ServiceUtils.handleDAOException(ex, response);
+		}
 		return json;
 	}
 
