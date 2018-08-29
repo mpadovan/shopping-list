@@ -21,7 +21,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDAO{
-	private DAOFactory dAOFactory;
 	
 	public PublicProductDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);

@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
-	private DAOFactory dAOFactory;
 	
 	public ProductDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);

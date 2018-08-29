@@ -27,7 +27,6 @@ import java.util.logging.Logger;
  * @author simon
  */
 public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCategoryImagesDAO{
-	private DAOFactory dAOFactory;
 	public ListsCategoryImagesDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
 	}
