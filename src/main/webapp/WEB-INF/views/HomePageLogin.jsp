@@ -77,8 +77,11 @@
 												<tr>
 													<th scope="col">Nome prodotto</th>
 													<th scope="col">Quantità</th>
-													<th scope="col"></th>
-													<th scope="col"></th>
+													<th scope="col">Note</th>
+													<th scope="col">Logo</th>
+													<th scope="col">Fotografia</th>
+													<th scope="col">Categoria</th>
+													<th scope="col" colspan="2">Gestisci</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -158,8 +161,8 @@
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<c:if test="${not empty requestScope.currentList}">
-		<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
-		<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
+			<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
+			<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
 		</c:if>
 	</jsp:attribute>
 </layouts:base>

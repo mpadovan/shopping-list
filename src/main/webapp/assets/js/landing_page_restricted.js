@@ -34,6 +34,9 @@ Vue.component('ajaxComponent', {
 
 Vue.component('list-item', {
 	props: ['item'],
+	created: function() {
+		console.log(this.item);
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.item.name);
@@ -59,6 +62,10 @@ Vue.component('list-item', {
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
+				<td>{{ item.item.note }}</td> \
+				<td>"logo"</td> \
+				<td>"fotografia"</td> \
+				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
