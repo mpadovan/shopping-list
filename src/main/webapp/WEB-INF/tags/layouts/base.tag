@@ -43,7 +43,7 @@
 		<%-- Container for page Content printed via JSP tag --%>
 		<div class="wrapper">
 			<shared:sidebar />
-			<div id="content">
+			<div id="content" style="overflow-x: hidden;">
 				<shared:navbar />
 
 				<jsp:invoke fragment="pageContent" />
@@ -68,11 +68,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/assets/js/sidebar.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<<<<<<< src/main/webapp/WEB-INF/tags/layouts/base.tag
 		<script src="http://momentjs.com/downloads/moment.min.js"></script>
-=======
 		<script src="${pageContext.servletContext.contextPath}/assets/js/baseGeolocal.js"></script>
->>>>>>> src/main/webapp/WEB-INF/tags/layouts/base.tag
 		<jsp:invoke fragment="customJs" />
 	</body>
 </html>

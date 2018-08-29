@@ -34,6 +34,9 @@ Vue.component('ajaxComponent', {
 
 Vue.component('list-item', {
 	props: ['item'],
+	created: function() {
+		console.log(this.item);
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.item.name);
@@ -59,6 +62,10 @@ Vue.component('list-item', {
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
+				<td>{{ item.item.note }}</td> \
+				<td>"logo"</td> \
+				<td>"fotografia"</td> \
+				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
@@ -66,6 +73,14 @@ Vue.component('list-item', {
 
 Vue.component('search-item', {
 	props: ['item'],
+	data: function() {
+		return {
+			show: false
+		};
+	},
+	created: function() {
+		console.log(this.item);
+	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.name);
@@ -80,10 +95,17 @@ Vue.component('search-item', {
 			});
 		}
 	},
-	template: '<li class="list-group-item" @click="callParent"> \
+	template: '<li class="list-group-item"> \
 					<div class="row align-items-center"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><i class="fa fa-plus float-right"></i></div> \
+				 		<div class="col align-self-center float-right"><div @click="show = !show"><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+					</div> \
+					<div class="row align-items-center" v-show="show"> \
+						<div class="col align-self-center float-left"> \
+							<div>{{item.logo }}</div> \
+							<div>{{item.note }}</div> \
+						</div> \
+						<div class="col align-self-center float-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
 					</div> \
 				</li>'
 });

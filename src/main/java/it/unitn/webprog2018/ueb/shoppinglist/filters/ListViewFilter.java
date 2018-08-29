@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
+import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class ListFilter implements Filter {
+public class ListViewFilter implements Filter {
 
 	private ListDAO listDAO;
 
@@ -62,51 +63,54 @@ public class ListFilter implements Filter {
 
 			String uri = ((HttpServletRequest) request).getRequestURI();
 			if (!uri.endsWith("/")) {
+				uri = uri.trim();
 				uri += "/";
 			}
-			String listIdString = uri.substring(uri.lastIndexOf("HomePageLogin/" + user.getId() + "/") + ("HomePageLogin/" + user.getId() + "/").length(), uri.lastIndexOf("/"));
-			if (!listIdString.isEmpty() && !uri.contains("HomePageLogin")) {
+
+			if (Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getId() + "/.+", uri)) {
+				Integer listId;
+				if (uri.endsWith("/" + user.getId() + "/")) { // handles the case in which userId and listId have the same value
+					listId = user.getId();
+					request.setAttribute("currentListId", listId);
+				} else {
+					try {
+						listId = Integer.parseInt(uri.substring(uri.lastIndexOf("/", uri.length() - 2) + 1, uri.length() - 1));
+						request.setAttribute("currentListId", listId);
+					} catch (NumberFormatException ex) {
+						((HttpServletResponse) response).sendError(400, "You wrote this URL yourself, didn't you? This does not point to a list.");
+						return;
+					}
+				}
 				try {
-					Integer listId = Integer.parseInt(listIdString);
 					if (!listDAO.hasViewPermission(listId, user.getId())) {
 						((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 								+ "The resource you are trying to access is none of your business.\n"
-								+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
+								+ "If you think you have the right to access it, prove it by logging in.");
 						return;
-					} else {
-						java.util.List<List> personalLists = (java.util.List<List>) session.getAttribute("personalLists");
-						if (personalLists != null) {
-							for (List l : personalLists) {
-								if (l.getId().equals(l.getId())) {
-									request.setAttribute("currentList", l);
-									System.out.println("Added List");
-								}
-							}
-						}
-						java.util.List<List> sharedLists = (java.util.List<List>) session.getAttribute("sharedLists");
-						if (sharedLists != null) {
-							for (List l : (java.util.List<List>) session.getAttribute("sharedLists")) {
-								if (l.getId().equals(l.getId())) {
-									request.setAttribute("currentList", l);
-									request.setAttribute("sharedUsers", listDAO.getConnectedUsers(l.getId()));
-									System.out.println("Added list");
-								}
-							}
-						}
 					}
-				} catch (DaoException | NumberFormatException ex) {
+				} catch (DaoException ex) {
 					ex.printStackTrace();
 					((HttpServletResponse) response).sendRedirect("ops");
+					return;
 				}
-			} else {
-				((HttpServletResponse)response).sendError(404, "The resource you are trying to access does not exist");
+			} else if (!uri.contains("HomePageLogin")) { // The home page must not necessarily refer to a list
+				((HttpServletResponse) response).sendError(404, "The resource you are trying to access does not exist");
+			}
+			if (!response.isCommitted()) {
+				Throwable problem = null;
+				try {
+					chain.doFilter(request, response);
+				} catch (Exception ex) {
+					if (response instanceof HttpServletResponse) {
+						((HttpServletResponse) response).sendError(500, ex.getMessage());
+					}
+				}
 			}
 		}
 	}
 
 	@Override
 	public void destroy() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

@@ -53,7 +53,8 @@ public class ProductDAOImpl implements ProductDAO {
 		product2.setOwner(user);
 		product2.setName("Zucchine");
 		product2.setNote("Zucchine fresche di stagione");
-		product2.setLogo("/uploads/restricted/1/productLogo/zucchini.png");
+		product2.setPhotography("https://www.salepepe.it/files/2014/12/zucchine.jpg");
+		product2.setLogo("https://www.casadelcontadino.shop/wp-content/uploads/2017/10/logo-new3.png");
 		products.add(product2);
 		
 		Product product3 = new Product();
@@ -65,6 +66,7 @@ public class ProductDAOImpl implements ProductDAO {
 		product3.getOwner().setId(2);
 		product3.setName("Pomodori pachino");
 		product3.setNote("Pomodori rossi dalla forma allungata (?)");
+		product3.setPhotography("http://www.italiafruit.net/Public/Upload/News/Images/43006/pomodoro-datterino-w-300.jpg");
 		products.add(product3);
 	}
 
