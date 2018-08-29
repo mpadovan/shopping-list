@@ -166,9 +166,9 @@ public class User extends AbstractEntity {
 
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) {
-		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+		/*if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
-		}
+		}*/
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDAO{
-	private DAOFactory dAOFactory;
 	
 	public PublicProductDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
@@ -188,7 +187,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	
 	@Override
 	public Boolean addProduct(PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{

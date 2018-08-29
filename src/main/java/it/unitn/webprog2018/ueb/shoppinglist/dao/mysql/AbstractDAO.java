@@ -8,7 +8,7 @@ import java.sql.Connection;
  * @author giuliapeserico
  */
 public abstract class AbstractDAO {
-	private DAOFactory dAOFactory;
+	protected DAOFactory dAOFactory;
 	private final Connection con;
 
 	public AbstractDAO(Connection con, DAOFactory dAOFactory) {

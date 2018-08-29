@@ -28,7 +28,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
-	private DAOFactory dAOFactory;
 	
 	public MessageDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);

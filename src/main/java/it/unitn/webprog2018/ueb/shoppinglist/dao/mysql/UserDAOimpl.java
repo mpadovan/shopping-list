@@ -19,7 +19,6 @@ import java.util.logging.Logger;
  * @author Michele Tessari
  */
 public class UserDAOimpl extends AbstractDAO implements UserDAO{
-	private DAOFactory dAOFactory;
 	
 	public UserDAOimpl(Connection connection, DAOFactory dAOFactory) {
 		super(connection, dAOFactory);

@@ -28,7 +28,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDAO{
-	private DAOFactory dAOFactory;
 	
 	public ListsCategoryDAOImpl(Connection connection, DAOFactory dAOFactory) {
 		super(connection, dAOFactory);
@@ -121,7 +120,7 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 			ListsCategory lc = new ListsCategory();
 			String query = "SELECT id,description " +
 					"FROM listscategories " +
-					"WHERE name = "+name;
+					"WHERE name = \'"+name+"\'";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			if(rs.first())

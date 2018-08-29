@@ -13,7 +13,7 @@
 		<div class="card card-new">
 			<div class="card-body">
 				<h1 class="card-title">Nuovo categoria di lista</h1>
-				<form method="POST" action="NewListsCategory">
+				<form method="POST" action="NewListsCategory" enctype='multipart/form-data'>
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
