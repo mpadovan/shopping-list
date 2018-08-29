@@ -91,13 +91,15 @@ public class EditProductServlet extends HttpServlet {
 		
 		try {
 			Product product = productDAO.getProduct(productId);
-			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
-			productsCategory.setId(categoryId);
+			ProductsCategory productCategory = productsCategoryDAO.getById(categoryId);
+			productCategory.setId(categoryId);
 			product.setName(name);
 			product.setLogo(logo);
 			product.setNote(note);
-			product.setPhotography(photography);
-			product.setCategory(productsCategory);
+			if(photography != null){
+				product.setPhotography(photography);
+			}
+			product.setCategory(productCategory);
 			if (productDAO.updateProduct(productId,product)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 			} else {

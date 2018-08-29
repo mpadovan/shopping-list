@@ -64,8 +64,7 @@
 									   class="custom-file-input form-control"
 									   id="image"
 									   name="image"
-									   aria-describedby="image"
-									   value="${product.photography}">
+									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
 						</div>
