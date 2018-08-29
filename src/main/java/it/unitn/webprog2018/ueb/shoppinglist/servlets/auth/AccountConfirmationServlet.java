@@ -85,6 +85,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
+					user = userDAO.getByEmail(user.getEmail());
 					// Creating directories for the new user
 					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
 					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
