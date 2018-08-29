@@ -8,23 +8,20 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author simon
+ * @author Giulia Carocari
  */
-public class InfoListServlet extends HttpServlet {
+public class DeleteListServlet extends HttpServlet {
 
 	private ListDAO listDAO;
 
@@ -44,22 +41,17 @@ public class InfoListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
+		User user =  ((User) request.getSession().getAttribute("user"));
 		try {
-			List list = listDAO.getList((Integer) request.getAttribute("currentListId"));
-			request.setAttribute("currentList", list);
-			request.setAttribute("hasModifyPermission", listDAO.hasModifyPermission(list.getId(), user.getId()));
-			request.setAttribute("hasDeletePermission", listDAO.hasDeletePermission(list.getId(), user.getId()));
-			if (((java.util.List<List>)session.getAttribute("sharedLists")).contains((List)request.getAttribute("currentList"))) {
-				request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
+			if (listDAO.deleteList((Integer) request.getAttribute("currentListId"))) {
+				request.getSession().setAttribute("personalLists", listDAO.getPersonalLists(user.getId()));
+				request.getSession().setAttribute("sharedLists", listDAO.getSharedLists(user.getId()));
+				response.sendRedirect(this.getServletContext().getContextPath() + "/restricted/HomePageLogin/" + user.getId());
 			}
 		} catch (DaoException ex) {
-			response.sendError(500);
-			Logger.getLogger(InfoListServlet.class.getName()).log(Level.SEVERE, null, ex);
-			return;
+			response.sendError(500, "We could not delete your list");
+			Logger.getLogger(DeleteListServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		request.getRequestDispatcher("/WEB-INF/views/list/InfoList.jsp").forward(request, response);
 	}
 
 	/**
@@ -82,7 +74,7 @@ public class InfoListServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Short description";
-	}
+		return "Deletes a List";
+	}// </editor-fold>
 
 }

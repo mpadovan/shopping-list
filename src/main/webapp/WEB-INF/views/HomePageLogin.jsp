@@ -64,13 +64,17 @@
 									<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.id}/${requestScope.currentList.id}">
 											<u>${requestScope.currentList.name}</u></a>
 									</h5>
-									<div class="d-flex justify-content-end">
-										<p class="pointer" @click="chat = !chat">Chat
-											<a href="#">
-												<i class="far fa-comments"></i>
-											</a>
-										</p>
-									</div>
+
+									<c:if test="${!empty requestScope.sharedUsers}">
+										<div class="d-flex justify-content-end">
+
+											<p class="pointer" @click="chat = !chat">Chat
+												<a href="#">
+													<i class="far fa-comments"></i>
+												</a>
+											</p>
+										</div>
+									</c:if>
 									<div class="table-wrapper-2 table-responsive-md">
 										<table class="table table-striped">
 											<thead>

@@ -107,7 +107,7 @@ public class ListDAOImpl implements ListDAO {
 				return l;
 			}
 		}
-		throw new RecordNotFoundDaoException("List " + id + "does not exist");
+		throw new RecordNotFoundDaoException("List " + id + " does not exist");
 	}
 
 	@Override
@@ -359,32 +359,51 @@ public class ListDAOImpl implements ListDAO {
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		if (null == listId) {
 			throw new RecordNotFoundDaoException("List " + listId + " not found");
-		} else switch (listId) {
-			case 1:
-				return userId == 1;
-			case 2:
-				return userId == 1;
-			default:
-				throw new RecordNotFoundDaoException("List " + listId + " not found");
+		} else {
+			switch (listId) {
+				case 1:
+					return userId == 1;
+				case 2:
+					return userId == 1;
+				default:
+					throw new RecordNotFoundDaoException("List " + listId + " not found");
+			}
 		}
 	}
 
 	@Override
-	public java.util.List<List> getPersonalLists(Integer id) {
-		if (id == 1) {
-			java.util.List<List> l = new LinkedList<>();
-			l.add(lists.get(1));
-			return l;
+	public java.util.List<List> getPersonalLists(Integer id) throws DaoException {
+		try {
+			if (lists.contains(dAOFactory.getListDAO().getList(1))) {
+				java.util.List<List> l = new LinkedList<>();
+				try {
+					l.add(dAOFactory.getListDAO().getList(1));
+				} catch (DaoException ex) {
+					Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				return l;
+			}
+		} catch (DaoException ex) {
+
+			return new LinkedList<>();
 		}
 		return new LinkedList<>();
 	}
 
 	@Override
-	public java.util.List<List> getSharedLists(Integer id) {
-		if (id == 1) {
-			java.util.List<List> l = new LinkedList<>();
-			l.add(lists.get(0));
-			return l;
+	public java.util.List<List> getSharedLists(Integer id) throws DaoException {
+		try {
+			if (lists.contains(dAOFactory.getListDAO().getList(2))) {
+				java.util.List<List> l = new LinkedList<>();
+				try {
+					l.add(dAOFactory.getListDAO().getList(2));
+				} catch (DaoException ex) {
+					Logger.getLogger(ListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				return l;
+			}
+		} catch (DaoException ex) {
+			return new LinkedList<>();
 		}
 		return new LinkedList<>();
 	}
@@ -403,5 +422,24 @@ public class ListDAOImpl implements ListDAO {
 		list.add(dAOFactory.getUserDAO().getById(1));
 		list.add(dAOFactory.getUserDAO().getById(2));
 		return list;
+	}
+
+	@Override
+	public boolean deleteList(Integer listId) throws DaoException {
+		try {
+			switch (listId) {
+				case 1:
+					lists.remove(0);
+					return true;
+				case 2:
+					lists.remove(1);
+					return true;
+				default:
+					throw new DaoException("The list you are trying to delete does not exist");
+			}
+		} catch (IndexOutOfBoundsException ex) {
+			ex.printStackTrace();
+		}
+		return false;
 	}
 }

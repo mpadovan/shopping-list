@@ -33,7 +33,7 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 					<c:forEach items="${sessionScope.personalLists}" var="list">
-						<li>
+						<li id="personal-list-${list.id}">
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>
@@ -48,7 +48,7 @@
 				<div class="divider"></div>
 				<ul class="list-unstyled scrollable-menu" id="shareList">
 					<c:forEach items="${sessionScope.sharedLists}" var="list">
-						<li>
+					<li id="shared-list-${list.id}" >
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 					</li>
 					</c:forEach>

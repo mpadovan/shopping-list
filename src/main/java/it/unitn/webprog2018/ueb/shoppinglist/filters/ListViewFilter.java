@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class ListFilter implements Filter {
+public class ListViewFilter implements Filter {
 
 	private ListDAO listDAO;
 
