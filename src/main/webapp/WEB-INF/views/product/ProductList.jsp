@@ -12,7 +12,14 @@
     <jsp:attribute name="pageContent">
 		<div class="card m-3">
 			<div class="card-body">
-				<h2 class="card-title text-center">I tuoi prodotti</h2>
+				<h2 class="card-title text-center">
+					<span class="float-left" style="font-size: 15px;">
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}"><i class="fas fa-chevron-left"></i> Indietro</a>
+					</span> I tuoi prodotti
+					<span class="float-right" style="font-size: 15px;">
+						<a class="info-custom-product-a" href="${pageContext.servletContext.contextPath}/restricted/NewProduct">Crea prodotto <i class="fas fa-plus-circle"></i></a>
+					</span>
+				</h2>
 				<div class="container-fluid mt-3">
 					<table class="table table-responsive-md">
 						<thead>
@@ -28,14 +35,14 @@
 						<tbody>
 							<c:forEach var="p" items="${requestScope.products}">
 								<tr>
-									<td><a href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
+									<td><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
 									<td>${p.note}</td>
-									<c:if test="${p.logo != null}">
+									<c:if test="${p.logo != ''}">
 									<td>
-										<div class="info-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
+										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
 									</td>
 									</c:if>
-									<c:if test="${p.logo == null}">
+									<c:if test="${p.logo == ''}">
 										<td>
 											
 										</td>
@@ -53,8 +60,8 @@
 
 									<td>${p.category.name}</td>
 									<td>
-										<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
-										<span class="ml-4"><a href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
+										<span><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
+										<span class="ml-4"><a class="info-custom-product-a"href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
 									</td>
 								</tr>
 								<!-- Modal -->

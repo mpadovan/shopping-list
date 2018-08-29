@@ -9,13 +9,13 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid">
+		<div class="container-fluid mt-3">
 			<div class="row justify-content-center">
 				<div class="col" id="app">
 					<div class="card">
 						<div class="card-body">
 							<div class="float-right mb-2">
-								<a href="NewProduct.jsp">
+								<a href="${pageContext.servletContext.contextPath}/restricted/NewProduct">
 									<u>Crea prodotto</u>
 								</a>
 							</div>
