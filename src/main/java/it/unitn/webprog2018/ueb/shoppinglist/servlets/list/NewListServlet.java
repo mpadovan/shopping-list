@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,9 @@ import javax.servlet.http.HttpSession;
  * @author giulia
  */
 @WebServlet(name = "NewListServlet", urlPatterns = {"/restricted/NewList"})
+@MultipartConfig
 public class NewListServlet extends HttpServlet {
+
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
@@ -44,6 +47,7 @@ public class NewListServlet extends HttpServlet {
 		listDAO = factory.getListDAO();
 		userDAO = factory.getUserDAO();
 	}
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -81,80 +85,72 @@ public class NewListServlet extends HttpServlet {
 			path += "/";
 		}
 
+		Boolean redirect = false;
 		HttpSession session = request.getSession(false);
 		User me = (User) session.getAttribute("user");
-		String name =  request.getParameter("nameList");
+		String name = request.getParameter("nameList");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared");
-		
+
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
 		list.setDescription(description);
 		ListsCategory listCategory = null;
 		try {
-			System.out.println("before getByName");
-			listCategory = listsCategoryDAO.getById(categoryId);
-			System.out.println("after getByName");
+			//Categoria
+			try {
+				listCategory = listsCategoryDAO.getById(categoryId);
+			} catch (RecordNotFoundDaoException ex) {
+				list.setError("category", "questa categoria non esiste");
+				request.setAttribute("list", list);
+				request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
+			}
 			list.setCategory(listCategory);
 
+			//shared - persone condivisione
 			if (shared == null || shared.length == 0) {
 				Boolean valid = listDAO.addList(list);
 				if (valid) {
-					it.unitn.webprog2018.ueb.shoppinglist.entities.List newlist = listDAO.getList(list.getName(), me);
-					System.out.println("getlist");
-					path += "restricted/HomePageLogin/" + me.getId() + "/" + newlist.getId();
-					response.sendRedirect(path);
+					redirect=true;
 				} else {
 					request.setAttribute("list", list);
 					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				}
-			}
-
-		} catch (RecordNotFoundDaoException ex) {
-			System.out.println("RNFDE");
-			list.setError("category", "questa categoria non esiste");
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
-		} catch (DaoException ex) {
-			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(500, ex.getMessage());
-		}
-
-		if (shared != null && shared.length != 0) {
-			System.out.println("shared!");
-			LinkedList<User> listashared = new LinkedList();
-			for (int i = 0; i < shared.length; i++) {
-				try {
-					User u = userDAO.getByEmail(shared[i]);
-					listashared.add(u);
-				} catch (RecordNotFoundDaoException ex) {
-					list.setError("shared", "l'utente " + shared[i] + " non esiste");
-					request.setAttribute("list", list);
-					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
-				} catch (DaoException ex) {
-					Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-					response.sendError(500, ex.getMessage());
+			} else {
+				System.out.println("shared!");
+				LinkedList<User> listashared = new LinkedList();
+				for (int i = 0; i < shared.length; i++) {
+					try {
+						User u = userDAO.getByEmail(shared[i]);
+						listashared.add(u);
+					} catch (RecordNotFoundDaoException ex) {
+						list.setError("shared", "l'utente " + shared[i] + " non esiste");
+						request.setAttribute("list", list);
+						request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
+					}
 				}
-			}
-			try {
 				Boolean valid = listDAO.addList(list);
 				if (valid) {
 					for (User u : listashared) {
 						listDAO.linkShoppingListToUser(list, u.getId());
 					}
-					it.unitn.webprog2018.ueb.shoppinglist.entities.List newlist = listDAO.getList(list.getName(), me);
-					path += "restricted/HomePageLogin/" + me.getId() + "/" + newlist.getId();
-					response.sendRedirect(path);
+					redirect=true;
 				} else {
 					request.setAttribute("list", list);
 					request.getRequestDispatcher("/WEB-INF/views/list/NewSharedList.jsp").forward(request, response);
 				}
-			} catch (DaoException ex) {
-				Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-				response.sendError(500, ex.getMessage());
 			}
+			if(redirect)
+			{
+				list = listDAO.getList(list.getName(), me);
+				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+				response.sendRedirect(path);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, ex.getMessage());
 		}
 	}
 

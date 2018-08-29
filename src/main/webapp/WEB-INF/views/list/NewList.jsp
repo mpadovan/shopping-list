@@ -16,7 +16,7 @@
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
 					</div>
-					<form class="form-list" method="POST" action="NewList">
+					<form class="form-list" method="POST" action="NewList" enctype='multipart/form-data'>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -40,13 +40,16 @@
 						</div>
 						<div>
 							<label for="shared">Condividi con: </label>
-							<select class="select2 js-example-basic-multiple form-control" name="shared" multiple="multiple">
-								<option>giuliacarocari@gmail.com</option>
-								<option>simonelever@gmail.com</option>
-								<option>matteopadovan@gmail.com</option>
-								<option>giu.peserico@gmail.com</option>
-								<option>micheletessari@gmail.com</option>
-							</select>
+							<input type="text"
+								   class="form-control" 
+								   id="nameList"
+								   name="shared" 
+								   required />
+							<input type="text"
+								   class="form-control" 
+								   id="nameList"
+								   name="shared" 
+								   required />
 						</div>
 						<div>
 							<label for="description">Descrizione</label>
@@ -87,15 +90,15 @@
 		<script>
 			$(document).ready(function () {
 				$(document).ready(function () {
-				$('select').each(function () {
-					$(this).select2({
-						theme: 'bootstrap4'
+					$('select').each(function () {
+						$(this).select2({
+							theme: 'bootstrap4'
+						});
+					});
+					$('.js-example-basic-multiple').select2({
+
 					});
 				});
-				$('.js-example-basic-multiple').select2({
-
-				});
-			});
 			});
 
 		</script>
