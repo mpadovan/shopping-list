@@ -16,7 +16,7 @@
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Modifica prodotto</h1>
 					</div>
-					<form method="POST" action="EditProduct?id=${param.id}">
+					<form method="POST" action="EditProduct?id=${param.id}" enctype='multipart/form-data'>
 						<input type="hidden" name="id" value="${product.id}">
 						<div>
 							<label for="name">Nome prodotto</label>
