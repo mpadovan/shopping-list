@@ -11,13 +11,12 @@
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<c:if test="!${empty sessionScope.user.image}">
+			<c:if test="${!empty requestScope.currentList.image}">
 				<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			</c:if>
-			<c:if test="${empty sessionScope.user.image}">
+			<c:if test="${empty requestScope.currentList.image}">
 				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
 			</c:if>
-			<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			<div class="card-body">
 				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
 				<table class="table table-responsive-md">

@@ -57,7 +57,7 @@ public class ListDAOImpl implements ListDAO {
 		l2.getCategory().setName("Ferrmenta");
 		l2.setDescription("Lista delle cose veramente importanti");
 		l2.setId(2);
-		l2.setImage("https://www.bricoman.it/media/foto_articoli/2016/01/10040619_HR_PRO_V01_2016_01_11_151504_original.JPG");
+		l2.setImage("");
 		l2.setName("EuroBrico");
 		l2.setOwner(user);
 
