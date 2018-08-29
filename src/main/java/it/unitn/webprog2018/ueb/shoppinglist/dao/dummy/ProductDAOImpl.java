@@ -41,6 +41,8 @@ public class ProductDAOImpl implements ProductDAO {
 		product.setOwner(user);
 		product.setName("Ananas");
 		product.setNote("Ananas maturo e dolce");
+		product.setLogo("/uploads/restricted/1/productLogo/ananas.png");
+		product.setPhotography("/uploads/restricted/1/productImage/ananas.jpg");
 		products.add(product);
 
 		Product product2 = new Product();
