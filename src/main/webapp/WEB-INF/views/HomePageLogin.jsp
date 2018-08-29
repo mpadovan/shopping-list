@@ -10,8 +10,7 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid">
-
+		<div class="container-fluid mt-4">
 			<div class="row justify-content-center">
 				<c:if test="${!empty requestScope.currentList}">
 					<div class="col" id="app">
@@ -139,14 +138,13 @@
 							</div>
 						</div>
 					</div>
-
 				</c:if>
 				<c:if test="${empty requestScope.currentList}">
-					<div class="col" id="app">
+					<div class="col">
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body" style="margin:auto;">
 								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewSharedList">clicca qui</a> per crearne una nuova<br>
-								<img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda">
+								<div style="width: 300px; margin: auto;"><img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
 							</div>
 						</div>
 					</div>
@@ -159,7 +157,9 @@
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/landing_page_restricted.css">
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-		<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
-		<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
+		<c:if test="${not empty requestScope.currentList}">
+			<script src="${pageContext.servletContext.contextPath}/assets/js/landing_page_restricted.js"></script>
+			<script src="${pageContext.servletContext.contextPath}/assets/js/chat_manager.js"></script>
+		</c:if>
 	</jsp:attribute>
 </layouts:base>

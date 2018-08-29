@@ -25,7 +25,7 @@ Vue.component('getCat', {
 				// Let's check whether notification permissions have already been granted
 				else if (Notification.permission === "granted") {
 					// If it's okay let's create a notification
-					var notification = new Notification(self.data[0].category + 'vicino a te!');
+					var notification = new Notification(self.data[0].category + ' vicino a te!');
 				}
 
 				// Otherwise, we need to ask the user for permission
@@ -33,7 +33,7 @@ Vue.component('getCat', {
 					Notification.requestPermission(function (permission) {
 						// If the user accepts, let's create a notification
 						if (permission === "granted") {
-							var notification = new Notification(self.data[0].category + 'vicino a te!');
+							var notification = new Notification(self.data[0].category + ' vicino a te!');
 						}
 					});
 				}
