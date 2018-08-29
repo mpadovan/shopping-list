@@ -36,7 +36,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			List list = new List();
 			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"u.name,u.lastname,u.administrator,u.email" +
+					"u.name,u.lastname,u.administrator,u.email," +
 					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
