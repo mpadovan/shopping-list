@@ -72,9 +72,12 @@
 												<thead>
 													<tr>
 														<th scope="col">Nome prodotto</th>
-														<th scope="col">Quantità</th>
-														<th scope="col"></th>
-														<th scope="col"></th>
+													<th scope="col">Quantità</th>
+													<th scope="col">Note</th>
+													<th scope="col">Logo</th>
+													<th scope="col">Fotografia</th>
+													<th scope="col">Categoria</th>
+													<th scope="col" colspan="2">Gestisci</th>
 													</tr>
 												</thead>
 												<tbody>

@@ -106,7 +106,7 @@ Vue.component('categories', {
 				enableHighAccuracy: true,
 				timeout: 5000,
 				maximumAge: 0
-			  });
+			});
 		}
 	}
 });
@@ -164,6 +164,10 @@ Vue.component('list-item', {
 	template: '<tr> \
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
+				<td>{{ item.item.note }}</td> \
+				<td>"logo"</td> \
+				<td>"fotografia"</td> \
+				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
@@ -359,12 +363,15 @@ var app = new Vue({
 		if (localStorage.getItem("items")) {
 			this.items = JSON.parse(localStorage.getItem("items"));
 		} else {
-			this.items.push({
-				item: {
-					name: 'il tuo primo oggetto in lista',
-				},
-				amount: 1
-			});
+			// this.items.push({
+			// 	item: {
+			// 		name: 'il tuo primo oggetto in lista',
+			// 	},
+			// 	amount: 1,
+			// 	category: {
+			// 		name: 'default'
+			// 	}
+			// });
 		}
 	}
 });
