@@ -81,7 +81,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			String query =	"SELECT pp.id,pp.name,pp.note,pp.logo,pp.photography," +
 					"pp.idproductscategory,pc.name,pc.description " +
 					"FROM publicproducts pp " +
-					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id"+
+					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id "+
 					"WHERE pp.name LIKE \"%"+matching+"%\"";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
