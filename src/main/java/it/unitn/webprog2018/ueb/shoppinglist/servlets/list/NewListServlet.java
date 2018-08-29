@@ -42,7 +42,7 @@ public class NewListServlet extends HttpServlet {
 
 	@Override
 	public void init() {
-		DAOFactory factory = (DAOFactoryImpl) this.getServletContext().getAttribute("daoFactory");
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		listsCategoryDAO = factory.getListsCategoryDAO();
 		listDAO = factory.getListDAO();
 		userDAO = factory.getUserDAO();
