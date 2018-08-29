@@ -111,7 +111,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 						Files.copy(src.toPath(), dest.toPath());
 						src.delete();
 						user.setImage("/uploads/restricted/" + user.getId() + "/avatar/" + avatarName2);
-						System.out.println(user.getImage());
+						user.setCheckpassword(user.getPassword());
 						userDAO.updateUser(user.getId(), user);
 					}
 					tokenDAO.removeToken(token);
