@@ -739,7 +739,22 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 
 	@Override
 	public Boolean addList(List list) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = list.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+list.getImage()+"\")";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				int count = st.executeUpdate();
+				st.close();
+				return valid && (count == 1);
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 	
 }
