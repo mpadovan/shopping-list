@@ -44,34 +44,6 @@ public class HomePageLoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String uri = request.getRequestURI();
-		if (!uri.endsWith("/")) {
-			uri += "/";
-		}
-		if (uri.matches(".*/[0-9]+/[0-9]+/")) { // URI ends with user id and list id (checked by filters)
-			java.util.List<List> personalLists = (java.util.List<List>) request.getSession().getAttribute("personalLists");
-			if (personalLists != null) {
-				for (List l : personalLists) {
-					if (l.getId().equals(request.getAttribute("currentListId"))) {
-						request.setAttribute("currentList", l);
-					}
-				}
-			}
-			java.util.List<List> sharedLists = (java.util.List<List>) request.getSession().getAttribute("sharedLists");
-			if (sharedLists != null) {
-				for (List l : (java.util.List<List>) request.getSession().getAttribute("sharedLists")) {
-					if (l.getId().equals(request.getAttribute("currentListId"))) {
-						request.setAttribute("currentList", l);
-						try {
-							request.setAttribute("sharedUsers", listDAO.getConnectedUsers(l.getId()));
-						} catch (DaoException ex) {
-							Logger.getLogger(HomePageLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-							response.sendError(500);
-						}
-					}
-				}
-			}
-		}
 		request.getRequestDispatcher("/WEB-INF/views/HomePageLogin.jsp").forward(request, response);
 	}
 

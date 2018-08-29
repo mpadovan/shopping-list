@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.filters;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -78,7 +79,8 @@ public class ListEditFilter implements Filter {
 					}
 				}
 				try {
-					if (!listDAO.hasModifyPermission(listId, ((User) req.getSession().getAttribute("user")).getId())) {
+					List currentList = (List) ((HttpServletRequest) request).getAttribute("currentList");
+					if (!currentList.getOwner().getId().equals(user.getId()) && !listDAO.hasModifyPermission(listId, ((User) req.getSession().getAttribute("user")).getId())) {
 						((HttpServletResponse) response).sendError(401);
 					}
 				} catch (DaoException ex) {
