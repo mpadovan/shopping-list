@@ -95,12 +95,12 @@ Vue.component('search-item', {
 	},
 	template: '<li class="list-group-item"> \
 					<div class="row align-items-center" @click="show = !show"> \
-						<img v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
+						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
 				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
 					</div> \
 					<div class="row align-items-center mt-2" v-show="show"> \
-						<div class="col-1 align-self-left" > \
+						<div class="col-1 align-self-left" v-if="item.logo"> \
 							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
 						</div> \
 						<div class="col align-self-left"> \
