@@ -52,7 +52,7 @@
 								   class="form-control"
 								   id="description"
 								   name="description"
-								   required>
+								   >
 						</div>
 						<div>
 							<label for="image">Immagine</label>
