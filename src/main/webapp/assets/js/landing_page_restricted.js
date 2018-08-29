@@ -14,7 +14,6 @@ Vue.component('ajaxComponent', {
 		};
 	},
 	created: function () {
-		console.log('AjaxComponent Created');
 		var self = this;
 		$.ajax(this.settings)
 				.done(function (data) {
@@ -26,17 +25,11 @@ Vue.component('ajaxComponent', {
 					self.$emit('done', 'error');
 				});
 	},
-	template: "<div style=\"display:none;\"></div>",
-	destroyed: function () {
-		console.log('destroyed', this._inactive, this.item);
-	}
+	template: "<div style=\"display:none;\"></div>"
 });
 
 Vue.component('list-item', {
-	props: ['item'],
-	created: function() {
-		console.log(this.item);
-	},
+	props: ['item', 'permission'],
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.item.name);
@@ -64,8 +57,8 @@ Vue.component('list-item', {
 				<td>{{ item.amount }}</td> \
 				<td>{{ item.item.note }}</td> \
 				<td>{{ item.item.category.name }}</td> \
-				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
-				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
+				<td v-if="permission" @click="updateItem"><i class="fas fa-pen-square"></i></td> \
+				<td v-if="permission" @click="deleteItem"><i class="fas fa-trash"></i></td> \
 			</tr>'
 });
 
@@ -75,9 +68,6 @@ Vue.component('search-item', {
 		return {
 			show: false
 		};
-	},
-	created: function() {
-		console.log(this.item);
 	},
 	computed: {
 		capitalized: function () {
@@ -95,12 +85,12 @@ Vue.component('search-item', {
 	},
 	template: '<li class="list-group-item"> \
 					<div class="row align-items-center" @click="show = !show"> \
-						<img v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
+						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
 				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
 					</div> \
 					<div class="row align-items-center mt-2" v-show="show"> \
-						<div class="col-1 align-self-left" > \
+						<div class="col-1 align-self-left" v-if="item.logo"> \
 							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
 						</div> \
 						<div class="col align-self-left"> \
@@ -133,10 +123,7 @@ Vue.component('fetchListComponent', {
 				});
 			}
 	},
-	template: "<div style=\"display:none;\"></div>",
-	destroyed: function () {
-		console.log('fetch destroyed', this._inactive, this.item);
-	}
+	template: "<div style=\"display:none;\"></div>"
 });
 
 var app = new Vue({
@@ -166,7 +153,8 @@ var app = new Vue({
 		ajaxComponent: false,
 		operation: null,
 		list: null,
-		chat: false
+		chat: false,
+		permission: false 
 	},
 	methods: {
 		searching: function () {
@@ -377,6 +365,11 @@ var app = new Vue({
 				return false;
 		},
 		fetchListDone: function (data) {
+			this.permission = true;
+			if(!data.editList) {
+				toastr['info']('Non sei abilitato alla modifica di questa lista, contatta l\'amministratore della lista per informazioni');
+				this.permission = false;
+			}
 			this.fetchListComponent = false;
 			data = data.publicProducts.concat(data.products);
 			//_.sortBy(data,['product.category.name', 'product.name']);
@@ -386,7 +379,6 @@ var app = new Vue({
 				data[i].product = undefined;
 				this.items.push(data[i]);
 			}
-			console.log(this.items);
 			$('#chat').height($('#app').height());
 		}
 	},
@@ -421,7 +413,6 @@ var app = new Vue({
 		},
 		chat: function(val) {
 			$('#chat').css('display', 'block');
-			console.log($('#chat'));
 		} 
 	},
 	created: function () {
