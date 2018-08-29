@@ -61,7 +61,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	
 	@Override
 	public Boolean addProductsCategory(ProductsCategory pc) throws DaoException{
-		Boolean valid = pc.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // pc.isVaildOnCreate(dAOFactory);
 		if(valid){
 			try{
 				String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""+

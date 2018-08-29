@@ -188,7 +188,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	
 	@Override
 	public Boolean addProduct(PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
