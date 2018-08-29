@@ -63,8 +63,6 @@ Vue.component('list-item', {
 				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
 				<td>{{ item.item.note }}</td> \
-				<td>"logo"</td> \
-				<td>"fotografia"</td> \
 				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
@@ -96,16 +94,19 @@ Vue.component('search-item', {
 		}
 	},
 	template: '<li class="list-group-item"> \
-					<div class="row align-items-center"> \
+					<div class="row align-items-center" @click="show = !show"> \
+						<img v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><div @click="show = !show"><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
 					</div> \
-					<div class="row align-items-center" v-show="show"> \
-						<div class="col align-self-center float-left"> \
-							<div>{{item.logo }}</div> \
-							<div>{{item.note }}</div> \
+					<div class="row align-items-center mt-2" v-show="show"> \
+						<div class="col-1 align-self-left" > \
+							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
 						</div> \
-						<div class="col align-self-center float-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
+						<div class="col align-self-left"> \
+							<div >{{item.note }}</div> \
+						</div> \
+						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
 					</div> \
 				</li>'
 });

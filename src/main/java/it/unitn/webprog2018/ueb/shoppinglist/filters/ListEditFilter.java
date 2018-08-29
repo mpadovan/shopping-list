@@ -27,8 +27,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-public class ListDeleteFilter implements Filter {
-
+public class ListEditFilter implements Filter {
+	
 	private ListDAO listDAO;
 	private FilterConfig filterConfig;
 	
@@ -78,7 +78,7 @@ public class ListDeleteFilter implements Filter {
 					}
 				}
 				try {
-					if (!listDAO.hasDeletePermission(listId, ((User) req.getSession().getAttribute("user")).getId())) {
+					if (!listDAO.hasModifyPermission(listId, ((User) req.getSession().getAttribute("user")).getId())) {
 						((HttpServletResponse) response).sendError(401);
 					}
 				} catch (DaoException ex) {
