@@ -190,46 +190,58 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 					"INNER JOIN users u ON p.iduser = u.id " +
 					"INNER JOIN productscategories pc ON p.idproductscategory = pc.id " +
 					"WHERE p.id = "+productId;
-					Statement st = this.getCon().createStatement();
-					ResultSet rs = st.executeQuery(query);
-					User u = new User();
-					ProductsCategory pc = new ProductsCategory();
-					ProductsCategory pcp = new ProductsCategory();
-					if(rs.first())
-					{
-						int i = 1;
-						p.setId(productId);
-						p.setName(rs.getString(i++));
-						p.setNote(rs.getString(i++));
-						p.setLogo(rs.getString(i++));
-						p.setPhotography(rs.getString(i++));
-						u.setId(rs.getInt(i++));
-						u.setName(rs.getString(i++));
-						u.setLastname(rs.getString(i++));
-						u.setAdministrator(rs.getInt(i++) != 0);
-						pc.setId(rs.getInt(i++));
-						pc.setName(rs.getString(i++));
-						pcp.setId(rs.getInt(i++));
-						pc.setCategory(pcp);
-						pc.setDescription(rs.getString(i++));
-						pc.setLogo(rs.getString(i++));
-						p.setOwner(u);
-						p.setCategory(pc);
-						
-						rs.close();
-						st.close();
-						return p;
-					}
-					throw new RecordNotFoundDaoException("Product with id: " + productId + " not found");
+			Statement st = this.getCon().createStatement();
+			ResultSet rs = st.executeQuery(query);
+			User u = new User();
+			ProductsCategory pc = new ProductsCategory();
+			ProductsCategory pcp = new ProductsCategory();
+			if(rs.first())
+			{
+				int i = 1;
+				p.setId(productId);
+				p.setName(rs.getString(i++));
+				p.setNote(rs.getString(i++));
+				p.setLogo(rs.getString(i++));
+				p.setPhotography(rs.getString(i++));
+				u.setId(rs.getInt(i++));
+				u.setName(rs.getString(i++));
+				u.setLastname(rs.getString(i++));
+				u.setAdministrator(rs.getInt(i++) != 0);
+				pc.setId(rs.getInt(i++));
+				pc.setName(rs.getString(i++));
+				pcp.setId(rs.getInt(i++));
+				pc.setCategory(pcp);
+				pc.setDescription(rs.getString(i++));
+				pc.setLogo(rs.getString(i++));
+				p.setOwner(u);
+				p.setCategory(pc);
+				
+				rs.close();
+				st.close();
+				return p;
+			}
+			throw new RecordNotFoundDaoException("Product with id: " + productId + " not found");
 		}
 		catch(SQLException ex){
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean deleteProduct(Integer id) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			String query = "delete from products where id = "+id;
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			if(count < 1)
+				throw new RecordNotFoundDaoException("product "+id+" not found");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
 }
