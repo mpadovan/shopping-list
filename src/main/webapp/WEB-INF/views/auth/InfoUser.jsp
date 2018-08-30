@@ -4,6 +4,7 @@
     Author     : Giulia Peserico
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
@@ -13,7 +14,13 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3">
-						<img style="max-width: 200px; max-height: 200px; margin-top: 35px;" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="Nome Cognome" title="Immagine profilo">
+						<c:if test="${not empty sessionScope.user.image}">
+							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="Nome Cognome" title="Immagine profilo">
+						</c:if>
+						<c:if test="${empty sessionScope.user.image}">
+							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar2.png" alt="Nome Cognome" title="Immagine profilo">
+						</c:if>
+						<a href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser" class="btn btn-light mx-2 mt-3">Cambia immagine</a>
 					</div>
 					<div class="col">
 						<h5 class="card-title text-center">Informazioni utente "${sessionScope.user.name} ${sessionScope.user.lastname}"</h5>
