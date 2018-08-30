@@ -227,7 +227,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	 */
 	@Override
 	public Boolean addProduct(Integer listId, Product product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -249,7 +249,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	 */
 	@Override
 	public Boolean addPublicProduct(Integer listId, PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
