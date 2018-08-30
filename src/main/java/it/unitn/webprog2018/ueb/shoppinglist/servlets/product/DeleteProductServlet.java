@@ -68,7 +68,6 @@ public class DeleteProductServlet extends HttpServlet {
 					String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
 					int ext = product.getPhotography().lastIndexOf(".");
 					File file = new File(imageFolder + product.getId() + product.getPhotography().substring(ext));
-					System.out.println(file.toString());
 					file.delete();
 				}
 				if(product.getLogo()!=null && !product.getLogo().equals(""))
@@ -76,7 +75,6 @@ public class DeleteProductServlet extends HttpServlet {
 					String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
 					int ext = product.getLogo().lastIndexOf(".");
 					File file = new File(logoFolder + product.getId() + product.getLogo().substring(ext));
-					System.out.println(file.toString());
 					file.delete();
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");

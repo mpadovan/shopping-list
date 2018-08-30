@@ -26,5 +26,7 @@ public interface PublicProductDAO {
 
 	public Boolean addProduct(PublicProduct product) throws DaoException;
 	
+	public Boolean addProductWithId(PublicProduct product) throws DaoException;
+	
 	public Boolean deleteProduct(Integer id) throws DaoException;
 }

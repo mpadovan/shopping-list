@@ -179,7 +179,7 @@ public class NewProductServlet extends HttpServlet {
 				}
 				if (checkImage || checkLogo) {
 					if (!productDAO.updateProduct(product.getId(), product)) {
-						response.sendError(500, "Qualcpsa è andato storto. Non è stato possibili aggiornare immagine o logo");
+						response.sendError(500, "Qualcosa è andato storto. Non è stato possibili aggiornare immagine o logo");
 					}
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
@@ -188,7 +188,7 @@ public class NewProductServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/views/product/NewProduct.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
-			Logger.getLogger(NewPublicProductServlet.class
+			Logger.getLogger(NewProductServlet.class
 					.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
