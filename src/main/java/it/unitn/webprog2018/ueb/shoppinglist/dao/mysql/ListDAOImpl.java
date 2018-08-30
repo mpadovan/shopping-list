@@ -733,22 +733,17 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 
 	@Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
-		Boolean valid = list.isVaildOnCreate(dAOFactory);
-		if(valid)
-		{
-			try{
-				String query = "insert into sharedlists (iduser,idlist,iduserlist) values ("+idpartecipant+","+list.getId()+","+list.getOwner().getId()+")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
-				int count = st.executeUpdate();
-				st.close();
-				return valid && (count == 1);
-			}
-			catch(SQLException ex){
-				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new UpdateException(ex);
-			}
+		try{
+			String query = "insert into sharedlists (iduser,idlist,iduserlist) values ("+idpartecipant+","+list.getId()+","+list.getOwner().getId()+")";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			return count == 1;
 		}
-		return valid;
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
 
 	@Override
