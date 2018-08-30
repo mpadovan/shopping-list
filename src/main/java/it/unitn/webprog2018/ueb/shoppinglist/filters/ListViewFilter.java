@@ -10,7 +10,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -45,6 +48,8 @@ public class ListViewFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpServletResponse resp = (HttpServletResponse) response;
 			ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
 			HttpSession session = ((HttpServletRequest) request).getSession(false);
 			User user = null;
@@ -82,7 +87,32 @@ public class ListViewFilter implements Filter {
 					}
 				}
 				try {
-					if (!listDAO.hasViewPermission(listId, user.getId())) {
+					if (uri.matches(".*/[0-9]+/[0-9]+/")) { // URI ends with user id and list id (checked by filters)
+						java.util.List<List> personalLists = (java.util.List<List>) req.getSession().getAttribute("personalLists");
+						if (personalLists != null) {
+							for (List l : personalLists) {
+								if (l.getId().equals(request.getAttribute("currentListId"))) {
+									request.setAttribute("currentList", l);
+								}
+							}
+						}
+						java.util.List<List> sharedLists = (java.util.List<List>) req.getSession().getAttribute("sharedLists");
+						if (sharedLists != null) {
+							for (List l : (java.util.List<List>) req.getSession().getAttribute("sharedLists")) {
+								if (l.getId().equals(request.getAttribute("currentListId"))) {
+									request.setAttribute("currentList", l);
+									try {
+										request.setAttribute("sharedUsers", listDAO.getConnectedUsers(l.getId()));
+									} catch (DaoException ex) {
+										Logger.getLogger(HomePageLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+										resp.sendError(500);
+									}
+								}
+							}
+						}
+					}
+					List currentList = (List) ((HttpServletRequest) request).getAttribute("currentList");
+					if (!currentList.getOwner().getId().equals(user.getId()) && !listDAO.hasViewPermission(listId, user.getId())) {
 						((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 								+ "The resource you are trying to access is none of your business.\n"
 								+ "If you think you have the right to access it, prove it by logging in.");

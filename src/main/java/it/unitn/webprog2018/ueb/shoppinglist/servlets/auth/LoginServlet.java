@@ -37,9 +37,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 
-	@Inject
-	private ChatSessionHandler chatSessionHandler;
-	
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
 	private UserDAO userDAO;
 	private ListDAO listDAO;
@@ -50,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() {
-		DAOFactory factory = (DAOFactoryImpl) this.getServletContext().getAttribute("daoFactory");
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
 		listDAO = factory.getListDAO();
 	}

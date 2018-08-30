@@ -41,7 +41,7 @@
 							   class="form-control"
 							   id="note"
 							   name="note" 
-							   required>
+							   >
 					</div>
 					<div>
 						<label for="logo">Logo</label>

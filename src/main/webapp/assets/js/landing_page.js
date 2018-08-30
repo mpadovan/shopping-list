@@ -172,9 +172,12 @@ Vue.component('list-item', {
 });
 Vue.component('search-item', {
 	props: ['item'],
-	data: function() {
+	data: function () {
 		return {
-			show: false
+			show: false,
+			delay: 190,
+			clicks: 0,
+			timer: null
 		};
 	},
 	computed: {
@@ -189,24 +192,38 @@ Vue.component('search-item', {
 			this.$emit('add', {
 				item: self.item
 			});
-		}
+		},
+		oneClick: function(event){
+          this.clicks++ 
+          if(this.clicks === 1) {
+            var self = this
+            this.timer = setTimeout(function() {
+              self.show = !self.show;
+              self.clicks = 0
+            }, this.delay);
+          } else{
+             clearTimeout(this.timer);  
+             this.callParent();
+             this.clicks = 0;
+          }         
+        }
 	},
 	template: '<li class="list-group-item"> \
-				<div class="row align-items-center" @click="show = !show"> \
-		<img v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
-		<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-		 <div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
-	</div> \
-	<div class="row align-items-center mt-2" v-show="show"> \
-		<div class="col-1 align-self-left" > \
-			<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
-		</div> \
-		<div class="col align-self-left"> \
-			<div >{{item.note }}</div> \
-		</div> \
-		<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
-	</div> \
-</li>'
+					<div class="row align-items-center" @click="oneClick"> \
+						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
+				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+					</div> \
+					<div class="row align-items-center mt-2" v-show="show"> \
+						<div class="col-1 align-self-left" v-if="item.logo"> \
+							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
+						</div> \
+						<div class="col align-self-left"> \
+							<div >{{item.note }}</div> \
+						</div> \
+						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
+					</div> \
+				</li>'
 });
 
 var app = new Vue({
@@ -246,6 +263,7 @@ var app = new Vue({
 		},
 		listHided: function () {
 			this.showSearch = true;
+			if(this.items.length === 0) toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
 		searchHided: function () {
 			this.showList = true;
@@ -277,7 +295,7 @@ var app = new Vue({
 		updateComponent: function () {
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1): this.items[i].amount = this.item_amount;
+					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
 					this.updateLocalStorage();
 					return;
 				}
@@ -302,19 +320,22 @@ var app = new Vue({
 			if (this.showAutocomplete) {
 				console.log(data);
 				(data.length == 0) ? this.autocompleteList = [{
-					name: 'Nessun risultato'
-				}]: this.autocompleteList = data;
+						name: 'Nessun risultato'
+					}] : this.autocompleteList = data;
 			} else {
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
-					if (this.results[j].category == undefined) this.results[j].category = {
-						name: 'Default'
-					};
+					if (this.results[j].category == undefined)
+						this.results[j].category = {
+							name: 'Default'
+						};
 				}
 				this.resultsSorted = this.results;
 				console.log(this.results);
-				if (this.results.length == 0) this.noResults = true;
-				else this.noResults = false;
+				if (this.results.length == 0)
+					this.noResults = true;
+				else
+					this.noResults = false;
 				var arr = [];
 				for (var i = 0; data.length > i; i++) {
 					if (typeof data[i].category == 'undefined') {
@@ -367,7 +388,8 @@ var app = new Vue({
 			}
 			this.resultsSorted = [];
 			for (var i = 0; this.results.length > i; i++) {
-				if (this.results[i].category.name == val) this.resultsSorted.push(this.results[i]);
+				if (this.results[i].category.name == val)
+					this.resultsSorted.push(this.results[i]);
 			}
 		}
 	},

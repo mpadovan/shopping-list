@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,6 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class ListDAOImpl extends AbstractDAO implements ListDAO{
-	private DAOFactory dAOFactory;
 	
 	public ListDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
@@ -37,7 +37,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			List list = new List();
 			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"u.name,u.lastname,u.administrator,u.email" +
+					"u.name,u.lastname,u.administrator,u.email," +
 					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
@@ -734,12 +734,40 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 
 	@Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		try{
+			String query = "insert into sharedlists (iduser,idlist,iduserlist) values ("+idpartecipant+","+list.getId()+","+list.getOwner().getId()+")";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			int count = st.executeUpdate();
+			st.close();
+			return count == 1;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
 	}
 
 	@Override
 	public Boolean addList(List list) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = list.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String image = list.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
+				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\")";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				int count = st.executeUpdate();
+				st.close();
+				return valid && (count == 1);
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 	
 }

@@ -53,6 +53,7 @@ public class ServiceUtils {
 	 * @param response HttpServletResponse that returns the error to the client
 	 */
 	public static void handleDAOException(DaoException ex, HttpServletResponse response) {
+		ex.printStackTrace();
 		if (ex instanceof RecordNotFoundDaoException) {
 			try {
 				if (!response.isCommitted()) {

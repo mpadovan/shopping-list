@@ -54,7 +54,7 @@ public class ListProductEditFilter implements ContainerRequestFilter {
 			uri = uri.substring(uri.lastIndexOf("permission/") + "permission/".length());
 			Integer listId = Integer.parseInt(uri.substring(0, uri.indexOf("/")));
 			try {
-				if (!listDAO.hasAddDeletePermission(listId, user.getId())) {
+				if (!listDAO.getList(listId).getOwner().getId().equals(user.getId()) && !listDAO.hasAddDeletePermission(listId, user.getId())) {
 					// TODO add correct redirection to error page ?
 					if (!servletResponse.isCommitted()) {
 						servletResponse.sendError(401, "YOU SHALL NOT PASS!");

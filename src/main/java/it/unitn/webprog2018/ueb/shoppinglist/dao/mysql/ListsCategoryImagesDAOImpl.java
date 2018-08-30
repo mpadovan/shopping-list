@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +28,6 @@ import java.util.logging.Logger;
  * @author simon
  */
 public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCategoryImagesDAO{
-	private DAOFactory dAOFactory;
 	public ListsCategoryImagesDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
 	}
@@ -37,8 +37,11 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		Boolean valid = listCategoriesImage.isVaildOnCreate(dAOFactory);
 		if(valid){
 			try{
+				String image = listCategoriesImage.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "insert into listscategoriesimages (image,idcategory) values\n" +
-						"(\""+listCategoriesImage.getImage()+"\","+listCategoriesImage.getCategory().getId()+")";
+						"(\""+image+"\","+listCategoriesImage.getCategory().getId()+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
@@ -93,8 +96,11 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		if(valid)
 		{
 			try{
+				String image = listCategoriesImage.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "update listscategoriesimages\n" +
-						"set image = \""+listCategoriesImage.getImage()+"\",\n" +
+						"set image = \""+image+"\",\n" +
 						"	idcategory = "+listCategoriesImage.getCategory().getId()+"\n" +
 						"where id = " + categoryId;
 				PreparedStatement st = this.getCon().prepareStatement(query);

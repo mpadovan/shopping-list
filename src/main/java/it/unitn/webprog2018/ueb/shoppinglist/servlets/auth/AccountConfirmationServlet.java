@@ -85,6 +85,7 @@ public class AccountConfirmationServlet extends HttpServlet {
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
+					user = userDAO.getByEmail(user.getEmail());
 					// Creating directories for the new user
 					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
 					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
@@ -109,6 +110,9 @@ public class AccountConfirmationServlet extends HttpServlet {
 						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
 						Files.copy(src.toPath(), dest.toPath());
 						src.delete();
+						user.setImage("/uploads/restricted/" + user.getId() + "/avatar/" + avatarName2);
+						user.setCheckpassword(user.getPassword());
+						userDAO.updateUser(user.getId(), user);
 					}
 					tokenDAO.removeToken(token);
 					path += "Login";

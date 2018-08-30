@@ -63,7 +63,7 @@
 					</c:if>
 
 					<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
-						Luigi Bianchi
+						${sessionScope.user.name} ${sessionScope.user.lastname}
 					</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Profilo</a>

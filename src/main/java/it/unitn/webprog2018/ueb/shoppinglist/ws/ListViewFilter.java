@@ -62,6 +62,7 @@ public class ListViewFilter implements ContainerRequestFilter {
 				}
 			} catch (DaoException ex) {
 				// TODO add correct redirection to error page ?
+				ex.printStackTrace();
 				ServiceUtils.handleDAOException(ex, servletResponse);
 			}
 		}

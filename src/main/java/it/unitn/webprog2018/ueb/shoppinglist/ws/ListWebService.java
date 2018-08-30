@@ -169,7 +169,7 @@ public class ListWebService {
 		}
 		try {
 			json += ", \"editList\":";
-			if (listDAO.hasAddDeletePermission(listId, userId)) {
+			if (listDAO.getList(listId).getOwner().getId().equals(userId) || listDAO.hasAddDeletePermission(listId, userId)) {
 				json += "true";
 			} else {
 				json += "false";

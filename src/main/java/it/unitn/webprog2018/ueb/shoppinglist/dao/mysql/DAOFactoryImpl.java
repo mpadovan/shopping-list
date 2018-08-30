@@ -34,6 +34,7 @@ public class DAOFactoryImpl implements DAOFactory {
 	// private final NotificationDAO NOTIFICATION_DAO;
 	
 	public DAOFactoryImpl(Connection con) {
+		this.con = con;
 		this.LISTS_CATEGORY_IMAGE_DAO = new ListsCategoryImagesDAOImpl(con, this);
 		this.LIST_DAO = new ListDAOImpl(con, this);
 		this.PRODUCTS_CATEGORY_DAO = new ProductsCategoryDAOImpl(con, this);
@@ -44,7 +45,6 @@ public class DAOFactoryImpl implements DAOFactory {
 		this.EXAMPLE_DAO = new ExampleDAOImpl(con, this);
 		this.MESSAGE_DAO = new MessageDAOImpl(con, this);
 		// this.NOTIFICATION_DAO = new NotificationDaoImpl(con,this);
-		this.con = con;
 	}
 
 	@Override
