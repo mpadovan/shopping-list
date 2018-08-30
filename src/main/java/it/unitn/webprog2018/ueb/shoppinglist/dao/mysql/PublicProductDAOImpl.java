@@ -219,7 +219,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 		//if(valid)
 		//{
 		try{
-			String query = "DELETE FROM publicproducts WHERE idproduct = "+id;
+			String query = "DELETE FROM publicproducts WHERE id = "+id;
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			int count = st.executeUpdate();
 			st.close();
