@@ -16,6 +16,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -115,14 +116,17 @@ public class NewListServlet extends HttpServlet {
 			//shared - persone condivisione
 			if (shared == null || shared.length == 0) {
 				Boolean valid = listDAO.addList(list);
+				if (!listDAO.linkShoppingListToUser(list, me.getId())) {
+					new SQLException("link non effettutato tra lista e utente");
+				}
 				if (valid) {
-					redirect=true;
+					redirect = true;
 				} else {
 					request.setAttribute("list", list);
 				}
 			} else {
 				System.out.println("shared!");
-				isshared=true;
+				isshared = true;
 				LinkedList<User> listashared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
 					try {
@@ -136,31 +140,30 @@ public class NewListServlet extends HttpServlet {
 				Boolean valid = listDAO.addList(list);
 				if (valid) {
 					for (User u : listashared) {
-						listDAO.linkShoppingListToUser(list, u.getId());
+						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+							new SQLException("link non effettutato tra lista e utente");
+						}
 					}
-					redirect=true;
+					redirect = true;
 				} else {
 					request.setAttribute("list", list);
 				}
 			}
-			if(redirect)
-			{
+			if (redirect) {
 				list = listDAO.getList(list.getName(), me);
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-				if(!isshared)
-				{
+				if (!isshared) {
 					//set sessione liste not shared
-					//session.setAttribute(, );
-				}
-				else
-				{
+					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> personalLists = listDAO.getPersonalLists(me.getId());
+					session.setAttribute("personalLists", personalLists);
+				} else {
 					//set sessione liste shared
+					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
+					session.setAttribute("sharedLists", sharedLists);
 				}
 				System.out.println(me.getId() + "/" + list.getId());
 				response.sendRedirect(path);
-			}
-			else
-			{
+			} else {
 				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
