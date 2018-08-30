@@ -754,13 +754,19 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		{
 			try{
 				String image = list.getImage();
-				if(File.separator.equals("\\"))
+				System.out.println(image);
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
-				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
-				int count = st.executeUpdate();
+				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\");\n";
+				query += "select LAST_INSERT_ID();";
+				Statement st = this.getCon().createStatement();
+				st.execute(query);
+				ResultSet rs =  st.getResultSet();
+				Integer id = rs.getInt(1);
+				list.setId(id);
+				System.out.println(id);
 				st.close();
-				return valid && (count == 1);
+				return valid && (id > 0);
 			}
 			catch(SQLException ex){
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
