@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
+package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
+import it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.*;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
@@ -31,9 +32,9 @@ import javax.servlet.http.Part;
  *
  * @author simon
  */
-@WebServlet(name = "ChangeImageAdminServlet", urlPatterns = {"/restricted/admin/ChangeImageAdmin"})
+@WebServlet(name = "ChangeImageUserServlet", urlPatterns = {"/restricted/ChangeImageUser"})
 @MultipartConfig
-public class ChangeImageAdminServlet extends HttpServlet {
+public class ChangeImageUserServlet extends HttpServlet {
 
 	UserDAO userDAO;
 
@@ -125,13 +126,13 @@ public class ChangeImageAdminServlet extends HttpServlet {
 			try {
 				if (userDAO.updateUser(user.getId(), user)) {
 					session.setAttribute("user", user);
-					response.sendRedirect(context + "restricted/admin/InfoAdmin");
+					response.sendRedirect(context + "restricted/InfoUser");
 				}
 			} catch (DaoException ex) {
-				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else {
-			response.sendRedirect(context + "restricted/admin/InfoAdmin");
+			response.sendRedirect(context + "restricted/InfoUser");
 		}
 	}
 
