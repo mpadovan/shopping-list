@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <layouts:base pageTitle="Product list">
     <jsp:attribute name="pageContent">
@@ -37,27 +38,16 @@
 								<tr>
 									<td><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
 									<td>${p.note}</td>
-									<c:if test="${not empty p.logo}">
-										<td>
+									<td>
+										<c:if test="${p.logo ne 'null'}" >
 											<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
-										</td>
-									</c:if>
-									<c:if test="${empty p.logo}">
-										<td>
-
-										</td>
-									</c:if>
-									<c:if test="${not empty p.photography}">
-										<td>
-											<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
-										</td>
-									</c:if>
-									<c:if test="${empty p.photography}">
-										<td>
-
-										</td>
-									</c:if>
-
+										</c:if>
+									</td>
+									<td>
+										<c:if test="${p.photography ne 'null'}">
+											<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}"></div>
+										</c:if>
+									</td>
 									<td>${p.category.name}</td>
 									<td>
 										<span class="ml-4"><a class="info-custom-product-a"href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>

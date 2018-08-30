@@ -34,7 +34,6 @@
 									name="category" 
 									required
 									>
-								<option selected value="-1">Nessuna</option>
 								<c:forEach var="c" items="${requestScope.productsCategory}">
 									<option value="${c.id}">${c.name}</option>
 								</c:forEach>
@@ -46,7 +45,7 @@
 								   class="form-control"
 								   id="note"
 								   name="note" 
-								   required>
+								   >
 						</div>
 						<div>
 							<label for="logo">Logo</label>

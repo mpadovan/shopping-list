@@ -63,14 +63,14 @@ public class DeleteProductServlet extends HttpServlet {
 		try {
 			Product product = productDAO.getProduct(productId);
 			if (productDAO.deleteProduct(product.getId())) {
-				if(product.getPhotography()!=null && !product.getPhotography().equals(""))
+				if(product.getPhotography()!=null && !product.getPhotography().equals("") && !product.getPhotography().equals("null"))
 				{
 					String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
 					int ext = product.getPhotography().lastIndexOf(".");
 					File file = new File(imageFolder + product.getId() + product.getPhotography().substring(ext));
 					file.delete();
 				}
-				if(product.getLogo()!=null && !product.getLogo().equals(""))
+				if(product.getLogo()!=null && !product.getLogo().equals("") && !product.getLogo().equals("null"))
 				{
 					String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
 					int ext = product.getLogo().lastIndexOf(".");
