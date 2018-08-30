@@ -16,7 +16,7 @@ public class DBListener implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		String dburl = "jdbc:mysql://localhost:3306/shoppinglistdb?serverTimezone=WET";
+		String dburl = "jdbc:mysql://localhost:3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
 		String dbUsername = "root";
 		String dbPassword = "root";
 

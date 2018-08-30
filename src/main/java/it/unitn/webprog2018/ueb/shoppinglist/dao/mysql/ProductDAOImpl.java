@@ -116,8 +116,14 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
-					logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					if(logo!=null)
+					{
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					}
+					if(photo!=null)
+					{
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					}
 				}
 				String query = "UPDATE products\n" +
 						"SET name = \""+product.getName()+"\"," +
@@ -126,7 +132,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 						"   photography = \""+photo+"\"," +
 						"   iduser = "+product.getOwner().getId()+"," +
 						"   idproductscategory = "+product.getCategory().getId()+
-						"WHERE id = "+productId;
+						" WHERE id = "+productId;
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();
@@ -150,7 +156,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
 		List<Product> list = new ArrayList<>();
 		try {
-			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory,"
+			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.iduser,p.idproductscategory,"
 					+ "pc.name,pc.category,pc.description,pc.logo "
 					+ "FROM products p inner join productscategories pc on p.idproductscategory = pc.id "
 					+ "WHERE p.iduser = " + userId + " AND p.name LIKE \"%" + matching + "%\"";
@@ -169,7 +175,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				p.setNote(rs.getString(i++));
 				p.setLogo(rs.getString(i++));
 				p.setPhotography(rs.getString(i++));
-				p.setOwner(null);
+				p.setOwner(new User());
+				p.getOwner().setId(rs.getInt(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
 				pcp.setId(rs.getInt(i++));

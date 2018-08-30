@@ -99,6 +99,17 @@ public class ChangeImageUserServlet extends HttpServlet {
 
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
+			System.out.println("entrato");
+			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
+				System.out.println("entrato2");
+				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
+				int extold = user.getImage().lastIndexOf(".");
+				File fileold = new File(imageFolder + user.getId() + user.getImage().substring(extold));
+				if (fileold.exists()) {
+					fileold.delete();
+					System.out.println("entrato3");
+				}
+			}
 			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);

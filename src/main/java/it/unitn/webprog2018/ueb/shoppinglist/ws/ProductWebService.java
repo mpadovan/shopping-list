@@ -196,7 +196,7 @@ public class ProductWebService {
 			product.getOwner().setId(userId);
 			ProductsCategory productsCategory = new ProductsCategory();
 			product.setCategory(productsCategory);
-			product.getCategory().setId(0);
+			product.getCategory().setId(1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

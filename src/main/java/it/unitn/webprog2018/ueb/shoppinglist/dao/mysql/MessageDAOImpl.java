@@ -86,8 +86,8 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 			try{
 				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES " +
 						"("+message.getSender().getId()+","+message.getList().getId()+",now(1),\""+message.getText()+"\");\n";
-				query += "CALL setLastAccess("+message.getSender().getId()+","+message.getList().getId()+",now(1))";
-				
+				query += "CALL setLastAccess("+message.getSender().getId()+","+message.getList().getId()+",now(1));";
+				System.out.println(query);
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();
 				st.close();
