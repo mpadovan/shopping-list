@@ -55,7 +55,7 @@ public class ChangeImageUserServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/admin/ChangeImageAdmin.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/auth/ChangeImageUser.jsp").forward(request, response);
 	}
 
 	/**

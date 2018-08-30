@@ -22,14 +22,14 @@
 					<c:if test="${empty sessionScope.user.image}">
 						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar.png" alt="Nome Cognome" title="Immagine profilo">
 					</c:if>
-					<form class="form-signin" action="ChangeImageAdmin" method="POST" enctype='multipart/form-data'>
+					<form class="form-signin" action="ChangeImageUser" method="POST" enctype='multipart/form-data'>
 						<div class="custom-file my-2">
 							<label class="custom-file-label" for="image">Scegli avatar</label>
 							<input type="file" class="custom-file-input" id="image" name="image">
 						</div>
 						<button type="submit" class="btn btn-primary float-right mx-2">Conferma</button>
 						<div class="mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser">Indietro</a>
 						</div>
 					</form>
 				</div>

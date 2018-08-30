@@ -20,7 +20,7 @@
 						<c:if test="${empty sessionScope.user.image}">
 							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar2.png" alt="Nome Cognome" title="Immagine profilo">
 						</c:if>
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ChangeImageUser" class="btn btn-light mx-2 mt-3">Cambia immagine</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser" class="btn btn-light mx-2 mt-3">Cambia immagine</a>
 					</div>
 					<div class="col">
 						<h5 class="card-title text-center">Informazioni utente "${sessionScope.user.name} ${sessionScope.user.lastname}"</h5>
