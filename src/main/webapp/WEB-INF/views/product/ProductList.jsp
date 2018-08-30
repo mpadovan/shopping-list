@@ -29,7 +29,7 @@
 								<th>Logo</th>
 								<th>Fotografia</th>
 								<th>Categoria</th>
-								<th>Gestisci</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -37,22 +37,22 @@
 								<tr>
 									<td><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
 									<td>${p.note}</td>
-									<c:if test="${p.logo != ''}">
+									<c:if test="${not empty p.logo}">
 										<td>
 											<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
 										</td>
 									</c:if>
-									<c:if test="${p.logo == ''}">
+									<c:if test="${empty p.logo}">
 										<td>
 
 										</td>
 									</c:if>
-									<c:if test="${p.photography != null}">
+									<c:if test="${not empty p.photography}">
 										<td>
 											<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
 										</td>
 									</c:if>
-									<c:if test="${p.photography == null}">
+									<c:if test="${empty p.photography}">
 										<td>
 
 										</td>
@@ -60,7 +60,6 @@
 
 									<td>${p.category.name}</td>
 									<td>
-										<span><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
 										<span class="ml-4"><a class="info-custom-product-a"href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
 									</td>
 								</tr>

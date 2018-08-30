@@ -140,4 +140,14 @@ public class ProductDAOImpl implements ProductDAO {
 	private synchronized void removeProductFromList(Product p) {
 		products.remove(p);
 	}
+
+	@Override
+	public Boolean addProductWithId(Product product) throws DaoException {
+		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		if (valid) {
+			product.setId(products.size() + 1);
+			products.add(product);
+		}
+		return valid;
+	}
 }

@@ -367,7 +367,8 @@ public class ListDAOImpl implements ListDAO {
 				case 2:
 					return userId == 1;
 				default:
-					throw new RecordNotFoundDaoException("List " + listId + " not found");
+					return true;
+					//throw new RecordNotFoundDaoException("List " + listId + " not found");
 			}
 		}
 	}

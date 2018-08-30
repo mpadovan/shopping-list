@@ -11,7 +11,7 @@
 
 <layouts:admin pageTitle="Admin products">
 	<jsp:attribute name="pageContent">
-		<div class="card" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
+		<div class="card card-list-product">
 			<div class="card-body">
 				<h1 class="card-title">Prodotti</h1>
 				<p><a class="a-admin"href="${pageContext.servletContext.contextPath}/restricted/admin/NewPublicProduct">Nuovo prodotto <i class="fas fa-plus-circle"></i></a></p>
@@ -24,13 +24,6 @@
 						</div>
 					</div>
 				</form>
-				<nav aria-label="Page navigation example" class="float-right">
-					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#">Precedente</a></li>
-						<li class="page-item"><a class="page-link" href="#">...</a></li>
-						<li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-					</ul>
-				</nav>
 				<table class="table table-responsive-md table-striped">
 					<thead>
 						<tr>
@@ -47,8 +40,26 @@
 							<tr>
 								<td>${p.name}</td>
 								<td>${p.note}</td>
-								<td>${p.logo}</td>
-								<td>${p.photography}</td>
+								<c:if test="${not empty p.logo}">
+									<td>
+										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
+									</td>
+								</c:if>
+								<c:if test="${empty p.logo}">
+									<td>
+
+									</td>
+								</c:if>
+								<c:if test="${not empty p.photography}">
+									<td>
+										<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
+									</td>
+								</c:if>
+								<c:if test="${empty p.photography}">
+									<td>
+
+									</td>
+								</c:if>
 								<td>${p.category.name}</td>
 								<td>
 									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
