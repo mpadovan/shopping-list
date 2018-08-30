@@ -36,7 +36,7 @@
 							   class="form-control"
 							   id="logo"
 							   name="logo" 
-							   required>
+							   />
 					</div>
 					<div>
 						<label for="category">Categoria padre</label>
