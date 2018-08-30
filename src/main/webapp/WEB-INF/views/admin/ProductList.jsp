@@ -11,7 +11,7 @@
 
 <layouts:admin pageTitle="Admin products">
 	<jsp:attribute name="pageContent">
-		<div class="card" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
+		<div class="card card-list-product">
 			<div class="card-body">
 				<h1 class="card-title">Prodotti</h1>
 				<p><a class="a-admin"href="${pageContext.servletContext.contextPath}/restricted/admin/NewPublicProduct">Nuovo prodotto <i class="fas fa-plus-circle"></i></a></p>

@@ -33,7 +33,7 @@ body{
 	border-radius: 10px;
 }
 .info-custom-product{
-	background-color: white;
+	background-color: #2a5788;
 	max-width: 50px;
 	min-height: 50px;
 	border-radius: 10px;
@@ -66,4 +66,10 @@ body{
 .info-product-card{
 	max-width: 1000px;	
 	margin: 100px auto;
+}
+.card-list-product{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom:10px;
 }
