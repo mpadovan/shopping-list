@@ -23,7 +23,7 @@
 					</div>
 					<div class="col">
 						<h4 class="card-title text-center">Modifica utente ${sessionScope.user.name} ${sessionScope.user.lastname}</h4>
-						<form action="EditAdmin" method="POST">
+						<form action="EditUser" method="POST">
 							<div class="form-group row">
 								<label for="name" class="col-sm-3 col-form-label">Nome</label>
 								<div class="col-sm-9">
