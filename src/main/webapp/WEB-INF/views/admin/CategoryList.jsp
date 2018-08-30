@@ -24,13 +24,6 @@
 						</div>
 					</div>
 				</form>
-				<nav aria-label="Page navigation example" class="float-right">
-					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#">Precedente</a></li>
-						<li class="page-item"><a class="page-link" href="#">...</a></li>
-						<li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-					</ul>
-				</nav>
 				<table class="table table-responsive-md table-striped">
 					<thead>
 						<tr>

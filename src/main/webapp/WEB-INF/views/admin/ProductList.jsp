@@ -40,26 +40,16 @@
 							<tr>
 								<td>${p.name}</td>
 								<td>${p.note}</td>
-								<c:if test="${not empty p.logo}">
-									<td>
+								<td>
+									<c:if test="${p.logo ne 'null' && not empty p.logo}">	
 										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
-									</td>
-								</c:if>
-								<c:if test="${empty p.logo}">
-									<td>
-
-									</td>
-								</c:if>
-								<c:if test="${not empty p.photography}">
-									<td>
+									</c:if>
+								</td>
+								<td>
+									<c:if test="${p.photography ne 'null' && not empty p.logo}">
 										<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
-									</td>
-								</c:if>
-								<c:if test="${empty p.photography}">
-									<td>
-
-									</td>
-								</c:if>
+									</c:if>
+								</td>
 								<td>${p.category.name}</td>
 								<td>
 									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
