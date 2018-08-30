@@ -6,6 +6,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,12 +114,16 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 		if(valid)
 		{
 			try{
+				String image = user.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
+				
 				String query = "UPDATE users " +
 						"SET email = \"" + user.getEmail() +
 						"\", password = \"" + user.getPassword() +
 						"\", name = \"" + user.getName() +
 						"\", lastname = \"" + user.getLastname() +
-						"\", image = \"" + user.getImage() +
+						"\", image = \"" + image +
 						"\", administrator = " + (user.isAdministrator()? 1 : 0) +
 						" WHERE id = " + id;
 				PreparedStatement st = this.getCon().prepareStatement(query);
