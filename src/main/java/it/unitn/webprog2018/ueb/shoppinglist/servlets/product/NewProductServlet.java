@@ -114,6 +114,8 @@ public class NewProductServlet extends HttpServlet {
 				product.setName(name);
 				product.setNote(note);
 				product.setCategory(productsCategory);
+				product.setLogo(null);
+				product.setPhotography(null);
 			} catch (RecordNotFoundDaoException ex) {
 				Logger.getLogger(NewProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 				response.sendError(404, ex.getMessage());
@@ -121,10 +123,10 @@ public class NewProductServlet extends HttpServlet {
 			//aggiunta del prodotto senza logo e immagine
 			Boolean checkLogo = false;
 			Boolean checkImage = false;
-
 			if (productDAO.addProductWithId(product)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
+					System.out.println("carico logo");
 					checkLogo = true;
 					logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
 					int ext = logoFileName.lastIndexOf(".");

@@ -120,13 +120,18 @@ public class EditProductServlet extends HttpServlet {
 			if ((logo != null) && (logo.getSize() > 0)) {
 				//crezione cartella se non esiste
 				//delete old product
-				String logoFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
-				int extold = product.getLogo().lastIndexOf(".");
-				File file = new File(logoFolder + product.getId() + product.getLogo().substring(extold));
-				if(file.exists())
-				{
-					file.delete();
+				System.out.println("logo si");
+				if (product.getLogo() != null && !product.getLogo().equals("") && !product.getLogo().equals("null")) {
+					System.out.println("voglio cancellare");
+					String logoFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
+					int extold = product.getLogo().lastIndexOf(".");
+					File file = new File(logoFolder + product.getId() + product.getLogo().substring(extold));
+					if (file.exists()) {
+						Boolean fatto=file.delete();
+						System.out.println(fatto);
+					}
 				}
+				System.out.println("logo cancellato o non trovato");
 				//create
 				logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
 				int ext = logoFileName.lastIndexOf(".");
@@ -152,13 +157,14 @@ public class EditProductServlet extends HttpServlet {
 				product.setLogo(logoURI);
 			}
 			if ((photography != null) && (photography.getSize() > 0)) {
-				//delete photography
-				String imageFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
-				int extold = product.getPhotography().lastIndexOf(".");
-				File file = new File(imageFolderold + product.getId() + product.getPhotography().substring(extold));
-				if(file.exists())
-				{
-					file.delete();
+				//delete old photography
+				if (product.getPhotography() != null && !product.getPhotography().equals("") && !product.getPhotography().equals("null")) {
+					String imageFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
+					int extold = product.getPhotography().lastIndexOf(".");
+					File file = new File(imageFolderold + product.getId() + product.getPhotography().substring(extold));
+					if (file.exists()) {
+						file.delete();
+					}
 				}
 				//create
 				imageFileName = Paths.get(photography.getSubmittedFileName()).getFileName().toString();

@@ -116,8 +116,14 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
-					logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					if(logo!=null)
+					{
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					}
+					if(photo!=null)
+					{
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					}
 				}
 				String query = "UPDATE products\n" +
 						"SET name = \""+product.getName()+"\"," +
