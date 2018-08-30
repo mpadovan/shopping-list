@@ -37,20 +37,25 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
 		List<Message> listOut = new ArrayList<>();
 		try{
-			String query =	"SELECT id,sendtime,text FROM messages WHERE idlist = "+list.getId()+" ORDER BY sendtime limit 30";
+			String query =	"SELECT m.id,m.sendtime,m.text,m.iduser,u.name,u.lastname FROM messages m inner join users u on m.iduser = u.id WHERE m.idlist = "+list.getId()+" ORDER BY sendtime limit 30";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Message m = null;
+			User u;
 			int i;
 			while(rs.next())
 			{
 				i = 1;
 				m = new Message();
+				u = new User();
 				m.setId(rs.getInt(i++));
 				m.setSendTime(rs.getTimestamp(i++));
 				m.setText(rs.getString(i++));
+				u.setId(rs.getInt(i++));
+				u.setName(rs.getString(i++));
+				u.setLastname(rs.getString(i++));
 				m.setList(list);
-				m.setSender(user);
+				m.setSender(u);
 				
 				listOut.add(m);
 			}
