@@ -33,17 +33,11 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 		super(con, dAOFactory);
 	}
 	
-	/**
-	 * dopo molteplici bestemmie ho scelto per la query piú ovvia anche se probabilmente molto lenta perché (in teoria) deve fare una query annidata per ogni record
-	 * quando scarica gli ultimi messaggi viene settata la data di accesso = al sendtime del messaggio piú vecchio scaricato
-	 */
 	@Override
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
 		List<Message> listOut = new ArrayList<>();
 		try{
-			String query =	"(SELECT id,sendtime,text FROM messages WHERE idlist = "+list.getId()+" AND " +
-					"(SELECT lastchataccess FROM sharedlists WHERE iduser = "+user.getId()+" AND idlist = "+list.getId()+" limit 1) < sendtime " +
-					"ORDER BY sendtime limit 30)";
+			String query =	"SELECT id,sendtime,text FROM messages WHERE idlist = "+list.getId()+" ORDER BY sendtime limit 30";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Message m = null;
