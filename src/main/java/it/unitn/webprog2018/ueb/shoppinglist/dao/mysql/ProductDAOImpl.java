@@ -126,7 +126,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 						"   photography = \""+photo+"\"," +
 						"   iduser = "+product.getOwner().getId()+"," +
 						"   idproductscategory = "+product.getCategory().getId()+
-						"WHERE id = "+productId;
+						" WHERE id = "+productId;
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();

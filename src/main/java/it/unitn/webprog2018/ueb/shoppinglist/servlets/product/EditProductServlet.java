@@ -118,11 +118,15 @@ public class EditProductServlet extends HttpServlet {
 			product.setName(name);
 			product.setNote(note);
 			if ((logo != null) && (logo.getSize() > 0)) {
-				//delete
+				//crezione cartella se non esiste
+				//delete old product
 				String logoFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
 				int extold = product.getLogo().lastIndexOf(".");
 				File file = new File(logoFolder + product.getId() + product.getLogo().substring(extold));
-				file.delete();
+				if(file.exists())
+				{
+					file.delete();
+				}
 				//create
 				logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
 				int ext = logoFileName.lastIndexOf(".");
@@ -152,7 +156,10 @@ public class EditProductServlet extends HttpServlet {
 				String imageFolderold = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
 				int extold = product.getPhotography().lastIndexOf(".");
 				File file = new File(imageFolderold + product.getId() + product.getPhotography().substring(extold));
-				file.delete();
+				if(file.exists())
+				{
+					file.delete();
+				}
 				//create
 				imageFileName = Paths.get(photography.getSubmittedFileName()).getFileName().toString();
 				int ext = imageFileName.lastIndexOf(".");
