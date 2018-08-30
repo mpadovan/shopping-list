@@ -48,7 +48,7 @@ public class EditProductServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() {
-		DAOFactory factory = (DAOFactoryImpl) this.getServletContext().getAttribute("daoFactory");
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 	}
