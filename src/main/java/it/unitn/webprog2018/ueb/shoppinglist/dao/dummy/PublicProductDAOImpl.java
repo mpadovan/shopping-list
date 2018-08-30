@@ -198,6 +198,16 @@ public class PublicProductDAOImpl implements PublicProductDAO {
 	private synchronized void removeProductFromList(PublicProduct p) {
 		publicProducts.remove(p);
 	}
+
+	@Override
+	public Boolean addProductWithId(PublicProduct product) throws DaoException {
+		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		if (valid) {
+			product.setId(publicProducts.size() + 1);
+			publicProducts.add(product);
+		}
+		return valid;
+	}
 	
 
 }
