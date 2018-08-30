@@ -28,7 +28,7 @@
 
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/navbar_admin.css" />
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/admin_page.css" />
-
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 		<jsp:invoke fragment="customCss" />
 
 		<title><c:out value="${pageTitle}" /></title>
@@ -82,7 +82,6 @@
 
 
 
-
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 		<!-- Popper.JS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
@@ -91,6 +90,7 @@
 		<!-- jQuery Custom Scroller CDN -->
 		<!-- development version, includes helpful console warnings -->
 		<script src="${pageContext.servletContext.contextPath}/assets/js/admin_page.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 		<jsp:invoke fragment="customJs" />
 
 	</body>

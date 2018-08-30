@@ -292,7 +292,43 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 
 	@Override
 	public Boolean addProductWithId(PublicProduct product) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String logo = product.getLogo();
+				String photo = product.getPhotography();
+				if(File.separator.equals("\\")){
+					if(logo!=null)
+					{
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					}
+					if(photo!=null)
+					{
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					}
+				}
+				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (\""+
+						product.getName()+"\",\""+
+						product.getNote()+"\",\""+
+						logo+"\",\""+
+						photo+"\","+
+						product.getCategory().getId()+")";
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					product.setId(rs.getInt(1));
+				}
+				st.close();
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 	
 }
