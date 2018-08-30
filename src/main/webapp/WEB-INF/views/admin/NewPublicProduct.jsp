@@ -30,7 +30,7 @@
 							   id="note"
 							   name="note" 
 							   value="${product.note}"
-							   required>
+							   />
 					</div>
 					<div>
 						<label for="logo">Logo</label>
