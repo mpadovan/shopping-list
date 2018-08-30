@@ -6,6 +6,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,11 +35,17 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		if(valid)
 		{
 			try{
+				String logo = product.getLogo();
+				String photo = product.getPhotography();
+				if(File.separator.equals("\\")){
+					logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (\""+
 						product.getName()+"\",\""+
 						product.getNote()+"\",\""+
-						product.getLogo()+"\",\""+
-						product.getPhotography()+"\","+
+						logo+"\",\""+
+						photo+"\","+
 						product.getOwner().getId()+","+
 						product.getCategory().getId()+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
@@ -107,11 +114,17 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		if(valid)
 		{
 			try{
+				String logo = product.getLogo();
+				String photo = product.getPhotography();
+				if(File.separator.equals("\\")){
+					logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "UPDATE products\n" +
 						"SET name = \""+product.getName()+"\"," +
 						"	note = \""+product.getNote()+"\"," +
-						"   logo = \""+product.getLogo()+"\"," +
-						"   photography = \""+product.getPhotography()+"\"," +
+						"   logo = \""+logo+"\"," +
+						"   photography = \""+photo+"\"," +
 						"   iduser = "+product.getOwner().getId()+"," +
 						"   idproductscategory = "+product.getCategory().getId()+
 						"WHERE id = "+productId;

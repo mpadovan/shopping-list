@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -752,7 +753,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+list.getImage()+"\")";
+				String image = list.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
+				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				int count = st.executeUpdate();
 				st.close();

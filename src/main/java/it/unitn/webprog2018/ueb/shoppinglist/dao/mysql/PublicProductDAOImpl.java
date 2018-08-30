@@ -7,6 +7,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -163,11 +164,17 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 		if(valid)
 		{
 			try{
+				String logo = product.getLogo();
+				String photo = product.getPhotography();
+				if(File.separator.equals("\\")){
+					logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "UPDATE publicproducts " +
 						"SET name = \""+product.getName()+"\"," +
 						"note = \""+product.getNote()+"\"," +
-						"logo = \""+product.getLogo()+"\"," +
-						"photography = \""+product.getPhotography()+"\"," +
+						"logo = \""+logo+"\"," +
+						"photography = \""+photo+"\"," +
 						"idproductscategory = "+product.getCategory().getId()+
 						" WHERE id = "+id;
 				PreparedStatement st = this.getCon().prepareStatement(query);
@@ -191,11 +198,17 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 		if(valid)
 		{
 			try{
+				String logo = product.getLogo();
+				String photo = product.getPhotography();
+				if(File.separator.equals("\\")){
+					logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (\""+
 						product.getName()+"\",\""+
 						product.getNote()+"\",\""+
-						product.getLogo()+"\",\""+
-						product.getPhotography()+"\","+
+						logo+"\",\""+
+						photo+"\","+
 						product.getCategory().getId()+")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();

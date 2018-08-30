@@ -88,12 +88,15 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 		if(valid)
 		{
 			try{
+				String image = user.getImage();
+				if(File.separator.equals("\\"))
+					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "INSERT INTO users (email,name,lastname,administrator,image,password) VALUES (\""+
 						user.getEmail()+"\",\""+
 						user.getName()+"\",\""+
 						user.getLastname()+"\","+
 						(user.isAdministrator()? 1 : 0)+",\""+
-						user.getImage()+"\",\""+
+						image+"\",\""+
 						user.getPassword()+"\")";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.executeUpdate();
