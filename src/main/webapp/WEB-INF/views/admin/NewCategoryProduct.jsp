@@ -28,7 +28,7 @@
 							   class="form-control"
 							   id="note"
 							   name="description" 
-							   required>
+							   />
 					</div>
 					<div>
 						<label for="logo">Logo</label>
