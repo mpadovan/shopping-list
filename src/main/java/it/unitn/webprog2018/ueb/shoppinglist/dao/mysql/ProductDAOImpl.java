@@ -150,7 +150,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
 		List<Product> list = new ArrayList<>();
 		try {
-			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory,"
+			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.iduser,p.idproductscategory,"
 					+ "pc.name,pc.category,pc.description,pc.logo "
 					+ "FROM products p inner join productscategories pc on p.idproductscategory = pc.id "
 					+ "WHERE p.iduser = " + userId + " AND p.name LIKE \"%" + matching + "%\"";
@@ -169,7 +169,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				p.setNote(rs.getString(i++));
 				p.setLogo(rs.getString(i++));
 				p.setPhotography(rs.getString(i++));
-				p.setOwner(null);
+				p.setOwner(new User());
+				p.getOwner().setId(rs.getInt(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
 				pcp.setId(rs.getInt(i++));
