@@ -56,6 +56,7 @@ public class DeleteProductServlet extends HttpServlet {
 		try {
 			Product product = productDAO.getProduct(productId);
 			if (productDAO.deleteProduct(product.getId())) {
+				
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 			} else {
 				request.setAttribute("product", product);
