@@ -120,22 +120,6 @@ public class NewListServlet extends HttpServlet {
 			}
 			list.setCategory(listCategory);
 
-			// fetch list image - storing beneath
-			File file = null;
-			String imageName = "";
-			String imageURI = "";
-			String userFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/" + me.getId() + "/";
-			Part image = request.getPart("image");
-			if ((image != null) && (image.getSize() > 0)) {
-				imageName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
-				int ext = imageName.lastIndexOf(".");
-				int noExt = imageName.lastIndexOf(File.separator);
-				imageName = userFolder + "/listImage/" + list.getName() + (ext > noExt ? imageName.substring(ext) : "");
-				imageURI = "uploads/restricted/tmp/"
-						+ imageName.substring(imageName.lastIndexOf(list.getName()));
-			}
-			list.setImage(imageURI);
-
 			//shared - persone condivisione
 			if (shared == null || shared.length == 0) {
 				//add privatelist
@@ -185,20 +169,36 @@ public class NewListServlet extends HttpServlet {
 					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
 					session.setAttribute("sharedLists", sharedLists);
 				}
-				// save list image - last thing before redirecting, to make sure everything went right
+				// fetch list image - storing beneath
+				File file = null;
+				String imageFileName = "";
+				String imageURI = "";
+				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "";
+				Part image = request.getPart("image");
 				if ((image != null) && (image.getSize() > 0)) {
-					try (InputStream fileContent = image.getInputStream()) {
-						file = new File(imageName);
-						Files.copy(fileContent, file.toPath());
+					imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
+					int ext = imageFileName.lastIndexOf(".");
+					int noExt = imageFileName.lastIndexOf(File.separator);
+					imageFileName = imageFolder + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
+					InputStream fileContentImage = null;
+					try {
+						ext = imageFileName.lastIndexOf(".");
+						noExt = imageFileName.lastIndexOf(File.separator);
+						fileContentImage = image.getInputStream();
+						file = new File(imageFileName);
+						Files.copy(fileContentImage, file.toPath());
+						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "productImage"
+								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
 					} catch (FileAlreadyExistsException ex) {
-						response.sendError(500, "Server could not store the image, "
-								+ "please retry the list creation process."
-								+ "Notice that you can also upload the image later when editing the list.");
-						getServletContext().log("impossible to upload the file", ex);
+						file.delete();
+						Files.copy(fileContentImage, file.toPath());
+						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "productImage"
+								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
+
 					}
 				}
-
+				list.setImage(imageURI);
 				response.sendRedirect(path);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
