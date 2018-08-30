@@ -14,8 +14,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +33,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -94,10 +100,11 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared");
+		/*
 		for (int i = 0; i < shared.length; i++) {
 			System.out.print(shared[i] + " ");
 		}
-
+		 */
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -113,6 +120,22 @@ public class NewListServlet extends HttpServlet {
 			}
 			list.setCategory(listCategory);
 
+			// fetch list image - storing beneath
+			File file = null;
+			String imageName = "";
+			String imageURI = "";
+			String userFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/" + me.getId() + "/";
+			Part image = request.getPart("image");
+			if ((image != null) && (image.getSize() > 0)) {
+				imageName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
+				int ext = imageName.lastIndexOf(".");
+				int noExt = imageName.lastIndexOf(File.separator);
+				imageName = userFolder + "/listImage/" + list.getName() + (ext > noExt ? imageName.substring(ext) : "");
+				imageURI = "uploads/restricted/tmp/"
+						+ imageName.substring(imageName.lastIndexOf(list.getName()));
+			}
+			list.setImage(imageURI);
+
 			//shared - persone condivisione
 			if (shared == null || shared.length == 0) {
 				//add privatelist
@@ -126,7 +149,7 @@ public class NewListServlet extends HttpServlet {
 					request.setAttribute("list", list);
 				}
 			} else {
-				System.out.println("shared!");
+				// System.out.println("shared!");
 				isshared = true;
 				LinkedList<User> listashared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
@@ -141,7 +164,7 @@ public class NewListServlet extends HttpServlet {
 				Boolean valid = listDAO.addList(list);
 				if (valid) {
 					for (User u : listashared) {
-						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+						if (!listDAO.linkShoppingListToUser(listDAO.getList(list.getName(), list.getOwner()), u.getId())) {
 							new SQLException("link non effettutato tra lista e utente");
 						}
 					}
@@ -157,13 +180,25 @@ public class NewListServlet extends HttpServlet {
 					//set sessione liste not shared
 					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> personalLists = listDAO.getPersonalLists(me.getId());
 					session.setAttribute("personalLists", personalLists);
-				}
-				else
-				{
+				} else {
 					//set sessione liste shared
 					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
 					session.setAttribute("sharedLists", sharedLists);
 				}
+				// save list image - last thing before redirecting, to make sure everything went right
+				if ((image != null) && (image.getSize() > 0)) {
+					try (InputStream fileContent = image.getInputStream()) {
+						file = new File(imageName);
+						Files.copy(fileContent, file.toPath());
+
+					} catch (FileAlreadyExistsException ex) {
+						response.sendError(500, "Server could not store the image, "
+								+ "please retry the list creation process."
+								+ "Notice that you can also upload the image later when editing the list.");
+						getServletContext().log("impossible to upload the file", ex);
+					}
+				}
+
 				response.sendRedirect(path);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
