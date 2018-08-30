@@ -50,12 +50,15 @@
 								   required>
 						</div>
 						<div>
-							<label for="logo">Logo</label>
-							<input type="text"
-								   class="form-control"
-								   id="logo"
-								   name="logo" 
-								   value="${product.logo}">
+							<label for="image">Logo</label>
+							<div class="custom-file">
+								<input type="file"
+									   class="custom-file-input form-control"
+									   id="image"
+									   name="logo"
+									   aria-describedby="image">
+								<label class="custom-file-label" for="image">Scegli file</label>
+							</div>
 						</div>
 						<div>
 							<label for="image">Immagine</label>

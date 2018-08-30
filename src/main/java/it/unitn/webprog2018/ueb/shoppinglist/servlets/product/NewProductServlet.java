@@ -103,7 +103,7 @@ public class NewProductServlet extends HttpServlet {
 		String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
 		String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
 		Part logo = request.getPart("logo");
-		Part image = request.getPart("image");
+		Part photography = request.getPart("image");
 
 		Product product = new Product();
 		try {
@@ -151,9 +151,9 @@ public class NewProductServlet extends HttpServlet {
 					product.setLogo(logoURI);
 				}
 				//upload image
-				if ((image != null) && (image.getSize() > 0)) {
+				if ((photography != null) && (photography.getSize() > 0)) {
 					checkImage = true;
-					imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
+					imageFileName = Paths.get(photography.getSubmittedFileName()).getFileName().toString();
 					int ext = imageFileName.lastIndexOf(".");
 					int noExt = imageFileName.lastIndexOf(File.separator);
 					imageFileName = imageFolder + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
@@ -161,7 +161,7 @@ public class NewProductServlet extends HttpServlet {
 					try {
 						ext = imageFileName.lastIndexOf(".");
 						noExt = imageFileName.lastIndexOf(File.separator);
-						fileContentImage = image.getInputStream();
+						fileContentImage = photography.getInputStream();
 						fileImage = new File(imageFileName);
 						Files.copy(fileContentImage, fileImage.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage"
