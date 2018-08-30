@@ -227,7 +227,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	 */
 	@Override
 	public Boolean addProduct(Integer listId, Product product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -249,7 +249,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	 */
 	@Override
 	public Boolean addPublicProduct(Integer listId, PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -317,7 +317,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product, Integer newAmount) throws DaoException {
-		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
 		if(newAmount < 0)
 			throw new DaoException("invalid quantity value");
 		if(valid)
@@ -344,7 +344,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	
 	@Override
 	public Boolean updateAmount(Integer listId, Product product, Integer newAmount) throws DaoException {
-		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
 		if(newAmount < 0)
 			throw new DaoException("invalid quantity value");
 		if(valid)
@@ -371,7 +371,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		Boolean valid =	true; // product.isVaildOnUpdate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -396,7 +396,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	
 	@Override
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
-		Boolean valid = product.isVaildOnUpdate(dAOFactory);
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
 		if(valid)
 		{
 			try{

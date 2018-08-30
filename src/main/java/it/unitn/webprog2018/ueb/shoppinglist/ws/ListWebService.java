@@ -229,10 +229,12 @@ public class ListWebService {
 	@AddDeletePermission
 	public void addProductOnList(@PathParam("listId") int listId,
 			@PathParam("userId") int userId, String content) {
+		System.out.println("in addproductonlist");
 		Product product = null;
 		try {
 			Gson gson = new Gson();
 			product = gson.fromJson(content, Product.class);
+			System.out.println("Content: " + content + ", productId:" + product.getId()); 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -246,8 +248,10 @@ public class ListWebService {
 					}
 				} else {
 					if (listDAO.isOnList(listId, product)) {
+						System.out.println("Updating amount");
 						listDAO.updateAmount(listId, product);
 					} else {
+						System.out.println("Adding product");
 						listDAO.addProduct(listId, product);
 					}
 				}
