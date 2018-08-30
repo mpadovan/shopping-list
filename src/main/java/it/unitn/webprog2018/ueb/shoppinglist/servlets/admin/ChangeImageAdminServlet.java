@@ -34,8 +34,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "ChangeImageAdminServlet", urlPatterns = {"/restricted/admin/ChangeImageAdmin"})
 @MultipartConfig
 public class ChangeImageAdminServlet extends HttpServlet {
+
 	UserDAO userDAO;
-	
+
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -79,6 +80,24 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		File file = null;
 		String avatarFileName = "";
 		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
+
+		//crezione cartella se non esiste
+		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
+		File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
+		File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
+		if (!userDir.exists()) {
+			if (!userDir.mkdir()) {
+				response.sendError(500, "impossibile creare cartella per utente");
+			}
+		}
+		if (!avatarDir.exists())
+		{
+			if (!avatarDir.mkdir())
+			{
+				response.sendError(500, "impossibile creare cartella per utente");
+			}
+		}
+
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
 			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
@@ -92,26 +111,25 @@ public class ChangeImageAdminServlet extends HttpServlet {
 				fileContent = avatar.getInputStream();
 				file = new File(avatarFileName);
 				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" +
-					File.separator	+ user.getId()+ (ext > noExt ? avatarFileName.substring(ext) : "");
-				
+				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
+						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
+
 				System.out.println(avatarFileName + " \n" + avatarURI);
 
 			} catch (FileAlreadyExistsException ex) {
 				file.delete();
 				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" +
-					File.separator	+ user.getId()+ (ext > noExt ? avatarFileName.substring(ext) : "");
-				
+				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
+						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
+
 			}
 		}
 		if (!response.isCommitted()) {
 			user.setImage(avatarURI);
 			try {
-				if(userDAO.updateUser(user.getId(), user))
-				{
+				if (userDAO.updateUser(user.getId(), user)) {
 					session.setAttribute("user", user);
-					response.sendRedirect(context+"restricted/admin/InfoAdmin");
+					response.sendRedirect(context + "restricted/admin/InfoAdmin");
 				}
 			} catch (DaoException ex) {
 				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
