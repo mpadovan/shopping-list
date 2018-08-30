@@ -114,6 +114,7 @@ public class NewListServlet extends HttpServlet {
 
 			//shared - persone condivisione
 			if (shared == null || shared.length == 0) {
+				//add privatelist
 				Boolean valid = listDAO.addList(list);
 				if (valid) {
 					redirect=true;
@@ -150,13 +151,15 @@ public class NewListServlet extends HttpServlet {
 				if(!isshared)
 				{
 					//set sessione liste not shared
-					//session.setAttribute(, );
+					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> personalLists = listDAO.getPersonalLists(me.getId());
+					session.setAttribute("personalLists", personalLists);
 				}
 				else
 				{
 					//set sessione liste shared
+					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
+					session.setAttribute("sharedLists", sharedLists);
 				}
-				System.out.println(me.getId() + "/" + list.getId());
 				response.sendRedirect(path);
 			}
 			else
