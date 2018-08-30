@@ -246,7 +246,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 					"pp.idproductscategory,pc.name,pc.description " +
 					"FROM publicproducts pp " +
 					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id " +
-					"WHERE pp.name = "+name;
+					"WHERE pp.name = \""+name+"\"";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			ProductsCategory pc = new ProductsCategory();
