@@ -62,16 +62,16 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		Boolean valid = true; // pc.isVaildOnCreate(dAOFactory);
 		if (valid) {
 			try {
-				if (pc.getCategory() == null) {
-					pc.getCategory().setId(null);
-				}
 				String logo = pc.getLogo();
 				if (File.separator.equals("\\")) {
 					logo = logo.replaceAll("\\\\", "\\\\\\\\");
 				}
-				String query = "INSERT INTO productscategories (name,category,description,logo) VALUES (\""
-						+ pc.getName() + "\","
-						+ pc.getCategory().getId() + ",\""
+//				String query = "INSERT INTO productscategories (name,description,logo) VALUES (\""
+//						+ pc.getName() + "\","
+//						+ pc.getDescription() + "\",\""
+//						+ logo + "\")";
+				String query = "INSERT INTO productscategories (name,description,logo) VALUES (\""
+						+ pc.getName() + "\",\""
 						+ pc.getDescription() + "\",\""
 						+ logo + "\")";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -179,7 +179,6 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				}
 				String query = "update productscategories\n"
 						+ "set name = \"" + productsCategory.getName() + "\",\n"
-						+ "	category = " + productsCategory.getCategory().getId() + ",\n"
 						+ "    description = \"" + productsCategory.getDescription() + "\",\n"
 						+ "    logo = \"" + logo + "\"\n"
 						+ "where id = " + id;

@@ -71,7 +71,6 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		// parametri stringhe
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		//parametri file
 		String logoURI = "";
 		File fileLogo = null;
@@ -80,21 +79,10 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		Part logo = request.getPart("logo");
 		ProductsCategory productCategory = new ProductsCategory();
 		try {
-			try {
 
-				ProductsCategory subCategory = new ProductsCategory();
-				if (categoryId >= 0) {
-					subCategory = productsCategoryDAO.getById(categoryId);
-				} else {
-					subCategory.setId(null);
-				}
-				productCategory.setName(name);
-				productCategory.setDescription(description);
-				productCategory.setCategory(subCategory);
-			} catch (RecordNotFoundDaoException ex) {
-				Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-				response.sendError(404, ex.getMessage());
-			}
+			productCategory.setName(name);
+			productCategory.setDescription(description);
+
 			if (productsCategoryDAO.addProductsCategory(productCategory)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
@@ -120,8 +108,9 @@ public class NewProductsCategoryServlet extends HttpServlet {
 
 					}
 					productCategory.setLogo(logoURI);
+					//System.out.println(productCategory.getId() + " " + productCategory.getName() + " " + productCategory.getCategory());
 					if (!productsCategoryDAO.updateProductsCategory(productCategory.getId(), productCategory)) {
-						response.sendError(500, "Qualcosa è andato storto. Non è stato possibili aggiornare logo");
+						response.sendError(500, "Qualcosa è andato storto. Non è stato possibile aggiornare logo");
 					}
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");

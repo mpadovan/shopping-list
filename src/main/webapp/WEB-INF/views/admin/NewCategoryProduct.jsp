@@ -41,19 +41,6 @@
 							<label class="custom-file-label" for="logo">Scegli file</label>
 						</div>
 					</div>
-					<div>
-						<label for="category">Categoria padre</label>
-						<select class="select2 js-example-basic-single form-control py-3"
-								name="category"
-								id="category"
-								name="category" 
-								required
-								>
-							<c:forEach var="c" items="${requestScope.productsCategory}">
-								<option value="${c.id}">${c.name}</option>
-							</c:forEach>
-						</select>
-					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ProductsCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>

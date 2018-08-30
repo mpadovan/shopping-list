@@ -64,10 +64,6 @@ public class ProductsCategory extends AbstractEntity {
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if (category==null)
-		{
-			setError("category", "Non può essere lasciato vuoto");
-		}
 		if(errors.isEmpty())
 		{
 			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
