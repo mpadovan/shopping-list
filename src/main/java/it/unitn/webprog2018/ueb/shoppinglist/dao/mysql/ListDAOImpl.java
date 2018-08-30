@@ -754,11 +754,15 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		{
 			try{
 				String image = list.getImage();
-				if(File.separator.equals("\\"))
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				int count = st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next()){
+					list.setId(rs.getInt(1));
+				}
 				st.close();
 				return valid && (count == 1);
 			}
