@@ -29,7 +29,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	public List<ProductsCategory> getFromQuery(String matching) throws DaoException {
 		List<ProductsCategory> list = new ArrayList<ProductsCategory>();
 		try {
-			String query = "SELECT id,name,category,description,logo FROM productscategories"
+			String query = "SELECT id,name,description,logo FROM productscategories"
 					+ "	WHERE name LIKE \"%" + matching + "%\"";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
@@ -39,9 +39,6 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				pc = new ProductsCategory();
 				pc.setId(rs.getInt("id"));
 				pc.setName(rs.getString("name"));
-				Integer idcategory = rs.getInt("category");
-				ProductsCategory productsCategory = getById(idcategory);
-				pc.setCategory(productsCategory);
 				pc.setDescription(rs.getString("description"));
 				pc.setLogo(rs.getString("logo"));
 				list.add(pc);
