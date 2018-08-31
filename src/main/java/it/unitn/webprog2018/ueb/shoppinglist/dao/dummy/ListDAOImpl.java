@@ -463,7 +463,8 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public void updateList(Integer id, List list) {
+	public Boolean updateList(Integer id, List list) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 }
