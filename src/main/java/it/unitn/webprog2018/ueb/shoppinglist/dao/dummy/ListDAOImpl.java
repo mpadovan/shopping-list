@@ -461,4 +461,9 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return false;
 	}
+
+	@Override
+	public void updateList(Integer id, List list) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }
