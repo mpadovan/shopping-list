@@ -108,7 +108,6 @@ public class NewProductsCategoryServlet extends HttpServlet {
 
 					}
 					productCategory.setLogo(logoURI);
-					//System.out.println(productCategory.getId() + " " + productCategory.getName() + " " + productCategory.getCategory());
 					if (!productsCategoryDAO.updateProductsCategory(productCategory.getId(), productCategory)) {
 						response.sendError(500, "Qualcosa è andato storto. Non è stato possibile aggiornare logo");
 					}
