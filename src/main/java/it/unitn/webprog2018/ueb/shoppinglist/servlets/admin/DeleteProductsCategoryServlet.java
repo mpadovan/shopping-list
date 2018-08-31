@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -41,15 +42,21 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 		try {
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
 			if (productsCategoryDAO.deleteProductsCategory(productsCategory.getId())) {
+				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
+					String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productCategoryLogo" + File.separator;
+					int ext = productsCategory.getLogo().lastIndexOf(".");
+					File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
+					file.delete();
+				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {
 				request.setAttribute("productsCategory", productsCategory);
 				request.getRequestDispatcher("/WEB-INF/views/admin/ProductList.jsp").forward(request, response);
 			}
-		} catch (RecordNotFoundDaoException ex){
+		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(DeleteProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
-		}catch (DaoException ex) {
+		} catch (DaoException ex) {
 			Logger.getLogger(DeleteProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
