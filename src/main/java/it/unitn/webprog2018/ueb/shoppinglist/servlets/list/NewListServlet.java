@@ -149,7 +149,11 @@ public class NewListServlet extends HttpServlet {
 				if (valid) {
 					for (User u : listashared) {
 						if (!listDAO.linkShoppingListToUser(listDAO.getList(list.getName(), list.getOwner()), u.getId())) {
-							new SQLException("link non effettutato tra lista e utente");
+							try {
+								throw new SQLException("link non effettutato tra lista e utente");
+							} catch (SQLException ex) {
+								Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+							}
 						}
 					}
 					redirect = true;
@@ -169,7 +173,7 @@ public class NewListServlet extends HttpServlet {
 					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
 					session.setAttribute("sharedLists", sharedLists);
 				}
-				// fetch list image - storing beneath
+
 				File file = null;
 				String imageFileName = "";
 				String imageURI = "";
@@ -181,21 +185,15 @@ public class NewListServlet extends HttpServlet {
 					int noExt = imageFileName.lastIndexOf(File.separator);
 					imageFileName = imageFolder + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 					InputStream fileContentImage = null;
+					fileContentImage = image.getInputStream();
+					file = new File(imageFileName);
 					try {
-						ext = imageFileName.lastIndexOf(".");
-						noExt = imageFileName.lastIndexOf(File.separator);
-						fileContentImage = image.getInputStream();
-						file = new File(imageFileName);
+
 						Files.copy(fileContentImage, file.toPath());
-						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "productImage"
+						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
 					} catch (FileAlreadyExistsException ex) {
-						file.delete();
-						Files.copy(fileContentImage, file.toPath());
-						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "productImage"
-								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
 					}
 				}
 				list.setImage(imageURI);
