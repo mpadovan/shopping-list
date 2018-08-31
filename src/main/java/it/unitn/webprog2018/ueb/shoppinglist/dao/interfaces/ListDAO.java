@@ -80,4 +80,6 @@ public interface ListDAO {
 	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
 
 	public boolean deleteList(Integer listId) throws DaoException;
+	
+	public Boolean updateList(Integer id, List list) throws DaoException;
 }
