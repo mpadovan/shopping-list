@@ -91,11 +91,13 @@ public class AccountConfirmationServlet extends HttpServlet {
 					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
 					File productImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "productImage");
 					File productLogoDirectory = new File(userDir.getAbsolutePath() + File.separator + "productLogo");
+					File listImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "listImage");
 					if (!userDir.exists()) {
 						if (userDir.mkdir()) {
 							avatarDir.mkdir();
 							productImageDirectory.mkdir();
 							productLogoDirectory.mkdir();
+							listImageDirectory.mkdir();
 						}
 					} else {
 						// TODO report error of already existing user

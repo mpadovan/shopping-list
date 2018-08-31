@@ -773,5 +773,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		}
 		return valid;
 	}
+
+	@Override
+	public void updateList(Integer id, List list) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

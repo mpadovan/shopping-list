@@ -17,6 +17,9 @@
 						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
 					</div>
 					<form class="form-list" method="POST" action="NewList" enctype='multipart/form-data'>
+						<c:if test="${requestScope.duplicateName}">
+							<div style="color: #cc0000">Hai già una lista con questo nome, cambialo per evitare di confonderti</div>
+						</c:if>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -67,7 +70,7 @@
 						</div>
 						<div class="float-right mt-3">
 							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
-							<button class="btn btn-new ml-2" type="submit">Modifica</button>
+							<button class="btn btn-new ml-2" type="submit">Crea</button>
 						</div> 
 					</form>
 				</div>
