@@ -185,16 +185,19 @@ public class NewListServlet extends HttpServlet {
 					String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
 					int ext = imageFileName.lastIndexOf(".");
 					int noExt = imageFileName.lastIndexOf(File.separator);
-					imageFileName = imageFolder + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
+					imageFileName = imageFolder + File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 					InputStream fileContentImage = image.getInputStream();
+					ext = imageFileName.lastIndexOf(".");
+					noExt = imageFileName.lastIndexOf(File.separator);
 					file = new File(imageFileName);
 					try {
-
 						Files.copy(fileContentImage, file.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
-					} catch (FileAlreadyExistsException ex) {
+					} catch (IOException ex) {
+						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+						request.setAttribute("uploadFail", true);
 					}
 				}
 				list.setImage(imageURI);
