@@ -41,14 +41,8 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div id="sharedList">
-							<label for="shared">Condividi con: </label>
-							<input type="email"
-								   class="form-control" 
-								   name="shared" 
-								   />
-						</div>
-						<button type="button" class="btn btn-light" onclick="aggiungiEmail()">Condividi con un'altra email</button>
+						<div id="sharedList">Condividi con:<br></div>
+						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
@@ -96,10 +90,10 @@
 					});
 				});
 			});
-			function aggiungiEmail() {
+			function addEmail() {
 				var btn = document.createElement("INPUT");
 				btn.setAttribute("type", "email");
-				btn.setAttribute("name", "shared");
+				btn.setAttribute("name", "shared[]");
 				btn.classList.add("form-control");
 				document.getElementById("sharedList").appendChild(btn);
 			}

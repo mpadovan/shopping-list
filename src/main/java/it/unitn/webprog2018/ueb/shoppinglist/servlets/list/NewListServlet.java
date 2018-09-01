@@ -96,8 +96,8 @@ public class NewListServlet extends HttpServlet {
 		String name = request.getParameter("nameList");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
-		String[] shared = request.getParameterValues("shared");
-
+		String[] shared = request.getParameterValues("shared[]");
+		System.out.println(shared.length);
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -127,15 +127,17 @@ public class NewListServlet extends HttpServlet {
 				}
 			} else {
 				// System.out.println("shared!");
-				isshared = true;
 				LinkedList<User> listashared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
-					try {
-						User u = userDAO.getByEmail(shared[i]);
-						listashared.add(u);
-					} catch (RecordNotFoundDaoException ex) {
-						list.setError("shared", "l'utente " + shared[i] + " non esiste");
-						request.setAttribute("list", list);
+					if (!shared[i].isEmpty()) {
+						isshared = true;
+						try {
+							User u = userDAO.getByEmail(shared[i]);
+							listashared.add(u);
+						} catch (RecordNotFoundDaoException ex) {
+							list.setError("shared", "l'utente " + shared[i] + " non esiste");
+							request.setAttribute("list", list);
+						}
 					}
 				}
 				boolean valid = false;
