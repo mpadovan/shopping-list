@@ -147,8 +147,8 @@ public class NewListServlet extends HttpServlet {
 					getServletContext().getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 				}
 				if (valid) {
-					for (User u : listashared) {
-						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+					for (User u : listashared) { // connect list to users, apart from the owner
+						if (!u.getEmail().equals(me.getEmail()) && !listDAO.linkShoppingListToUser(list, u.getId())) {
 							try {
 								throw new SQLException("link non effettutato tra lista e utente");
 							} catch (SQLException ex) {
@@ -186,7 +186,7 @@ public class NewListServlet extends HttpServlet {
 					file = new File(imageFileName);
 					try {
 						Files.copy(fileContentImage, file.toPath());
-						imageURI = File.separator + "uploads" + File.separator + "shared"
+						imageURI = getServletContext().getContextPath() + File.separator + "uploads" + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
 					} catch (IOException ex) {
