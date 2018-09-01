@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
@@ -17,12 +16,9 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -169,12 +165,10 @@ public class NewListServlet extends HttpServlet {
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
 				if (!isshared) {
 					//set sessione liste not shared
-					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> personalLists = listDAO.getPersonalLists(me.getId());
-					session.setAttribute("personalLists", personalLists);
+					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("personalLists")).add(list);
 				} else {
 					//set sessione liste shared
-					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
-					session.setAttribute("sharedLists", sharedLists);
+					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
 				}
 
 				File file = null;
