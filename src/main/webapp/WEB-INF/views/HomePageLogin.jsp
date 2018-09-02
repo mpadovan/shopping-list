@@ -17,11 +17,13 @@
 						<c:if test="${!requestScope.addDeletePermission}">
 							<div class="card">
 								<div class="card-body">
+									<!--
 									<div class="float-right mb-2">
 										<a href="NewProduct.jsp">
 											<u>Crea prodotto</u>
 										</a>
 									</div>
+									-->
 									<div class="input-group mb-0">
 										<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 										<div class="input-group-append">
@@ -150,7 +152,7 @@
 					<div class="col">
 						<div class="card">
 							<div class="card-body" style="margin:auto;">
-								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList">clicca qui</a> per crearne una nuova<br>
+								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova<br>
 								<div style="width: 300px; margin: auto;"><img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
 							</div>
 						</div>

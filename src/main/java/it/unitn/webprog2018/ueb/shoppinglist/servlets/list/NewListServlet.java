@@ -186,7 +186,7 @@ public class NewListServlet extends HttpServlet {
 					//set sessione liste shared
 					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
 				}
-				// Save the list image, or set the imageURI to an empty string (default will be loaded in jsp
+				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 				File file = null;
 				String imageURI = "";
 				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "shared";
@@ -215,7 +215,10 @@ public class NewListServlet extends HttpServlet {
 				listDAO.updateList(list.getId(), list);
 				response.sendRedirect(path);
 			} else {
-				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
+				// reload the page keeping request and response objects
+				// redirect would remove request associated objects
+				// forward would prevent the categories from being reloaded because request is directly processed by jsp, without servlet interception
+				doGet(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);

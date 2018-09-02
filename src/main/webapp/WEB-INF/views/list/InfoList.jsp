@@ -31,7 +31,7 @@
 						</tr>
 						<tr>
 							<th scope="row">Proprietario</th>
-							<td>${requestScope.currentList.owner.email}</td>
+							<td>${requestScope.currentList.owner.name} ${requestScope.currentList.owner.lastname}</td>
 						</tr>
 						<c:if test="${!empty requestScope.sharedUsers}">
 							<tr>
