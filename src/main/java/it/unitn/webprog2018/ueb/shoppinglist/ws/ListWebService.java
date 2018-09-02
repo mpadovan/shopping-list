@@ -16,7 +16,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ViewPermission;
 import java.io.IOException;
@@ -76,7 +76,7 @@ public class ListWebService {
 
 		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
 
-		String query = ServiceUtils.getQuery(search);
+		String query = HttpErrorHandler.getQuery(search);
 		List<ListsCategory> listsCategories = null;
 		try {
 			if (query.equals("")) {
@@ -85,7 +85,7 @@ public class ListWebService {
 				listsCategories = listsCategoryDAO.getFromQuery(query);
 			}
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 			return null;
 		}
 		if (listsCategories == null || listsCategories.isEmpty()) {
@@ -119,7 +119,7 @@ public class ListWebService {
 		try {
 			publicProductsOnList = listDAO.getPublicProductsOnList(listId);
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 		if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
 			json += "]";
@@ -146,7 +146,7 @@ public class ListWebService {
 		try {
 			productsOnList = listDAO.getProductsOnList(listId);
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 		if (productsOnList == null || productsOnList.isEmpty()) {
 			json += "]";
@@ -176,7 +176,7 @@ public class ListWebService {
 			}
 			json += "}";
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 		return json;
 	}
@@ -209,7 +209,7 @@ public class ListWebService {
 				listDAO.updateAmount(listId, product);
 			}
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 	}
 
@@ -256,7 +256,7 @@ public class ListWebService {
 					}
 				}
 			} catch (DaoException ex) {
-				ServiceUtils.handleDAOException(ex, response);
+				HttpErrorHandler.handleDAOException(ex, response);
 			} catch (IOException ex) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -300,7 +300,7 @@ public class ListWebService {
 
 			}
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 	}
 
@@ -341,7 +341,7 @@ public class ListWebService {
 
 			}
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 	}
 
@@ -362,7 +362,7 @@ public class ListWebService {
 			p.setId(productId);
 			listDAO.deleteFromList(listId, p);
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 	}
 
@@ -383,7 +383,7 @@ public class ListWebService {
 			p.setId(productId);
 			listDAO.deleteFromList(listId, p);
 		} catch (DaoException ex) {
-			ServiceUtils.handleDAOException(ex, response);
+			HttpErrorHandler.handleDAOException(ex, response);
 		}
 	}
 }
