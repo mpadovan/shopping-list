@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -89,15 +90,15 @@ public class NewListServlet extends HttpServlet {
 			path += "/";
 		}
 
-		Boolean redirect = false;
-		Boolean isshared = false;
+		Boolean everythingOK = true;
+		Boolean isShared = false;
 		HttpSession session = request.getSession(false);
 		User me = (User) session.getAttribute("user");
 		String name = request.getParameter("nameList");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared[]");
-		System.out.println(shared.length);
+
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -113,66 +114,79 @@ public class NewListServlet extends HttpServlet {
 			}
 			list.setCategory(listCategory);
 
-			//shared - persone condivisione
-			if (shared == null || shared.length == 0) {
-				//add privatelist
+			// check if there are any users in the shared[] textfields
+			if (shared != null && shared.length != 0) {
+				for (int i = 0; i < shared.length; i++) {
+					if (!shared[i].isEmpty()) {
+						isShared = true;
+					}
+				}
+			}
+
+			if (!isShared) {
+				// Add privatelist
 				Boolean valid = listDAO.addList(list);
 				if (!listDAO.linkShoppingListToUser(list, me.getId())) {
 					new SQLException("link non effettutato tra lista e utente");
 				}
-				if (valid) {
-					redirect = true;
-				} else {
+				if (!valid) {
+					everythingOK = false;
 					request.setAttribute("list", list);
 				}
 			} else {
-				// System.out.println("shared!");
-				LinkedList<User> listashared = new LinkedList();
+				// Add shared list
+				LinkedList<User> listShared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
-					if (!shared[i].isEmpty()) {
-						isshared = true;
-						try {
+					try {
+						if (!shared[i].isEmpty() && !shared[i].equals(me.getEmail())) {
 							User u = userDAO.getByEmail(shared[i]);
-							listashared.add(u);
-						} catch (RecordNotFoundDaoException ex) {
-							list.setError("shared", "l'utente " + shared[i] + " non esiste");
-							request.setAttribute("list", list);
+							listShared.add(u);
 						}
+					} catch (RecordNotFoundDaoException ex) {
+						everythingOK = false;
+						ex.printStackTrace();
+						list.setError("shared[]", "l'utente " + shared[i] + " non esiste");
+						request.setAttribute("list", list);
 					}
 				}
 				boolean valid = false;
 				try {
 					valid = listDAO.addList(list);
 				} catch (DaoException ex) {
-					request.setAttribute("duplicateName", true);
+					everythingOK = false;
+					// TODO impostare correttamente l'errore
+					list.setError("sth", "Qualcosa è andato storto mentre cercavamo di salvare la lista");
+					request.setAttribute("list", list);
 					ex.printStackTrace();
-					getServletContext().getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 				}
 				if (valid) {
-					for (User u : listashared) { // connect list to users, apart from the owner
-						if (!u.getEmail().equals(me.getEmail()) && !listDAO.linkShoppingListToUser(list, u.getId())) {
-							try {
-								throw new SQLException("link non effettutato tra lista e utente");
-							} catch (SQLException ex) {
-								Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+					for (User u : listShared) {	// connect list to users, apart from the owner
+						if (!u.getEmail().equals(me.getEmail())) {
+							if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+								everythingOK = false;
+								try {
+									throw new SQLException("link non effettutato tra lista e utente");
+								} catch (SQLException ex) {
+									Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+								}
 							}
 						}
 					}
-					redirect = true;
 				} else {
+					everythingOK = false;
 					request.setAttribute("list", list);
 				}
 			}
-			if (redirect) {
+			if (everythingOK) {
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-				if (!isshared) {
+				if (!isShared) {
 					//set sessione liste not shared
 					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("personalLists")).add(list);
 				} else {
 					//set sessione liste shared
 					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
 				}
-
+				// Save the list image, or set the imageURI to an empty string (default will be loaded in jsp
 				File file = null;
 				String imageURI = "";
 				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "shared";
@@ -197,6 +211,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 				list.setImage(imageURI);
+				// Update the list after setting the image URI
 				listDAO.updateList(list.getId(), list);
 				response.sendRedirect(path);
 			} else {

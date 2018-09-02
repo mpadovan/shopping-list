@@ -30,7 +30,7 @@ public class WebsocketListener implements ServletContextListener {
 		NotificationTimer notificationTimer = new NotificationTimer(1);
 		NotificationTimer.setNotificationSessionHandler(notificationSessionHandler);
 		sce.getServletContext().setAttribute("notificationTimer", notificationTimer);
-		ChatWebSocketServer.setChatSessionHandler(new ChatSessionHandler());
+		// ChatWebSocketServer.setChatSessionHandler(new ChatSessionHandler());
 	}
 
 	@Override
