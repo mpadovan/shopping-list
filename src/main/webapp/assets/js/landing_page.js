@@ -62,7 +62,7 @@ Vue.component('categories', {
 	template: ' <div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> \
 					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
 				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> \
-				<div v-show="!category">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
+				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
 					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
 				</select></div></div>',
 	watch: {
@@ -179,6 +179,10 @@ Vue.component('search-item', {
 			clicks: 0,
 			timer: null
 		};
+	},
+	created: function() {
+		this.item.photography = (this.item.photography == "null") ? null : this.item.photography;
+		this.item.logo = (this.item.logo == "null") ? null : this.item.logo;
 	},
 	computed: {
 		capitalized: function () {
