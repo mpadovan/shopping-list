@@ -23,20 +23,12 @@
 						</div>
 					</div>
 				</form>
-				<nav aria-label="Page navigation example" class="float-right">
-					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#">Precedente</a></li>
-						<li class="page-item"><a class="page-link" href="#">...</a></li>
-						<li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-					</ul>
-				</nav>
 				<table class="table table-responsive-md table-striped">
 					<thead>
 						<tr>
 							<th>Nome</th>
 							<th>Descrizione</th>
 							<th>Logo</th>
-							<th>Categoria padre</th>
 							<th>Gestisci</th>
 						</tr>
 					</thead>
@@ -45,8 +37,11 @@
 							<tr>
 								<td>${c.name}</td>
 								<td>${c.description}</td>
-								<td>${c.logo}</td>
-								<td>${c.category.name}</td>
+								<td>
+									<c:if test="${not empty c.logo && c.logo ne 'null'}">
+										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${c.logo}"></div>
+									</c:if>
+								</td>
 								<td>
 									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditProductsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a></span>
 									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a></span>
