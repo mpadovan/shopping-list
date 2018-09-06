@@ -50,7 +50,7 @@ var chat = new Vue({
 		};
 	},
 	watch: {
-		chat: function (val) {
+		chat: function () {
 			$('#chat').css('display', 'none');
 		},
 		text: function (val) {
@@ -117,26 +117,6 @@ $(document).ready(function () {
 	$('#app').resize(function () {
 		$('#chat').height($('#app').height());
 	});
-	var output;
-	var date = new Date();
-	var message = {
-		operation: 0,
-		payload: {
-			sender: {
-				name: "Luigi",
-				lastname: "Bianchi",
-				id: 2,
-				errors: {}
-			},
-			list: {
-				id: 1,
-				errors: {}
-			},
-			sendTime: moment().format('MMM D, YYYY h:m:s A'),
-			text: "Ciao Mario, Tutto bene, e tu?",
-			errors: {}
-		}
-	};
 	Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
 	Socket.onopen = function (evt) {
 		Socket.send(JSON.stringify({
@@ -154,11 +134,6 @@ $(document).ready(function () {
 	Socket.onerror = function (evt) {
 		chat.handleMessage(evt);
 	};
-
-	function doSend() {
-		writeToScreen("SENT: " + JSON.stringify(message));
-		websocket.send(JSON.stringify(message));
-	}
 	console.log($('#message-container'));
 	$('#message-container').addEventListener('resize', function(e) {
 		console.log(e);
