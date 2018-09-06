@@ -1,7 +1,9 @@
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
+import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -21,7 +23,9 @@ public class DBListener implements ServletContextListener {
 		String dbPassword = "root";
 
 		DatabaseManager dbManager = new DatabaseManager(dburl, dbUsername, dbPassword);
-		sce.getServletContext().setAttribute("daoFactory", new DAOFactoryImpl(dbManager.getCon()));
+		DAOFactory factory = new DAOFactoryImpl(dbManager.getCon());
+		sce.getServletContext().setAttribute("daoFactory", factory);
+		SessionHandler.setDaoFactory(factory);
 		// DAOFactory factory = new DAOFactoryImpl();
 		// sce.getServletContext().setAttribute("daoFactory", factory);
 	}

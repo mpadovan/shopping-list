@@ -126,10 +126,6 @@
 			make it portable from one system to the other</description>
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.PathSetter</listener-class>
 	</listener>
-	<listener>
-		<description>ServletContextListener for webSockets</description>
-		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.WebsocketListener</listener-class>
-	</listener>
 	<servlet>
 		<servlet-name>EditListServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>

@@ -16,23 +16,23 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  *
  * @author Giulia Carocari
  */
+@ApplicationScoped
 public class NotificationTimer extends ScheduledThreadPoolExecutor {
 	private static final int POLLING_RATE = 60 * 1000; // every minute
-	private static NotificationSessionHandler notificationSessionHandler;
+	
+	@Inject
+	private NotificationSessionHandler notificationSessionHandler;
 
 	public NotificationTimer(int i) {
 		super(i);
 		this.scheduleAtFixedRate(new DatabaseQueryTask(), 0, POLLING_RATE, TimeUnit.MILLISECONDS);
-	}
-	
-	
-	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
-		NotificationTimer.notificationSessionHandler = notificationSessionHandler;
 	}
 	
 	/**

@@ -133,7 +133,7 @@
 										<span aria-hidden="true">&times;</span>
 									</button>
 								</div>
-								<div class="messages-container">
+								<div class="messages-container" id="message-container">
 									<message-component v-for="message in messages" v-bind:message="message"></message-component>
 								</div>
 							</div>

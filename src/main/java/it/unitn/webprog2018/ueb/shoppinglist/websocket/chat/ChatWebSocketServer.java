@@ -37,7 +37,7 @@ public class ChatWebSocketServer {
 	public static void setChatSessionHandler(ChatSessionHandler chatSessionHandler) {
 		ChatWebSocketServer.chatSessionHandler = chatSessionHandler;
 	}
-*/
+	*/
 
 	@OnOpen
 	public void open(Session session, @PathParam("userId") Integer userId) throws DaoException {
