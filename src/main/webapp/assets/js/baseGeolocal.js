@@ -4,7 +4,7 @@ Vue.component('geores', {
         return {
             sorted: null,
             maxCat: 4,
-            maxNegozi: 7
+            maxNegozi: 4
         };
     },
     template: ' <div> \

@@ -87,7 +87,7 @@ public class ChatWebSocketServer {
 		switch (operation) {
 			case 0:
 				msg = GSON.fromJson(jsonMessage.get("payload"), Message.class);
-				if (chatSessionHandler.persistMessage(msg)) {
+				if (msg.getText().length() <= 255 && chatSessionHandler.persistMessage(msg)) {
 					listId = msg.getList().getId();
 					chatSessionHandler.notifyNewMessage(userId, listId);
 				}

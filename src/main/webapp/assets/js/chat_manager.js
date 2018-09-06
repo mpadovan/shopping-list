@@ -53,6 +53,11 @@ var chat = new Vue({
         chat: function (val) {
             $('#chat').css('display', 'none');
         },
+		text: function(val) {
+            if(val.length > 254) {
+                this.text = _.truncate(val, {length: 254});
+            }
+        }
     },
     created: function () {
         this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
@@ -90,7 +95,9 @@ var chat = new Vue({
                 this.message.payload.list.id = app.list;
                 this.message.payload.sender.id = this.user;
                 this.message.payload.text = this.text;
-                Socket.send(JSON.stringify(this.message));
+				if (this.message.payload.text.length <= 255) {
+					Socket.send(JSON.stringify(this.message));
+				}
             }
         },
         manageMessages: function (data) {
@@ -129,7 +136,7 @@ $(document).ready(function () {
             errors: {}
         }
     };
-    Socket = new WebSocket('ws://localhost:8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
+    Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
     Socket.onopen = function (evt) {
         Socket.send(JSON.stringify({
             operation: '1',
@@ -138,6 +145,7 @@ $(document).ready(function () {
     };
     Socket.onclose = function (evt) {
         console.log(evt);
+		Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
     };
     Socket.onmessage = function (evt) {
         chat.handleMessage(evt);
