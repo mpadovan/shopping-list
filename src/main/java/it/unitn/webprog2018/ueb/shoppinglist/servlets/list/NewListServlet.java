@@ -22,6 +22,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -100,11 +101,7 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared");
-		/*
-		for (int i = 0; i < shared.length; i++) {
-			System.out.print(shared[i] + " ");
-		}
-		 */
+
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -145,10 +142,17 @@ public class NewListServlet extends HttpServlet {
 						request.setAttribute("list", list);
 					}
 				}
-				Boolean valid = listDAO.addList(list);
+				boolean valid = false;
+				try {
+					valid = listDAO.addList(list);
+				} catch (DaoException ex) {
+					request.setAttribute("duplicateName", true);
+					ex.printStackTrace();
+					getServletContext().getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
+				}
 				if (valid) {
 					for (User u : listashared) {
-						if (!listDAO.linkShoppingListToUser(listDAO.getList(list.getName(), list.getOwner()), u.getId())) {
+						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
 							try {
 								throw new SQLException("link non effettutato tra lista e utente");
 							} catch (SQLException ex) {
@@ -162,7 +166,6 @@ public class NewListServlet extends HttpServlet {
 				}
 			}
 			if (redirect) {
-				list = listDAO.getList(list.getName(), me);
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
 				if (!isshared) {
 					//set sessione liste not shared
@@ -175,28 +178,27 @@ public class NewListServlet extends HttpServlet {
 				}
 
 				File file = null;
-				String imageFileName = "";
 				String imageURI = "";
-				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "";
+				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "shared";
 				Part image = request.getPart("image");
 				if ((image != null) && (image.getSize() > 0)) {
-					imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
+					String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
 					int ext = imageFileName.lastIndexOf(".");
 					int noExt = imageFileName.lastIndexOf(File.separator);
 					imageFileName = imageFolder + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-					InputStream fileContentImage = null;
-					fileContentImage = image.getInputStream();
+					InputStream fileContentImage = image.getInputStream();
 					file = new File(imageFileName);
 					try {
 
 						Files.copy(fileContentImage, file.toPath());
-						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + me.getId() + File.separator + "shared"
+						imageURI = File.separator + "uploads" + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
 					} catch (FileAlreadyExistsException ex) {
 					}
 				}
 				list.setImage(imageURI);
+				listDAO.updateList(list.getId(), list);
 				response.sendRedirect(path);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);

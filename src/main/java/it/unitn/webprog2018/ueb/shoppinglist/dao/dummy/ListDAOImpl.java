@@ -461,4 +461,10 @@ public class ListDAOImpl implements ListDAO {
 		}
 		return false;
 	}
+
+	@Override
+	public Boolean updateList(Integer id, List list) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

@@ -773,5 +773,36 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		}
 		return valid;
 	}
+
+	@Override
+	public Boolean updateList(Integer id, List list) throws DaoException{
+		Boolean valid = list.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String image = list.getImage();
+				if(File.separator.equals("\\") && image != null)
+					image = image.replaceAll("\\\\", "\\\\\\\\");
+				String query = "UPDATE lists SET name = ?,iduser = ?,idcategory = ?,description = ?,image = ? WHERE id = ?";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, list.getName());
+				st.setInt(2, list.getOwner().getId());
+				st.setInt(3, list.getCategory().getId());
+				st.setString(4, list.getDescription());
+				st.setString(5, image);
+				st.setInt(6, id);
+				int count = st.executeUpdate();
+				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("List "+id+" not found");
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
+	}
 	
 }

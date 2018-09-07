@@ -208,7 +208,7 @@ Vue.component('search-item', {
           }         
         }
 	},
-	template: '<li class="list-group-item"> \
+	template: '<li class="list-group-item noselect"> \
 					<div class="row align-items-center" @click="oneClick"> \
 						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
 						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
