@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -31,7 +32,13 @@ public class DatabaseManager {
 
 	private Connection startConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver", true, getClass().getClassLoader());
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver", true, getClass().getClassLoader()).newInstance();
+			} catch (InstantiationException ex) {
+				Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (IllegalAccessException ex) {
+				Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+			}
 			return DriverManager.getConnection(dburl, dbUsername, dbPassword);
 		} catch (ClassNotFoundException | SQLException cnfe) {
 			throw new RuntimeException(cnfe.toString(), cnfe.getCause());
