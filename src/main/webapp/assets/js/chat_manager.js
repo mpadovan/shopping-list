@@ -3,9 +3,6 @@ var Socket;
 
 var message = {
 	props: ['message'],
-	data: function () {
-		return {};
-	},
 	computed: {
 		fullName: function () {
 			return this.message.sender.name + ' ' + this.message.sender.lastname;
@@ -14,8 +11,7 @@ var message = {
 	template: ' <div class="alert alert-dark" v-bind:class="message.isMine" role="alert"> \
                     <div style="font-size:.80rem" v-bind:style="{ color: message.color }">{{ fullName }} - {{ message.sendTime }}</div> \
                     <div>{{ message.text }}</div> \
-                </div>',
-	created: function () {}
+                </div>'
 };
 
 var chat = new Vue({
@@ -126,7 +122,7 @@ $(document).ready(function () {
 	};
 	Socket.onclose = function (evt) {
 		console.log(evt);
-		Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
+		toastr['error']('Errore durante il caricamento della chat, ricarica la pagina per continuare');
 	};
 	Socket.onmessage = function (evt) {
 		chat.handleMessage(evt);

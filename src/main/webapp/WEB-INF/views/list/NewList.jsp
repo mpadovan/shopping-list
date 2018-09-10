@@ -58,6 +58,7 @@
 									   class="custom-file-input form-control"
 									   id="image"
 									   name="image"
+									   accept="image/*"
 									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
