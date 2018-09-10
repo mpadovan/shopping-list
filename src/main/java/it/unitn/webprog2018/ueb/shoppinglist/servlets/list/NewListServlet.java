@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
@@ -17,8 +16,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -93,14 +90,14 @@ public class NewListServlet extends HttpServlet {
 			path += "/";
 		}
 
-		Boolean redirect = false;
-		Boolean isshared = false;
+		Boolean everythingOK = true;
+		Boolean isShared = false;
 		HttpSession session = request.getSession(false);
 		User me = (User) session.getAttribute("user");
 		String name = request.getParameter("nameList");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
-		String[] shared = request.getParameterValues("shared");
+		String[] shared = request.getParameterValues("shared[]");
 
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
@@ -117,28 +114,38 @@ public class NewListServlet extends HttpServlet {
 			}
 			list.setCategory(listCategory);
 
-			//shared - persone condivisione
-			if (shared == null || shared.length == 0) {
-				//add privatelist
+			// check if there are any users in the shared[] textfields
+			if (shared != null && shared.length != 0) {
+				for (int i = 0; i < shared.length; i++) {
+					if (!shared[i].isEmpty()) {
+						isShared = true;
+					}
+				}
+			}
+
+			if (!isShared) {
+				// Add privatelist
 				Boolean valid = listDAO.addList(list);
 				if (!listDAO.linkShoppingListToUser(list, me.getId())) {
 					new SQLException("link non effettutato tra lista e utente");
 				}
-				if (valid) {
-					redirect = true;
-				} else {
+				if (!valid) {
+					everythingOK = false;
 					request.setAttribute("list", list);
 				}
 			} else {
-				// System.out.println("shared!");
-				isshared = true;
-				LinkedList<User> listashared = new LinkedList();
+				// Add shared list
+				LinkedList<User> listShared = new LinkedList();
 				for (int i = 0; i < shared.length; i++) {
 					try {
-						User u = userDAO.getByEmail(shared[i]);
-						listashared.add(u);
+						if (!shared[i].isEmpty() && !shared[i].equals(me.getEmail())) {
+							User u = userDAO.getByEmail(shared[i]);
+							listShared.add(u);
+						}
 					} catch (RecordNotFoundDaoException ex) {
-						list.setError("shared", "l'utente " + shared[i] + " non esiste");
+						everythingOK = false;
+						ex.printStackTrace();
+						list.setError("shared[]", "l'utente " + shared[i] + " non esiste");
 						request.setAttribute("list", list);
 					}
 				}
@@ -146,37 +153,40 @@ public class NewListServlet extends HttpServlet {
 				try {
 					valid = listDAO.addList(list);
 				} catch (DaoException ex) {
-					request.setAttribute("duplicateName", true);
+					everythingOK = false;
+					// TODO impostare correttamente l'errore
+					list.setError("sth", "Qualcosa è andato storto mentre cercavamo di salvare la lista");
+					request.setAttribute("list", list);
 					ex.printStackTrace();
-					getServletContext().getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 				}
 				if (valid) {
-					for (User u : listashared) {
-						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
-							try {
-								throw new SQLException("link non effettutato tra lista e utente");
-							} catch (SQLException ex) {
-								Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+					for (User u : listShared) {	// connect list to users, apart from the owner
+						if (!u.getEmail().equals(me.getEmail())) {
+							if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+								everythingOK = false;
+								try {
+									throw new SQLException("link non effettutato tra lista e utente");
+								} catch (SQLException ex) {
+									Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+								}
 							}
 						}
 					}
-					redirect = true;
 				} else {
+					everythingOK = false;
 					request.setAttribute("list", list);
 				}
 			}
-			if (redirect) {
+			if (everythingOK) {
 				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-				if (!isshared) {
+				if (!isShared) {
 					//set sessione liste not shared
-					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> personalLists = listDAO.getPersonalLists(me.getId());
-					session.setAttribute("personalLists", personalLists);
+					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("personalLists")).add(list);
 				} else {
 					//set sessione liste shared
-					java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List> sharedLists = listDAO.getSharedLists(me.getId());
-					session.setAttribute("sharedLists", sharedLists);
+					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
 				}
-
+				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 				File file = null;
 				String imageURI = "";
 				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "shared";
@@ -185,23 +195,30 @@ public class NewListServlet extends HttpServlet {
 					String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
 					int ext = imageFileName.lastIndexOf(".");
 					int noExt = imageFileName.lastIndexOf(File.separator);
-					imageFileName = imageFolder + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
+					imageFileName = imageFolder + File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 					InputStream fileContentImage = image.getInputStream();
+					ext = imageFileName.lastIndexOf(".");
+					noExt = imageFileName.lastIndexOf(File.separator);
 					file = new File(imageFileName);
 					try {
-
 						Files.copy(fileContentImage, file.toPath());
-						imageURI = File.separator + "uploads" + File.separator + "shared"
+						imageURI = getServletContext().getContextPath() + File.separator + "uploads" + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 
-					} catch (FileAlreadyExistsException ex) {
+					} catch (IOException ex) {
+						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+						request.setAttribute("uploadFail", true);
 					}
 				}
 				list.setImage(imageURI);
+				// Update the list after setting the image URI
 				listDAO.updateList(list.getId(), list);
 				response.sendRedirect(path);
 			} else {
-				request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
+				// reload the page keeping request and response objects
+				// redirect would remove request associated objects
+				// forward would prevent the categories from being reloaded because request is directly processed by jsp, without servlet interception
+				doGet(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,7 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.ServiceUtils;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.AddDeletePermission;
 import java.io.IOException;
 import javax.servlet.ServletContext;
@@ -62,7 +62,7 @@ public class ListProductEditFilter implements ContainerRequestFilter {
 				}
 			} catch (DaoException ex) {
 				// TODO add correct redirection to error page ?
-				ServiceUtils.handleDAOException(ex, servletResponse);
+				HttpErrorHandler.handleDAOException(ex, servletResponse);
 			}
 		}
 	}

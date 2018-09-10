@@ -14,7 +14,7 @@
 .chat {
     display: none;
     position: absolute;
-    z-index: 100000;
+    z-index: 998;
     right: 0;
 }
 
@@ -29,6 +29,7 @@
 
 #list {
     min-height: 30rem;
+	max-height: 60rem;
 }
 
 .message-r {

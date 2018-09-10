@@ -10,6 +10,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -25,17 +27,19 @@ import javax.websocket.server.ServerEndpoint;
  *
  * @author Giulia Carocari
  */
+@ApplicationScoped
 @ServerEndpoint("/restricted/notifications/{userId}")
 public class NotificationWebSocketServer {
 
 	private static final Gson GSON = new Gson();
-
-	private static NotificationSessionHandler notificationSessionHandler;
-
+	
+	@Inject
+	private NotificationSessionHandler notificationSessionHandler;
+	/*
 	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
 		NotificationWebSocketServer.notificationSessionHandler = notificationSessionHandler;
 	}
-
+	*/
 	/**
 	 * Method executed at the opening of the connection. Adds the user's session
 	 * to session handler and sends the first update about the notification

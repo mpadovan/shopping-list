@@ -13,6 +13,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -22,16 +24,20 @@ import javax.websocket.server.ServerEndpoint;
  * @author Giulia Carocari
  */
 @ServerEndpoint("/restricted/messages/{userId}")
+@ApplicationScoped
 public class ChatWebSocketServer {
 
 	private static final Gson GSON = new Gson().newBuilder().create();
 	private static final JsonParser GSON_PARSER = new JsonParser();
 	
-	private static ChatSessionHandler chatSessionHandler;
+	@Inject
+	private ChatSessionHandler chatSessionHandler;
 
+	/*
 	public static void setChatSessionHandler(ChatSessionHandler chatSessionHandler) {
 		ChatWebSocketServer.chatSessionHandler = chatSessionHandler;
 	}
+	*/
 
 	@OnOpen
 	public void open(Session session, @PathParam("userId") Integer userId) throws DaoException {
@@ -81,7 +87,7 @@ public class ChatWebSocketServer {
 		switch (operation) {
 			case 0:
 				msg = GSON.fromJson(jsonMessage.get("payload"), Message.class);
-				if (chatSessionHandler.persistMessage(msg)) {
+				if (msg.getText().length() <= 255 && chatSessionHandler.persistMessage(msg)) {
 					listId = msg.getList().getId();
 					chatSessionHandler.notifyNewMessage(userId, listId);
 				}

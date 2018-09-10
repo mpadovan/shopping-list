@@ -18,11 +18,13 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  *
  * @author Giulia Carocari
  */
+@ApplicationScoped
 public class ChatSessionHandler extends SessionHandler {
 	
 	private static final Gson GSON = new Gson();

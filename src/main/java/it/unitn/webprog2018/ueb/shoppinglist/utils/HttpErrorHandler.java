@@ -15,13 +15,23 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Class that implements shared methods of web services. Among these there is
- * string handling for database queries and exception handling.
+ * Class that implements shared methods for exception and error handling.
+ * Error messages are meant to keep the reporting of http errors uniform across the whole application,
+ * each error code is mapped to one or more message strings
  *
  * @author Giulia Carocari
  */
-public class ServiceUtils {
-
+public class HttpErrorHandler {
+	
+	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
+							+ "The resource you are trying to access is none of your business.\n"
+							+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login";
+	
+	
+	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
+	
+	
+	
 	/**
 	 * Prepares the string in input to be used for performing SQL string
 	 * matching

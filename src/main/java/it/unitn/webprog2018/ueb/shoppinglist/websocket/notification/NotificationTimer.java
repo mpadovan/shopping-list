@@ -16,23 +16,28 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PreDestroy;
+import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  *
  * @author Giulia Carocari
  */
-public class NotificationTimer extends ScheduledThreadPoolExecutor {
+@ApplicationScoped
+@Startup
+public class NotificationTimer {
 	private static final int POLLING_RATE = 60 * 1000; // every minute
-	private static NotificationSessionHandler notificationSessionHandler;
-
-	public NotificationTimer(int i) {
-		super(i);
-		this.scheduleAtFixedRate(new DatabaseQueryTask(), 0, POLLING_RATE, TimeUnit.MILLISECONDS);
-	}
+	private ScheduledThreadPoolExecutor executor;
 	
+	@Inject
+	private NotificationSessionHandler notificationSessionHandler;
 	
-	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
-		NotificationTimer.notificationSessionHandler = notificationSessionHandler;
+	public NotificationTimer() {
+		executor = new ScheduledThreadPoolExecutor(4);
+		executor.scheduleAtFixedRate(new DatabaseQueryTask(), POLLING_RATE, POLLING_RATE, TimeUnit.MILLISECONDS);
+		System.out.println("Notification timer ok");
 	}
 	
 	/**
@@ -46,7 +51,7 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 			try {
 				List<Notification> notifications = notificationSessionHandler.getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
 				for (Notification n : notifications) {
-					NotificationTimer.this.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+					executor.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 				}
 			} catch (DaoException ex) { // if DAO fails then we try again on the next poll
 				Logger.getLogger(NotificationTimer.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,5 +89,11 @@ public class NotificationTimer extends ScheduledThreadPoolExecutor {
 		}
 
 	}
-
+	
+	
+	@PreDestroy
+	void destroy() {
+		executor.purge();
+		executor.shutdownNow();
+	}
 }
