@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
