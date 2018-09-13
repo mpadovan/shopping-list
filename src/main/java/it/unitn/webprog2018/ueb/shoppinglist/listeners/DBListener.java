@@ -1,5 +1,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
@@ -33,6 +34,7 @@ public class DBListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try{
+			AbandonedConnectionCleanupThread.checkedShutdown();
 			((DatabaseManager)sce.getServletContext().getAttribute("dbManager")).shutdown();
 		} catch (NullPointerException e){
 			String msg = "DatabaseManager has already destroyed. Skipping...";
