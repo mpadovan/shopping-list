@@ -127,28 +127,8 @@
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.PathSetter</listener-class>
 	</listener>
 	<servlet>
-		<servlet-name>CategoryListServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ListCategoryServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>PublicProductListServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.PublicProductListServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>CategoryProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ProductsCategoryServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>AvatarServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads.UploadsServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>NewPublicProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.NewPublicProductServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>EditPublicProduct</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.EditPublicProductServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>DeletePublicProductServlet</servlet-name>
@@ -178,26 +158,6 @@
 		<servlet-name>DeleteListServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.DeleteListServlet</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>CategoryListServlet</servlet-name>
-		<url-pattern>/restricted/admin/ListCategory</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>PublicProductListServlet</servlet-name>
-		<url-pattern>/restricted/admin/PublicProductList</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>CategoryProductServlet</servlet-name>
-		<url-pattern>/restricted/admin/ProductsCategory</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>NewPublicProductServlet</servlet-name>
-		<url-pattern>/restricted/admin/NewPublicProduct</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>EditPublicProduct</servlet-name>
-		<url-pattern>/restricted/admin/EditPublicProduct</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DeletePublicProductServlet</servlet-name>
 		<url-pattern>/restricted/admin/DeletePublicProduct</url-pattern>
