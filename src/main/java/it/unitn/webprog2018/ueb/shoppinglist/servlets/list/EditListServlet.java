@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author simon
  */
+@WebServlet(name = "EditListServlet", urlPatterns = {"/restricted/EditList/*"})
 public class EditListServlet extends HttpServlet {
 	/**
 	 * Handles the HTTP <code>GET</code> method.

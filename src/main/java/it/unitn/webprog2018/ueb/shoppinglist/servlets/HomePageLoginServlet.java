@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author simon
  */
-@WebServlet("/restricted/HomePageLogin/*")
+@WebServlet(name = "HomePageLoginServlet", urlPatterns = {"/restricted/HomePageLogin/*"})
 public class HomePageLoginServlet extends HttpServlet {
 
 	private ListDAO listDAO;

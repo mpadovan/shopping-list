@@ -127,30 +127,6 @@
 		<listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.PathSetter</listener-class>
 	</listener>
 	<servlet>
-		<servlet-name>EditListServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.EditListServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>InfoListServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.InfoListServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>EditProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.EditProductServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>InfoProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.InfoProductServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>NewProductServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.product.NewProductServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>HomePageLoginServlet</servlet-name>
-		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageLoginServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>CategoryListServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.ListCategoryServlet</servlet-class>
 	</servlet>
@@ -202,30 +178,6 @@
 		<servlet-name>DeleteListServlet</servlet-name>
 		<servlet-class>it.unitn.webprog2018.ueb.shoppinglist.servlets.list.DeleteListServlet</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>EditListServlet</servlet-name>
-		<url-pattern>/restricted/EditList/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>InfoListServlet</servlet-name>
-		<url-pattern>/restricted/InfoList/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>EditProductServlet</servlet-name>
-		<url-pattern>/restricted/permission/EditProduct</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>InfoProductServlet</servlet-name>
-		<url-pattern>/restricted/InfoProduct</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>NewProductServlet</servlet-name>
-		<url-pattern>/restricted/NewProduct</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>HomePageLoginServlet</servlet-name>
-		<url-pattern>/restricted/HomePageLogin</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CategoryListServlet</servlet-name>
 		<url-pattern>/restricted/admin/ListCategory</url-pattern>
