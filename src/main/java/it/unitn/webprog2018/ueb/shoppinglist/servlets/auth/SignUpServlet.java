@@ -2,6 +2,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
@@ -80,68 +81,54 @@ public class SignUpServlet extends HttpServlet {
 		user.setCheckpassword(checkPassword);
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
-
 		try {
-			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
-				user.setPassword(Sha256.doHash(password));
-				user.setCheckpassword(Sha256.doHash(checkPassword));
-				// Retrieving user avatar
-				File file = null;
-				String avatarFileName = "";
-				String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
-				Part avatar = request.getPart("image");
-				if ((avatar != null) && (avatar.getSize() > 0)) {
-					avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
-					int ext = avatarFileName.lastIndexOf(".");
-					int noExt = avatarFileName.lastIndexOf(File.separator);
-					avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
-					try (InputStream fileContent = avatar.getInputStream()) {
-						file = new File(avatarFileName);
-						Files.copy(fileContent, file.toPath());
-						avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
-								+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
-
-					} catch (FileAlreadyExistsException ex) {
-						response.sendError(500, "Server could not store your avatar, "
-								+ "please retry the sign up process. "
-								+ "Notice that you can also upload the image later in you user page.");
-						getServletContext().log("impossible to upload the file", ex);
-					}
+			boolean emailOk = true;
+			try {
+				User alreadyExists = userDAO.getByEmail(email);
+				emailOk = false;
+			} catch (DaoException daoEx) {
+				if (daoEx instanceof RecordNotFoundDaoException) {
+					emailOk = true;
+				} else {
+					Logger.getLogger(SignUpServlet.class.getName()).log(Level.SEVERE, null, daoEx);
 				}
-				if (!response.isCommitted()) {
-					user.setImage(avatarURI);
+			}
+			if (emailOk) {
+				if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
+					user.setPassword(Sha256.doHash(password));
+					user.setCheckpassword(Sha256.doHash(checkPassword));
+					if (!response.isCommitted()) {
 
-					// Creating the token for the account confirmation
-					Token token = new Token();
+						// Creating the token for the account confirmation
+						Token token = new Token();
 
-					token.generateToken();
-					token.setExpirationFromNow(TOKEN_EXP);
-					token.setUser(user);
+						token.generateToken();
+						token.setExpirationFromNow(TOKEN_EXP);
+						token.setUser(user);
 
-					String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
+						String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
 
-					if (tokenDAO.addToken(token)) {
-						if (EmailSender.send(user.getEmail(), "Conferma account",
-								"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
-							request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
-						} else {
-							response.sendError(500, "The server could not reach your email address. Please try again later.");
-							if (file != null) {
-								file.delete();
+						if (tokenDAO.addToken(token)) {
+							if (EmailSender.send(user.getEmail(), "Conferma account",
+									"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
+								request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
+							} else {
+								response.sendError(500, "The server could not reach your email address. Please try again later.");
 							}
-						}
-					} else {
-						response.sendError(429, "You already have a pending sign up request for this email."
-								+ " Please check your mailbox");
-						if (file != null) {
-							file.delete();
+						} else {
+							response.sendError(429, "You already have a pending sign up request for this email."
+									+ " Please check your mailbox");
 						}
 					}
+				} else {
+					if (privacy == null || privacy.equals("")) {
+						request.setAttribute("privacy", "Confermare privacy");
+					}
+					request.setAttribute("user", user);
+					request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 				}
 			} else {
-				if (privacy == null || privacy.equals("")) {
-					request.setAttribute("privacy", "Confermare privacy");
-				}
+				user.setError("email", "Un account con questa email esiste già");
 				request.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 			}
