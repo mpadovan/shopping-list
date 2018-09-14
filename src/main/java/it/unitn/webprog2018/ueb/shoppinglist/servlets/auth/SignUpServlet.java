@@ -82,53 +82,36 @@ public class SignUpServlet extends HttpServlet {
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
 		try {
-			boolean emailOk = true;
-			try {
-				User alreadyExists = userDAO.getByEmail(email);
-				emailOk = false;
-			} catch (DaoException daoEx) {
-				if (daoEx instanceof RecordNotFoundDaoException) {
-					emailOk = true;
-				} else {
-					Logger.getLogger(SignUpServlet.class.getName()).log(Level.SEVERE, null, daoEx);
-				}
-			}
-			if (emailOk) {
-				if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
-					user.setPassword(Sha256.doHash(password));
-					user.setCheckpassword(Sha256.doHash(checkPassword));
-					if (!response.isCommitted()) {
+			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
+				user.setPassword(Sha256.doHash(password));
+				user.setCheckpassword(Sha256.doHash(checkPassword));
+				if (!response.isCommitted()) {
 
-						// Creating the token for the account confirmation
-						Token token = new Token();
+					// Creating the token for the account confirmation
+					Token token = new Token();
 
-						token.generateToken();
-						token.setExpirationFromNow(TOKEN_EXP);
-						token.setUser(user);
+					token.generateToken();
+					token.setExpirationFromNow(TOKEN_EXP);
+					token.setUser(user);
 
-						String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
+					String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
 
-						if (tokenDAO.addToken(token)) {
-							if (EmailSender.send(user.getEmail(), "Conferma account",
-									"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
-								request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
-							} else {
-								response.sendError(500, "The server could not reach your email address. Please try again later.");
-							}
+					if (tokenDAO.addToken(token)) {
+						if (EmailSender.send(user.getEmail(), "Conferma account",
+								"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
+							request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
 						} else {
-							response.sendError(429, "You already have a pending sign up request for this email."
-									+ " Please check your mailbox");
+							response.sendError(500, "The server could not reach your email address. Please try again later.");
 						}
+					} else {
+						response.sendError(429, "You already have a pending sign up request for this email."
+								+ " Please check your mailbox");
 					}
-				} else {
-					if (privacy == null || privacy.equals("")) {
-						request.setAttribute("privacy", "Confermare privacy");
-					}
-					request.setAttribute("user", user);
-					request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 				}
 			} else {
-				user.setError("email", "Un account con questa email esiste già");
+				if (privacy == null || privacy.equals("")) {
+					request.setAttribute("privacy", "Confermare privacy");
+				}
 				request.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 			}
