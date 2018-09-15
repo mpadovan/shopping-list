@@ -55,7 +55,7 @@ public class DirectoryManager implements ServletContextListener {
 			new File(restrictedPath + "shared" + File.separator + "productImage").mkdir();
 		}
 		
-		sce.getServletContext().setAttribute("uploadFolder", folders);
+		sce.getServletContext().setAttribute("uploadFolder", path);
 		sce.getServletContext().setAttribute("avatarFolder", restrictedPath + "avatar" + File.separator);
 		sce.getServletContext().setAttribute("listFolder", restrictedPath + "shared" + File.separator + "listImage" + File.separator);
 		sce.getServletContext().setAttribute("productFolder", restrictedPath + "shared" + File.separator + "productImage" + File.separator);

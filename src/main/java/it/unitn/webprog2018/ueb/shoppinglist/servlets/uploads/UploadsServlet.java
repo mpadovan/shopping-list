@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Giulia Carocari
  */
-@WebServlet(name = "UploadsServlet", urlPatterns = {"/uploads/*"})
+@WebServlet(name = "UploadsServlet", urlPatterns = {"/Uploads/*"})
 public class UploadsServlet extends HttpServlet {
 
 	/**
