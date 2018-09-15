@@ -7,12 +7,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+ 
 /**
  * Entity class that implements the User entity (aka user table in database)
  *
@@ -102,7 +99,10 @@ public class User extends AbstractEntity {
 	}
 
 	/**
-	 * @return the path of the avatar image associated with the user
+	 * @return the path of t@Override
+	public String getHash() {
+		return Sha256.doHash(token);
+	}he avatar image associated with the user
 	 */
 	public String getImage() {
 		return image;
@@ -133,6 +133,11 @@ public class User extends AbstractEntity {
 
 	public void setTokenpassword(String tokenpassword) {
 		this.tokenpassword = tokenpassword;
+	}
+	
+	@Override
+	public String getHash() {
+		return Sha256.doHash(id+email);
 	}
 	
 	@Override

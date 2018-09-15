@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.sql.Timestamp;
 
 /**
@@ -59,6 +60,11 @@ public class Message extends AbstractEntity {
 
 	public void setRead(boolean read) {
 		this.read = read;
+	}
+	
+	@Override
+	public String getHash() {
+		return Sha256.doHash(id+text);
 	}
 	
 }

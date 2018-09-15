@@ -41,7 +41,7 @@ public class UploadsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String filename = request.getPathInfo().substring(1);
-			String uploadPath = getServletContext().getInitParameter("uploadFolder");
+			String uploadPath = (String) getServletContext().getAttribute("uploadFolder");
 			File file = new File(uploadPath, filename);
 			response.setHeader("Content-Type", getServletContext().getMimeType(filename));
 			response.setHeader("Content-Length", String.valueOf(file.length()));

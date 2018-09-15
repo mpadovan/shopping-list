@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +38,11 @@ public class ListsCategory extends AbstractEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override
+	public String getHash() {
+		return Sha256.doHash(id+name);
 	}
 	
 	@Override

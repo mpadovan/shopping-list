@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.sql.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -54,6 +55,11 @@ public class Token extends AbstractEntity {
 	public void setExpirationFromNow(long delay) {
 		Date date = new Date(System.currentTimeMillis() + delay);
 		expirationDate = date;
+	}
+	
+	@Override
+	public String getHash() {
+		return Sha256.doHash(token);
 	}
 	
 	@Override
