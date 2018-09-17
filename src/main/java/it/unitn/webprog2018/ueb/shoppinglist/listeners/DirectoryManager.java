@@ -25,7 +25,7 @@ public class DirectoryManager implements ServletContextListener {
 	 * otherwise it creates the whole nested structure.
 	 * Eventually it sets the uploads folder path and its innermost directories 
 	 * (allowing for structural revision) as context attributes.
-	 * One may safely assume that the path string set by this method is always terminated by <code>File.separator</code>
+	 * One may safely assume that the path string set by this method is always terminated by <code>File.separator</code>.
 	 * 
 	 * @param sce 
 	 */
@@ -54,8 +54,11 @@ public class DirectoryManager implements ServletContextListener {
 			new File(restrictedPath + "shared" + File.separator + "listImage").mkdir();
 			new File(restrictedPath + "shared" + File.separator + "productImage").mkdir();
 		}
+		// Path adjustment to allow it to be used with an image uri
+		path = path.substring(0,path.lastIndexOf(File.separator));
+		path = path.substring(0,path.lastIndexOf(File.separator)) + File.separator;
 		
-		sce.getServletContext().setAttribute("uploadFolder", path);
+		sce.getServletContext().setAttribute("uploadFolder", path.substring(0,path.lastIndexOf(File.separator)));
 		sce.getServletContext().setAttribute("avatarFolder", restrictedPath + "avatar" + File.separator);
 		sce.getServletContext().setAttribute("listFolder", restrictedPath + "shared" + File.separator + "listImage" + File.separator);
 		sce.getServletContext().setAttribute("productFolder", restrictedPath + "shared" + File.separator + "productImage" + File.separator);

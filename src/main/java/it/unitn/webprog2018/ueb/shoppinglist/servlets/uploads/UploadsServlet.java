@@ -41,17 +41,19 @@ public class UploadsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String filename = request.getPathInfo().substring(1);
-			String uploadPath = (String) getServletContext().getAttribute("uploadFolder");
+			String uploadPath = (String) getServletContext().getAttribute("uploadFolder") + File.separator + "Uploads";
 			File file = new File(uploadPath, filename);
+			System.out.println(uploadPath);
+			System.out.println(filename);
 			response.setHeader("Content-Type", getServletContext().getMimeType(filename));
 			response.setHeader("Content-Length", String.valueOf(file.length()));
 			response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
 			Files.copy(file.toPath(), response.getOutputStream());
-		} catch (FileNotFoundException ex) {
-			response.sendError(404, "The resource you are lookin for does not exist in our system");
-		} catch (NoSuchFileException ex) { //Exception thrown by Files.copy()
-			response.sendError(404, "The resource you are lookin for does not exist in our system");
+		} catch (FileNotFoundException | NoSuchFileException ex) {
+			response.sendError(404, "The resource you are looking for does not exist in our system");
 		}
+		//Exception thrown by Files.copy()
+		
 	}
 
 	/**

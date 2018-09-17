@@ -79,8 +79,9 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		String avatarURI = "";
 		File file = null;
 		String avatarFileName = "";
-		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-
+		String avatarsFolder = (String) getServletContext().getAttribute("avatarFolder");
+		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
+		/*
 		//crezione cartella se non esiste
 		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
 		File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
@@ -95,43 +96,40 @@ public class ChangeImageAdminServlet extends HttpServlet {
 				response.sendError(500, "impossibile creare cartella per utente");
 			}
 		}
-
+		*/
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
-			System.out.println("entrato");
+			// System.out.println("entrato");
 			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				System.out.println("entrato2");
-				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-				int extold = user.getImage().lastIndexOf(".");
-				File fileold = new File(imageFolder + user.getId() + user.getImage().substring(extold));
-				if (fileold.exists()) {
-					fileold.delete();
+				// System.out.println("entrato2");
+				// String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
+				// int extold = user.getImage().lastIndexOf(".");
+				File oldFile = new File(uploadFolder + user.getImage());
+				if (oldFile.exists()) {
+					oldFile.delete();
 					System.out.println("entrato3");
 				}
 			}
 			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			// Extension handling
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = avatarsFolder + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
+			avatarFileName = avatarsFolder + user.getHash()+ (ext > noExt ? avatarFileName.substring(ext) : "");
 			InputStream fileContent = null;
 			try {
-				ext = avatarFileName.lastIndexOf(".");
-				noExt = avatarFileName.lastIndexOf(File.separator);
 				fileContent = avatar.getInputStream();
 				file = new File(avatarFileName);
 				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
+				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 
 				System.out.println(avatarFileName + " \n" + avatarURI);
 
 			} catch (FileAlreadyExistsException ex) {
-				file.delete();
-				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-
+				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
+				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+				response.sendRedirect("/restricted/admin/ChangeImageAdmin");
 			}
+			
 			user.setImage(avatarURI);
 			try {
 				if (userDAO.updateUser(user.getId(), user)) {
