@@ -175,7 +175,8 @@ var app = new Vue({
 		operation: null,
 		list: null,
 		chat: false,
-		permission: false 
+		permission: false,
+		lockAjaxComponent: false 
 	},
 	methods: {
 		searching: function () {
@@ -307,7 +308,10 @@ var app = new Vue({
 			this.showSearch = false;
 		},
 		replaceQuerySearch: function (val) {
+			this.lockAjaxComponent = true;
 			this.query = val;
+			this.ajaxComponent = false;
+			this.searching();
 		},
 		quickAddProduct: function () {
 			this.ajaxSettings = {
@@ -338,6 +342,7 @@ var app = new Vue({
 		},
 		ajaxDone: function (data) {
 			this.ajaxComponent = false;
+			this.lockAjaxComponent = false;
 			if (data === 'error')
 				return;
 			else {
@@ -406,7 +411,7 @@ var app = new Vue({
 	},
 	watch: {
 		query: function (val) {
-			if (val == 0) {
+			if (val == 0 || this.lockAjaxComponent) {
 				this.showAutocomplete = false;
 				this.hideSearch();
 			} else {
