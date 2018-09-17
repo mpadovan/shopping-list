@@ -77,67 +77,50 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 
 		String avatarURI = "";
-		File file = null;
-		String avatarFileName = "";
 		String avatarsFolder = (String) getServletContext().getAttribute("avatarFolder");
 		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
-		/*
-		//crezione cartella se non esiste
-		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
-		File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
-		File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
-		if (!userDir.exists()) {
-			if (!userDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
-		if (!avatarDir.exists()) {
-			if (!avatarDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
-		*/
+		
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
-			// System.out.println("entrato");
+			// Delete old image
 			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				// System.out.println("entrato2");
-				// String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-				// int extold = user.getImage().lastIndexOf(".");
 				File oldFile = new File(uploadFolder + user.getImage());
 				if (oldFile.exists()) {
 					oldFile.delete();
-					System.out.println("entrato3");
 				}
 			}
-			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
 			// Extension handling
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = avatarsFolder + user.getHash()+ (ext > noExt ? avatarFileName.substring(ext) : "");
-			InputStream fileContent = null;
+			avatarFileName = avatarsFolder + user.getHash() + (ext > noExt ? avatarFileName.substring(ext) : "");
 			try {
-				fileContent = avatar.getInputStream();
-				file = new File(avatarFileName);
+				InputStream fileContent = avatar.getInputStream();
+				File file = new File(avatarFileName);
+				if (file.exists()) {	// avoid fileAlreadyExistsException
+					file.delete();
+				}
 				Files.copy(fileContent, file.toPath());
 				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 
-				System.out.println(avatarFileName + " \n" + avatarURI);
+				// System.out.println(avatarFileName + " \n" + avatarURI);
 
-			} catch (FileAlreadyExistsException ex) {
+			} catch (IOException ex) {
+				// It is not a fatal error, we ask the user to try again
 				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
 				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-				response.sendRedirect("/restricted/admin/ChangeImageAdmin");
+				response.sendRedirect(context + "/restricted/admin/ChangeImageAdmin");
 			}
-			
-			user.setImage(avatarURI);
-			try {
-				if (userDAO.updateUser(user.getId(), user)) {
-					session.setAttribute("user", user);
-					response.sendRedirect(context + "restricted/admin/InfoAdmin");
+			if (!response.isCommitted()) {
+				user.setImage(avatarURI);
+				try {
+					if (userDAO.updateUser(user.getId(), user)) {
+						session.setAttribute("user", user);
+						response.sendRedirect(context + "restricted/admin/InfoAdmin");
+					}
+				} catch (DaoException ex) {
+					Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 				}
-			} catch (DaoException ex) {
-				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else {
 			response.sendRedirect(context + "restricted/admin/InfoAdmin");
@@ -151,7 +134,7 @@ public class ChangeImageAdminServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Short description";
-	}// </editor-fold>
+		return "Servlet that changes the avatar of an admin";
+	}
 
 }
