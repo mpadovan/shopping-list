@@ -254,7 +254,8 @@ var app = new Vue({
 		item_id: null,
 		categoriesResults: null,
 		categoryFull: null,
-		showLocals: false
+		showLocals: false,
+		lockSearch: false
 	},
 	methods: {
 		searching: function () {
@@ -354,6 +355,7 @@ var app = new Vue({
 				this.searchCategories = unique;
 			}
 			this.searchInitializing = null;
+			this.lockSearch = false;
 		},
 		hideSearch: function () {
 			this.query = '';
@@ -361,7 +363,9 @@ var app = new Vue({
 			this.showSearch = false;
 		},
 		replaceQuerySearch: function (val) {
+			this.lockSearch = true;
 			this.query = val;
+			this.searching();
 		},
 		showCat: function (data) {
 			this.category = data.cat;
@@ -372,7 +376,7 @@ var app = new Vue({
 	},
 	watch: {
 		query: function (val) {
-			if (val == 0) {
+			if (val == 0 || this.lockSearch) {
 				this.showAutocomplete = false;
 				this.hideSearch();
 			} else {
