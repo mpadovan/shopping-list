@@ -38,7 +38,7 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		if(valid){
 			try{
 				String image = listCategoriesImage.getImage();
-				if(File.separator.equals("\\"))
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "INSERT INTO listscategoriesimages (image,idcategory) VALUES (?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
@@ -98,7 +98,7 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		{
 			try{
 				String image = listCategoriesImage.getImage();
-				if(File.separator.equals("\\"))
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				String query = "UPDATE listscategoriesimages SET image = ?, idcategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
