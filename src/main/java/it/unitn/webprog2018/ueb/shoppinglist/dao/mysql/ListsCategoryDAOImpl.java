@@ -37,10 +37,10 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	public List<ListsCategory> getFromQuery(String matching) throws DaoException {
 		List<ListsCategory> list = new ArrayList<ListsCategory>();
 		try{
-			String query = "SELECT id,name,description FROM listscategories"
-					+ "	WHERE name LIKE \"%"+matching+"%\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT id,name,description FROM listscategories WHERE name LIKE ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, "%"+matching+"%");
+			ResultSet rs = st.executeQuery();
 			ListsCategory pc;
 			
 			while (rs.next())
@@ -68,10 +68,10 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		Boolean valid = lc.isVaildOnCreate(dAOFactory);
 		if(valid){
 			try{
-				String query = "INSERT INTO listscategories (name,description) VALUES (\""+
-						lc.getName()+ "\",\"" +
-						lc.getDescription()+ "\")";
+				String query = "INSERT INTO listscategories (name,description) VALUES (?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, lc.getName());
+				st.setString(2, lc.getDescription());
 				int count = st.executeUpdate();
 				st.close();
 				return valid && (count == 1);
@@ -88,10 +88,9 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	public List<ListsCategory> getAll() throws DaoException{
 		List<ListsCategory> list = new ArrayList<>();
 		try{
-			String query =	"SELECT id,name,description " +
-					"FROM listscategories";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query =	"SELECT id,name,description FROM listscategories";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			ResultSet rs = st.executeQuery();
 			ListsCategory lc;
 			int i;
 			while(rs.next())
@@ -118,11 +117,10 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	public ListsCategory getByName(String name) throws DaoException {
 		try{
 			ListsCategory lc = new ListsCategory();
-			String query = "SELECT id,description " +
-					"FROM listscategories " +
-					"WHERE name = \'"+name+"\'";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT id,description FROM listscategories WHERE name = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, name);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				int i = 1;
@@ -146,9 +144,10 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	public ListsCategory getById(Integer id) throws DaoException {
 		try{
 			ListsCategory lc = new ListsCategory();
-			String query = "select name,description from listscategories where id = "+id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "select name,description from listscategories where id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				int i = 1;
@@ -171,8 +170,9 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 	@Override
 	public Boolean deleteListsCategory(Integer id) throws DaoException {
 		try{
-			String query = "call deleteListsCategory("+id+");";
+			String query = "call deleteListsCategory(?);";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
 			int count = st.executeUpdate();
 			st.close();
 			if(count < 1)
@@ -191,11 +191,11 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		if(valid)
 		{
 			try{
-				String query = "update listscategories\n" +
-						"set name = \""+listsCategory.getName()+"\",\n" +
-						"	description = \""+listsCategory.getDescription()+"\"\n" +
-						"where id = " + categoryId;
+				String query = "UPDATE listscategories SET name = ?, description = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, listsCategory.getName());
+				st.setString(2, listsCategory.getDescription());
+				st.setInt(3, categoryId);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)

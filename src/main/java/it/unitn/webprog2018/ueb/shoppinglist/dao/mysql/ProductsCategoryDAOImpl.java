@@ -20,21 +20,21 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCategoryDAO {
-
+	
 	public ProductsCategoryDAOImpl(Connection connection, DAOFactory dAOFactory) {
 		super(connection, dAOFactory);
 	}
-
+	
 	@Override
 	public List<ProductsCategory> getFromQuery(String matching) throws DaoException {
 		List<ProductsCategory> list = new ArrayList<ProductsCategory>();
 		try {
-			String query = "SELECT id,name,description,logo FROM productscategories"
-					+ "	WHERE name LIKE \"%" + matching + "%\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT id,name,description,logo FROM productscategories WHERE name LIKE ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, "%" + matching + "%");
+			ResultSet rs = st.executeQuery();
 			ProductsCategory pc;
-
+			
 			while (rs.next()) {
 				pc = new ProductsCategory();
 				pc.setId(rs.getInt("id"));
@@ -43,35 +43,31 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				pc.setLogo(rs.getString("logo"));
 				list.add(pc);
 			}
-
+			
 			st.close();
 			rs.close();
-
+			
 			return list;
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean addProductsCategory(ProductsCategory pc) throws DaoException {
 		Boolean valid = true; // pc.isVaildOnCreate(dAOFactory);
 		if (valid) {
 			try {
 				String logo = pc.getLogo();
-				if (File.separator.equals("\\")) {
+				if (File.separator.equals("\\") && logo != null) {
 					logo = logo.replaceAll("\\\\", "\\\\\\\\");
 				}
-//				String query = "INSERT INTO productscategories (name,description,logo) VALUES (\""
-//						+ pc.getName() + "\","
-//						+ pc.getDescription() + "\",\""
-//						+ logo + "\")";
-				String query = "INSERT INTO productscategories (name,description,logo) VALUES (\""
-						+ pc.getName() + "\",\""
-						+ pc.getDescription() + "\",\""
-						+ logo + "\")";
+				String query = "INSERT INTO productscategories (name,description,logo) VALUES (?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, pc.getName());
+				st.setString(2, pc.getDescription());
+				st.setString(3, logo);
 				st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
@@ -86,13 +82,12 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public List<ProductsCategory> getAll() throws DaoException {
 		List<ProductsCategory> list = new ArrayList<>();
 		try {
-			String query = "SELECT id,name,category,description,logo "
-					+ "FROM productscategories";
+			String query = "SELECT id,name,category,description,logo FROM productscategories";
 			Statement st = this.getCon().createStatement();
 			ResultSet rs = st.executeQuery(query);
 			ProductsCategory pc, pcp;
@@ -117,17 +112,16 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public ProductsCategory getById(Integer id) throws DaoException {
 		try {
 			ProductsCategory pc = new ProductsCategory();
 			ProductsCategory pcp = new ProductsCategory();
-			String query = "SELECT name,category,description,logo "
-					+ "FROM productscategories "
-					+ "WHERE id = " + id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT name,category,description,logo FROM productscategories WHERE id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				int i = 1;
 				pc.setId(id);
@@ -136,7 +130,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
-
+				
 				rs.close();
 				st.close();
 				return pc;
@@ -147,12 +141,13 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean deleteProductsCategory(Integer id) throws DaoException {
 		try {
-			String query = "call deleteProductsCategory(" + id + ");";
+			String query = "CALL deleteProductsCategory(?);";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
 			int count = st.executeUpdate();
 			st.close();
 			if (count < 1) {
@@ -164,22 +159,22 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean updateProductsCategory(Integer id, ProductsCategory productsCategory) throws DaoException {
 		Boolean valid = productsCategory.isVaildOnUpdate(dAOFactory);
 		if (valid) {
 			try {
 				String logo = productsCategory.getLogo();
-				if (File.separator.equals("\\")) {
+				if (File.separator.equals("\\") && logo!=null) {
 					logo = logo.replaceAll("\\\\", "\\\\\\\\");
 				}
-				String query = "update productscategories\n"
-						+ "set name = \"" + productsCategory.getName() + "\",\n"
-						+ "    description = \"" + productsCategory.getDescription() + "\",\n"
-						+ "    logo = \"" + logo + "\"\n"
-						+ "where id = " + id;
+				String query = "UPDATE productscategories SET name = ?, description = ?, logo = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, productsCategory.getName());
+				st.setString(2, productsCategory.getDescription());
+				st.setString(3, logo);
+				st.setInt(4, id);
 				int count = st.executeUpdate();
 				st.close();
 				if (count != 1) {
@@ -193,17 +188,16 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public ProductsCategory getByName(String name) throws DaoException {
 		try {
 			ProductsCategory pc = new ProductsCategory();
 			ProductsCategory pcp = new ProductsCategory();
-			String query = "SELECT id,category,description,logo "
-					+ "FROM productscategories "
-					+ "WHERE name = \"" + name + "\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT id,category,description,logo FROM productscategories WHERE name = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, name);
+			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				int i = 1;
 				pc.setId(rs.getInt(i++));
@@ -212,7 +206,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 				pc.setCategory(pcp);
 				pc.setDescription(rs.getString(i++));
 				pc.setLogo(rs.getString(i++));
-
+				
 				rs.close();
 				st.close();
 				return pc;
