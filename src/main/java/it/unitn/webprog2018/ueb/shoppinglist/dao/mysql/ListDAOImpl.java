@@ -42,9 +42,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"FROM lists l " +
 					"INNER JOIN users u ON l.iduser = u.id " +
 					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE l.id = "+id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE l.id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			int i = 1;
 			if(rs.first())
 			{
@@ -88,9 +89,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE l.name = \""+name+"\" AND l.iduser = "+owner.getId();
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE l.name = ? AND l.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, name);
+			st.setInt(2, owner.getId());
+			ResultSet rs = st.executeQuery();
 			ListsCategory lc = new ListsCategory();
 			int i = 1;
 			if(rs.first())
@@ -125,9 +128,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"FROM publicproductsonlists ppl " +
 					"INNER JOIN publicproducts pp ON ppl.idpublicproduct = pp.id " +
 					"INNER JOIN productscategories pc ON pc.id = pp.idproductscategory " +
-					"WHERE ppl.quantity >= 0 AND ppl.idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE ppl.quantity >= 0 AND ppl.idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			ResultSet rs = st.executeQuery();
 			PublicProduct p;
 			ProductsCategory pc,pcp;
 			Integer quantity;
@@ -176,9 +180,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"INNER JOIN products p ON pl.idproduct = p.id " +
 					"INNER JOIN productscategories pc ON pc.id = p.idproductscategory " +
 					"INNER JOIN users u ON p.iduser = u.id " +
-					"WHERE pl.quantity >= 0 AND pl.idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE pl.quantity >= 0 AND pl.idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			ResultSet rs = st.executeQuery();
 			Product p;
 			ProductsCategory pc,pcp;
 			User u;
@@ -200,7 +205,6 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				u.setId(rs.getInt(i++));
 				u.setName(rs.getString(i++));
 				u.setLastname(rs.getString(i++));
-				//u.setImage(rs.getString(i++));
 				u.setAdministrator(rs.getInt(i++) != 0);
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
@@ -230,8 +234,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "CALL addProductOnList("+product.getId()+","+listId+")";
+				String query = "CALL addProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, product.getId());
+				st.setInt(2, listId);
 				st.executeUpdate();
 				st.close();
 				return valid;
@@ -252,8 +258,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "CALL addPublicProductOnList("+product.getId()+","+listId+")";
+				String query = "CALL addPublicProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, product.getId());
+				st.setInt(2, listId);
 				st.executeUpdate();
 				st.close();
 				return valid;
@@ -272,9 +280,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			String query = "SELECT EXISTS(SELECT 1 " +
 					"FROM publicproductsonlists " +
-					"WHERE idlist = "+listId+" AND idpublicproduct = "+product.getId()+" AND quantity >= 0) AS exist";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE idlist = ? AND idpublicproduct = ? AND quantity >= 0) AS exist";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			st.setInt(2, product.getId());
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				exist = rs.getInt(1) == 1;
@@ -296,9 +306,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try {
 			String query = "SELECT EXISTS(SELECT 1 " +
 					"FROM productsonlists " +
-					"WHERE idlist = "+listId+" AND idproduct = "+product.getId()+" AND quantity >= 0) AS exist";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE idlist = ? AND idproduct = ? AND quantity >= 0) AS exist";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			st.setInt(2, product.getId());
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				exist = rs.getInt(1) == 1;
@@ -323,10 +335,13 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		{
 			try{
 				String query = "UPDATE publicproductsonlists " +
-						"SET quantity = "+newAmount+
-						" WHERE idlist = " + listId+
-						" AND idpublicproduct = " + product.getId();
+						"SET quantity = ?"+
+						" WHERE idlist = ?"+
+						" AND idpublicproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, newAmount);
+				st.setInt(2, listId);
+				st.setInt(3, product.getId());
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -350,10 +365,13 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		{
 			try{
 				String query = "UPDATE productsonlists " +
-						"SET quantity = "+newAmount+
-						" WHERE idlist = " + listId+
-						" AND idproduct = " + product.getId();
+						"SET quantity = ?"+
+						" WHERE idlist = ?"+
+						" AND idproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, newAmount);
+				st.setInt(2, listId);
+				st.setInt(3, product.getId());
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -376,9 +394,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			try{
 				String query = "UPDATE publicproductsonlists " +
 						"SET quantity = quantity + 1"+
-						" WHERE idlist = " + listId+
-						" AND idpublicproduct = " + product.getId();
+						" WHERE idlist = ?"+
+						" AND idpublicproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, listId);
+				st.setInt(2, product.getId());
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -401,9 +421,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			try{
 				String query = "UPDATE productsonlists " +
 						"SET quantity = quantity + 1"+
-						" WHERE idlist = " + listId+
-						" AND idproduct = " + product.getId();
+						" WHERE idlist = ?"+
+						" AND idproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, listId);
+				st.setInt(2, product.getId());
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -422,9 +444,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public Boolean hasAddDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
 		try {
-			String query = "SELECT adddelete FROM sharedlists WHERE iduser = "+userId+" AND idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT adddelete FROM sharedlists WHERE iduser = ? AND idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			st.setInt(2, listId);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				hasPermission = rs.getInt(1) == 1;
@@ -444,9 +468,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
 		try {
-			String query = "SELECT modifylist FROM sharedlists WHERE iduser = "+userId+" AND idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT modifylist FROM sharedlists WHERE iduser = ? AND idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			st.setInt(2, listId);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				hasPermission = rs.getInt(1) == 1;
@@ -466,9 +492,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public Boolean hasDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
 		try {
-			String query = "SELECT deletelist FROM sharedlists WHERE iduser = "+userId+" AND idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT deletelist FROM sharedlists WHERE iduser = ? AND idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			st.setInt(2, listId);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				hasPermission = rs.getInt(1) == 1;
@@ -494,9 +522,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 					"l.idcategory,lc.name,lc.description " +
 					"FROM lists l " +
 					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE iduser = "+userId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
 			List l;
 			ListsCategory lc;
 			int i;
@@ -532,8 +561,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "CALL deletePublicProductOnList("+product.getId()+","+listId+")";
+				String query = "CALL deletePublicProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, product.getId());
+				st.setInt(2, listId);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -554,8 +585,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		if(valid)
 		{
 			try{
-				String query = "CALL deleteProductOnList("+product.getId()+","+listId+")";
+				String query = "CALL deleteProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, product.getId());
+				st.setInt(2, listId);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -574,9 +607,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
 		try {
-			String query = "select EXISTS(SELECT 1 FROM sharedlists WHERE idlist = "+listId+" AND iduser = "+userId+") as exist";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "select EXISTS(SELECT 1 FROM sharedlists WHERE idlist = ? AND iduser = ?) as exist";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			st.setInt(2, userId);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				hasPermission = rs.getInt(1) == 1;
@@ -596,9 +631,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
 		try{
-			String query =	"select iduser from sharedlists where idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query =	"select iduser from sharedlists where idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			ResultSet rs = st.executeQuery();
 			while(rs.next())
 				list.add(rs.getInt(1));
 			rs.close();
@@ -617,9 +653,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image \n" +
 					"from lists l inner join sharedlists s on l.id != s.idlist\n" +
-					"where l.iduser = " + id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"where l.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			List l;
 			User u;
 			ListsCategory lc;
@@ -656,9 +693,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		try{
 			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image\n" +
 					"from lists l inner join sharedlists s on l.id = s.idlist\n" +
-					"where l.iduser = " + id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"where l.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			List l;
 			User u;
 			ListsCategory lc;
@@ -694,9 +732,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
 		java.util.List<User> list = new ArrayList<>();
 		try{
-			String query =	"select iduser from sharedlists where idlist = "+listId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query =	"select iduser from sharedlists where idlist = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
+			ResultSet rs = st.executeQuery();
 			User u;
 			while(rs.next()){
 				u = new User();
@@ -717,8 +756,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 	@Override
 	public boolean deleteList(Integer listId) throws DaoException {
 		try{
-			String query = "delete from lists where id = "+listId;
+			String query = "delete from lists where id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, listId);
 			int count = st.executeUpdate();
 			st.close();
 			if(count != 1)
@@ -730,12 +770,14 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
 		try{
-			String query = "insert into sharedlists (iduser,idlist,iduserlist) values ("+idpartecipant+","+list.getId()+","+list.getOwner().getId()+")";
+			String query = "insert into sharedlists (iduser,idlist) values (?,?)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, idpartecipant);
+			st.setInt(2, list.getId());
 			int count = st.executeUpdate();
 			st.close();
 			return count == 1;
@@ -745,7 +787,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean addList(List list) throws DaoException {
 		Boolean valid = list.isVaildOnCreate(dAOFactory);
@@ -755,8 +797,13 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				String image = list.getImage();
 				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
-				String query = "insert into lists (name,iduser,idcategory,description,image) values (\""+list.getName()+"\","+list.getOwner().getId()+","+list.getCategory().getId()+",\""+list.getDescription()+"\",\""+image+"\")";
+				String query = "insert into lists (name,iduser,idcategory,description,image) values (?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, list.getName());
+				st.setInt(2, list.getOwner().getId());
+				st.setInt(3, list.getCategory().getId());
+				st.setString(4, list.getDescription());
+				st.setString(5, image);
 				int count = st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
 				if(rs.next()){
@@ -772,7 +819,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateList(Integer id, List list) throws DaoException{
 		Boolean valid = list.isVaildOnUpdate(dAOFactory);

@@ -37,9 +37,10 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
 		List<Message> listOut = new ArrayList<>();
 		try{
-			String query =	"SELECT m.id,m.sendtime,m.text,m.iduser,u.name,u.lastname FROM messages m inner join users u on m.iduser = u.id WHERE m.idlist = "+list.getId()+" ORDER BY sendtime limit 30";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query =	"SELECT m.id,m.sendtime,m.text,m.iduser,u.name,u.lastname FROM messages m inner join users u on m.iduser = u.id WHERE m.idlist = ? ORDER BY sendtime limit 30";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, list.getId());
+			ResultSet rs = st.executeQuery();
 			Message m = null;
 			User u;
 			int i;
@@ -61,7 +62,12 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 			}
 			if(m != null){
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-				st.executeUpdate("CALL setLastAccess("+user.getId()+","+list.getId()+",\""+dateFormat.format(m.getSendTime())+"\")");
+				String querySetLastaccess = "CALL setLastAccess(?,?,?)";
+				st = this.getCon().prepareStatement(querySetLastaccess);
+				st.setInt(1, user.getId());
+				st.setInt(2, list.getId());
+				st.setString(3, dateFormat.format(m.getSendTime()));
+				st.executeUpdate();
 			}
 			rs.close();
 			st.close();
@@ -84,11 +90,15 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 		if(valid)
 		{
 			try{
-				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES " +
-						"("+message.getSender().getId()+","+message.getList().getId()+",now(1),\""+message.getText()+"\");\n";
-				query += "CALL setLastAccess("+message.getSender().getId()+","+message.getList().getId()+",now(1));";
+				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES (?,?,now(1),?);\n"
+							+ "CALL setLastAccess(?,?,now(1));";
 				System.out.println(query);
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, message.getSender().getId());
+				st.setInt(2, message.getList().getId());
+				st.setString(3, message.getText());
+				st.setInt(4, message.getSender().getId());
+				st.setInt(5, message.getList().getId());
 				st.executeUpdate();
 				st.close();
 				return valid;
@@ -107,10 +117,11 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 		try{
 			String query =	"SELECT s.idlist,count(*) " +
 					"FROM sharedlists s RIGHT JOIN messages m ON s.idlist = m.idlist " +
-					"WHERE s.iduser = 1 AND s.lastchataccess < m.sendtime " +
+					"WHERE s.iduser = ? AND s.lastchataccess < m.sendtime " +
 					"GROUP BY(s.idlist)";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
 			int i,idlist,unreadcount;
 			while(rs.next())
 			{

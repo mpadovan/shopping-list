@@ -13,6 +13,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,9 +46,10 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 					"inner join users u on l.iduser = u.id\n" +
 					"left join products p on pn.idproduct = p.id\n" +
 					"left join publicproducts pp on pn.idpublicproduct = pp.id\n" +
-					"where time <= "+dateFormat.format(nextRequest);
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"where time <= ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, dateFormat.format(nextRequest));
+			ResultSet rs = st.executeQuery();
 			Notification n;
 			it.unitn.webprog2018.ueb.shoppinglist.entities.List l;
 			User u;
@@ -110,9 +112,10 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 					"inner join users u on l.iduser = u.id\n" +
 					"left join products p on pn.idproduct = p.id\n" +
 					"left join publicproducts pp on pn.idpublicproduct = pp.id\n" +
-					"where pn.isread = 0 and pn.time <= now(1) and l.iduser = "+userId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"where pn.isread = 0 and pn.time <= now(1) and l.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
 			Notification n;
 			it.unitn.webprog2018.ueb.shoppinglist.entities.List l;
 			User u;
@@ -175,9 +178,10 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 	@Override
 	public Integer getNotificationCount(Integer userId) throws DaoException {
 		try {
-			String query = "select count(*) from productsnotification pn inner join lists l on pn.idlist = l.id where pn.time <= now(1) and pn.isread = 0 and l.iduser = "+userId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+			String query = "select count(*) from productsnotification pn inner join lists l on pn.idlist = l.id where pn.time <= now(1) and pn.isread = 0 and l.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
 			Integer count = 0;
 			if(rs.first())
 			{
