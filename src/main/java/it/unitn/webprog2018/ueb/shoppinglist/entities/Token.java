@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.sql.Date;
 import java.util.Objects;
@@ -59,7 +60,7 @@ public class Token extends AbstractEntity {
 	
 	@Override
 	public String getHash() {
-		return Sha256.doHash(token);
+		return CookieCipher.encrypt(token);
 	}
 	
 	@Override

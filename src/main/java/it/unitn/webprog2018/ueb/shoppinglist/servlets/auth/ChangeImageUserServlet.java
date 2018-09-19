@@ -5,7 +5,6 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
-import it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.*;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
@@ -13,8 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -69,6 +66,7 @@ public class ChangeImageUserServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		String context = getServletContext().getContextPath();
 		if (!context.endsWith("/")) {
 			context += "/";
@@ -78,73 +76,55 @@ public class ChangeImageUserServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 
 		String avatarURI = "";
-		File file = null;
-		String avatarFileName = "";
-		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-
-		//crezione cartella se non esiste
-		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
-		File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
-		File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
-		if (!userDir.exists()) {
-			if (!userDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
-		if (!avatarDir.exists()) {
-			if (!avatarDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
-
+		String avatarsFolder = (String) getServletContext().getAttribute("avatarFolder");
+		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
+		
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
-			System.out.println("entrato");
+			// Delete old image
 			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				System.out.println("entrato2");
-				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-				int extold = user.getImage().lastIndexOf(".");
-				File fileold = new File(imageFolder + user.getId() + user.getImage().substring(extold));
-				if (fileold.exists()) {
-					fileold.delete();
-					System.out.println("entrato3");
+				File oldFile = new File(uploadFolder + user.getImage());
+				if (oldFile.exists()) {
+					oldFile.delete();
 				}
 			}
-			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			// Extension handling
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = avatarsFolder + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-			InputStream fileContent = null;
+			avatarFileName = avatarsFolder + user.getHash() + (ext > noExt ? avatarFileName.substring(ext) : "");
 			try {
-				ext = avatarFileName.lastIndexOf(".");
-				noExt = avatarFileName.lastIndexOf(File.separator);
-				fileContent = avatar.getInputStream();
-				file = new File(avatarFileName);
-				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-
-				System.out.println(avatarFileName + " \n" + avatarURI);
-
-			} catch (FileAlreadyExistsException ex) {
-				file.delete();
-				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-
-			}
-			user.setImage(avatarURI);
-			try {
-				if (userDAO.updateUser(user.getId(), user)) {
-					session.setAttribute("user", user);
-					response.sendRedirect(context + "restricted/InfoUser");
+				InputStream fileContent = avatar.getInputStream();
+				File file = new File(avatarFileName);
+				if (file.exists()) {	// avoid fileAlreadyExistsException
+					file.delete();
 				}
-			} catch (DaoException ex) {
-				Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.SEVERE, null, ex);
+				Files.copy(fileContent, file.toPath());
+				avatarURI = context + avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+
+				// System.out.println(avatarFileName + " \n" + avatarURI);
+
+			} catch (IOException ex) {
+				// It is not a fatal error, we ask the user to try again
+				Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.WARNING, null, ex);
+				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+				response.sendRedirect(context + "/restricted/ChangeImageUser");
+			}
+			if (!response.isCommitted()) {
+				user.setImage(avatarURI);
+				try {
+					if (userDAO.updateUser(user.getId(), user)) {
+						session.setAttribute("user", user);
+						response.sendRedirect(context + "restricted/InfoUser");
+					}
+				} catch (DaoException ex) {
+					Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			}
 		} else {
 			response.sendRedirect(context + "restricted/InfoUser");
 		}
+		
 	}
 
 	/**

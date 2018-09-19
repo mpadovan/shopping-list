@@ -39,7 +39,7 @@
 								<td>${c.description}</td>
 								<td>
 									<c:if test="${not empty c.logo && c.logo ne 'null'}">
-										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${c.logo}"></div>
+										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${c.logo}"></div>
 									</c:if>
 								</td>
 								<td>

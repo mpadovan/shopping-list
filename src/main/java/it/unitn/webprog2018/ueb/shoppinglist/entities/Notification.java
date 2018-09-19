@@ -6,7 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.sql.Timestamp;
 
 /**
@@ -53,6 +53,6 @@ public class Notification extends AbstractEntity {
 	
 	@Override
 	public String getHash() {
-		return Sha256.doHash(id+time.toString());
+		return CookieCipher.encrypt(id+time.toString());
 	}
 }

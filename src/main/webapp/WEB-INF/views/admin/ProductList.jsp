@@ -42,12 +42,12 @@
 								<td>${p.note}</td>
 								<td>
 									<c:if test="${p.logo ne 'null' && not empty p.logo}">	
-										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
+										<div class="info-custom-product text-center"><img class="rounded logo-product" src="${p.logo}"></div>
 									</c:if>
 								</td>
 								<td>
 									<c:if test="${p.photography ne 'null' && not empty p.logo}">
-										<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
+										<div class="info-product-image text-center"><img class="image-product-list" src="${p.photography}" alt="" title=""></div>
 									</c:if>
 								</td>
 								<td>${p.category.name}</td>

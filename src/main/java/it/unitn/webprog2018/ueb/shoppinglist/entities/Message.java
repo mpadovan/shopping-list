@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.sql.Timestamp;
 
@@ -64,7 +65,7 @@ public class Message extends AbstractEntity {
 	
 	@Override
 	public String getHash() {
-		return Sha256.doHash(id+text);
+		return CookieCipher.encrypt(id+text);
 	}
 	
 }

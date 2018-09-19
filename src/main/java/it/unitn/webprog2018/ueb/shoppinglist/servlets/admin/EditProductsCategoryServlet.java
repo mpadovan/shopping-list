@@ -78,62 +78,65 @@ public class EditProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
+		}
+		
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer productCategoryId = Integer.parseInt(request.getParameter("id"));
+
 		//parametri stringhe
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+
 		//parametri file
 		String logoURI = "";
-		File fileLogo = null;
-		String logoFileName = "";
-		String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productCategoryLogo" + File.separator;
+		String logoFolder = (String) getServletContext().getAttribute("categoryLogoFolder");
+		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
+
 		Part logo = request.getPart("logo");
 		try {
 			ProductsCategory productsCategory = productsCategoryDAO.getById(productCategoryId);
 			productsCategory.setName(name);
 			productsCategory.setDescription(description);
 			productsCategory.setId(productCategoryId);
+
 			if ((logo != null) && (logo.getSize() > 0)) {
-				//creazione cartella se non esiste
-				//delete old logo product category
+				// delete old product category logo
 				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
-					int ext = productsCategory.getLogo().lastIndexOf(".");
-					File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
-					if (file.exists()) {
-						Boolean fatto = file.delete();
+					File oldLogo = new File(uploadFolder + productsCategory.getLogo());
+					if (oldLogo.exists()) {
+						oldLogo.delete();
 					}
 				}
-				//create
-				logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
+				// save new logo
+				String logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
 				int ext = logoFileName.lastIndexOf(".");
 				int noExt = logoFileName.lastIndexOf(File.separator);
-				logoFileName = logoFolder + productsCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-				InputStream fileContentLogo = null;
+				logoFileName = logoFolder + productsCategory.getHash() + (ext > noExt ? logoFileName.substring(ext) : "");
 				try {
-					ext = logoFileName.lastIndexOf(".");
-					noExt = logoFileName.lastIndexOf(File.separator);
-					fileContentLogo = logo.getInputStream();
-					fileLogo = new File(logoFileName);
-					Files.copy(fileContentLogo, fileLogo.toPath());
-					logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
-							+ File.separator + productsCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
-				} catch (FileAlreadyExistsException ex) {
-					response.sendError(500, "Server could not store your avatar, "
-							+ "please retry the sign up process. "
-							+ "Notice that you can also upload the image later in you user page.");
-					getServletContext().log("impossible to upload the file", ex);
-
+					File fileLogo = new File(logoFileName);
+					if (fileLogo.exists()) { // avoid FileAlreadyExistsException
+					 	fileLogo.delete();
+					}
+					Files.copy(logo.getInputStream(), fileLogo.toPath());
+					logoURI = context + logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+				} catch (IOException ex) {
+					// It is not a fatal error, we ask the user to try again
+					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+					productsCategory.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+					doGet(request, response);
 				}
 				productsCategory.setLogo(logoURI);
 			}
-
-			if (productsCategoryDAO.updateProductsCategory(productCategoryId, productsCategory)) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
-			} else {
-				request.setAttribute("productCategory", productsCategory);
-				request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
+			if (!response.isCommitted()) {
+				if (productsCategoryDAO.updateProductsCategory(productCategoryId, productsCategory)) {
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
+				} else {
+					request.setAttribute("productCategory", productsCategory);
+					request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
+				}
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);

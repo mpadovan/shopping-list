@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -31,6 +32,7 @@ public class DirectoryManager implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
+		// HttpErrorHandler.setContextPath(sce.getServletContext().getContextPath());
 		String path = System.getProperty("catalina.home") + sce.getServletContext().getContextPath();
 		if (!path.endsWith(File.separator)) {
 			path += File.separator;
@@ -51,10 +53,11 @@ public class DirectoryManager implements ServletContextListener {
 			
 			new File(restrictedPath).mkdir();
 			new File(restrictedPath + "avatar").mkdir();
-			new File(restrictedPath + "shared" + File.separator + "listImage").mkdir();
-			new File(restrictedPath + "shared" + File.separator + "productImage").mkdir();
+			new File(restrictedPath + "shared" + File.separator + "listImage").mkdirs();
+			new File(restrictedPath + "shared" + File.separator + "productImage").mkdirs();
 		}
 		// Path adjustment to allow it to be used with an image uri
+		// Sample usage: < getServletContext().getAttribute("uploadFolder") + entity.getImage() > is the absolute path of the file
 		path = path.substring(0,path.lastIndexOf(File.separator));
 		path = path.substring(0,path.lastIndexOf(File.separator)) + File.separator;
 		

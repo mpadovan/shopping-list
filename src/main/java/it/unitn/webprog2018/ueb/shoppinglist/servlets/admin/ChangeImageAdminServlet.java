@@ -12,8 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -101,15 +99,16 @@ public class ChangeImageAdminServlet extends HttpServlet {
 					file.delete();
 				}
 				Files.copy(fileContent, file.toPath());
-				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
-
+				avatarURI = context + avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+				// System.out.println(avatarURI);
 				// System.out.println(avatarFileName + " \n" + avatarURI);
 
 			} catch (IOException ex) {
 				// It is not a fatal error, we ask the user to try again
 				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
 				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-				response.sendRedirect(context + "/restricted/admin/ChangeImageAdmin");
+				// allows to forward response with correct loading of accessory information from the database to be shown in the jsp.
+				doGet(request, response);
 			}
 			if (!response.isCommitted()) {
 				user.setImage(avatarURI);
