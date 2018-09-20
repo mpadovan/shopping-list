@@ -146,33 +146,17 @@ public class User extends AbstractEntity {
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
 		}
-		/*if(errors.isEmpty())
-		{
-			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
-			try {
-				userDAO.getByEmail(email);
-				User user = userDAO.getById(id);
-				if(id!=user.getId())
-				{
-					setError("email", "email già esistente");
-					System.out.println("ciao");
-				}
-			} catch (RecordNotFoundDaoException ex) {
-				//tutto andato a buon fine, nessun duplicato
-				System.out.println("RNFDE");
-			}
-		}*/
 	}
 
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) {
-		/*if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
-		}*/
+		}
 	}
 
 	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException{
 		if (password == null || password.equals("")) {
 			setError("password", "Non può essere lasciato vuoto");
 		}
@@ -181,6 +165,21 @@ public class User extends AbstractEntity {
 		}
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
+		}
+		if(errors.isEmpty())
+		{
+			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
+			try {
+				userDAO.getByEmail(email);
+				setError("email", "Email già esistente");
+				/*User user = userDAO.getById(id);
+				if(id!=user.getId())
+				{
+					setError("email", "email già esistente");
+				}*/
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
 		}
 	}
 }

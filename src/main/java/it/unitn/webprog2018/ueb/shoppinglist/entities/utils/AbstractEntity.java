@@ -47,11 +47,11 @@ public abstract class AbstractEntity implements Serializable {
 		return this.errors.isEmpty();
 	}
 
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException{
 	}
 
 	;
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException{
 	}
 
 	;
