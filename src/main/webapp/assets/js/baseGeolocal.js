@@ -1,3 +1,4 @@
+/* jshint esversion:6 */
 Vue.component('geores', {
     props: ['data', 'ok'],
     data: function () {
@@ -7,16 +8,16 @@ Vue.component('geores', {
             maxNegozi: 4
         };
     },
-    template: ' <div> \
-                    <div v-if="!ok">{{ data }}</div> \
-                    <div v-if="ok"><h5>Vicino a te: </h5> \
-                    <div v-for="cat in sorted" > \
-                        <div> \
-                            <h5>{{ cat.category }}</h5> \
-                            <div v-for="element in cat.response.data">{{ element.name }}</div> \
-                        </div> \
-                    </div></div> \
-                </div>',
+    template: ` <div> 
+                    <div v-if="!ok">{{ data }}</div> 
+                    <div v-if="ok"><h5>Vicino a te: </h5> 
+                    <div v-for="cat in sorted" > 
+                        <div> 
+                            <h5>{{ cat.category }}</h5> 
+                            <div v-for="element in cat.response.data">{{ element.name }}</div> 
+                        </div> 
+                    </div></div> 
+                </div>`,
     mounted: function () {
         console.log(this.data);
         tippy('#geolocBtn', {
