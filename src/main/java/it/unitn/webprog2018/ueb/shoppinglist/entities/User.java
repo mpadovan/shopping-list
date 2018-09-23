@@ -149,7 +149,7 @@ public class User extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
 		}
@@ -165,13 +165,12 @@ public class User extends AbstractEntity {
 		}
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
-		}
-		if(errors.isEmpty())
+		}if(errors.isEmpty())
 		{
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {
 				userDAO.getByEmail(email);
-				setError("email", "Email già esistente");
+				setError("email", "Email già esistente, sembra che tu sia già registrato. Effettua il login");
 				/*User user = userDAO.getById(id);
 				if(id!=user.getId())
 				{

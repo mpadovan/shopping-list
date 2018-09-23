@@ -38,6 +38,17 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "NewPublicProductServlet", urlPatterns = {"/restricted/admin/NewPublicProduct"})
 public class NewPublicProductServlet extends HttpServlet {
+	private ProductsCategoryDAO productsCategoryDAO;
+
+	/**
+	 * Method to be executed at servlet initialization. Handles connections with
+	 * persistence layer.
+	 */
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		productsCategoryDAO = factory.getProductsCategoryDAO();
+	}
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -50,13 +61,8 @@ public class NewPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		try {
-			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
-			PublicProduct product = new PublicProduct();
-			request.setAttribute("productsCategory", productsCategory);
-			request.setAttribute("product", product);
-			request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);
+			InitializeCategoryRedirect(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -177,13 +183,19 @@ public class NewPublicProductServlet extends HttpServlet {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
 				request.setAttribute("product", product);
-				request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);
+				InitializeCategoryRedirect(request, response);
 			}
 
 		} catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
+	}
+
+	private void InitializeCategoryRedirect(HttpServletRequest request, HttpServletResponse response) throws DaoException, ServletException, IOException {
+		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
+		request.setAttribute("productsCategory", productsCategory);
+		request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);
 	}
 
 	/**
