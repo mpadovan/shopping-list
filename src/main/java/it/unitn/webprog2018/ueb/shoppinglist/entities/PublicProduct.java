@@ -85,7 +85,20 @@ public class PublicProduct extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		if(errors.isEmpty())
+		{
+			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
+			try {
+				PublicProduct publicProduct = publicProductDAO.getByName(name);
+				if(id!=publicProduct.getId())
+				{
+					setError("name", "Nome già esistente");
+				}
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 	@Override

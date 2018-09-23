@@ -32,6 +32,20 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "EditPublicProductServlet", urlPatterns = {"/restricted/admin/EditPublicProduct"})
 public class EditPublicProductServlet extends HttpServlet {
 
+	private ProductsCategoryDAO productsCategoryDAO;
+	private PublicProductDAO publicProductDAO;
+
+	/**
+	 * Method to be executed at servlet initialization. Handles connections with
+	 * persistence layer.
+	 */
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		productsCategoryDAO = factory.getProductsCategoryDAO();
+		publicProductDAO = factory.getPublicProductDAO();
+	}
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -43,23 +57,17 @@ public class EditPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
+
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 
 		try {
-			PublicProduct publicProduct = publicProductDAO.getById(productId);
-			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
-			request.setAttribute("productsCategory", productsCategory);
-			request.setAttribute("product", publicProduct);
-			request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
-		} catch (RecordNotFoundDaoException ex){
+			InitializeCategoryRedirect(request, response, productId);
+		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
 		} catch (DaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
-			
 		}
 
 	}
@@ -75,10 +83,7 @@ public class EditPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
 		Integer productId = Integer.parseInt(request.getParameter("id"));
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
-
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
 		String note = request.getParameter("note");
@@ -94,20 +99,26 @@ public class EditPublicProductServlet extends HttpServlet {
 			product.setNote(note);
 			product.setPhotography(photography);
 			product.setCategory(productsCategory);
-			if (publicProductDAO.updateProduct(productId,product)) {
+			if (publicProductDAO.updateProduct(productId, product)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
-				request.setAttribute("product", product);
-				request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+				InitializeCategoryRedirect(request, response, productId);
 			}
-		}
-		catch (RecordNotFoundDaoException ex){
+		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
-		}catch (DaoException ex) {
+		} catch (DaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
+	}
+
+	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response,Integer productId) throws DaoException, ServletException, IOException {
+		PublicProduct publicProduct = publicProductDAO.getById(productId);
+		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
+		request.setAttribute("productsCategory", productsCategory);
+		request.setAttribute("product", publicProduct);
+		request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 	}
 
 	/**
