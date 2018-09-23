@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -146,26 +147,24 @@ public class User extends AbstractEntity {
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
 		}
-	}
-
-	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
-		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
-			setError("checkpassword", "Deve coincidere con password");
-		}
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException{
-		if (password == null || password.equals("")) {
+		if (password == null || password.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("password", "Non può essere lasciato vuoto");
 		}
-		if (checkpassword == null || checkpassword.equals("")) {
+		if (checkpassword == null || checkpassword.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
 		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
-		}if(errors.isEmpty())
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+	}
+
+	@Override
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException{
+		if(errors.isEmpty())
 		{
 			UserDAO userDAO = ((DAOFactory) dAOFactory).getUserDAO();
 			try {

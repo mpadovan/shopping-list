@@ -76,15 +76,13 @@ public class SignUpServlet extends HttpServlet {
 		user.setName(name);
 		user.setLastname(lastName);
 		user.setEmail(email);
-		user.setPassword(password);
-		user.setCheckpassword(checkPassword);
+		user.setPassword(Sha256.doHash(password));
+		user.setCheckpassword(Sha256.doHash(checkPassword));
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
 
 		try {
 			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
-				user.setPassword(Sha256.doHash(password));
-				user.setCheckpassword(Sha256.doHash(checkPassword));
 				// Retrieving user avatar
 				File file = null;
 				String avatarFileName = "";
