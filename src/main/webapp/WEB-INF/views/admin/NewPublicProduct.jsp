@@ -88,7 +88,6 @@
 					});
 				});
 			});
-
 		</script>
 	</jsp:attribute>
 </layouts:admin>

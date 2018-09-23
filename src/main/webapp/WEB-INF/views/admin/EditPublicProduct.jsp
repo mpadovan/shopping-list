@@ -13,7 +13,7 @@
 		<div class="card card-new">
 			<div class="card-body">
 				<h1 class="card-title">Modifica prodotto</h1>
-				<form method="POST" action="EditPublicProduct?id=${param.id}">
+				<form method="POST" action="EditPublicProduct?id=${param.id}" enctype='multipart/form-data'>
 					<input type="hidden" name="id" value="${product.id}">
 					<div>
 						<label for="name">Nome prodotto</label>
@@ -31,7 +31,7 @@
 							   id="note"
 							   name="note" 
 							   value="${product.note}"
-							   required>
+							   >
 					</div>
 					<div>
 						<label for="logo">Logo</label>
@@ -55,14 +55,14 @@
 					</div>
 					<div>
 						<label for="category">Categoria</label>
-						<select class="select2 js-example-basic-single form-control py-3"
+						<select class="select2 form-control py-3"
 								name="category"
 								id="category"
 								name="category"
 								required
 								>
 							<c:forEach var="c" items="${requestScope.productsCategory}">
-								<option value="${c.id}"<c:if test="${product.category.id == c.id}"	> selected</c:if>>${c.name}</option>
+								<option value="${c.id}"<c:if test="${product.category.id == c.id}"> selected</c:if>>${c.name}</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -78,9 +78,17 @@
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css">
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-
+		<script>
+			$(document).ready(function () {
+				$('select').each(function () {
+					$(this).select2({
+						theme: 'bootstrap4'
+					});
+				});
+			});
+		</script>
 	</jsp:attribute>
 </layouts:admin>
