@@ -65,7 +65,7 @@
 						<div class="form-group">
 							<div class="form-check">
 								<input class="form-check-input ${ requestScope.privacy != null ? "is-invalid" : ""}"
-									   type="checkbox" value="" name="privacy" id="privacy" required >
+									   type="checkbox" value="privacy" name="privacy" id="privacy" required >
 								<label class="form-check-label" for="privacy">
 									Normativa privacy
 								</label>
