@@ -39,6 +39,7 @@ import javax.servlet.http.Part;
 @WebServlet(name = "NewPublicProductServlet", urlPatterns = {"/restricted/admin/NewPublicProduct"})
 public class NewPublicProductServlet extends HttpServlet {
 	private ProductsCategoryDAO productsCategoryDAO;
+	private PublicProductDAO publicProductDAO;
 
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
@@ -48,6 +49,7 @@ public class NewPublicProductServlet extends HttpServlet {
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productsCategoryDAO = factory.getProductsCategoryDAO();
+		publicProductDAO = factory.getPublicProductDAO();
 	}
 
 	/**
@@ -66,7 +68,6 @@ public class NewPublicProductServlet extends HttpServlet {
 		} catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
 	}
 
 	/**
@@ -80,9 +81,6 @@ public class NewPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
-		PublicProductDAO publicProductDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getPublicProductDAO();
-
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		//parametri stringhe

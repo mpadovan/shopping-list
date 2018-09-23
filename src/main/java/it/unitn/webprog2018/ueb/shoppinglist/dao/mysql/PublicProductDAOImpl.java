@@ -269,7 +269,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			if(rs.first())
 			{
 				int i = 1;
-				p.setId(i++);
+				p.setId(rs.getInt(i++));
 				p.setName(name);
 				p.setNote(rs.getString(i++));
 				p.setLogo(rs.getString(i++));
