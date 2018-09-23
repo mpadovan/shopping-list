@@ -60,22 +60,24 @@
 					</div>
 					<div>
 						<label for="logo">Logo</label>
-						<input type="text"
-							   class="form-control"
-							   id="logo"
-							   name="logo" 
-							   value="${product.logo}">
-					</div>
-					<div>
-						<label for="photo">Fotografia</label>
 						<div class="custom-file">
 							<input type="file"
 								   class="custom-file-input form-control"
-								   id="photography"
-								   name="photography"
-								   aria-describedby="photography"
-								   value="${product.photography}">
-							<label class="custom-file-label" for="photography">Scegli file</label>
+								   id="logo"
+								   name="logo"
+								   aria-describedby="logo">
+							<label class="custom-file-label" for="logo">Scegli file</label>
+						</div>
+					</div>
+					<div>
+						<label for="image">Immagine</label>
+						<div class="custom-file">
+							<input type="file"
+								   class="custom-file-input form-control"
+								   id="image"
+								   name="image"
+								   aria-describedby="image">
+							<label class="custom-file-label" for="image">Scegli file</label>
 						</div>
 					</div>
 					<div class="float-right mt-3">

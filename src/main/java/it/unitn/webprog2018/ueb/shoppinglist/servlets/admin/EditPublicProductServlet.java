@@ -57,11 +57,10 @@ public class EditPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		Integer productId = Integer.parseInt(request.getParameter("id"));
-
 		try {
-			InitializeCategoryRedirect(request, response, productId);
+			PublicProduct publicProduct = publicProductDAO.getById(productId);
+			InitializeCategoryRedirect(request, response, publicProduct);
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
@@ -87,7 +86,7 @@ public class EditPublicProductServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
 		String note = request.getParameter("note");
-		String photography = request.getParameter("photography");
+		String photography = request.getParameter("image");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 
 		try {
@@ -102,7 +101,7 @@ public class EditPublicProductServlet extends HttpServlet {
 			if (publicProductDAO.updateProduct(productId, product)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {
-				InitializeCategoryRedirect(request, response, productId);
+				InitializeCategoryRedirect(request, response, product);
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,8 +112,7 @@ public class EditPublicProductServlet extends HttpServlet {
 		}
 	}
 
-	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response,Integer productId) throws DaoException, ServletException, IOException {
-		PublicProduct publicProduct = publicProductDAO.getById(productId);
+	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response, PublicProduct publicProduct) throws DaoException, ServletException, IOException {
 		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 		request.setAttribute("productsCategory", productsCategory);
 		request.setAttribute("product", publicProduct);
