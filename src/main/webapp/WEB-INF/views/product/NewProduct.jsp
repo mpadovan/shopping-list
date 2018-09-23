@@ -29,8 +29,6 @@
 							<input type="text"
 								   class="form-control ${(product.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="name"
-								   name="name" 
-								   value="${product.name}"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${product}" field="name" />
