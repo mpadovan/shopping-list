@@ -57,21 +57,21 @@ public class ProductsCategory extends AbstractEntity {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-	
+
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
-		if (name==null || name.equals(""))
-		{
+		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
-		{
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
 			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
 			try {
-				productsCategoryDAO.getByName(name);
-				ProductsCategory productsCategory = productsCategoryDAO.getById(id);
-				if(id!=productsCategory.getId())
-				{
+				ProductsCategory productsCategory = productsCategoryDAO.getByName(name);
+				if (id != productsCategory.getId()) {
 					setError("name", "Nome già esistente");
 				}
 			} catch (RecordNotFoundDaoException ex) {
@@ -81,11 +81,16 @@ public class ProductsCategory extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
+			try {
+				productsCategoryDAO.getByName(name);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }
