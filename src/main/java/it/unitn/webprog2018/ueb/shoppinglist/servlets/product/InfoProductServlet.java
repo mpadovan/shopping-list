@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -30,14 +30,14 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "InfoProductServlet", urlPatterns = {"/restricted/InfoProduct"})
 public class InfoProductServlet extends HttpServlet {
-
+	
 	private ProductDAO productDAO;
 	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
-
+		
 	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -50,6 +50,8 @@ public class InfoProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 		System.out.println(productId);
 		try {
@@ -65,7 +67,7 @@ public class InfoProductServlet extends HttpServlet {
 		}
 		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -78,7 +80,7 @@ public class InfoProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

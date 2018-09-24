@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "HomePageServlet", urlPatterns = {"/home"})
 public class HomePageServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -24,10 +24,12 @@ public class HomePageServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/HomePage.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -37,5 +39,5 @@ public class HomePageServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Home Page Servlet";
 	}
-
+	
 }

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -24,14 +24,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DeleteListServlet", urlPatterns = {"/restricted/DeleteList/*"})
 public class DeleteListServlet extends HttpServlet {
-
+	
 	private ListDAO listDAO;
-
+	
 	@Override
 	public void init() {
 		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -43,6 +43,8 @@ public class DeleteListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		User user =  ((User) request.getSession().getAttribute("user"));
 		try {
 			if (listDAO.deleteList((Integer) request.getAttribute("currentListId"))) {
@@ -55,7 +57,7 @@ public class DeleteListServlet extends HttpServlet {
 			Logger.getLogger(DeleteListServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -68,7 +70,7 @@ public class DeleteListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -78,5 +80,5 @@ public class DeleteListServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Deletes a List";
 	}// </editor-fold>
-
+	
 }

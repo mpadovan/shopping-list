@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -36,11 +36,11 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
-
+	
 	private static final int COOKIE_EXP = 60 * 60 * 24 * 7;	// 7 days in seconds
 	private UserDAO userDAO;
 	private ListDAO listDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 		userDAO = factory.getUserDAO();
 		listDAO = factory.getListDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method. Logs the user and creates a
 	 * session for her.
@@ -64,15 +64,16 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String path = getServletContext().getContextPath();
 		if (!path.endsWith("/")) {
 			path += "/";
 		}
-
+		
 		String email = (String) request.getParameter("email");
 		String password = (String) request.getParameter("password");
-
+		
 		User user = null;
 		try {
 			user = userDAO.getByEmail(email);
@@ -98,7 +99,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
 				java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
-
+				
 				session.setAttribute("personalLists", personalLists);
 				session.setAttribute("sharedLists", sharedLists);
 				
@@ -123,13 +124,15 @@ public class LoginServlet extends HttpServlet {
 			//pagina di errore OPSS
 		}
 	}
-
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

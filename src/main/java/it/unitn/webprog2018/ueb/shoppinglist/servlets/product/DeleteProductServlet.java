@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -33,9 +33,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "DeleteProductServlet", urlPatterns = {"/restricted/DeleteProduct"})
 public class DeleteProductServlet extends HttpServlet {
-
+	
 	private ProductDAO productDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -45,7 +45,7 @@ public class DeleteProductServlet extends HttpServlet {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -57,6 +57,8 @@ public class DeleteProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
@@ -90,7 +92,7 @@ public class DeleteProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -100,5 +102,5 @@ public class DeleteProductServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit custom product servlet";
 	}
-
+	
 }

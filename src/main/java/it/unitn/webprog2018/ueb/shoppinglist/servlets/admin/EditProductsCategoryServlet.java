@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -35,7 +35,7 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "EditProductsCategoryServlet", urlPatterns = {"/restricted/admin/EditProductsCategory"})
 public class EditProductsCategoryServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -47,16 +47,18 @@ public class EditProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
-
+		
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 			ProductsCategory productCategory = productsCategoryDAO.getById(categoryId);
 			request.setAttribute("productsCategory", productsCategory);
 			request.setAttribute("productCategory", productCategory);
 			request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
-
+			
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
@@ -64,9 +66,9 @@ public class EditProductsCategoryServlet extends HttpServlet {
 			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-
+		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -78,6 +80,8 @@ public class EditProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer productCategoryId = Integer.parseInt(request.getParameter("id"));
 		//parametri stringhe
@@ -118,17 +122,17 @@ public class EditProductsCategoryServlet extends HttpServlet {
 					Files.copy(fileContentLogo, fileLogo.toPath());
 					logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
 							+ File.separator + productsCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+					
 				} catch (FileAlreadyExistsException ex) {
 					response.sendError(500, "Server could not store your avatar, "
 							+ "please retry the sign up process. "
 							+ "Notice that you can also upload the image later in you user page.");
 					getServletContext().log("impossible to upload the file", ex);
-
+					
 				}
 				productsCategory.setLogo(logoURI);
 			}
-
+			
 			if (productsCategoryDAO.updateProductsCategory(productCategoryId, productsCategory)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {
@@ -142,7 +146,7 @@ public class EditProductsCategoryServlet extends HttpServlet {
 			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

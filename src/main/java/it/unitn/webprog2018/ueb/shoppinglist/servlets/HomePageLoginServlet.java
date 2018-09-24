@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -25,14 +25,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "HomePageLoginServlet", urlPatterns = {"/restricted/HomePageLogin/*"})
 public class HomePageLoginServlet extends HttpServlet {
-
+	
 	private ListDAO listDAO;
-
+	
 	@Override
 	public void init() {
 		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -44,9 +44,11 @@ public class HomePageLoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/HomePageLogin.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -59,7 +61,7 @@ public class HomePageLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DeleteProductsCategoryServlet", urlPatterns = {"/restricted/admin/DeleteProductsCategory"})
 public class DeleteProductsCategoryServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -39,6 +39,8 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
 		try {
@@ -63,7 +65,7 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -73,5 +75,5 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit products category servlet";
 	}
-
+	
 }

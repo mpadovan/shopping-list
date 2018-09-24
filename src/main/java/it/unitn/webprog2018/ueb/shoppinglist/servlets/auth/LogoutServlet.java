@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/restricted/Logout")
 public class LogoutServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -34,13 +34,15 @@ public class LogoutServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String path = getServletContext().getContextPath();
 		if (!path.endsWith("/")) {
 			path += "/";
 		}
-
+		
 		HttpSession session = request.getSession();
-
+		
 		// Delete all cookies
 		Cookie cookies[] = request.getCookies();
 		for (Cookie cookie : cookies) {
@@ -53,10 +55,10 @@ public class LogoutServlet extends HttpServlet {
 		session.invalidate();
 		response.sendRedirect(path);
 	}
-
+	
 	@Override
 	public String getServletInfo() {
 		return "Servlet for logout handling. Only GET requests implemented.";
 	}
-
+	
 }

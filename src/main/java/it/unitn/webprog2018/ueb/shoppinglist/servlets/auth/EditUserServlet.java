@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.*;
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "EditUserServlet", urlPatterns = {"/restricted/EditUser"})
 public class EditUserServlet extends HttpServlet {
 	private UserDAO userDAO;
-
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -49,9 +49,11 @@ public class EditUserServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/EditUser.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -63,6 +65,8 @@ public class EditUserServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String path = getServletContext().getContextPath();
 		if (!path.endsWith("/")) {
 			path += "/";
@@ -137,21 +141,21 @@ public class EditUserServlet extends HttpServlet {
 	}
 	
 	/*private void deleteRememberCookie(HttpServletRequest request, HttpServletResponse response) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("remember")) {
-					cookie.setValue("");
-					cookie.setPath("/");
-					cookie.setMaxAge(0);
-					response.addCookie(cookie);
-					System.out.println("true");
-				}
-			}
-		}
-		System.out.println("false");
+	Cookie[] cookies = request.getCookies();
+	if (cookies != null) {
+	for (Cookie cookie : cookies) {
+	if (cookie.getName().equals("remember")) {
+	cookie.setValue("");
+	cookie.setPath("/");
+	cookie.setMaxAge(0);
+	response.addCookie(cookie);
+	System.out.println("true");
+	}
+	}
+	}
+	System.out.println("false");
 	}*/
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -161,5 +165,5 @@ public class EditUserServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit admin servlet";
 	}
-
+	
 }

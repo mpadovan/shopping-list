@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -40,11 +40,11 @@ import javax.servlet.http.Part;
 @WebServlet(name = "NewListServlet", urlPatterns = {"/restricted/NewList"})
 @MultipartConfig
 public class NewListServlet extends HttpServlet {
-
+	
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
-
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -52,7 +52,7 @@ public class NewListServlet extends HttpServlet {
 		listDAO = factory.getListDAO();
 		userDAO = factory.getUserDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -64,6 +64,8 @@ public class NewListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			List<ListsCategory> listsCategory = listsCategoryDAO.getAll();
 			request.setAttribute("listsCategory", listsCategory);
@@ -73,7 +75,7 @@ public class NewListServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -85,11 +87,13 @@ public class NewListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String path = getServletContext().getContextPath();
 		if (!path.endsWith("/")) {
 			path += "/";
 		}
-
+		
 		Boolean everythingOK = true;
 		Boolean isShared = false;
 		HttpSession session = request.getSession(false);
@@ -98,7 +102,7 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared[]");
-
+		
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -113,7 +117,7 @@ public class NewListServlet extends HttpServlet {
 				request.setAttribute("list", list);
 			}
 			list.setCategory(listCategory);
-
+			
 			// check if there are any users in the shared[] textfields
 			if (shared != null && shared.length != 0) {
 				for (int i = 0; i < shared.length; i++) {
@@ -122,7 +126,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 			}
-
+			
 			if (!isShared) {
 				// Add privatelist
 				Boolean valid = listDAO.addList(list);
@@ -204,7 +208,7 @@ public class NewListServlet extends HttpServlet {
 						Files.copy(fileContentImage, file.toPath());
 						imageURI = getServletContext().getContextPath() + File.separator + "uploads" + File.separator + "shared"
 								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
+						
 					} catch (IOException ex) {
 						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 						request.setAttribute("uploadFail", true);
@@ -225,7 +229,7 @@ public class NewListServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -235,5 +239,5 @@ public class NewListServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "New list servlet";
 	}
-
+	
 }
