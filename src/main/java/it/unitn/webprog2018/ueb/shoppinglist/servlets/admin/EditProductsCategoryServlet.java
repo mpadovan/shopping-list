@@ -12,9 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -121,7 +118,7 @@ public class EditProductsCategoryServlet extends HttpServlet {
 					 	fileLogo.delete();
 					}
 					Files.copy(logo.getInputStream(), fileLogo.toPath());
-					logoURI = context + logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+					logoURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 				} catch (IOException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);

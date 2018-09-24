@@ -100,7 +100,7 @@ public class NewProductsCategoryServlet extends HttpServlet {
 							fileLogo.delete();
 						}
 						Files.copy(logo.getInputStream(), fileLogo.toPath());
-						logoURI = context + logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+						logoURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 
 					} catch (IOException ex) {
 						// It is not a fatal error, we ask the user to try again

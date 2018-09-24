@@ -99,7 +99,7 @@ public class ChangeImageAdminServlet extends HttpServlet {
 					file.delete();
 				}
 				Files.copy(fileContent, file.toPath());
-				avatarURI = context + avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 				// System.out.println(avatarURI);
 				// System.out.println(avatarFileName + " \n" + avatarURI);
 

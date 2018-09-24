@@ -44,10 +44,16 @@ public class DeletePublicProductServlet extends HttpServlet {
 			PublicProduct publicProduct = publicProductDAO.getById(productId);
 			if (publicProductDAO.deleteProduct(publicProduct.getId())) {
 				if (publicProduct.getPhotography() != null && !publicProduct.getPhotography().equals("") && !publicProduct.getPhotography().equals("null")) {	
-					new File(getServletContext().getAttribute("uploadFolder") + publicProduct.getPhotography()).delete();
+					File image = new File(getServletContext().getAttribute("uploadFolder") + publicProduct.getPhotography());
+					if (image.exists()) {
+						image.delete();
+					}
 				}
 				if (publicProduct.getLogo() != null && !publicProduct.getLogo().equals("") && !publicProduct.getLogo().equals("null")) {
-					new File(getServletContext().getAttribute("uploadFolder") + publicProduct.getLogo()).delete();
+					File logo = new File(getServletContext().getAttribute("uploadFolder") + publicProduct.getLogo());
+					if (logo.exists()) {
+						logo.delete();
+					}
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 			} else {

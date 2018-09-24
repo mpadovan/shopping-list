@@ -17,7 +17,7 @@
 						<h1 class="h3 mb-3 font-weight-normal">Cambia immagine profilo</h1>
 					</div>
 					<c:if test="${not empty sessionScope.user.image}">
-						<img style="max-width: 100px; max-height: 100px;" src="${user.image}" alt="Nome Cognome" title="Immagine profilo">
+						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${user.image}" alt="Nome Cognome" title="Immagine profilo">
 					</c:if>
 					<c:if test="${empty sessionScope.user.image}">
 						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar.png" alt="Nome Cognome" title="Immagine profilo">

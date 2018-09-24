@@ -15,7 +15,7 @@
 				<div class="row">
 					<div class="col-3">
 						<c:if test="${not empty sessionScope.user.image}">
-							<img style="max-width: 100px; max-height: 100px;" src="${sessionScope.user.image}" alt="${sessionScope.user.name} ${sessionScope.user.lastname}" title="Immagine profilo">
+							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="${sessionScope.user.name} ${sessionScope.user.lastname}" title="Immagine profilo">
 						</c:if>
 						<c:if test="${empty sessionScope.user.image}">
 							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar2.png" alt="${sessionScope.user.name} ${sessionScope.user.lastname}" title="Immagine profilo">

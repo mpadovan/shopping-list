@@ -47,7 +47,9 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 					File logo = new File(getServletContext().getAttribute("uploadFolder") + productsCategory.getLogo());
 					// int ext = productsCategory.getLogo().lastIndexOf(".");
 					// File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
-					logo.delete();
+					if (logo.exists()) {
+						logo.delete();
+					}
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {
