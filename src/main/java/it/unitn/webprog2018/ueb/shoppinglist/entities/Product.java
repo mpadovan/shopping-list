@@ -86,10 +86,6 @@ public class Product extends AbstractEntity {
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if (owner==null || owner.equals(""))
-		{
-			setError("owner", "Non può essere lasciato vuoto");
-		}
 		if (category==null || category.equals(""))
 		{
 			setError("name", "Non può essere lasciato vuoto");

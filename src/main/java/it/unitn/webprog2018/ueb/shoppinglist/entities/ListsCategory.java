@@ -19,10 +19,11 @@ import java.util.logging.Logger;
  * @author simon
  */
 public class ListsCategory extends AbstractEntity {
-	
-	@Expose private String name;
+
+	@Expose
+	private String name;
 	private String description;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -38,22 +39,22 @@ public class ListsCategory extends AbstractEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
-		if (name==null || name.equals(""))
-		{
+		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
-		{
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
 			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
 			try {
-				listsCategoryDAO.getByName(name);
-				ListsCategory listsCategory = listsCategoryDAO.getById(id);
-				if(id!=listsCategory.getId())
-				{
-					setError("name", "name già esistente");
+				ListsCategory listsCategory = listsCategoryDAO.getByName(name);
+				if (id != listsCategory.getId()) {
+					setError("name", "Nome già esistente");
 				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
@@ -62,11 +63,16 @@ public class ListsCategory extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
+			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
+			try {
+				listsCategoryDAO.getByName(name);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }
