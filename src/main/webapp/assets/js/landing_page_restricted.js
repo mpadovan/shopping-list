@@ -176,16 +176,14 @@ var app = new Vue({
 		list: null,
 		chat: false,
 		permission: false,
-		lockAjaxComponent: false
+		lockAjaxComponent: false,
+		item_selected_id: 1
 	},
 	computed: {
 		autocompleteComputed: function () {
 			var temp = _.cloneDeep(this.autocompleteList);
 			for (var i = 0; i < temp.length; i++) {
-				if (i == 0)
-					temp[i].selected = true;
-				else
-					temp[i].selected = false;
+				temp.id = i;
 			}
 			return temp;
 		}
@@ -471,23 +469,26 @@ var app = new Vue({
 
 $('#search-bar').keyup((e) => {
 	if (e.keyCode === 38) {
+		if(app.item_selected_id == app.autocompleteComputed.length) {
+			app.item_selected_id = 0;
+		}
 		for (var i = 0; i < app.autocompleteComputed.length; i++) {
-			if (app.autocompleteComputed[i].selected) {
-				if (i > 0) {
-					app.autocompleteComputed[i].selected = false;
-					app.autocompleteComputed[--i].selected = true;
-					break;
-				}
+			if(app.autocompleteComputed[i].id == app.item_selected_id) {
+				
+				app.item_selected_id = app.item_selected_id + 1;
+				console.log(app.item_selected_id);
+				break;
 			}
 		}
 	} else if (e.keyCode === 40) {
+		if(app.item_selected_id == 0) {
+			app.item_selected_id = app.autocompleteComputed.length;
+			console.log(app.item_selected_id);
+		}
 		for (var i = 0; i < app.autocompleteComputed.length; i++) {
-			if (app.autocompleteComputed[i].selected) {
-				if (i < (app.autocompleteComputed.length - 1)) {
-					app.autocompleteComputed[i].selected = false;
-					app.autocompleteComputed[++i].selected = true;
-					break;
-				}
+			if(app.autocompleteComputed[i].id == app.item_selected_id) {
+				app.item_selected_id = app.item_selected_id - 1;
+				break;
 			}
 		}
 	}
