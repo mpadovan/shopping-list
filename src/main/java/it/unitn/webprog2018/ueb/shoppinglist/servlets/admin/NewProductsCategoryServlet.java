@@ -117,7 +117,7 @@ public class NewProductsCategoryServlet extends HttpServlet {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {
 				request.setAttribute("productCategory", productCategory);
-				request.getRequestDispatcher("/WEB-INF/views/admin/NewProductsCategory.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/admin/NewCategoryProduct.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
