@@ -1,4 +1,4 @@
-	/*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -64,34 +64,44 @@ public class List extends AbstractEntity {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
 		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		if (category==null || category.equals(""))
 		{
-			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
-			try {
-				listDAO.getList(name, owner);
-				List list = listDAO.getList(id);
-				if(id!=list.getId())
-				{
-					setError("name", "name già esistente");
-				}
-			} catch (RecordNotFoundDaoException ex) {
-				//tutto andato a buon fine, nessun duplicato
-			}
+			setError("name", "Non può essere lasciato vuoto");
 		}
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		/*if (errors.isEmpty()) {
+			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
+			try {
+				List list = listDAO.getList(name, owner);
+				if (id != list.getId()) {
+					setError("name", "Nome già esistente");
+				}
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}*/
 	}
 
 	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		/*if (errors.isEmpty()) {
+			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
+			try {
+				List list = listDAO.getList(name, owner);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}*/
 	}
 
 }
