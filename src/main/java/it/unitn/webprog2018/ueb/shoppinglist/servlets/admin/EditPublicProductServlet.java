@@ -12,14 +12,15 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +36,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "EditPublicProductServlet", urlPatterns = {"/restricted/admin/EditPublicProduct"})
 @MultipartConfig
 public class EditPublicProductServlet extends HttpServlet {
+
+	@Inject
+	UploadHandler uploadHandler;
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -108,24 +112,11 @@ public class EditPublicProductServlet extends HttpServlet {
 
 			if ((logo != null) && (logo.getSize() > 0)) {
 				// delete old product logo
-				if (product.getLogo() != null && !product.getLogo().equals("") && !product.getLogo().equals("null")) {
-					File oldLogo = new File(uploadFolder + product.getLogo());
-					if (oldLogo.exists()) {
-						oldLogo.delete();
-					}
-				}
+				uploadHandler.deleteFile(product.getLogo(), getServletContext());
+
 				// save new logo
-				String logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-				int ext = logoFileName.lastIndexOf(".");
-				int noExt = logoFileName.lastIndexOf(File.separator);
-				logoFileName = logoFolder + product.getHash() + (ext > noExt ? logoFileName.substring(ext) : "");
 				try {
-					File fileLogo = new File(logoFileName);
-					if (fileLogo.exists()) { // avoid FileAlreadyExistsException
-						fileLogo.delete();
-					}
-					Files.copy(logo.getInputStream(), fileLogo.toPath());
-					logoURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
 				} catch (IOException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -134,28 +125,14 @@ public class EditPublicProductServlet extends HttpServlet {
 					doGet(request, response);
 				}
 				product.setLogo(logoURI);
-				
+
 				if (!response.isCommitted()) {
 					if ((photography != null) && (photography.getSize() > 0)) {
 						// delete old product image
-						if (product.getLogo() != null && !product.getLogo().equals("") && !product.getLogo().equals("null")) {
-							File oldLogo = new File(uploadFolder + product.getLogo());
-							if (oldLogo.exists()) {
-								oldLogo.delete();
-							}
-						}
+						uploadHandler.deleteFile(product.getPhotography(), getServletContext());
 						// save new image
-						String imageFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-						ext = imageFileName.lastIndexOf(".");
-						noExt = imageFileName.lastIndexOf(File.separator);
-						logoFileName = imageFolder + product.getHash() + (ext > noExt ? logoFileName.substring(ext) : "");
 						try {
-							File fileLogo = new File(logoFileName);
-							if (fileLogo.exists()) { // avoid FileAlreadyExistsException
-								fileLogo.delete();
-							}
-							Files.copy(logo.getInputStream(), fileLogo.toPath());
-							imageURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+							imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
 						} catch (IOException ex) {
 							// It is not a fatal error, we ask the user to try again
 							Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -166,11 +143,13 @@ public class EditPublicProductServlet extends HttpServlet {
 						product.setPhotography(imageURI);
 					}
 				}
-				if (publicProductDAO.updateProduct(productId, product)) {
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
-				} else {
-					request.setAttribute("product", product);
-					request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+				if (!response.isCommitted()) {
+					if (publicProductDAO.updateProduct(productId, product)) {
+						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
+					} else {
+						request.setAttribute("product", product);
+						request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+					}
 				}
 			}
 		} catch (RecordNotFoundDaoException ex) {

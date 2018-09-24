@@ -10,13 +10,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +31,9 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "EditProductsCategoryServlet", urlPatterns = {"/restricted/admin/EditProductsCategory"})
 public class EditProductsCategoryServlet extends HttpServlet {
-
+	@Inject
+	UploadHandler uploadHandler;
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -88,11 +89,9 @@ public class EditProductsCategoryServlet extends HttpServlet {
 		String description = request.getParameter("description");
 
 		//parametri file
-		String logoURI = "";
-		String logoFolder = (String) getServletContext().getAttribute("categoryLogoFolder");
-		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
-
+		String logoURI = null;
 		Part logo = request.getPart("logo");
+		
 		try {
 			ProductsCategory productsCategory = productsCategoryDAO.getById(productCategoryId);
 			productsCategory.setName(name);
@@ -101,24 +100,10 @@ public class EditProductsCategoryServlet extends HttpServlet {
 
 			if ((logo != null) && (logo.getSize() > 0)) {
 				// delete old product category logo
-				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
-					File oldLogo = new File(uploadFolder + productsCategory.getLogo());
-					if (oldLogo.exists()) {
-						oldLogo.delete();
-					}
-				}
+				uploadHandler.deleteFile(productsCategory.getLogo(), getServletContext());
 				// save new logo
-				String logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-				int ext = logoFileName.lastIndexOf(".");
-				int noExt = logoFileName.lastIndexOf(File.separator);
-				logoFileName = logoFolder + productsCategory.getHash() + (ext > noExt ? logoFileName.substring(ext) : "");
 				try {
-					File fileLogo = new File(logoFileName);
-					if (fileLogo.exists()) { // avoid FileAlreadyExistsException
-					 	fileLogo.delete();
-					}
-					Files.copy(logo.getInputStream(), fileLogo.toPath());
-					logoURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_CATEGORY_LOGO, productsCategory, getServletContext());
 				} catch (IOException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
