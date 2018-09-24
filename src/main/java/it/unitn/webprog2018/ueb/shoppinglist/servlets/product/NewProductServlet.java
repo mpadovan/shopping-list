@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ import javax.servlet.http.Part;
  * @author simon
  */
 @MultipartConfig
+@WebServlet(name = "NewProductServlet", urlPatterns = {"/restricted/NewProduct"})
 public class NewProductServlet extends HttpServlet {
 
 	private ProductDAO productDAO;

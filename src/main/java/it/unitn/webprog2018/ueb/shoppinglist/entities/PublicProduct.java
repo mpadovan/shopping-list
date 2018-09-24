@@ -82,12 +82,15 @@ public class PublicProduct extends AbstractEntity {
 		{
 			setError("category", "Non può essere lasciato vuoto");
 		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
 		if(errors.isEmpty())
 		{
 			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
 			try {
-				publicProductDAO.getByName(name);
-				PublicProduct publicProduct = publicProductDAO.getById(id);
+				PublicProduct publicProduct = publicProductDAO.getByName(name);
 				if(id!=publicProduct.getId())
 				{
 					setError("name", "Nome già esistente");
@@ -99,11 +102,22 @@ public class PublicProduct extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if(errors.isEmpty())
+		{
+			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
+			try {
+				publicProductDAO.getByName(name);
+				setError("name", "Nome già esistente");
+				/*PublicProduct publicProduct = publicProductDAO.getById(id);
+				if(id!=publicProduct.getId())
+				{
+					setError("name", "Nome già esistente");
+				}*/
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }

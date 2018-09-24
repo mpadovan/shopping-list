@@ -7,12 +7,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
 <layouts:base pageTitle="New product">
     <jsp:attribute name="pageContent">
 		<div class="cointainer-fluid px-2">
 			<div class="card product-card">
 				<div class="card-body">
+					<c:if test="${!empty product.errors}">
+						<div class="alert alert-danger" role="alert">
+							<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
+							<p>Controlla i campi sottostanti.</p>
+						</div>
+					</c:if>
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Nuovo prodotto</h1>
 					</div>
@@ -20,11 +27,12 @@
 						<div>
 							<label for="name">Nome prodotto</label>
 							<input type="text"
-								   class="form-control" 
+								   class="form-control ${(product.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="name"
-								   name="name" 
-								   value="${product.name}"
 								   required />
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${product}" field="name" />
+							</div>
 						</div>
 						<div>
 							<label for="category">Categoria</label>

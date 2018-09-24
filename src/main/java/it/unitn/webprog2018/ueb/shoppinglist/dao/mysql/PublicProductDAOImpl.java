@@ -192,7 +192,8 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	
 	@Override
 	public Boolean addProduct(PublicProduct product) throws DaoException {
-		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; 
+		product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -263,12 +264,12 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 					"WHERE pp.name = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setString(1, name);
-			ResultSet rs = st.executeQuery(query);
+			ResultSet rs = st.executeQuery();
 			ProductsCategory pc = new ProductsCategory();
 			if(rs.first())
 			{
 				int i = 1;
-				p.setId(i++);
+				p.setId(rs.getInt(i++));
 				p.setName(name);
 				p.setNote(rs.getString(i++));
 				p.setLogo(rs.getString(i++));
@@ -292,7 +293,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	
 	@Override
 	public Boolean addProductWithId(PublicProduct product) throws DaoException {
-		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		Boolean valid = product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
