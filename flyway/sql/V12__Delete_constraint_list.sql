@@ -1,0 +1,1 @@
+ALTER TABLE lists DROP INDEX list_name_unique;
