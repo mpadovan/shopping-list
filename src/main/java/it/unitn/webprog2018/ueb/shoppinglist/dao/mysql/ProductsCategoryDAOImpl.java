@@ -56,7 +56,7 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	
 	@Override
 	public Boolean addProductsCategory(ProductsCategory pc) throws DaoException {
-		Boolean valid = true; // pc.isVaildOnCreate(dAOFactory);
+		Boolean valid = pc.isVaildOnCreate(dAOFactory);
 		if (valid) {
 			try {
 				String logo = pc.getLogo();
