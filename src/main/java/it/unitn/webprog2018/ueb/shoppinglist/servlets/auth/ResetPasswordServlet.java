@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -31,15 +31,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ResetPasswordServlet", urlPatterns = {"/ResetPassword"})
 public class ResetPasswordServlet extends HttpServlet {
-
+	
 	private UserDAO userDAO;
-
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -51,9 +51,11 @@ public class ResetPasswordServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -65,14 +67,16 @@ public class ResetPasswordServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String context = getServletContext().getContextPath();
 		if (!context.endsWith("/")) {
 			context += "/";
 		}
 		String email = (String) request.getParameter("email");
-
+		
 		User user = null;
-
+		
 		try {
 			user = userDAO.getByEmail(email);
 		} catch (RecordNotFoundDaoException ex) {
@@ -101,7 +105,7 @@ public class ResetPasswordServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -111,5 +115,5 @@ public class ResetPasswordServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}// </editor-fold>
-
+	
 }

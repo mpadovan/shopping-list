@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -42,10 +42,10 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "NewProductServlet", urlPatterns = {"/restricted/NewProduct"})
 public class NewProductServlet extends HttpServlet {
-
+	
 	private ProductDAO productDAO;
 	private ProductsCategoryDAO productsCategoryDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -56,7 +56,7 @@ public class NewProductServlet extends HttpServlet {
 		productDAO = factory.getProductDAO();
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -68,6 +68,8 @@ public class NewProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 			request.setAttribute("productsCategory", productsCategory);
@@ -76,7 +78,7 @@ public class NewProductServlet extends HttpServlet {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -88,13 +90,15 @@ public class NewProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		//parametri stringhe
 		String name = (String) request.getParameter("name");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String note = request.getParameter("note");
-
+		
 		//parametri file
 		String logoURI = "";
 		String imageURI = "";
@@ -106,7 +110,7 @@ public class NewProductServlet extends HttpServlet {
 		String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
 		Part logo = request.getPart("logo");
 		Part photography = request.getPart("image");
-
+		
 		Product product = new Product();
 		try {
 			try {
@@ -143,14 +147,14 @@ public class NewProductServlet extends HttpServlet {
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo"
 								+ File.separator + product.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
-
+						
+						
 					} catch (FileAlreadyExistsException ex) {
 						fileLogo.delete();
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo"
 								+ File.separator + product.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						
 					}
 					product.setLogo(logoURI);
 				}
@@ -170,14 +174,14 @@ public class NewProductServlet extends HttpServlet {
 						Files.copy(fileContentImage, fileImage.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage"
 								+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
-
+						
+						
 					} catch (FileAlreadyExistsException ex) {
 						fileImage.delete();
 						Files.copy(fileContentImage, fileImage.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage"
 								+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
+						
 					}
 					product.setPhotography(imageURI);
 				}
@@ -197,7 +201,7 @@ public class NewProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

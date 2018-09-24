@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -27,14 +27,14 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "InfoListServlet", urlPatterns = {"/restricted/InfoList/*"})
 public class InfoListServlet extends HttpServlet {
-
+	
 	private ListDAO listDAO;
-
+	
 	@Override
 	public void init() {
 		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -46,6 +46,8 @@ public class InfoListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		try {
@@ -63,7 +65,7 @@ public class InfoListServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher("/WEB-INF/views/list/InfoList.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -76,7 +78,7 @@ public class InfoListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -86,5 +88,5 @@ public class InfoListServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}
-
+	
 }

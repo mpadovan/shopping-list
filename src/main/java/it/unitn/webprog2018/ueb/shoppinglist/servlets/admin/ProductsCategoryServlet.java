@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ProductsCategoryServlet", urlPatterns = {"/restricted/admin/ProductsCategory"})
 public class ProductsCategoryServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -37,10 +37,12 @@ public class ProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		String searchParam = request.getParameter("search");
 		Integer checkParam = 0;
-
+		
 		List<ProductsCategory> productsCategory = null;
 		if (searchParam == null) {
 			searchParam = "";
@@ -65,7 +67,7 @@ public class ProductsCategoryServlet extends HttpServlet {
 		request.setAttribute("checkParam", checkParam);
 		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryProduct.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -77,9 +79,9 @@ public class ProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

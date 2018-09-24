@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -40,10 +40,10 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "EditProductServlet", urlPatterns = {"/restricted/permission/EditProduct"})
 public class EditProductServlet extends HttpServlet {
-
+	
 	private ProductDAO productDAO;
 	private ProductsCategoryDAO productsCategoryDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -54,7 +54,7 @@ public class EditProductServlet extends HttpServlet {
 		productDAO = factory.getProductDAO();
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -66,8 +66,10 @@ public class EditProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
-
+		
 		try {
 			Product product = productDAO.getProduct(productId);
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
@@ -82,7 +84,7 @@ public class EditProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -94,6 +96,8 @@ public class EditProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String name = request.getParameter("name");
 		Part logo = request.getPart("logo");
 		Part photography = request.getPart("image");
@@ -111,7 +115,7 @@ public class EditProductServlet extends HttpServlet {
 		String imageFileName = "";
 		String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
 		String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
-
+		
 		try {
 			Product product = productDAO.getProduct(productId);
 			ProductsCategory productCategory = productsCategoryDAO.getById(categoryId);
@@ -148,13 +152,13 @@ public class EditProductServlet extends HttpServlet {
 					Files.copy(fileContentLogo, fileLogo.toPath());
 					logoURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo"
 							+ File.separator + product.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+					
 				} catch (FileAlreadyExistsException ex) {
 					response.sendError(500, "Server could not store your avatar, "
 							+ "please retry the sign up process. "
 							+ "Notice that you can also upload the image later in you user page.");
 					getServletContext().log("impossible to upload the file", ex);
-
+					
 				}
 				product.setLogo(logoURI);
 			}
@@ -182,16 +186,16 @@ public class EditProductServlet extends HttpServlet {
 					Files.copy(fileContentImage, fileImage.toPath());
 					imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage"
 							+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
+					
 				} catch (FileAlreadyExistsException ex) {
 //					fileImage.delete();
 //					Files.copy(fileContentImage, fileImage.toPath());
 //					imageURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage"
 //							+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-					response.sendError(500, "Server could not store your avatar, "
-							+ "please retry the sign up process. "
-							+ "Notice that you can also upload the image later in you user page.");
-					getServletContext().log("impossible to upload the file", ex);
+response.sendError(500, "Server could not store your avatar, "
+		+ "please retry the sign up process. "
+		+ "Notice that you can also upload the image later in you user page.");
+getServletContext().log("impossible to upload the file", ex);
 				}
 				product.setPhotography(imageURI);
 			}
@@ -208,9 +212,9 @@ public class EditProductServlet extends HttpServlet {
 			Logger.getLogger(EditProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-
+		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -31,10 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 @MultipartConfig
 @WebServlet(name = "EditPublicProductServlet", urlPatterns = {"/restricted/admin/EditPublicProduct"})
 public class EditPublicProductServlet extends HttpServlet {
-
+	
 	private ProductsCategoryDAO productsCategoryDAO;
 	private PublicProductDAO publicProductDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -45,7 +45,7 @@ public class EditPublicProductServlet extends HttpServlet {
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 		publicProductDAO = factory.getPublicProductDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -57,6 +57,8 @@ public class EditPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 		try {
 			PublicProduct publicProduct = publicProductDAO.getById(productId);
@@ -68,9 +70,9 @@ public class EditPublicProductServlet extends HttpServlet {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-
+		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -82,13 +84,15 @@ public class EditPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 		String name = request.getParameter("name");
 		String logo = request.getParameter("logo");
 		String note = request.getParameter("note");
 		String photography = request.getParameter("image");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
-
+		
 		try {
 			PublicProduct product = publicProductDAO.getById(productId);
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
@@ -111,14 +115,14 @@ public class EditPublicProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response, PublicProduct publicProduct) throws DaoException, ServletException, IOException {
 		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 		request.setAttribute("productsCategory", productsCategory);
 		request.setAttribute("product", publicProduct);
 		request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -128,5 +132,5 @@ public class EditPublicProductServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit public product servlet";
 	}
-
+	
 }

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -40,7 +40,7 @@ import javax.servlet.http.Part;
 public class NewPublicProductServlet extends HttpServlet {
 	private ProductsCategoryDAO productsCategoryDAO;
 	private PublicProductDAO publicProductDAO;
-
+	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -51,7 +51,7 @@ public class NewPublicProductServlet extends HttpServlet {
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 		publicProductDAO = factory.getPublicProductDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -63,13 +63,15 @@ public class NewPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			InitializeCategoryRedirect(request, response);
 		} catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -81,6 +83,8 @@ public class NewPublicProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		//parametri stringhe
@@ -89,7 +93,7 @@ public class NewPublicProductServlet extends HttpServlet {
 		String note = request.getParameter("note");
 		//String photography = request.getParameter("photography");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
-
+		
 		//parametri file
 		String logoURI = "";
 		String imageURI = "";
@@ -101,7 +105,7 @@ public class NewPublicProductServlet extends HttpServlet {
 		String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productImage" + File.separator;
 		Part logo = request.getPart("logo");
 		Part photography = request.getPart("image");
-
+		
 		PublicProduct product = new PublicProduct();
 		try {
 			try {
@@ -119,7 +123,7 @@ public class NewPublicProductServlet extends HttpServlet {
 			//aggiunta del prodotto senza logo e immagine
 			Boolean checkLogo = false;
 			Boolean checkImage = false;
-
+			
 			if (publicProductDAO.addProductWithId(product)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
@@ -137,13 +141,13 @@ public class NewPublicProductServlet extends HttpServlet {
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productLogo"
 								+ File.separator + product.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						
 					} catch (FileAlreadyExistsException ex) {
 						fileLogo.delete();
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productLogo"
 								+ File.separator + product.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						
 					}
 					product.setLogo(logoURI);
 				}
@@ -163,13 +167,13 @@ public class NewPublicProductServlet extends HttpServlet {
 						Files.copy(fileContentImage, fileImage.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productImage"
 								+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
+						
 					} catch (FileAlreadyExistsException ex) {
 						fileImage.delete();
 						Files.copy(fileContentImage, fileImage.toPath());
 						imageURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productImage"
 								+ File.separator + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-
+						
 					}
 					product.setPhotography(imageURI);
 				}
@@ -183,19 +187,19 @@ public class NewPublicProductServlet extends HttpServlet {
 				request.setAttribute("product", product);
 				InitializeCategoryRedirect(request, response);
 			}
-
+			
 		} catch (DaoException ex) {
 			Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	private void InitializeCategoryRedirect(HttpServletRequest request, HttpServletResponse response) throws DaoException, ServletException, IOException {
 		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 		request.setAttribute("productsCategory", productsCategory);
 		request.getRequestDispatcher("/WEB-INF/views/admin/NewPublicProduct.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -205,5 +209,5 @@ public class NewPublicProductServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "New public product servlet";
 	}
-
+	
 }

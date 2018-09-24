@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -35,7 +35,7 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "NewProductsCategoryServlet", urlPatterns = {"/restricted/admin/NewProductsCategory"})
 public class NewProductsCategoryServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -47,6 +47,8 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
@@ -55,9 +57,9 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		} catch (DaoException ex) {
 			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
+		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -69,6 +71,8 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		// parametri stringhe
 		String name = request.getParameter("name");
@@ -81,10 +85,10 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		Part logo = request.getPart("logo");
 		ProductsCategory productCategory = new ProductsCategory();
 		try {
-
+			
 			productCategory.setName(name);
 			productCategory.setDescription(description);
-
+			
 			if (productsCategoryDAO.addProductsCategory(productCategory)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
@@ -101,13 +105,13 @@ public class NewProductsCategoryServlet extends HttpServlet {
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
 								+ File.separator + productCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						
 					} catch (FileAlreadyExistsException ex) {
 						fileLogo.delete();
 						Files.copy(fileContentLogo, fileLogo.toPath());
 						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
 								+ File.separator + productCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						
 					}
 					productCategory.setLogo(logoURI);
 					if (!productsCategoryDAO.updateProductsCategory(productCategory.getId(), productCategory)) {
@@ -124,7 +128,7 @@ public class NewProductsCategoryServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

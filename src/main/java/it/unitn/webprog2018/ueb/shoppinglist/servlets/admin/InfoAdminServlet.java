@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "InfoAdminServlet", urlPatterns = {"/restricted/admin/InfoAdmin"})
 public class InfoAdminServlet extends HttpServlet {
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -31,10 +31,12 @@ public class InfoAdminServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/admin/InfoAdmin.jsp").forward(request, response);
 	}
-
-
+	
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -44,5 +46,5 @@ public class InfoAdminServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Info admin servlet";
 	}
-
+	
 }
