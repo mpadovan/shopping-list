@@ -55,6 +55,7 @@ public class DirectoryManager implements ServletContextListener {
 			new File(restrictedPath + "avatar").mkdir();
 			new File(restrictedPath + "shared" + File.separator + "listImage").mkdirs();
 			new File(restrictedPath + "shared" + File.separator + "productImage").mkdirs();
+			new File(restrictedPath + "shared" + File.separator + "productLogo").mkdirs();
 		}
 		// Path adjustment to allow it to be used with an image uri
 		// Sample usage: < getServletContext().getAttribute("uploadFolder") + entity.getImage() > is the absolute path of the file
@@ -66,10 +67,10 @@ public class DirectoryManager implements ServletContextListener {
 		sce.getServletContext().setAttribute("listFolder", restrictedPath + "shared" + File.separator + "listImage" + File.separator);
 		sce.getServletContext().setAttribute("productFolder", restrictedPath + "shared" + File.separator + "productImage" + File.separator);
 		sce.getServletContext().setAttribute("publicProductFolder", publicPath + "productImage" + File.separator);
-		sce.getServletContext().setAttribute("productLogoFolder", publicPath + "productLogo" + File.separator);
+		sce.getServletContext().setAttribute("publicProductLogoFolder", publicPath + "productLogo" + File.separator);
 		sce.getServletContext().setAttribute("categoryLogoFolder", publicPath + "productCategoryLogo" + File.separator);
 		sce.getServletContext().setAttribute("listCategoryFolder", publicPath + "listCategoryImage" + File.separator);
-
+		sce.getServletContext().setAttribute("productLogoFolder", restrictedPath + "shared" + File.separator + "productLogo" + File.separator);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +36,10 @@ import javax.servlet.http.Part;
 public class ChangeImageAdminServlet extends HttpServlet {
 
 	UserDAO userDAO;
-
+	
+	@Inject
+	UploadHandler uploadHandler;
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -74,23 +79,26 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
-		String avatarURI = "";
+		String avatarURI = null;
 		String avatarsFolder = (String) getServletContext().getAttribute("avatarFolder");
 		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
 		
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
 			// Delete old image
-			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				File oldFile = new File(uploadFolder + user.getImage());
-				if (oldFile.exists()) {
-					oldFile.delete();
-				}
+			if (!uploadHandler.deleteFile(user.getImage(), getServletContext())) {
+				response.sendError(500);
 			}
+			/*
 			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
 			// Extension handling
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
+			
+			*/
+			try {
+				avatarURI = uploadHandler.uploadFile(avatar, UploadHandler.FILE_TYPE.AVATAR, user, getServletContext());
+			/*
 			avatarFileName = avatarsFolder + user.getHash() + (ext > noExt ? avatarFileName.substring(ext) : "");
 			try {
 				InputStream fileContent = avatar.getInputStream();
@@ -102,14 +110,16 @@ public class ChangeImageAdminServlet extends HttpServlet {
 				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 				// System.out.println(avatarURI);
 				// System.out.println(avatarFileName + " \n" + avatarURI);
-
+			*/
 			} catch (IOException ex) {
 				// It is not a fatal error, we ask the user to try again
 				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
 				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
 				// allows to forward response with correct loading of accessory information from the database to be shown in the jsp.
+				// request.setAttribute("user", user);
 				doGet(request, response);
 			}
+			
 			if (!response.isCommitted()) {
 				user.setImage(avatarURI);
 				try {
