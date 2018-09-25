@@ -78,6 +78,14 @@ public class PublicProduct extends AbstractEntity {
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
+		if (name.length() > 40)
+		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (note.length() > 256)
+		{
+			setError("note", "Non può contenere più di 40 caratteri");
+		}
 		if (category==null || category.equals(""))
 		{
 			setError("category", "Non può essere lasciato vuoto");

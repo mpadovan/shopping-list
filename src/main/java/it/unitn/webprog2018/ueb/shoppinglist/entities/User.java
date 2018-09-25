@@ -141,11 +141,23 @@ public class User extends AbstractEntity {
 		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
+		if (name.length() > 40)
+		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
 		if (lastname == null || lastname.equals("")) {
 			setError("lastname", "Non può essere lasciato vuoto");
 		}
+		if (lastname.length() > 40)
+		{
+			setError("lastname", "Non può contenere più di 40 caratteri");
+		}
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
+		}
+		if (email.length() > 255)
+		{
+			setError("email", "Non può contenere più di 40 caratteri");
 		}
 		if (password == null || password.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("password", "Non può essere lasciato vuoto");
@@ -153,7 +165,7 @@ public class User extends AbstractEntity {
 		if (checkpassword == null || checkpassword.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
-		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+		if (!(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
