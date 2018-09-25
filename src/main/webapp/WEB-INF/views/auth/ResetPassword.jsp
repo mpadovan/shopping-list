@@ -18,13 +18,21 @@
 						</div>
 					<form class="form-signin" action="ResetPassword" method="POST">
 						<div class="form-label-group">
-							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control" placeholder="Email" required="required">
+							<input type="email"  
+								   id="email"
+								   name="email"
+								   aria-describedby="emailHelp"
+								   class="form-control ${requestScope.emailnotfound ? "is-invalid" : ""}"
+								   placeholder="Email" 
+								   required="required">
 							<label for="email">Email</label>
-							<c:if test='${requestScope.emailnotfound}'><div style="color: #cc0000">Non esiste nessun account associato a questa email</div></c:if>							
-						</div>
-						<button type="submit" class="btn btn-lg btn-block form-signin-btn">Continua</button>
-						<div class="mt-3">
-							<a href="${pageContext.servletContext.contextPath}/Login">Indietro</a>
+							<div class="invalid-feedback">
+								Non esiste nessun account associato a questa email
+							</div>
+							<button type="submit" class="btn btn-lg btn-block form-signin-btn mt-3">Continua</button>
+							<div class="mt-3">
+								<a href="${pageContext.servletContext.contextPath}/Login">Indietro</a>
+							</div>
 						</div>
 					</form>
 				</div>
