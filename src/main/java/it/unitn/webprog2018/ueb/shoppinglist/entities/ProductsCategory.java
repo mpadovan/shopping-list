@@ -63,6 +63,14 @@ public class ProductsCategory extends AbstractEntity {
 		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
+		if (name.length() > 40)
+		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (description.length() > 256)
+		{
+			setError("description", "Non può contenere più di 40 caratteri");
+		}
 	}
 
 	@Override
