@@ -17,7 +17,7 @@
 						<a class="user-link" href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser">
 							<div class="user-hover rounded-circle">
 								<div class="user-hover-content">
-									<i class="fas fa-plus fa-3x"></i>
+									<p>Cambia immagine <i class="fas fa-plus fa-2x"></i></p>
 								</div>
 							</div>
 							<c:if test="${not empty sessionScope.user.image}">
