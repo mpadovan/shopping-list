@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -31,15 +31,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ResetPasswordServlet", urlPatterns = {"/ResetPassword"})
 public class ResetPasswordServlet extends HttpServlet {
-	
+
 	private UserDAO userDAO;
-	
+
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -55,7 +55,7 @@ public class ResetPasswordServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -74,38 +74,38 @@ public class ResetPasswordServlet extends HttpServlet {
 			context += "/";
 		}
 		String email = (String) request.getParameter("email");
-		
+
 		User user = null;
-		
 		try {
-			user = userDAO.getByEmail(email);
-		} catch (RecordNotFoundDaoException ex) {
-			request.setAttribute("emailnotfound", true);
-			request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp").forward(request, response);
-		} catch (DaoException ex) {
-			Logger.getLogger(ResetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(500, ex.getMessage());
-		}
-		int time = (int) System.currentTimeMillis();
-		String token = UUID.randomUUID().toString();
-		user.setTokenpassword(token);
-		try {
-			if(userDAO.updateUser(user.getId(), user))
-			{
-				String link = "http://localhost:8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" +token;
+			try {
+				user = userDAO.getByEmail(email);
+				user.setCheckpassword(user.getPassword());
+			} catch (RecordNotFoundDaoException ex) {
+				request.setAttribute("emailnotfound", true);
+				request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp").forward(request, response);
+			}
+			String token = UUID.randomUUID().toString();
+			System.out.println("Token: " + token);
+			user.setTokenpassword(token);
+			try {
+				userDAO.setToken(user);
+				String link = "http://localhost:8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
 				if (EmailSender.send(user.getEmail(), "Reset Password",
 						"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {
 					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmSendEmail.jsp").forward(request, response);
 				} else {
 					response.sendError(500, "The server could not reach your email address. Please try again later.");
 				}
+			} catch (RecordNotFoundDaoException ex) {
+				Logger.getLogger(ResetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
+				response.sendError(404, ex.getMessage());
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(ResetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -115,5 +115,5 @@ public class ResetPasswordServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}// </editor-fold>
-	
+
 }
