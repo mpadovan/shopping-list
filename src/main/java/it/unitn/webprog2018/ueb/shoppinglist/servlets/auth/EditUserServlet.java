@@ -81,6 +81,7 @@ public class EditUserServlet extends HttpServlet {
 			String lastName = request.getParameter("lastName");
 			user.setName(name);
 			user.setLastname(lastName);
+			user.setCheckpassword(user.getPassword());
 			String password = request.getParameter("password");
 			if(password!=null && !password.equals(""))
 			{
@@ -129,7 +130,7 @@ public class EditUserServlet extends HttpServlet {
 			}
 			else
 			{
-				request.getRequestDispatcher("/WEB-INF/views/EditUser.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/auth/EditUser.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditUserServlet.class.getName()).log(Level.SEVERE, null, ex);

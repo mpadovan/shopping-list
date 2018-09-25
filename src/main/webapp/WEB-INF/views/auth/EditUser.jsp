@@ -26,35 +26,50 @@
 					<form class="form-user" action="EditUser" method="POST">
 						<div class="form-group">
 							<label for="name">Nome</label>
-							<input type="text"  id="name" name="name" class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"required>
+							<input type="text" 
+								   id="name"
+								   name="name"
+								   value="${sessionScope.user.name}"
+								   class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"
+								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="name" />
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="lastName">Cognome</label>
-							<input type="text"  id="lastName" name="lastName" class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"	 required>
+							<input type="text" 
+								   id="lastName"
+								   name="lastName"
+								   ${sessionScope.user.lastname}
+								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
+								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="lastname" />
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="email">Email</label>
-							<input type="email" readonly class="form-control" id="email" name="email"value="${sessionScope.user.email}" required>
+							<input type="email"readonly
+								   class="form-control"
+								   id="email"
+								   name="email"
+								   value="${sessionScope.user.email}"
+								   required>
 						</div>
 						<div id="blockPassword">
 							<div class="form-group" style="display: none" id="divPassword">
 								<label for="password">Password attuale</label>
-								<input type="password" id="password" name="password" class="form-control" required>
+								<input type="password" id="password" name="password" class="form-control">
 								
 							</div>
 							<div class="form-group" style="display: none" id="divNewPassword">
 								<label for="newPassword">Nuova password</label>
-								<input type="password" id="newPassword" name="newPassword" class="form-control" required>
+								<input type="password" id="newPassword" name="newPassword" class="form-control">
 							</div>
 							<div class="form-group" style="display: none" id="divCheckPassword">
 								<label for="checkPassword">Nuova password</label>
-								<input type="password" id="checkPassword" name="checkPassword" class="form-control" required>
+								<input type="password" id="checkPassword" name="checkPassword" class="form-control">
 							</div>
 						</div>
 						<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
