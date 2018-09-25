@@ -77,6 +77,7 @@ public class SetNewPasswordServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDAO.getById(id);
+			System.out.println(user.getTokenpassword() +" " + token);
 			if(user.getTokenpassword().equals(token) && token!=null)
 			{
 				user.setPassword(password);

@@ -29,7 +29,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 	public User getById(Integer id) throws DaoException{
 		try{
 			User user = new User();
-			String query = "SELECT email,password,name,lastname,image,administrator FROM users WHERE id = ?";
+			String query = "SELECT email,password,name,lastname,image,administrator,tokenpassword FROM users WHERE id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
@@ -42,6 +42,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				user.setLastname(rs.getString("lastname"));
 				user.setImage(rs.getString("image"));
 				user.setAdministrator(rs.getInt("administrator") != 0);
+				user.setTokenpassword(rs.getString("tokenpassword"));
 
 				rs.close();
 				st.close();
@@ -116,6 +117,23 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 		return valid;
 	}
 	
+	public void setToken(User user) throws DaoException
+	{
+		try {
+			String query = "UPDATE users SET tokenpassword = ? WHERE id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, user.getTokenpassword());
+			st.setInt(2, user.getId());
+			int count = st.executeUpdate();
+			st.close();
+			if(count != 1)
+				throw new RecordNotFoundDaoException("user: "+user.getId()+" not found");
+		} catch (SQLException ex) {
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new DaoException(ex);
+		}
+	}
+	
 	@Override
 	public Boolean updateUser(Integer id, User user) throws DaoException{
 		Boolean valid = user.isVaildOnUpdate(dAOFactory);
@@ -126,7 +144,7 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				
-				String query = "UPDATE users SET email = ?, password = ?, name = ?, lastname = ?, image = ?, administrator = ? WHERE id = ?";
+				String query = "UPDATE users SET email = ?, password = ?, name = ?, lastname = ?, image = ?, administrator = ?, tokenpassword = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, user.getEmail());
 				st.setString(2, user.getPassword());
@@ -134,7 +152,8 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				st.setString(4, user.getLastname());
 				st.setString(5, image);
 				st.setInt(6, user.isAdministrator()? 1 : 0);
-				st.setInt(7, id);
+				st.setString(7, null);
+				st.setInt(8, id);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
