@@ -12,11 +12,18 @@ and open the template in the editor.
 	max-width: 1000px;	
 	margin: 100px auto;
 }
+.edit-user-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
 .form-user {
 	width: 100%;
-	max-width: 420px;
+	max-width: 450px;
 	padding: 15px;
 	margin: auto;
+}
+#content {
+	background-color:lightgrey;
 }
 
 #user .user-image {
