@@ -206,13 +206,16 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
 				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (?,?,?,?,?)";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, product.getName());
 				st.setString(2, product.getNote());
 				st.setString(3, logo);
 				st.setString(4, photo);
 				st.setInt(5, product.getCategory().getId());
 				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					product.setId(rs.getInt(1));
 				st.close();
 				return valid;
 			}

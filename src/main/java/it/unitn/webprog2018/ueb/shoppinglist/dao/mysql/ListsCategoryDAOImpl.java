@@ -69,10 +69,13 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		if(valid){
 			try{
 				String query = "INSERT INTO listscategories (name,description) VALUES (?,?)";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, lc.getName());
 				st.setString(2, lc.getDescription());
 				int count = st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					lc.setId(rs.getInt(1));
 				st.close();
 				return valid && (count == 1);
 			}
