@@ -94,7 +94,8 @@ public class ChangeImageUserServlet extends HttpServlet {
 				// It is not a fatal error, we ask the user to try again
 				Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.WARNING, null, ex);
 				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-				response.sendRedirect(context + "/restricted/ChangeImageUser");
+				request.setAttribute("user", user);
+				doGet(request, response);
 			}
 			if (!response.isCommitted()) {
 				user.setImage(avatarURI);
