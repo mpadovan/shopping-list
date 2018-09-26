@@ -13,15 +13,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -38,6 +36,9 @@ import javax.servlet.http.Part;
 @MultipartConfig
 @WebServlet(name = "NewPublicProductServlet", urlPatterns = {"/restricted/admin/NewPublicProduct"})
 public class NewPublicProductServlet extends HttpServlet {
+
+	@Inject
+	UploadHandler uploadHandler;
 
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -89,9 +90,7 @@ public class NewPublicProductServlet extends HttpServlet {
 		//parametri file
 		String logoURI = "";
 		String imageURI = "";
-		String logoFolder = (String) getServletContext().getAttribute("productLogoFolder");
-		String imageFolder = (String) getServletContext().getAttribute("publicProductFolder");
-		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
+		
 		Part logo = request.getPart("logo");
 		Part image = request.getPart("image");
 
@@ -102,8 +101,6 @@ public class NewPublicProductServlet extends HttpServlet {
 				productsCategory.setId(categoryId);
 				product.setName(name);
 				product.setNote(note);
-				//product.setLogo(logo);
-				//product.setPhotography(photography);
 				product.setCategory(productsCategory);
 			} catch (RecordNotFoundDaoException ex) {
 				Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,18 +110,8 @@ public class NewPublicProductServlet extends HttpServlet {
 			if (publicProductDAO.addProductWithId(product)) {
 				// logo upload
 				if ((logo != null) && (logo.getSize() > 0)) {
-					String logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-					int ext = logoFileName.lastIndexOf(".");
-					int noExt = logoFileName.lastIndexOf(File.separator);
-					logoFileName = logoFolder + product.getHash() + (ext > noExt ? logoFileName.substring(ext) : "");
 					try {
-						File fileLogo = new File(logoFileName);
-						if (fileLogo.exists()) {
-							fileLogo.delete();
-						}
-						Files.copy(logo.getInputStream(), fileLogo.toPath());
-						logoURI = logoFileName.substring(logoFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
-
+						logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_LOGO, product, getServletContext());
 					} catch (IOException ex) {
 						// It is not a fatal error, we ask the user to try again
 						Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -138,17 +125,8 @@ public class NewPublicProductServlet extends HttpServlet {
 				if (!response.isCommitted()) {
 					// image upload
 					if ((image != null) && (image.getSize() > 0)) {
-						String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
-						int ext = imageFileName.lastIndexOf(".");
-						int noExt = imageFileName.lastIndexOf(File.separator);
-						imageFileName = imageFolder + product.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
 						try {
-							File fileImage = new File(imageFileName);
-							if (fileImage.exists()) {
-								fileImage.delete();
-							}
-							Files.copy(image.getInputStream(), fileImage.toPath());
-							imageURI = imageFileName.substring(imageFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+							imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_IMAGE, product, getServletContext());
 						} catch (FileAlreadyExistsException ex) {
 							// It is not a fatal error, we ask the user to try again
 							Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -159,7 +137,10 @@ public class NewPublicProductServlet extends HttpServlet {
 						}
 						product.setPhotography(imageURI);
 					}
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
+					if (!response.isCommitted()) {
+						publicProductDAO.updateProduct(product.getId(), product);
+						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
+					}
 				}
 			} else {
 				request.setAttribute("product", product);
