@@ -9,13 +9,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +31,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "ChangeImageUserServlet", urlPatterns = {"/restricted/ChangeImageUser"})
 @MultipartConfig
 public class ChangeImageUserServlet extends HttpServlet {
+	
+	@Inject
+	private UploadHandler uploadHandler;
 	
 	UserDAO userDAO;
 	
@@ -81,35 +83,13 @@ public class ChangeImageUserServlet extends HttpServlet {
 		
 		String avatarURI = "";
 
-		String avatarsFolder = (String) getServletContext().getAttribute("avatarFolder");
-		String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
-		
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
 			// Delete old image
-			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				File oldFile = new File(uploadFolder + user.getImage());
-				if (oldFile.exists()) {
-					oldFile.delete();
-				}
-			}
-			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
-			// Extension handling
-			int ext = avatarFileName.lastIndexOf(".");
-			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = avatarsFolder + user.getHash() + (ext > noExt ? avatarFileName.substring(ext) : "");
+			uploadHandler.deleteFile(user.getImage(), getServletContext());
+			
 			try {
-				InputStream fileContent = avatar.getInputStream();
-				File file = new File(avatarFileName);
-				if (file.exists()) {	// avoid fileAlreadyExistsException
-					file.delete();
-				}
-				Files.copy(fileContent, file.toPath());
-
-				avatarURI = avatarFileName.substring(avatarFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
-
-				// System.out.println(avatarFileName + " \n" + avatarURI);
-
+				avatarURI = uploadHandler.uploadFile(avatar, UploadHandler.FILE_TYPE.AVATAR, user, getServletContext());
 			} catch (IOException ex) {
 				// It is not a fatal error, we ask the user to try again
 				Logger.getLogger(ChangeImageUserServlet.class.getName()).log(Level.WARNING, null, ex);

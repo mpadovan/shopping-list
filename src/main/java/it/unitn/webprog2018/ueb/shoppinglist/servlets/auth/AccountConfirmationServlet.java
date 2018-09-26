@@ -11,9 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +64,6 @@ public class AccountConfirmationServlet extends HttpServlet {
 		String tokenString = request.getParameter("token");
 
 		Token token = tokenDAO.getByTokenString(tokenString);
-		String avatarName = "";
 		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
 		if (token == null) {
 			// TODO edit to correct page
@@ -74,19 +71,14 @@ public class AccountConfirmationServlet extends HttpServlet {
 			response.sendRedirect(path);
 		} else if (isExpired(token)) {
 			tokenDAO.removeToken(token);
-			avatarName = token.getUser().getImage().substring(token.getUser().getImage().lastIndexOf("/") + 1);
-			File avatar = new File(uploadFolder + "/restricted/tmp/" + avatarName);
-			avatar.delete();
-			// TODO redirect to error page
 			path += "expiredToken.html";
 			response.sendRedirect(path);
 		}
-		if (!response.isCommitted()) {
+		if (!response.isCommitted()) {	// If token is null then response is committed
 			User user = token.getUser();
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
-					user = userDAO.getByEmail(user.getEmail());
 					tokenDAO.removeToken(token);
 					path += "Login";
 					response.sendRedirect(path);
