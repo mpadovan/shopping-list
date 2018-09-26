@@ -13,16 +13,14 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -43,6 +41,9 @@ public class NewListServlet extends HttpServlet {
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
+	
+	@Inject
+	private UploadHandler uploadHandler;
 
 	@Override
 	public void init() {
@@ -193,25 +194,10 @@ public class NewListServlet extends HttpServlet {
 				}
 				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 				String imageURI = "";
-				String imageFolder = (String) getServletContext().getAttribute("listFolder");
-				String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
 				Part image = request.getPart("image");
 				if ((image != null) && (image.getSize() > 0)) {
-					String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
-					int ext = imageFileName.lastIndexOf(".");
-					int noExt = imageFileName.lastIndexOf(File.separator);
-					imageFileName = imageFolder + list.getHash() + (ext > noExt ? imageFileName.substring(ext) : "");
-					InputStream fileContentImage = image.getInputStream();
-					File file = new File(imageFileName);
-
 					try {
-						if (file.exists()) {
-							file.delete();
-						}
-						Files.copy(fileContentImage, file.toPath());
-
-						imageURI = context + imageFileName.substring(imageFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
-
+						imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.LIST_IMAGE, list, getServletContext());
 					} catch (IOException ex) {
 						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 						list.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");

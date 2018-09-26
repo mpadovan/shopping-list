@@ -5,7 +5,6 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
-import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
