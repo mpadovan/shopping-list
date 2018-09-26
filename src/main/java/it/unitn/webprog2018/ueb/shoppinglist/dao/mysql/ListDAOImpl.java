@@ -73,7 +73,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				st.close();
 				return list;
 			}
-			throw new RecordNotFoundDaoException("User with id: " + id + " not found");
+			throw new RecordNotFoundDaoException("List with id: " + id + " not found");
 		}
 		catch(SQLException ex){
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -647,6 +647,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		}
 	}
 	
+	/*
+		Questo metodo deve ritornare tutte le liste dello user escluse quelle che si trovano nella tabella sharedlists
+	*/
 	@Override
 	public java.util.List<List> getPersonalLists(Integer id) throws DaoException{
 		java.util.List<List> list = new ArrayList<>();
@@ -687,6 +690,11 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		}
 	}
 	
+	/*
+		Questo metodo deve restituire tutte le liste per cui vale:
+		- user è owner e ci sono entry corrispondenti alla lista in sharedLists
+		- user non è owner ma ci sono entry con la sua id in sharedlists per quella lista
+	*/
 	@Override
 	public java.util.List<List> getSharedLists(Integer id)throws DaoException{
 		java.util.List<List> list = new ArrayList<>();

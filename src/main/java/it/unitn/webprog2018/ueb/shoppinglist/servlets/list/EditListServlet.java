@@ -56,6 +56,6 @@ public class EditListServlet extends HttpServlet {
 	@Override
 	public String getServletInfo() {
 		return "Edit List Servlet";
-	}// </editor-fold>
+	}
 	
 }
