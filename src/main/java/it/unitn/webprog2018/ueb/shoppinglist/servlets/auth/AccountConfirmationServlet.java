@@ -87,36 +87,6 @@ public class AccountConfirmationServlet extends HttpServlet {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
 					user = userDAO.getByEmail(user.getEmail());
-					// Creating directories for the new user
-					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
-					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
-					File productImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "productImage");
-					File productLogoDirectory = new File(userDir.getAbsolutePath() + File.separator + "productLogo");
-					File listImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "listImage");
-					if (!userDir.exists()) {
-						if (userDir.mkdir()) {
-							avatarDir.mkdir();
-							productImageDirectory.mkdir();
-							productLogoDirectory.mkdir();
-							listImageDirectory.mkdir();
-						}
-					} else {
-						// TODO report error of already existing user
-						// Should not happen thanks to validation
-					}
-					if (user.getImage() != null && !user.getImage().equals("")) {
-						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
-
-						File src = new File(uploadFolder + File.separator + "restricted" + File.separator + "tmp"
-								+ File.separator + avatarName);
-						String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
-						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
-						Files.copy(src.toPath(), dest.toPath());
-						src.delete();
-						user.setImage("/uploads/restricted/" + user.getId() + "/avatar/" + avatarName2);
-						user.setCheckpassword(user.getPassword());
-						userDAO.updateUser(user.getId(), user);
-					}
 					tokenDAO.removeToken(token);
 					path += "Login";
 					response.sendRedirect(path);

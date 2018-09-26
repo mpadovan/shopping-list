@@ -2,6 +2,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
@@ -82,35 +83,12 @@ public class SignUpServlet extends HttpServlet {
 		user.setCheckpassword(Sha256.doHash(checkPassword));
 		user.setImage(avatarURI);
 		user.setAdministrator(false);
-		
+
 		try {
 			if (user.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory")) && privacy != null) {
-				// Retrieving user avatar
-				File file = null;
-				String avatarFileName = "";
-				String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + "/restricted/tmp/";
-				Part avatar = request.getPart("image");
-				if ((avatar != null) && (avatar.getSize() > 0)) {
-					avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
-					int ext = avatarFileName.lastIndexOf(".");
-					int noExt = avatarFileName.lastIndexOf(File.separator);
-					avatarFileName = avatarsFolder + email + (ext > noExt ? avatarFileName.substring(ext) : "");
-					try (InputStream fileContent = avatar.getInputStream()) {
-						file = new File(avatarFileName);
-						Files.copy(fileContent, file.toPath());
-						avatarURI = "localhost:8080" + context + "uploads/restricted/tmp/"
-								+ avatarFileName.substring(avatarFileName.lastIndexOf(email));
-						
-					} catch (FileAlreadyExistsException ex) {
-						response.sendError(500, "Server could not store your avatar, "
-								+ "please retry the sign up process. "
-								+ "Notice that you can also upload the image later in you user page.");
-						getServletContext().log("impossible to upload the file", ex);
-					}
-				}
+				user.setPassword(Sha256.doHash(password));
+				user.setCheckpassword(Sha256.doHash(checkPassword));
 				if (!response.isCommitted()) {
-					user.setImage(avatarURI);
-					
 					// Creating the token for the account confirmation
 					Token token = new Token();
 					
@@ -126,16 +104,10 @@ public class SignUpServlet extends HttpServlet {
 							request.getRequestDispatcher("/WEB-INF/views/auth/CheckSignUp.jsp").forward(request, response);
 						} else {
 							response.sendError(500, "The server could not reach your email address. Please try again later.");
-							if (file != null) {
-								file.delete();
-							}
 						}
 					} else {
 						response.sendError(429, "You already have a pending sign up request for this email."
 								+ " Please check your mailbox");
-						if (file != null) {
-							file.delete();
-						}
 					}
 				}
 			} else {

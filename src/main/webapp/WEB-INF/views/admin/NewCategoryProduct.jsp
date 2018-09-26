@@ -12,7 +12,7 @@
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
-				<h1 class="card-title">Nuovo categoria di prodotto</h1>
+				<h1 class="card-title">Nuova categoria di prodotto</h1>
 				<form method="POST" action="NewProductsCategory" enctype='multipart/form-data'>
 					<div>
 						<label for="name">Nome categoria</label>

@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -40,11 +39,11 @@ import javax.servlet.http.Part;
 @WebServlet(name = "NewListServlet", urlPatterns = {"/restricted/NewList"})
 @MultipartConfig
 public class NewListServlet extends HttpServlet {
-	
+
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
-	
+
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -52,7 +51,7 @@ public class NewListServlet extends HttpServlet {
 		listDAO = factory.getListDAO();
 		userDAO = factory.getUserDAO();
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -75,7 +74,7 @@ public class NewListServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher("/WEB-INF/views/list/NewList.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -87,13 +86,15 @@ public class NewListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		String path = getServletContext().getContextPath();
-		if (!path.endsWith("/")) {
-			path += "/";
+
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
 		}
-		
+
 		Boolean everythingOK = true;
 		Boolean isShared = false;
 		HttpSession session = request.getSession(false);
@@ -102,7 +103,7 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared[]");
-		
+
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -117,7 +118,7 @@ public class NewListServlet extends HttpServlet {
 				request.setAttribute("list", list);
 			}
 			list.setCategory(listCategory);
-			
+
 			// check if there are any users in the shared[] textfields
 			if (shared != null && shared.length != 0) {
 				for (int i = 0; i < shared.length; i++) {
@@ -126,7 +127,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 			}
-			
+
 			if (!isShared) {
 				// Add privatelist
 				Boolean valid = listDAO.addList(list);
@@ -182,7 +183,7 @@ public class NewListServlet extends HttpServlet {
 				}
 			}
 			if (everythingOK) {
-				path += "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+				String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
 				if (!isShared) {
 					//set sessione liste not shared
 					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("personalLists")).add(list);
@@ -191,33 +192,39 @@ public class NewListServlet extends HttpServlet {
 					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
 				}
 				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
-				File file = null;
 				String imageURI = "";
-				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "shared";
+				String imageFolder = (String) getServletContext().getAttribute("listFolder");
+				String uploadFolder = (String) getServletContext().getAttribute("uploadFolder");
 				Part image = request.getPart("image");
 				if ((image != null) && (image.getSize() > 0)) {
 					String imageFileName = Paths.get(image.getSubmittedFileName()).getFileName().toString();
 					int ext = imageFileName.lastIndexOf(".");
 					int noExt = imageFileName.lastIndexOf(File.separator);
-					imageFileName = imageFolder + File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
+					imageFileName = imageFolder + list.getHash() + (ext > noExt ? imageFileName.substring(ext) : "");
 					InputStream fileContentImage = image.getInputStream();
-					ext = imageFileName.lastIndexOf(".");
-					noExt = imageFileName.lastIndexOf(File.separator);
-					file = new File(imageFileName);
+					File file = new File(imageFileName);
+
 					try {
+						if (file.exists()) {
+							file.delete();
+						}
 						Files.copy(fileContentImage, file.toPath());
-						imageURI = getServletContext().getContextPath() + File.separator + "uploads" + File.separator + "shared"
-								+ File.separator + list.getId() + (ext > noExt ? imageFileName.substring(ext) : "");
-						
+
+						imageURI = context + imageFileName.substring(imageFileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+
 					} catch (IOException ex) {
 						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-						request.setAttribute("uploadFail", true);
+						list.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+						request.setAttribute("list", list);
+						doGet(request, response);
 					}
 				}
-				list.setImage(imageURI);
-				// Update the list after setting the image URI
-				listDAO.updateList(list.getId(), list);
-				response.sendRedirect(path);
+				if (!response.isCommitted()) {
+					list.setImage(imageURI);
+					// Update the list after setting the image URI
+					listDAO.updateList(list.getId(), list);
+					response.sendRedirect(path);
+				}
 			} else {
 				// reload the page keeping request and response objects
 				// redirect would remove request associated objects
@@ -229,7 +236,7 @@ public class NewListServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -239,5 +246,5 @@ public class NewListServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "New list servlet";
 	}
-	
+
 }

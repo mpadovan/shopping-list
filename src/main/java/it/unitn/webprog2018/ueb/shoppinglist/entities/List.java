@@ -11,6 +11,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 
 /**
  *
@@ -110,6 +112,11 @@ public class List extends AbstractEntity {
 				//tutto andato a buon fine, nessun duplicato
 			}
 		}*/
+	}
+
+	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
 	}
 
 }

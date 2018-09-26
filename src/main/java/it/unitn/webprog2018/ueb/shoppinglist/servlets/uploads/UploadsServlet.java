@@ -5,13 +5,9 @@
 */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads;
 
-import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import javax.servlet.ServletException;
@@ -19,13 +15,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Giulia Carocari
  */
-@WebServlet(name = "UploadsServlet", urlPatterns = {"/uploads/*"})
+@WebServlet(name = "UploadsServlet", urlPatterns = {"/Uploads/*"})
 public class UploadsServlet extends HttpServlet {
 	
 	/**
@@ -43,17 +38,17 @@ public class UploadsServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		try {
 			String filename = request.getPathInfo().substring(1);
-			String uploadPath = getServletContext().getInitParameter("uploadFolder");
+			String uploadPath = (String) getServletContext().getAttribute("uploadFolder") + File.separator + "Uploads";
 			File file = new File(uploadPath, filename);
 			response.setHeader("Content-Type", getServletContext().getMimeType(filename));
 			response.setHeader("Content-Length", String.valueOf(file.length()));
 			response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
 			Files.copy(file.toPath(), response.getOutputStream());
-		} catch (FileNotFoundException ex) {
-			response.sendError(404, "The resource you are lookin for does not exist in our system");
-		} catch (NoSuchFileException ex) { //Exception thrown by Files.copy()
-			response.sendError(404, "The resource you are lookin for does not exist in our system");
+		} catch (FileNotFoundException | NoSuchFileException ex) {
+			response.sendError(404, "The resource you are looking for does not exist in our system");
 		}
+		//Exception thrown by Files.copy()
+		
 	}
 	
 	/**
