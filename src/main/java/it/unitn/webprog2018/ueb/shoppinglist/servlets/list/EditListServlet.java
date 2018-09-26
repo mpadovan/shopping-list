@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
