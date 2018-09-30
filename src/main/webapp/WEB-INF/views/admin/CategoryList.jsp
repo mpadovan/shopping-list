@@ -39,9 +39,7 @@
 								<td>${c.name}</td>
 								<td>${c.description}</td>
 								<td>
-									<c:forEach var="i" items="${pageContext.servletContext.contextPath}${requestScope.listsCategoryImage}">
-										<c:if test="${c.id==i.category.id}">${i.image}</c:if>
-									</c:forEach>
+									Immagine
 								<td>
 									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a></span>
 									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a></span>
