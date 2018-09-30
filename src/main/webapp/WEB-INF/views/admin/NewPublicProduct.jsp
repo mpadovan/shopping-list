@@ -50,10 +50,13 @@
 					<div>
 						<label for="note">Note</label>
 						<input type="text"
-							   class="form-control"
+							   class="form-control ${(product.getFieldErrors("note") != null ? "is-invalid" : "")}"
 							   id="note"
 							   name="note" 
 							   >
+						<div class="invalid-feedback">
+							<shared:fieldErrors entity="${product}" field="note" />
+						</div>
 					</div>
 					<div>
 						<label for="logo">Logo</label>
