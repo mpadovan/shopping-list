@@ -20,7 +20,7 @@
 					</div>
 				</c:if>
 				<div class="text-center mb-4">
-					<h3 class="mb-3 font-weight-normal">Nuovo categoria di prodotto</h3>
+					<h3 class="mb-3 font-weight-normal">Nuova categoria di prodotto</h3>
 				</div>
 				<form class="form-list" method="POST" action="NewProductsCategory" enctype='multipart/form-data'>
 					<div>

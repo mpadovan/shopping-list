@@ -5,20 +5,17 @@
 */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
-import com.mysql.cj.Session;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +27,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "EditAdminServlet", urlPatterns = {"/restricted/admin/EditAdmin"})
 public class EditAdminServlet extends HttpServlet {
+
 	private UserDAO userDAO;
 	
 	@Override
@@ -37,6 +35,7 @@ public class EditAdminServlet extends HttpServlet {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
 	}
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -81,53 +80,39 @@ public class EditAdminServlet extends HttpServlet {
 			user.setName(name);
 			user.setLastname(lastName);
 			String password = request.getParameter("password");
-			if(password!=null && !password.equals(""))
-			{
+			if (password != null && !password.equals("")) {
 				System.out.println("password equal");
 				String newPassword = request.getParameter("newPassword");
 				String checkPassword = request.getParameter("checkPassword");
-				if(Sha256.doHash(password).equals(user.getPassword()))
-				{
+				if (Sha256.doHash(password).equals(user.getPassword())) {
 					user.setPassword(Sha256.doHash(newPassword));
 					user.setCheckpassword(Sha256.doHash(checkPassword));
-					if(userDAO.updateUser(id, user))
-					{
+					if (userDAO.updateUser(id, user)) {
 						session.setAttribute("user", user);
-						redirect=true;
+						redirect = true;
 						System.out.println("utente modificato con password");
-					}
-					else
-					{
+					} else {
 						request.setAttribute("user", user);
 						System.out.println("validation utente modificato con password");
 					}
-				}
-				else
-				{
+				} else {
 					request.setAttribute("passworderrata", "la password non è corretta");
 					System.out.println("password errata");
 				}
-			}
-			else{
-				if(userDAO.updateUser(id, user))
-				{
+			} else {
+				if (userDAO.updateUser(id, user)) {
 					session.setAttribute("user", user);
-					redirect=true;
+					redirect = true;
 					System.out.println("utente modificato senza password");
-				}
-				else
-				{
+				} else {
 					request.setAttribute("user", user);
 					System.out.println("validation utente modificato senza password");
 				}
 			}
-			if(redirect)
-			{
+			if (redirect) {
 				path += "restricted/admin/InfoAdmin";
 				response.sendRedirect(path);
-			}
-			else
-			{
+			} else {
 				request.getRequestDispatcher("/WEB-INF/views/admin/EditAdmin.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
@@ -138,7 +123,7 @@ public class EditAdminServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
+
 	/*private void deleteRememberCookie(HttpServletRequest request, HttpServletResponse response) {
 	Cookie[] cookies = request.getCookies();
 	if (cookies != null) {

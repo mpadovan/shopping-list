@@ -12,7 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -47,10 +46,12 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
 			if (productsCategoryDAO.deleteProductsCategory(productsCategory.getId())) {
 				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
-					String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productCategoryLogo" + File.separator;
-					int ext = productsCategory.getLogo().lastIndexOf(".");
-					File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
-					file.delete();
+					File logo = new File(getServletContext().getAttribute("uploadFolder") + productsCategory.getLogo());
+					// int ext = productsCategory.getLogo().lastIndexOf(".");
+					// File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
+					if (logo.exists()) {
+						logo.delete();
+					}
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
 			} else {

@@ -11,9 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +64,6 @@ public class AccountConfirmationServlet extends HttpServlet {
 		String tokenString = request.getParameter("token");
 
 		Token token = tokenDAO.getByTokenString(tokenString);
-		String avatarName = "";
 		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
 		if (token == null) {
 			// TODO edit to correct page
@@ -74,49 +71,14 @@ public class AccountConfirmationServlet extends HttpServlet {
 			response.sendRedirect(path);
 		} else if (isExpired(token)) {
 			tokenDAO.removeToken(token);
-			avatarName = token.getUser().getImage().substring(token.getUser().getImage().lastIndexOf("/") + 1);
-			File avatar = new File(uploadFolder + "/restricted/tmp/" + avatarName);
-			avatar.delete();
-			// TODO redirect to error page
 			path += "expiredToken.html";
 			response.sendRedirect(path);
 		}
-		if (!response.isCommitted()) {
+		if (!response.isCommitted()) {	// If token is null then response is committed
 			User user = token.getUser();
 			try {
 				user.setCheckpassword(user.getPassword());
 				if (userDAO.addUser(user)) {
-					user = userDAO.getByEmail(user.getEmail());
-					// Creating directories for the new user
-					File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
-					File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
-					File productImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "productImage");
-					File productLogoDirectory = new File(userDir.getAbsolutePath() + File.separator + "productLogo");
-					File listImageDirectory = new File(userDir.getAbsolutePath() + File.separator + "listImage");
-					if (!userDir.exists()) {
-						if (userDir.mkdir()) {
-							avatarDir.mkdir();
-							productImageDirectory.mkdir();
-							productLogoDirectory.mkdir();
-							listImageDirectory.mkdir();
-						}
-					} else {
-						// TODO report error of already existing user
-						// Should not happen thanks to validation
-					}
-					if (user.getImage() != null && !user.getImage().equals("")) {
-						avatarName = user.getImage().substring(user.getImage().lastIndexOf("/") + 1);
-
-						File src = new File(uploadFolder + File.separator + "restricted" + File.separator + "tmp"
-								+ File.separator + avatarName);
-						String avatarName2 = avatarName.replaceFirst(user.getEmail(), user.getId().toString());
-						File dest = new File(avatarDir.getAbsolutePath() + File.separator + avatarName2);
-						Files.copy(src.toPath(), dest.toPath());
-						src.delete();
-						user.setImage("/uploads/restricted/" + user.getId() + "/avatar/" + avatarName2);
-						user.setCheckpassword(user.getPassword());
-						userDAO.updateUser(user.getId(), user);
-					}
 					tokenDAO.removeToken(token);
 					path += "Login";
 					response.sendRedirect(path);

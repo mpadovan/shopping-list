@@ -12,7 +12,7 @@
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
 			<c:if test="${!empty requestScope.currentList.image}">
-				<img class="card-img-top" src="${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
+				<img class="card-img-top" src="${pageContext.servletContext.contextPath}${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 			</c:if>
 			<c:if test="${empty requestScope.currentList.image}">
 				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">

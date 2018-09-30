@@ -9,9 +9,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteListServlet extends HttpServlet {
 	
 	private ListDAO listDAO;
+	
+	@Inject
+	private UploadHandler uploadHandler;
 	
 	@Override
 	public void init() {
@@ -47,7 +53,9 @@ public class DeleteListServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		User user =  ((User) request.getSession().getAttribute("user"));
 		try {
-			if (listDAO.deleteList((Integer) request.getAttribute("currentListId"))) {
+			List list = listDAO.getList((Integer) request.getAttribute("currentListId"));
+			if (listDAO.deleteList(list.getId())) {
+				uploadHandler.deleteFile(list.getImage(), getServletContext());
 				request.getSession().setAttribute("personalLists", listDAO.getPersonalLists(user.getId()));
 				request.getSession().setAttribute("sharedLists", listDAO.getSharedLists(user.getId()));
 				response.sendRedirect(this.getServletContext().getContextPath() + "/restricted/HomePageLogin/" + user.getId());

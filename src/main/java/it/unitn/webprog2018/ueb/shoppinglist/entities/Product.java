@@ -8,10 +8,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 
 /**
  *
@@ -78,6 +77,11 @@ public class Product extends AbstractEntity {
 
 	public void setCategory(ProductsCategory category) {
 		this.category = category;
+	}
+	
+	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
 	}
 	
 	@Override

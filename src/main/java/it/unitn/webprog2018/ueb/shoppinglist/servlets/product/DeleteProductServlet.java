@@ -2,24 +2,21 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import it.unitn.webprog2018.ueb.shoppinglist.servlets.admin.DeletePublicProductServlet;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +30,11 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "DeleteProductServlet", urlPatterns = {"/restricted/DeleteProduct"})
 public class DeleteProductServlet extends HttpServlet {
-	
+
 	private ProductDAO productDAO;
+	
+	@Inject
+	UploadHandler uploadHandler;
 	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
@@ -45,7 +45,7 @@ public class DeleteProductServlet extends HttpServlet {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -65,19 +65,11 @@ public class DeleteProductServlet extends HttpServlet {
 		try {
 			Product product = productDAO.getProduct(productId);
 			if (productDAO.deleteProduct(product.getId())) {
-				if(product.getPhotography()!=null && !product.getPhotography().equals("") && !product.getPhotography().equals("null"))
-				{
-					String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productImage" + File.separator;
-					int ext = product.getPhotography().lastIndexOf(".");
-					File file = new File(imageFolder + product.getId() + product.getPhotography().substring(ext));
-					file.delete();
+				if (product.getPhotography() != null && !product.getPhotography().equals("") && !product.getPhotography().equals("null")) {
+					uploadHandler.deleteFile(product.getPhotography(), getServletContext());
 				}
-				if(product.getLogo()!=null && !product.getLogo().equals("") && !product.getLogo().equals("null"))
-				{
-					String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "productLogo" + File.separator;
-					int ext = product.getLogo().lastIndexOf(".");
-					File file = new File(logoFolder + product.getId() + product.getLogo().substring(ext));
-					file.delete();
+				if (product.getLogo() != null && !product.getLogo().equals("") && !product.getLogo().equals("null")) {
+					uploadHandler.deleteFile(product.getLogo(), getServletContext());
 				}
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 			} else {
@@ -92,7 +84,7 @@ public class DeleteProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -102,5 +94,5 @@ public class DeleteProductServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit custom product servlet";
 	}
-	
+
 }

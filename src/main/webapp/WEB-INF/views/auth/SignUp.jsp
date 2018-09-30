@@ -37,10 +37,6 @@
 								<shared:fieldErrors entity="${user}" field="lastname" />
 							</div>
 						</div>
-						<div class="custom-file my-2">
-							<label class="custom-file-label" for="image">Scegli avatar</label>
-							<input type="file" class="custom-file-input" id="image" name="image">
-						</div>
 						<div class="form-label-group mt-3">
 							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control ${(user.getFieldErrors("email") != null ? "is-invalid" : "")}" placeholder="Email" required>
 							<label for="email">Email</label>

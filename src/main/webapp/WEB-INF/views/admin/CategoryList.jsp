@@ -39,7 +39,7 @@
 								<td>${c.name}</td>
 								<td>${c.description}</td>
 								<td>
-									<c:forEach var="i" items="${requestScope.listsCategoryImage}">
+									<c:forEach var="i" items="${pageContext.servletContext.contextPath}${requestScope.listsCategoryImage}">
 										<c:if test="${c.id==i.category.id}">${i.image}</c:if>
 									</c:forEach>
 								<td>

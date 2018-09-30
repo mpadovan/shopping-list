@@ -42,7 +42,7 @@
 							   class="form-control ${(listsCategory.getFieldErrors("description") != null ? "is-invalid" : "")}"
 							   id="description"
 							   name="description" 
-							   value="${listsCategory.description}"
+							   va${pageContext.servletContext.contextPath}lue="${listsCategory.description}"
 							   >
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${listsCategory}" field="description" />
@@ -55,7 +55,7 @@
 						<c:forEach var="c" items="${requestScope.listsCategoryImage}">
 							<c:if test="${listsCategory.id==c.category.id}">
 								<label for="image">Fotografia</label>
-								<p><i>1- ${c.image}</i></p>
+								<p><i>1- ${pageContext.servletContext.contextPath}${c.image}</i></p>
 								<div class="custom-file">
 									<input type="file"
 										   class="custom-file-input form-control"

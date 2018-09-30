@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.dummy.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
@@ -15,12 +14,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
-import it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatSessionHandler;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -99,7 +96,11 @@ public class LoginServlet extends HttpServlet {
 				}
 				java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
 				java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
-				
+				/*
+				for (List list : sharedLists) {
+					System.out.println(list.getName() + ", " +  list.getOwner().getId());
+				}
+				*/
 				session.setAttribute("personalLists", personalLists);
 				session.setAttribute("sharedLists", sharedLists);
 				

@@ -26,6 +26,8 @@ public abstract class AbstractEntity implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public abstract String getHash();
 
 	protected final Map<String, Set<String>> errors;
 
