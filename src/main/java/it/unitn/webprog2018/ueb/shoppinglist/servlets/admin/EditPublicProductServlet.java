@@ -12,17 +12,19 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -31,9 +33,12 @@ import javax.servlet.http.HttpServletResponse;
 @MultipartConfig
 @WebServlet(name = "EditPublicProductServlet", urlPatterns = {"/restricted/admin/EditPublicProduct"})
 public class EditPublicProductServlet extends HttpServlet {
-	
+
 	private ProductsCategoryDAO productsCategoryDAO;
 	private PublicProductDAO publicProductDAO;
+	
+	@Inject
+	UploadHandler uploadHandler;
 	
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
@@ -88,24 +93,64 @@ public class EditPublicProductServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
 		String name = request.getParameter("name");
-		String logo = request.getParameter("logo");
+		Part logo = request.getPart("logo");
 		String note = request.getParameter("note");
-		String photography = request.getParameter("image");
+
+		Part photography = request.getPart("image");
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
-		
+		String logoURI = "";
+		String imageURI = "";
 		try {
 			PublicProduct product = publicProductDAO.getById(productId);
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
 			productsCategory.setId(categoryId);
 			product.setName(name);
-			product.setLogo(logo);
+			// product.setLogo(logo);
 			product.setNote(note);
-			product.setPhotography(photography);
+			// product.setPhotography(photography);
 			product.setCategory(productsCategory);
-			if (publicProductDAO.updateProduct(productId, product)) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
-			} else {
-				InitializeCategoryRedirect(request, response, product);
+
+			if ((logo != null) && (logo.getSize() > 0)) {
+				// delete old product logo
+				uploadHandler.deleteFile(product.getLogo(), getServletContext());
+
+				// save new logo
+				try {
+					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
+				} catch (IOException ex) {
+					// It is not a fatal error, we ask the user to try again
+					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+					product.setError("logo", "Non è stato possibile salvare il logo, riprova più tardi o contatta un amministratore");
+					request.setAttribute("product", product);
+					doGet(request, response);
+				}
+				product.setLogo(logoURI);
+
+				if (!response.isCommitted()) {
+					if ((photography != null) && (photography.getSize() > 0)) {
+						// delete old product image
+						uploadHandler.deleteFile(product.getPhotography(), getServletContext());
+						// save new image
+						try {
+							imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
+						} catch (IOException ex) {
+							// It is not a fatal error, we ask the user to try again
+							Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+							product.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+							request.setAttribute("product", product);
+							doGet(request, response);
+						}
+						product.setPhotography(imageURI);
+					}
+				}
+				if (!response.isCommitted()) {
+					if (publicProductDAO.updateProduct(productId, product)) {
+						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
+					} else {
+						request.setAttribute("product", product);
+						request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+					}
+				}
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);

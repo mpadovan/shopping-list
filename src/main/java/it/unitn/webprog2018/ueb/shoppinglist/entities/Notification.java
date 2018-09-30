@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.sql.Timestamp;
 
 /**
@@ -48,5 +49,10 @@ public class Notification extends AbstractEntity {
 
 	public void setTime(Timestamp time) {
 		this.time = time;
+	}
+	
+	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+time.toString());
 	}
 }

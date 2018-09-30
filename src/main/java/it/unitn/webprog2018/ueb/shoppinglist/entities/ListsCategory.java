@@ -11,6 +11,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,10 +21,11 @@ import java.util.logging.Logger;
  * @author simon
  */
 public class ListsCategory extends AbstractEntity {
-	
-	@Expose private String name;
+
+	@Expose
+	private String name;
 	private String description;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -38,22 +41,35 @@ public class ListsCategory extends AbstractEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
+	}
 	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
-		if (name==null || name.equals(""))
-		{
+		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		if (name.length() > 40)
 		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (description.length() > 256)
+		{
+			setError("description", "Non può contenere più di 40 caratteri");
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
 			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
 			try {
-				listsCategoryDAO.getByName(name);
-				ListsCategory listsCategory = listsCategoryDAO.getById(id);
-				if(id!=listsCategory.getId())
-				{
-					setError("name", "name già esistente");
+				ListsCategory listsCategory = listsCategoryDAO.getByName(name);
+				if (id != listsCategory.getId()) {
+					setError("name", "Nome già esistente");
 				}
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
@@ -62,11 +78,16 @@ public class ListsCategory extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
+			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) dAOFactory).getListsCategoryDAO();
+			try {
+				listsCategoryDAO.getByName(name);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }

@@ -45,7 +45,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
 				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (?,?,?,?,?,?)";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, product.getName());
 				st.setString(2, product.getNote());
 				st.setString(3, logo);
@@ -53,6 +53,9 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				st.setInt(5, product.getOwner().getId());
 				st.setInt(6, product.getCategory().getId());
 				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					product.setId(rs.getInt(1));
 				st.close();
 				return valid;
 			} catch (SQLException ex) {

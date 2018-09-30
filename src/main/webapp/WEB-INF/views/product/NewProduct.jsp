@@ -27,6 +27,7 @@
 						<div>
 							<label for="name">Nome prodotto</label>
 							<input type="text"
+								   name="name"
 								   class="form-control ${(product.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="name"
 								   required />

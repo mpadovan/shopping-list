@@ -25,11 +25,14 @@ public class CookieCipher {
 		} catch (Exception e) {
 			System.err.println("Error during encription...\n" + e.toString());
 		}
-		return Base64.getEncoder().encodeToString(output);
+		// Making it URL and (linux) file name safe
+		return Base64.getEncoder().encodeToString(output).replace('+', '-').replace('/', '_').replaceAll("%", "%25").replaceAll("\n", "%0A");
 	}
 
 	public static String decrypt(String value) {
 		generateKey();
+		// 
+		value = value.replaceAll("%0A", "\n").replaceAll("%25", "%").replace('_', '/').replace('-', '+');
 		byte[] output = new byte[value.length()];
 		try {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);

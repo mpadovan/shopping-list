@@ -22,4 +22,6 @@ public interface UserDAO {
 	Boolean addUser(User user) throws DaoException;
 	
 	Boolean updateUser(Integer id, User user) throws DaoException;
+	
+	void setToken(User user) throws DaoException;
 }

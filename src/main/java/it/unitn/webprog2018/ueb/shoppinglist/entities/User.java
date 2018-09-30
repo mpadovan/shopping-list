@@ -10,10 +10,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Entity class that implements the User entity (aka user table in database)
  *
@@ -103,7 +101,10 @@ public class User extends AbstractEntity {
 	}
 
 	/**
-	 * @return the path of the avatar image associated with the user
+	 * @return the path of t@Override
+	public String getHash() {
+		return Sha256.doHash(token);
+	}he avatar image associated with the user
 	 */
 	public String getImage() {
 		return image;
@@ -137,15 +138,32 @@ public class User extends AbstractEntity {
 	}
 	
 	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+email);
+	}
+	
+	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
+		if (name.length() > 40)
+		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
 		if (lastname == null || lastname.equals("")) {
 			setError("lastname", "Non può essere lasciato vuoto");
 		}
+		if (lastname.length() > 40)
+		{
+			setError("lastname", "Non può contenere più di 40 caratteri");
+		}
 		if (email == null || email.equals("")) {
 			setError("email", "Non può essere lasciato vuoto");
+		}
+		if (email.length() > 255)
+		{
+			setError("email", "Non può contenere più di 40 caratteri");
 		}
 		if (password == null || password.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("password", "Non può essere lasciato vuoto");
@@ -153,7 +171,7 @@ public class User extends AbstractEntity {
 		if (checkpassword == null || checkpassword.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
-		if (password != null && !password.equals("") && !(password.equals(checkpassword))) {
+		if (!(password.equals(checkpassword))) {
 			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
