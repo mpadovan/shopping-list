@@ -51,16 +51,19 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div id="sharedList">Condividi con:<br></div>
-						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
-								   class="form-control"
+								   class="form-control ${(list.getFieldErrors("description") != null ? "is-invalid" : "")}"
 								   id="description"
 								   name="description"
 								   >
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${list}" field="description" />
+							</div>
 						</div>
+						<div id="sharedList">Condividi con:<br></div>
+						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
 						<div>
 							<label for="image">Immagine</label>
 							<div class="custom-file">
