@@ -51,9 +51,11 @@ public class EditUserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
+		String changepassword = request.getParameter("changepassword");
+		request.setAttribute("changepassword", changepassword);
 		request.getRequestDispatcher("/WEB-INF/views/auth/EditUser.jsp").forward(request, response);
 	}
-	
+		
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -82,15 +84,15 @@ public class EditUserServlet extends HttpServlet {
 			user.setName(name);
 			user.setLastname(lastName);
 			user.setCheckpassword(user.getPassword());
-			String password = request.getParameter("password");
-			if(password!=null && !password.equals(""))
+			String oldpassword = request.getParameter("oldpassword");
+			if(oldpassword!=null && !oldpassword.equals(""))
 			{
 				System.out.println("password equal");
-				String newPassword = request.getParameter("newPassword");
-				String checkPassword = request.getParameter("checkPassword");
-				if(Sha256.doHash(password).equals(user.getPassword()))
+				String password = request.getParameter("password");
+				String checkPassword = request.getParameter("checkpassword");
+				if(Sha256.doHash(oldpassword).equals(user.getPassword()))
 				{
-					user.setPassword(Sha256.doHash(newPassword));
+					user.setPassword(Sha256.doHash(password));
 					user.setCheckpassword(Sha256.doHash(checkPassword));
 					if(userDAO.updateUser(id, user))
 					{
@@ -101,12 +103,15 @@ public class EditUserServlet extends HttpServlet {
 					else
 					{
 						request.setAttribute("user", user);
+						request.setAttribute("changepassword", true);
 						System.out.println("validation utente modificato con password");
 					}
 				}
 				else
 				{
-					request.setAttribute("passworderrata", "la password non è corretta");
+					user.setError("oldpassword", "la password non è corretta");
+					request.setAttribute("user", user);
+					request.setAttribute("changepassword", true);
 					System.out.println("password errata");
 				}
 			}

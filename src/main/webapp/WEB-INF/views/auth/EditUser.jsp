@@ -41,7 +41,7 @@
 							<input type="text" 
 								   id="lastName"
 								   name="lastName"
-								   ${sessionScope.user.lastname}
+								   value="${sessionScope.user.lastname}"
 								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
 								   required>
 							<div class="invalid-feedback">
@@ -57,24 +57,45 @@
 								   value="${sessionScope.user.email}"
 								   required>
 						</div>
-						<div id="blockPassword">
-							<div class="form-group" style="display: none" id="divPassword">
+						<c:if test="${requestScope.changepassword == true}">
+							<div class="form-group" id="divOldPassword">
 								<label for="password">Password attuale</label>
-								<input type="password" id="password" name="password" class="form-control">
-								
+								<input type="password"
+									   id="oldPassword"
+									   name="oldpassword"
+									   class="form-control ${(user.getFieldErrors("oldpassword") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback">
+									<shared:fieldErrors entity="${user}" field="oldpassword" />
+								</div>
 							</div>
-							<div class="form-group" style="display: none" id="divNewPassword">
-								<label for="newPassword">Nuova password</label>
-								<input type="password" id="newPassword" name="newPassword" class="form-control">
+							<div class="form-group" id="divPassword">
+								<label for="password">Nuova password</label>
+								<input type="password" 
+									   id="password" 
+									   name="password" 
+									   class="form-control ${(user.getFieldErrors("password") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback">
+									<shared:fieldErrors entity="${user}" field="password" />
+								</div>
 							</div>
-							<div class="form-group" style="display: none" id="divCheckPassword">
-								<label for="checkPassword">Nuova password</label>
-								<input type="password" id="checkPassword" name="checkPassword" class="form-control">
+							<div class="form-group" id="divCheckPassword">
+								<label for="checkpassword">Nuova password</label>
+								<input type="password" 
+									   id="checkpassword" 
+									   name="checkpassword" 
+									   class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback ">
+									<shared:fieldErrors entity="${user}" field="checkpassword" />
+								</div>
 							</div>
-						</div>
+						</c:if>
 						<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
-						<button type="button" onclick="show()" class="btn btn-light	 float-right mx-2" id="btnLock">Modifica password <i class="fas fa-lock"></i></button>
-						<button type="button" onclick="hide()" class="btn btn-light	 float-right mx-2" id="btnUnLock" style="display: none;"> <i class="fas fa-unlock"></i></button>
+						<c:if test="${not requestScope.changepassword}">
+							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Modifica password<i class="fas fa-lock"></i></a>
+						</c:if>
+						<c:if test="${requestScope.changepassword == true}">
+							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser" class="btn btn-light float-right mx-2" id="btnUnLock"> <i class="fas fa-unlock"></i></a>
+						</c:if>
 						<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 					</form>
 				</div>
@@ -83,24 +104,6 @@
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/info_user.css" type="text/css" rel="stylesheet"/>
-	</jsp:attribute>
-	<jsp:attribute name="customJs">
-		<script>
-			function show() {
-				document.getElementById("divPassword").style.display = "";
-				document.getElementById("divNewPassword").style.display = "";
-				document.getElementById("divCheckPassword").style.display = "";
-				document.getElementById("btnLock").style.display = "none";
-				document.getElementById("btnUnLock").style.display = "";
-			}
-			function hide() {
-				document.getElementById("divPassword").style.display = "none";
-				document.getElementById("divNewPassword").style.display = "none";
-				document.getElementById("divCheckPassword").style.display = "none";
-				document.getElementById("btnLock").style.display = "";
-				document.getElementById("btnUnLock").style.display = "none";
-			}
-		</script>
 	</jsp:attribute>
 
 </layouts:base>
