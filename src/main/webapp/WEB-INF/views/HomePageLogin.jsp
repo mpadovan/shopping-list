@@ -151,9 +151,9 @@
 				<c:if test="${empty requestScope.currentList}">
 					<div class="col">
 						<div class="card">
-							<div class="card-body" style="margin:auto;">
-								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova<br>
-								<div style="width: 300px; margin: auto;"><img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
+							<div class="card-body card-closed-list text-center">
+								<p class="mb-2">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</p>
+								<div class="div-img-closed-list"><img class="image-closed-list" src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
 							</div>
 						</div>
 					</div>
