@@ -13,18 +13,18 @@
 		<div class="card info-user-card" id="user">
 			<div class="card-body">
 				<div class="media">
-					<div class="mx-2 my-auto user-image">
+					<div class="my-auto user-image">
 						<a class="user-link" href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser">
-							<div class="user-hover rounded-circle">
+							<div class="user-hover">
 								<div class="user-hover-content">
 									<p>Cambia immagine <i class="fas fa-plus fa-2x"></i></p>
 								</div>
 							</div>
 							<c:if test="${not empty sessionScope.user.image}">
-								<img class="card-img-top img-fluid rounded-circle" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="${sessionScope.user.name}" title="Cambia immagine">
+								<img class="card-img-top img-fluid" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="${sessionScope.user.name}" title="Cambia immagine">
 							</c:if>
 							<c:if test="${empty sessionScope.user.image}">
-								<img class="card-img-top img-fluid rounded-circle" src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png">
+								<img class="card-img-top img-fluid" src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png">
 							</c:if>
 						</a>
 					</div>
@@ -56,16 +56,16 @@
 		<div class="card info-user-card" id="user-responsive">
 			<div class="mx-auto my-2 user-image text-center">
 				<a class="user-link" href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser">
-					<div class="user-hover rounded-circle">
+					<div class="user-hover">
 						<div class="user-hover-content">
 							<i class="fas fa-plus fa-3x"></i>
 						</div>
 					</div>
 					<c:if test="${not empty sessionScope.user.image}">
-						<img class="card-img-top img-fluid rounded-circle" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="${sessionScope.user.name}" title="Cambia immagine">
+						<img class="card-img-top img-fluid" src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" alt="${sessionScope.user.name}" title="Cambia immagine">
 					</c:if>
 					<c:if test="${empty sessionScope.user.image}">
-						<img class="card-img-top img-fluid rounded-circle" src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png">
+						<img class="card-img-top img-fluid" src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png">
 					</c:if>
 				</a>
 			</div>
