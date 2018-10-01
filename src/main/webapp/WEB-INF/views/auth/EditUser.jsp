@@ -31,6 +31,7 @@
 								   name="name"
 								   value="${sessionScope.user.name}"
 								   class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"
+								   maxlength="40"
 								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="name" />
@@ -43,6 +44,7 @@
 								   name="lastName"
 								   value="${sessionScope.user.lastname}"
 								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
+								   maxlength="40"
 								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="lastname" />
@@ -55,6 +57,7 @@
 								   id="email"
 								   name="email"
 								   value="${sessionScope.user.email}"
+								   maxlength="40"
 								   required>
 						</div>
 						<c:if test="${requestScope.changepassword == true}">
@@ -89,14 +92,21 @@
 								</div>
 							</div>
 						</c:if>
-						<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
-						<c:if test="${not requestScope.changepassword}">
-							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Modifica password<i class="fas fa-lock"></i></a>
-						</c:if>
-						<c:if test="${requestScope.changepassword == true}">
-							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser" class="btn btn-light float-right mx-2" id="btnUnLock"> <i class="fas fa-unlock"></i></a>
-						</c:if>
-						<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+						<div class="mt-4">
+							<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
+							<c:if test="${not requestScope.changepassword}">
+								<a href="${pageContext.servletContext.contextPath}/restricted/EditUser?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Password <i class="fas fa-lock"></i></a>
+							</c:if>
+							<c:if test="${requestScope.changepassword == true}">
+								<a href="${pageContext.servletContext.contextPath}/restricted/EditUser" class="btn btn-light float-right mx-2" id="btnUnLock"> <i class="fas fa-unlock"></i></a>
+								</c:if>
+							<div id="btn-back-user">
+								<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+							</div>
+							<div id="btn-back-user-res">
+								<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser" class="btn btn-light"><i class="fas fa-chevron-left"></i></a>
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>

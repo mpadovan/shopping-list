@@ -31,6 +31,7 @@
 							   id="name"
 							   name="name" 
 							   value="${listsCategory.name}"
+							   maxlength="40"
 							   required />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${listsCategory}" field="name" />
@@ -42,7 +43,8 @@
 							   class="form-control ${(listsCategory.getFieldErrors("description") != null ? "is-invalid" : "")}"
 							   id="description"
 							   name="description" 
-							   va${pageContext.servletContext.contextPath}lue="${listsCategory.description}"
+							   value="${listsCategory.description}"
+							   maxlength="256"
 							   >
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${listsCategory}" field="description" />

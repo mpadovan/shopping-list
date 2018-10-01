@@ -31,6 +31,7 @@
 							   id="name"
 							   name="name" 
 							   value="${productCategory.name}"
+							   maxlength="40"
 							   required />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${productCategory}" field="name" />
@@ -43,6 +44,7 @@
 							   id="description"
 							   name="description" 
 							   value="${productCategory.description}"
+							   maxlength="256"
 							   >
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${productCategory}" field="description" />

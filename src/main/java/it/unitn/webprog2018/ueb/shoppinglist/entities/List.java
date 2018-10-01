@@ -78,7 +78,7 @@ public class List extends AbstractEntity {
 		}
 		if (description.length() > 256)
 		{
-			setError("description", "Non può contenere più di 40 caratteri");
+			setError("description", "Non può contenere più di 256 caratteri");
 		}
 		if (category==null || category.equals(""))
 		{

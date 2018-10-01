@@ -29,6 +29,7 @@
 							   class="form-control ${(productCategory.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 							   id="name"
 							   name="name" 
+							   maxlength="40"
 							   required />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${productCategory}" field="name" />
@@ -40,6 +41,7 @@
 							   class="form-control ${(productCategory.getFieldErrors("description") != null ? "is-invalid" : "")}"
 							   id="description"
 							   name="description" 
+							   maxlength="256"
 							   />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${productCategory}" field="description" />

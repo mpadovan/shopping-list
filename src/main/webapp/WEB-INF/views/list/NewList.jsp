@@ -21,7 +21,7 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
+						<h3 class="mb-3 font-weight-normal">Nuova lista</h3>
 					</div>
 					<form class="form-list" method="POST" action="NewList" enctype='multipart/form-data'>
 						<c:if test="${requestScope.duplicateName}">
@@ -33,6 +33,7 @@
 								   class="form-control ${(list.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="nameList"
 								   name="nameList" 
+								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${list}" field="name" />
@@ -57,6 +58,7 @@
 								   class="form-control ${(list.getFieldErrors("description") != null ? "is-invalid" : "")}"
 								   id="description"
 								   name="description"
+								   maxlength="256"
 								   >
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${list}" field="description" />
