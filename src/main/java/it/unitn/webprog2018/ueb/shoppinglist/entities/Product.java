@@ -96,7 +96,7 @@ public class Product extends AbstractEntity {
 		}
 		if (note.length() > 256)
 		{
-			setError("note", "Non può contenere più di 40 caratteri");
+			setError("note", "Non può contenere più di 256 caratteri");
 		}
 		if (category==null || category.equals(""))
 		{

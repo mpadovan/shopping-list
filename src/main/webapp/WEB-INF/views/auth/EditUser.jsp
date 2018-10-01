@@ -31,6 +31,7 @@
 								   name="name"
 								   value="${sessionScope.user.name}"
 								   class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"
+								   maxlength="40"
 								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="name" />
@@ -43,6 +44,7 @@
 								   name="lastName"
 								   value="${sessionScope.user.lastname}"
 								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
+								   maxlength="40"
 								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="lastname" />
@@ -55,6 +57,7 @@
 								   id="email"
 								   name="email"
 								   value="${sessionScope.user.email}"
+								   maxlength="40"
 								   required>
 						</div>
 						<c:if test="${requestScope.changepassword == true}">

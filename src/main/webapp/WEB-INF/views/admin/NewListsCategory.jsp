@@ -28,7 +28,8 @@
 						<input type="text"
 							   class="form-control ${(listsCategory.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 							   id="name"
-							   name="name" 
+							   name="name"
+							   maxlength="40"
 							   required />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${listsCategory}" field="name" />
@@ -40,6 +41,7 @@
 							   class="form-control ${(listsCategory.getFieldErrors("description") != null ? "is-invalid" : "")}"
 							   id="description"
 							   name="description"
+							   maxlength="256"
 							   />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${listsCategory}" field="description" />

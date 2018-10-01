@@ -21,7 +21,7 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Modifica lista</h1>
+						<h3 class="mb-3 font-weight-normal">Modifica lista</h3>
 					</div>
 					<form class="form-list" method="POST" action="EditList">
 						<div>
@@ -31,6 +31,7 @@
 								   id="nameList"
 								   name="nameList" 
 								   value="${requestScope.list.name}"
+								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${list}" field="name" />
@@ -57,6 +58,7 @@
 								   id="description"
 								   name="description"
 								   value="${requestScope.list.description}"
+								   maxlength="256"
 								   required>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${list}" field="description" />
