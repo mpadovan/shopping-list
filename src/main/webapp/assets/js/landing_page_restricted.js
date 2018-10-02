@@ -6,6 +6,11 @@
  * and open the template in the editor.
  */
 
+Vue.component('autocompleteItemComponent', {
+	props: ['item'],
+	template: '<liv-bind:id="\'item\' + item.sid" class="pointer autocomplete-li">{{item.name}}<li>'
+});
+
 Vue.component('ajaxComponent', {
 	props: ['settings'],
 	data: function () {
@@ -177,13 +182,13 @@ var app = new Vue({
 		chat: false,
 		permission: false,
 		lockAjaxComponent: false,
-		item_selected_id: 1
+		item_selected_id: -2
 	},
 	computed: {
 		autocompleteComputed: function () {
 			var temp = _.cloneDeep(this.autocompleteList);
-			for (var i = 0; i < temp.length; i++) {
-				temp.id = i;
+			for (var r = 0; r < temp.length; r++) {
+				temp[r].sid = r;
 			}
 			return temp;
 		}
@@ -204,6 +209,7 @@ var app = new Vue({
 			}
 		},
 		listHided: function () {
+			this.item_selected_id = -2
 			this.showSearch = true;
 			if (this.items.length === 0)
 				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
@@ -284,6 +290,7 @@ var app = new Vue({
 				} else {
 					this.showAutocompleteList = true;
 					this.autocompleteList = data;
+					this.item_selected_id = -2;
 				}
 			} else {
 				this.results = data;
@@ -467,29 +474,27 @@ var app = new Vue({
 	}
 });
 
-$('#search-bar').keyup((e) => {
-	if (e.keyCode === 38) {
+$('#search-bar').keydown((e) => {
+	if(app.item_selected_id == -2) {
+		app.item_selected_id = 0;
+	}
+	else if (e.keyCode === 40) {
+		app.item_selected_id = app.item_selected_id + 1;
 		if(app.item_selected_id == app.autocompleteComputed.length) {
-			app.item_selected_id = 0;
+			app.item_selected_id = app.item_selected_id - 1;
 		}
-		for (var i = 0; i < app.autocompleteComputed.length; i++) {
-			if(app.autocompleteComputed[i].id == app.item_selected_id) {
-				
-				app.item_selected_id = app.item_selected_id + 1;
-				console.log(app.item_selected_id);
-				break;
-			}
+	} else if (e.keyCode === 38) {
+		app.item_selected_id = app.item_selected_id - 1;
+		if(app.item_selected_id == -1) {
+			app.item_selected_id = app.item_selected_id + 1;
 		}
-	} else if (e.keyCode === 40) {
-		if(app.item_selected_id == 0) {
-			app.item_selected_id = app.autocompleteComputed.length;
-			console.log(app.item_selected_id);
-		}
-		for (var i = 0; i < app.autocompleteComputed.length; i++) {
-			if(app.autocompleteComputed[i].id == app.item_selected_id) {
-				app.item_selected_id = app.item_selected_id - 1;
-				break;
-			}
-		}
+	}
+	for(var i = 0; i < app.autocompleteComputed.length; i++) {
+		console.log($('#item' + i ).value);
+		$('#item' + i ).removeClass('selected');
+	}
+	$('#item' + app.item_selected_id ).addClass('selected');
+	if( e.keyCode == 13) {
+		
 	}
 });
