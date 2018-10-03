@@ -52,6 +52,12 @@
 								</c:forEach>
 							</select>
 						</div>
+						<div id="app">
+							<div id="sharedList">Condividi con:<br>
+								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+							</div>
+							<button id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+						</div>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
@@ -106,13 +112,32 @@
 					});
 				});
 			});
-			function addEmail() {
-				var btn = document.createElement("INPUT");
-				btn.setAttribute("type", "email");
-				btn.setAttribute("name", "shared[]");
-				btn.classList.add("form-control");
-				document.getElementById("sharedList").appendChild(btn);
-			}
+			var app = new Vue({
+				el: '#app',
+				data: {
+					emailFields: ['']
+				},
+				watch: {
+					emailFields: function () {
+						var c = 0;
+						for (var i = 0; i < this.emailFields.length; i++) {
+							if (this.emailFields[i] == '')
+								c = 1;
+						}
+						if (c) {
+							$('#btn-add-email').prop('disabled', true);
+						} else {
+							$('#btn-add-email').prop('disabled', false);
+						}
+						console.log(this.emailFields);
+					}
+				},
+				methods: {
+					addEmail: function() {
+						this.emailFields.push('');
+					}
+				}
+			});
 		</script>
 	</jsp:attribute>
 

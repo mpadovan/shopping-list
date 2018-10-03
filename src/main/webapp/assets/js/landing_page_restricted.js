@@ -78,7 +78,7 @@ Vue.component('search-item', {
 			return capitalized;
 		}
 	},
-	created: function() {
+	created: function () {
 		this.item.photography = (this.item.photography == "null") ? null : this.item.photography;
 		this.item.logo = (this.item.logo == "null") ? null : this.item.logo;
 	},
@@ -89,20 +89,20 @@ Vue.component('search-item', {
 				item: self.item
 			});
 		},
-		oneClick: function(event){
-          this.clicks++ 
-          if(this.clicks === 1) {
-            var self = this
-            this.timer = setTimeout(function() {
-              self.show = !self.show;
-              self.clicks = 0
-            }, this.delay);
-          } else{
-             clearTimeout(this.timer);  
-             this.callParent();
-             this.clicks = 0;
-          }         
-        }
+		oneClick: function (event) {
+			this.clicks++
+			if (this.clicks === 1) {
+				var self = this
+				this.timer = setTimeout(function () {
+					self.show = !self.show;
+					self.clicks = 0
+				}, this.delay);
+			} else {
+				clearTimeout(this.timer);
+				this.callParent();
+				this.clicks = 0;
+			}
+		}
 	},
 	template: '<li class="list-group-item noselect"> \
 					<div class="row align-items-center" @click="oneClick"> \
@@ -133,16 +133,16 @@ Vue.component('fetchListComponent', {
 		var self = this;
 		if (window.location.pathname.split('HomePageLogin/')[1].includes('/') &&
 				window.location.pathname.split('HomePageLogin/')[1].split("/")[1] !== '') {
-		$.ajax(this.settings)
-				.done(function (data) {
-					self.$emit('done', data);
-				})
-				.fail(function (err) {
-					console.log(err);
-					toastr["error"]('Errore AJAX, dettagli in console');
-					return;
-				});
-			}
+			$.ajax(this.settings)
+					.done(function (data) {
+						self.$emit('done', data);
+					})
+					.fail(function (err) {
+						console.log(err);
+						toastr["error"]('Errore AJAX, dettagli in console');
+						return;
+					});
+		}
 	},
 	template: "<div style=\"display:none;\"></div>"
 });
@@ -175,7 +175,18 @@ var app = new Vue({
 		operation: null,
 		list: null,
 		chat: false,
-		permission: false 
+		permission: false,
+		lockAjaxComponent: false,
+		item_selected_id: -2
+	},
+	computed: {
+		autocompleteComputed: function () {
+			var temp = _.cloneDeep(this.autocompleteList);
+			for (var r = 0; r < temp.length; r++) {
+				temp[r].sid = r;
+			}
+			return temp;
+		}
 	},
 	methods: {
 		searching: function () {
@@ -193,8 +204,10 @@ var app = new Vue({
 			}
 		},
 		listHided: function () {
+			this.item_selected_id = -2;
 			this.showSearch = true;
-			if(this.items.length === 0) toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
+			if (this.items.length === 0)
+				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
 		searchHided: function () {
 			this.showList = true;
@@ -272,6 +285,7 @@ var app = new Vue({
 				} else {
 					this.showAutocompleteList = true;
 					this.autocompleteList = data;
+					this.item_selected_id = -2;
 				}
 			} else {
 				this.results = data;
@@ -307,13 +321,17 @@ var app = new Vue({
 			this.showSearch = false;
 		},
 		replaceQuerySearch: function (val) {
+			alert(val);
+			this.lockAjaxComponent = true;
 			this.query = val;
+			this.ajaxComponent = false;
+			this.searching();
 		},
 		quickAddProduct: function () {
 			this.ajaxSettings = {
 				"async": true,
 				"crossDomain": true,
-				"url": "/ShoppingList/services/products/restricted/" + this.user,
+				"url": "/ShoppingList/services/products/restricted/" + this.user + '/' + this.list,
 				"method": "POST",
 				"data": "{\"name\": " + this.query + "}",
 				"headers": {
@@ -338,6 +356,7 @@ var app = new Vue({
 		},
 		ajaxDone: function (data) {
 			this.ajaxComponent = false;
+			this.lockAjaxComponent = false;
 			if (data === 'error')
 				return;
 			else {
@@ -347,7 +366,7 @@ var app = new Vue({
 						this.addResultsToIstance(data);
 						break;
 					case 2:
-						toastr['success'](this.operationData.product_name + ' aggiunto ai propri prodotti');
+						toastr['success'](this.operationData.product_name + ' creato ed aggiunto alla lista attuale');
 						break;
 					case 3:
 						data = data.products.concat(data.publicProducts);
@@ -388,7 +407,7 @@ var app = new Vue({
 		},
 		fetchListDone: function (data) {
 			this.permission = true;
-			if(!data.editList) {
+			if (!data.editList) {
 				toastr['info']('Non sei abilitato alla modifica di questa lista, contatta l\'amministratore della lista per informazioni');
 				this.permission = false;
 			}
@@ -406,7 +425,7 @@ var app = new Vue({
 	},
 	watch: {
 		query: function (val) {
-			if (val == 0) {
+			if (val == 0 || this.lockAjaxComponent) {
 				this.showAutocomplete = false;
 				this.hideSearch();
 			} else {
@@ -419,8 +438,8 @@ var app = new Vue({
 				};
 				this.operation = 1;
 				this.ajaxComponent = true;
-				$('#search-input').focus();
-			}
+				$('#search-input').focus();	
+		}
 		},
 		selected: function (val) {
 			if (val == 'all') {
@@ -433,20 +452,48 @@ var app = new Vue({
 					this.resultsSorted.push(this.results[i]);
 			}
 		},
-		chat: function(val) {
+		chat: function (val) {
 			$('#chat').css('display', 'block');
-		} 
+		}
 	},
 	created: function () {
 		this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
 		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
 		this.fetchList();
-		if(typeof(Worker) !== "undefined") {
-			if(typeof(w) == "undefined") {
+		/*if (typeof (Worker) !== "undefined") {
+			if (typeof (w) == "undefined") {
 				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
 			}
 		} else {
 			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
+		}*/
+	}
+});
+
+$('#search-bar').keydown((e) => {
+	if( e.keyCode === 13 && app.item_selected_id != -2) {
+		app.query = $('#item' + app.item_selected_id)[0].textContent;
+		app.searching();
+	}
+	if(e.keyCode === 13){
+		app.searching();
+	}
+	if(app.item_selected_id == -2) {
+		app.item_selected_id = 0;
+	}
+	else if (e.keyCode === 40) {
+		app.item_selected_id = app.item_selected_id + 1;
+		if(app.item_selected_id == app.autocompleteComputed.length) {
+			app.item_selected_id = app.item_selected_id - 1;
+		}
+	} else if (e.keyCode === 38) {
+		app.item_selected_id = app.item_selected_id - 1;
+		if(app.item_selected_id == -1) {
+			app.item_selected_id = app.item_selected_id + 1;
 		}
 	}
+	for(var i = 0; i < app.autocompleteComputed.length; i++) {
+		$('#item' + i ).removeClass('selected');
+	}
+	$('#item' + app.item_selected_id ).addClass('selected');
 });

@@ -1,3 +1,4 @@
+/* jshint esversion:6 */
 Vue.component('geores', {
     props: ['data', 'ok'],
     data: function () {
@@ -7,16 +8,16 @@ Vue.component('geores', {
             maxNegozi: 4
         };
     },
-    template: ' <div> \
-                    <div v-if="!ok">{{ data }}</div> \
-                    <div v-if="ok"><h5>Vicino a te: </h5> \
-                    <div v-for="cat in sorted" > \
-                        <div> \
-                            <h5>{{ cat.category }}</h5> \
-                            <div v-for="element in cat.response.data">{{ element.name }}</div> \
-                        </div> \
-                    </div></div> \
-                </div>',
+    template: ` <div> 
+                    <div v-if="!ok">{{ data }}</div> 
+                    <div v-if="ok"><h5>Vicino a te: </h5> 
+                    <div v-for="cat in sorted" > 
+                        <div> 
+                            <h5>{{ cat.category }}</h5> 
+                            <div v-for="element in cat.response.data">{{ element.name }}</div> 
+                        </div> 
+                    </div></div> 
+                </div>`,
     mounted: function () {
         console.log(this.data);
         tippy('#geolocBtn', {
@@ -76,6 +77,7 @@ var geo = new Vue({
                             toastr['error']("This browser does not support desktop notification");
                         }
 
+						/*
                         // Let's check whether notification permissions have already been granted
                         else if (Notification.permission === "granted") {
                             // If it's okay let's create a notification
@@ -90,7 +92,7 @@ var geo = new Vue({
                                     var notification = new Notification('vicino a te!');
                                 }
                             });
-                        }
+                        }*/
                     },
                     error: function() {
                         self.msg = 'Abilita i servizi di geolocalizzazione per avere suggerimenti';

@@ -34,7 +34,7 @@
 											</div>
 										</div>
 										<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
-											<li class="pointer autocomplete-li" style="padding-left: .5rem;" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+											<li v-bind:id="\'item\' + item.sid" class="pointer autocomplete-li" style="padding-left: .5rem;" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 										</div>
 										<transition name="fade" v-on:after-leave="searchHided">
 											<div class="list-group" v-if="showSearch">
