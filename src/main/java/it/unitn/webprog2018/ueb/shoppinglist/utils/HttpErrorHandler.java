@@ -55,16 +55,16 @@ public class HttpErrorHandler {
 	 * SQL wildcard character "%"
 	 */
 	public static String getQuery(String search) {
-		StringTokenizer filter = null;
+		StringTokenizer filter;
 		String query = "";
 		if (search != null) {
-			filter = new StringTokenizer(search, "-");
+			filter = new StringTokenizer(search, " ");
 			while (filter.hasMoreTokens()) {
 				// TODO add sql wildcard
-				query += filter.nextToken();
+				query += "%" + filter.nextToken();
 			}
 		}
-		return query;
+		return query + "%";
 	}
 
 	/**
