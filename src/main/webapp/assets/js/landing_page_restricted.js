@@ -335,7 +335,7 @@ var app = new Vue({
 			this.ajaxSettings = {
 				"async": true,
 				"crossDomain": true,
-				"url": "/ShoppingList/services/products/restricted/" + this.user,
+				"url": "/ShoppingList/services/products/restricted/" + this.user + '/' + this.list,
 				"method": "POST",
 				"data": "{\"name\": " + this.query + "}",
 				"headers": {
@@ -370,7 +370,7 @@ var app = new Vue({
 						this.addResultsToIstance(data);
 						break;
 					case 2:
-						toastr['success'](this.operationData.product_name + ' aggiunto ai propri prodotti');
+						toastr['success'](this.operationData.product_name + ' creato ed aggiunto alla lista attuale');
 						break;
 					case 3:
 						data = data.products.concat(data.publicProducts);
@@ -442,8 +442,8 @@ var app = new Vue({
 				};
 				this.operation = 1;
 				this.ajaxComponent = true;
-				$('#search-input').focus();
-			}
+				$('#search-input').focus();	
+		}
 		},
 		selected: function (val) {
 			if (val == 'all') {
@@ -464,13 +464,13 @@ var app = new Vue({
 		this.user = window.location.pathname.split('HomePageLogin/')[1].split('/')[0];
 		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
 		this.fetchList();
-		if (typeof (Worker) !== "undefined") {
+		/*if (typeof (Worker) !== "undefined") {
 			if (typeof (w) == "undefined") {
 				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
 			}
 		} else {
 			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
-		}
+		}*/
 	}
 });
 
