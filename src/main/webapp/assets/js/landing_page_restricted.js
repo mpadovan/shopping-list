@@ -6,11 +6,6 @@
  * and open the template in the editor.
  */
 
-Vue.component('autocompleteItemComponent', {
-	props: ['item'],
-	template: '<li v-bind:id="\'item\' + item.sid" class="pointer autocomplete-li">{{item.name}}<li>'
-});
-
 Vue.component('ajaxComponent', {
 	props: ['settings'],
 	data: function () {
@@ -326,6 +321,7 @@ var app = new Vue({
 			this.showSearch = false;
 		},
 		replaceQuerySearch: function (val) {
+			alert(val);
 			this.lockAjaxComponent = true;
 			this.query = val;
 			this.ajaxComponent = false;
@@ -478,7 +474,8 @@ $('#search-bar').keydown((e) => {
 	if( e.keyCode === 13 && app.item_selected_id != -2) {
 		app.query = $('#item' + app.item_selected_id)[0].textContent;
 		app.searching();
-	} else if(e.keyCode === 13){
+	}
+	if(e.keyCode === 13){
 		app.searching();
 	}
 	if(app.item_selected_id == -2) {
