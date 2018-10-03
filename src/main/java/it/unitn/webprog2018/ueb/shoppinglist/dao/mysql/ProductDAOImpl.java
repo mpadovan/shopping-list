@@ -22,11 +22,11 @@ import java.util.logging.Logger;
  */
 
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
-
+	
 	public ProductDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
 	}
-
+	
 	/**
 	 * aggiunge un prodotto al DB
 	 */
@@ -39,18 +39,23 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
-					logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					if(logo != null)
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					if(photo != null)
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
-				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (\""+
-						product.getName()+"\",\""+
-						product.getNote()+"\",\""+
-						logo+"\",\""+
-						photo+"\","+
-						product.getOwner().getId()+","+
-						product.getCategory().getId()+")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (?,?,?,?,?,?)";
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, logo);
+				st.setString(4, photo);
+				st.setInt(5, product.getOwner().getId());
+				st.setInt(6, product.getCategory().getId());
 				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					product.setId(rs.getInt(1));
 				st.close();
 				return valid;
 			} catch (SQLException ex) {
@@ -60,7 +65,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		}
 		return valid;
 	}
-
+	
 	/**
 	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire
 	 * la Query (dato che il chiamante conosce giá l'utente)
@@ -72,9 +77,10 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.idproductscategory,"
 					+ "pc.name,pc.category,pc.description,pc.logo "
 					+ "FROM products p inner join productscategories pc on p.idproductscategory = pc.id "
-					+ "WHERE p.iduser = " + userId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					+ "WHERE p.iduser = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
 			Product p;
 			ProductsCategory pc, pcp;
 			int i;
@@ -106,7 +112,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean updateProduct(Integer productId, Product product) throws DaoException {
 		Boolean valid = product.isVaildOnUpdate(dAOFactory);
@@ -117,23 +123,19 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
 					if(logo!=null)
-					{
 						logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					}
 					if(photo!=null)
-					{
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
-					}
 				}
-				String query = "UPDATE products\n" +
-						"SET name = \""+product.getName()+"\"," +
-						"	note = \""+product.getNote()+"\"," +
-						"   logo = \""+logo+"\"," +
-						"   photography = \""+photo+"\"," +
-						"   iduser = "+product.getOwner().getId()+"," +
-						"   idproductscategory = "+product.getCategory().getId()+
-						" WHERE id = "+productId;
+				String query = "UPDATE products SET name = ?, note = ?, logo = ?, photography = ?, iduser = ?, idproductscategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, logo);
+				st.setString(4, photo);
+				st.setInt(5, product.getOwner().getId());
+				st.setInt(6, product.getCategory().getId());
+				st.setInt(7, productId);
 				int count = st.executeUpdate();
 				st.close();
 				if (count != 1) {
@@ -147,7 +149,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		}
 		return valid;
 	}
-
+	
 	/**
 	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire
 	 * la Query (dato che il chiamante conosce giá l'utente)
@@ -159,9 +161,11 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,p.iduser,p.idproductscategory,"
 					+ "pc.name,pc.category,pc.description,pc.logo "
 					+ "FROM products p inner join productscategories pc on p.idproductscategory = pc.id "
-					+ "WHERE p.iduser = " + userId + " AND p.name LIKE \"%" + matching + "%\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					+ "WHERE p.iduser = ? AND p.name LIKE ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, userId);
+			st.setString(2, "%"+matching+"%");
+			ResultSet rs = st.executeQuery();
 			Product p;
 			ProductsCategory pc, pcp;
 			int i;
@@ -194,7 +198,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/**
 	 * ATTENZIONE: non da e-mail, password e image degli owner
 	 */
@@ -208,9 +212,10 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 					"FROM products p " +
 					"INNER JOIN users u ON p.iduser = u.id " +
 					"INNER JOIN productscategories pc ON p.idproductscategory = pc.id " +
-					"WHERE p.id = "+productId;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE p.id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, productId);
+			ResultSet rs = st.executeQuery();
 			User u = new User();
 			ProductsCategory pc = new ProductsCategory();
 			ProductsCategory pcp = new ProductsCategory();
@@ -248,8 +253,9 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 	@Override
 	public Boolean deleteProduct(Integer id) throws DaoException {
 		try{
-			String query = "delete from products where id = "+id;
+			String query = "delete from products where id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
 			int count = st.executeUpdate();
 			st.close();
 			if(count < 1)
@@ -261,20 +267,20 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean addProductWithId(Product product) throws DaoException {
 		Boolean valid = product.isVaildOnCreate(dAOFactory);
 		if (valid) {
 			try {
-				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (\""
-						+ product.getName() + "\",\""
-						+ product.getNote() + "\",\""
-						+ product.getLogo() + "\",\""
-						+ product.getPhotography() + "\","
-						+ product.getOwner().getId() + ","
-						+ product.getCategory().getId() + ")";
+				String query = "INSERT INTO products (name,note,logo,photography,iduser,idproductscategory) VALUES (?,?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, product.getLogo());
+				st.setString(4, product.getPhotography());
+				st.setInt(5, product.getOwner().getId());
+				st.setInt(6, product.getCategory().getId());
 				st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {

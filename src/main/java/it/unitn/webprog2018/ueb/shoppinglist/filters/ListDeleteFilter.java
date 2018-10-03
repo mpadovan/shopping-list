@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ public class ListDeleteFilter implements Filter {
 
 	private ListDAO listDAO;
 	private FilterConfig filterConfig;
-	
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
@@ -78,7 +79,8 @@ public class ListDeleteFilter implements Filter {
 					}
 				}
 				try {
-					if (!listDAO.hasDeletePermission(listId, ((User) req.getSession().getAttribute("user")).getId())) {
+					List list = listDAO.getList(listId);
+					if (!list.getOwner().getId().equals(user.getId()) && !listDAO.hasDeletePermission(listId, user.getId())) {
 						((HttpServletResponse) response).sendError(401);
 					}
 				} catch (DaoException ex) {
@@ -86,10 +88,12 @@ public class ListDeleteFilter implements Filter {
 					Logger.getLogger(ListDeleteFilter.class.getName()).log(Level.SEVERE, null, ex);
 				}
 			}
-			try {
-				chain.doFilter(request, response);
-			} catch (IOException | ServletException ex) {
-				Logger.getLogger(ListDeleteFilter.class.getName()).log(Level.SEVERE, null, ex);
+			if (!response.isCommitted()) {
+				try {
+					chain.doFilter(request, response);
+				} catch (IOException | ServletException ex) {
+					Logger.getLogger(ListDeleteFilter.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			}
 		}
 	}

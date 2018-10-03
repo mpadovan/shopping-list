@@ -1,12 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,9 +29,11 @@ public class EditListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/list/EditList.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -46,7 +47,7 @@ public class EditListServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -55,6 +56,6 @@ public class EditListServlet extends HttpServlet {
 	@Override
 	public String getServletInfo() {
 		return "Edit List Servlet";
-	}// </editor-fold>
-
+	}
+	
 }

@@ -20,29 +20,44 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Registrazione</h1>
+						<h3 class="mb-3 font-weight-normal">Registrazione</h3>
 					</div>
 					<form class="form-signin" action="SignUp" method="POST" enctype='multipart/form-data'>
 						<div class="form-label-group">
-							<input type="text"  id="name" name="name" class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}" placeholder="Nome" required>
+							<input type="text"
+								   id="name"
+								   name="name"
+								   class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"
+								   placeholder="Nome"
+								   maxlength="40"
+								   required>
 							<label for="name">Nome</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="name" />
 							</div>
 						</div>
 						<div class="form-label-group">
-							<input type="text"  id="lastName" name="lastName" class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}" placeholder="Cognome" required>
+							<input type="text" 
+								   id="lastName"
+								   name="lastName"
+								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
+								   placeholder="Cognome"
+								   maxlength="40"
+								   required>
 							<label for="lastName">Cognome</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="lastname" />
 							</div>
 						</div>
-						<div class="custom-file my-2">
-							<label class="custom-file-label" for="image">Scegli avatar</label>
-							<input type="file" class="custom-file-input" id="image" name="image">
-						</div>
 						<div class="form-label-group mt-3">
-							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control ${(user.getFieldErrors("email") != null ? "is-invalid" : "")}" placeholder="Email" required>
+							<input type="email" 
+								   id="email"
+								   name="email"
+								   aria-describedby="emailHelp"
+								   class="form-control ${(user.getFieldErrors("email") != null ? "is-invalid" : "")}"
+								   placeholder="Email"
+								   maxlength="40"
+								   required>
 							<label for="email">Email</label>
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="email" />
@@ -65,7 +80,7 @@
 						<div class="form-group">
 							<div class="form-check">
 								<input class="form-check-input ${ requestScope.privacy != null ? "is-invalid" : ""}"
-									   type="checkbox" value="" name="privacy" id="privacy" required >
+									   type="checkbox" value="privacy" name="privacy" id="privacy" required >
 								<label class="form-check-label" for="privacy">
 									Normativa privacy
 								</label>

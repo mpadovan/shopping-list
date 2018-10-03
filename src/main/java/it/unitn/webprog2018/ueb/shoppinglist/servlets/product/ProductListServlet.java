@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.product;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -36,7 +36,7 @@ public class ProductListServlet extends HttpServlet {
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
-
+		
 	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -49,6 +49,8 @@ public class ProductListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		try {
@@ -64,7 +66,7 @@ public class ProductListServlet extends HttpServlet {
 		}
 		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

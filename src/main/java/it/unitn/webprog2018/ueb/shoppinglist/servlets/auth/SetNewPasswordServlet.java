@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SetNewPasswordServlet extends HttpServlet {
 	
 	private UserDAO userDAO;
-
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -47,9 +47,11 @@ public class SetNewPasswordServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/SetNewPassword.jsp").forward(request, response);
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -61,6 +63,8 @@ public class SetNewPasswordServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String context = getServletContext().getContextPath();
 		if (!context.endsWith("/")) {
 			context += "/";
@@ -73,6 +77,7 @@ public class SetNewPasswordServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = userDAO.getById(id);
+			System.out.println(user.getTokenpassword() +" " + token);
 			if(user.getTokenpassword().equals(token) && token!=null)
 			{
 				user.setPassword(password);
@@ -84,7 +89,7 @@ public class SetNewPasswordServlet extends HttpServlet {
 					userDAO.updateUser(user.getId(), user);
 					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmChangePassword.jsp").forward(request, response);
 				}
-				else 
+				else
 				{
 					request.setAttribute("user", user);
 					request.getRequestDispatcher("/WEB-INF/views/auth/SetNewPassword.jsp").forward(request, response);
@@ -93,14 +98,14 @@ public class SetNewPasswordServlet extends HttpServlet {
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(SetNewPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
-		} 
+		}
 		catch (DaoException ex) {
 			Logger.getLogger(SetNewPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-				
+		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -110,5 +115,5 @@ public class SetNewPasswordServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}// </editor-fold>
-
+	
 }

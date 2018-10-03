@@ -8,10 +8,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.entities;
 import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 
 /**
  *
@@ -81,14 +80,23 @@ public class Product extends AbstractEntity {
 	}
 	
 	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
+	}
+	
+	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
 		if (name==null || name.equals(""))
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if (owner==null || owner.equals(""))
+		if (name.length() > 40)
 		{
-			setError("owner", "Non può essere lasciato vuoto");
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (note.length() > 256)
+		{
+			setError("note", "Non può contenere più di 256 caratteri");
 		}
 		if (category==null || category.equals(""))
 		{

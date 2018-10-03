@@ -4,33 +4,34 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 27-ago-2018, 13.49.04
+    Created on : 3-ott-2018, 13.48.41
     Author     : giulia
 */
 #btn-back-user{
 	display: block;
 }
+
 #btn-back-user-res{
 	display: none;
 }
-.card-img-top{
-	width: 200px;
-	height: 200px;
-}
-.info-user-card{
+
+.card-info{
 	max-width: 1000px;	
 	margin: 100px auto;
 }
+
 .edit-user-card{
 	max-width: 500px;	
 	margin: 100px auto;
 }
+
 .form-user {
 	width: 100%;
 	max-width: 450px;
 	padding: 15px;
 	margin: auto;
 }
+
 #content {
 	background-color:lightgrey;
 }

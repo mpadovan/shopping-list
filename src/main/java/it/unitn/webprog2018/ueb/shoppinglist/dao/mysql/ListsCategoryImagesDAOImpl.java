@@ -38,12 +38,16 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		if(valid){
 			try{
 				String image = listCategoriesImage.getImage();
-				if(File.separator.equals("\\"))
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
-				String query = "insert into listscategoriesimages (image,idcategory) values\n" +
-						"(\""+image+"\","+listCategoriesImage.getCategory().getId()+")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				String query = "INSERT INTO listscategoriesimages (image,idcategory) VALUES (?,?)";
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, image);
+				st.setInt(2, listCategoriesImage.getCategory().getId());
 				int count = st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					listCategoriesImage.setId(rs.getInt(1));
 				st.close();
 				return valid && (count == 1);
 			}
@@ -97,13 +101,13 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		{
 			try{
 				String image = listCategoriesImage.getImage();
-				if(File.separator.equals("\\"))
+				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
-				String query = "update listscategoriesimages\n" +
-						"set image = \""+image+"\",\n" +
-						"	idcategory = "+listCategoriesImage.getCategory().getId()+"\n" +
-						"where id = " + categoryId;
+				String query = "UPDATE listscategoriesimages SET image = ?, idcategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, image);
+				st.setInt(2, listCategoriesImage.getCategory().getId());
+				st.setInt(3, categoryId);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -125,9 +129,10 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 			ListsCategory lc;
 			String query = "select lci.image,lci.idcategory,lc.name,lc.description\n" +
 					"from listscategoriesimages lci inner join listscategories lc on lci.idcategory = lc.id\n" +
-					"where lci.id = "+id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"where lci.id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			if(rs.first())
 			{
 				int i = 1;

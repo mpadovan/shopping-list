@@ -11,6 +11,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+import java.io.File;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,21 +61,34 @@ public class ProductsCategory extends AbstractEntity {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
+
+	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
+	}
 	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
-		if (name==null || name.equals(""))
-		{
+		if (name == null || name.equals("")) {
 			setError("name", "Non può essere lasciato vuoto");
 		}
-		if(errors.isEmpty())
+		if (name.length() > 40)
 		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (description.length() > 256)
+		{
+			setError("description", "Non può contenere più di 256 caratteri");
+		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
 			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
 			try {
-				productsCategoryDAO.getByName(name);
-				ProductsCategory productsCategory = productsCategoryDAO.getById(id);
-				if(id!=productsCategory.getId())
-				{
+				ProductsCategory productsCategory = productsCategoryDAO.getByName(name);
+				if (id != productsCategory.getId()) {
 					setError("name", "Nome già esistente");
 				}
 			} catch (RecordNotFoundDaoException ex) {
@@ -81,11 +98,16 @@ public class ProductsCategory extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if (errors.isEmpty()) {
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) dAOFactory).getProductsCategoryDAO();
+			try {
+				productsCategoryDAO.getByName(name);
+				setError("name", "Nome già esistente");
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }

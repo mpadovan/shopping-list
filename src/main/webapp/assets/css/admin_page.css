@@ -11,20 +11,20 @@ body{
 	background-color: #fafafa;
 }
 .card-new{
-	margin: 10px auto;;
-	max-width: 600px;
+	margin: 100px auto;;
+	max-width: 500px;
 }
 .btn-new{
 	background-color: #2a5788;
 	color: white;
 }
+.edit-user-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
 .card-edit{
 	margin: 100px auto;
-	max-width: 1000px;	
-}
-.card-info{
-	max-width: 1000px;	
-	margin: 100px auto;
+	max-width: 500px;	
 }
 .info-product{
 	background-color: #2a5788 ;
@@ -32,25 +32,26 @@ body{
 	min-height: 50px;
 	border-radius: 10px;
 }
-.info-custom-product{
+.info-public-product{
 	background-color: #2a5788;
-	max-width: 50px;
-	min-height: 50px;
-	border-radius: 10px;
+	width: 50px;
+	height: 50px;
+}
+.info-product-category{
+	background-color: #2a5788;
+	width: 50px;
+	height: 50px;
 }
 .info-custom-product-a{
 	color: #007bff;
 }
 .logo-product{
-	max-width: 40px;
-	max-height: 40px;
-	margin-top: 4px;
+	width: 50px;
+	height: 50px;
 }
 .info-product-image{
-	background-color: white ;
-	max-width: 50px;
-	min-height: 50px;
-	border-radius: 10px;
+	width: 50px;
+	height: 50px;
 }
 .image-product{
 	max-width: 200px;
@@ -59,8 +60,8 @@ body{
 	margin-top: 45px;
 }
 .image-product-list{
-	max-width: 50px;
-	max-height: 50px;
+	width: 50px;
+	height: 50px;
 	margin: auto;
 }
 .info-product-card{
@@ -72,4 +73,10 @@ body{
 	margin-right: auto;
 	margin-top: 10px;
 	margin-bottom:10px;
+}
+.form-product {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
 }

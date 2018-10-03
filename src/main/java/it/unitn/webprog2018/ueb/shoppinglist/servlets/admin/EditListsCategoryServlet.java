@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -29,17 +29,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EditListsCategoryServlet", urlPatterns = {"/restricted/admin/EditListsCategory"})
 public class EditListsCategoryServlet extends HttpServlet {
-
+	
 	private ListsCategoryDAO listsCategoryDAO;
 	private ListsCategoryImagesDAO listsCategoryImagesDAO;
-
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		listsCategoryDAO = factory.getListsCategoryDAO();
 		listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -51,6 +51,8 @@ public class EditListsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
 		try {
 			ListsCategory listsCategory = listsCategoryDAO.getById(categoryId);
@@ -63,9 +65,9 @@ public class EditListsCategoryServlet extends HttpServlet {
 		} catch (DaoException ex) {
 			Logger.getLogger(EditListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
+		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -77,13 +79,15 @@ public class EditListsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-
+		
 		String image = request.getParameter("image");
 		String imageIdString = request.getParameter("imageId");
-
+		
 		Integer imageId = null;
 		ListsCategory listsCategory = new ListsCategory();
 		ListsCategoriesImage categoriesImage = null;
@@ -95,7 +99,7 @@ public class EditListsCategoryServlet extends HttpServlet {
 			categoriesImage = new ListsCategoriesImage();
 			categoriesImage.setImage(image);
 			categoriesImage.setId(imageId);
-
+			
 			try {
 				listsCategoryImagesDAO.updateListsCategoriesImage(categoryId, categoriesImage);
 			} catch (RecordNotFoundDaoException ex) {
@@ -106,7 +110,7 @@ public class EditListsCategoryServlet extends HttpServlet {
 				response.sendError(500, ex.getMessage());
 			}
 		}
-
+		
 		try {
 			if (listsCategoryDAO.updateListsCategory(categoryId, listsCategory)) {
 				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
@@ -121,9 +125,9 @@ public class EditListsCategoryServlet extends HttpServlet {
 			Logger.getLogger(EditListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-
+		
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -133,5 +137,5 @@ public class EditListsCategoryServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit list category servlet";
 	}
-
+	
 }

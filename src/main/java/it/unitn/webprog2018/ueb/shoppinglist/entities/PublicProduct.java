@@ -12,6 +12,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,21 +75,37 @@ public class PublicProduct extends AbstractEntity {
 	}
 	
 	@Override
+	public String getHash() {
+		return CookieCipher.encrypt(id+name);
+	}
+	
+	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException{
 		if (name==null || name.equals(""))
 		{
 			setError("name", "Non può essere lasciato vuoto");
 		}
+		if (name.length() > 40)
+		{
+			setError("name", "Non può contenere più di 40 caratteri");
+		}
+		if (note.length() > 256)
+		{
+			setError("note", "Non può contenere più di 256 caratteri");
+		}
 		if (category==null || category.equals(""))
 		{
 			setError("category", "Non può essere lasciato vuoto");
 		}
+	}
+
+	@Override
+	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
 		if(errors.isEmpty())
 		{
 			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
 			try {
-				publicProductDAO.getByName(name);
-				PublicProduct publicProduct = publicProductDAO.getById(id);
+				PublicProduct publicProduct = publicProductDAO.getByName(name);
 				if(id!=publicProduct.getId())
 				{
 					setError("name", "Nome già esistente");
@@ -99,11 +117,22 @@ public class PublicProduct extends AbstractEntity {
 	}
 
 	@Override
-	protected void validateOnUpdate(DAOFactory dAOFactory) {
-	}
-
-	@Override
-	protected void validateOnCreate(DAOFactory dAOFactory) {
+	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
+		if(errors.isEmpty())
+		{
+			PublicProductDAO publicProductDAO = ((DAOFactory) dAOFactory).getPublicProductDAO();
+			try {
+				publicProductDAO.getByName(name);
+				setError("name", "Nome già esistente");
+				/*PublicProduct publicProduct = publicProductDAO.getById(id);
+				if(id!=publicProduct.getId())
+				{
+					setError("name", "Nome già esistente");
+				}*/
+			} catch (RecordNotFoundDaoException ex) {
+				//tutto andato a buon fine, nessun duplicato
+			}
+		}
 	}
 
 }

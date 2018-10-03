@@ -55,9 +55,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 				p.setPhotography(rs.getString(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				//pc.setCategory(rs.getInt(i++));
 				pc.setDescription(rs.getString(i++));
-				//pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				list.add(p);
 			}
@@ -82,9 +80,10 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 					"pp.idproductscategory,pc.name,pc.description " +
 					"FROM publicproducts pp " +
 					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id "+
-					"WHERE pp.name LIKE \"%"+matching+"%\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE pp.name LIKE ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, "%"+matching+"%");
+			ResultSet rs = st.executeQuery();
 			PublicProduct p;
 			ProductsCategory pc;
 			int i;
@@ -100,9 +99,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 				p.setPhotography(rs.getString(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				//pc.setCategory(rs.getInt(i++));
 				pc.setDescription(rs.getString(i++));
-				//pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				list.add(p);
 			}
@@ -127,9 +124,10 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 					"pp.idproductscategory,pc.name,pc.description " +
 					"FROM publicproducts pp " +
 					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id " +
-					"WHERE pp.id = "+id;
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE pp.id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			ProductsCategory pc = new ProductsCategory();
 			if(rs.first())
 			{
@@ -141,9 +139,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 				p.setPhotography(rs.getString(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				//pc.setCategory(rs.getInt(i++));
 				pc.setDescription(rs.getString(i++));
-				//pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				
 				rs.close();
@@ -167,17 +163,19 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
-					logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					if(logo != null)
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					if(photo != null)
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
-				String query = "UPDATE publicproducts " +
-						"SET name = \""+product.getName()+"\"," +
-						"note = \""+product.getNote()+"\"," +
-						"logo = \""+logo+"\"," +
-						"photography = \""+photo+"\"," +
-						"idproductscategory = "+product.getCategory().getId()+
-						" WHERE id = "+id;
+				String query = "UPDATE publicproducts SET name = ?,note = ?,logo = ?,photography = ?,idproductscategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, logo);
+				st.setString(4, photo);
+				st.setInt(5, product.getCategory().getId());
+				st.setInt(6, id);
 				int count = st.executeUpdate();
 				st.close();
 				if(count != 1)
@@ -194,24 +192,30 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 	
 	@Override
 	public Boolean addProduct(PublicProduct product) throws DaoException {
-		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		Boolean valid = true; 
+		product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
-					logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					photo = photo.replaceAll("\\\\", "\\\\\\\\");
+					if(logo != null)
+						logo = logo.replaceAll("\\\\", "\\\\\\\\");
+					if(photo != null)
+						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
-				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (\""+
-						product.getName()+"\",\""+
-						product.getNote()+"\",\""+
-						logo+"\",\""+
-						photo+"\","+
-						product.getCategory().getId()+")";
-				PreparedStatement st = this.getCon().prepareStatement(query);
+				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (?,?,?,?,?)";
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, logo);
+				st.setString(4, photo);
+				st.setInt(5, product.getCategory().getId());
 				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next())
+					product.setId(rs.getInt(1));
 				st.close();
 				return valid;
 			}
@@ -232,8 +236,9 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 		//if(valid)
 		//{
 		try{
-			String query = "DELETE FROM publicproducts WHERE id = "+id;
+			String query = "DELETE FROM publicproducts WHERE id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
 			int count = st.executeUpdate();
 			st.close();
 			if(count != 1)
@@ -259,23 +264,22 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 					"pp.idproductscategory,pc.name,pc.description " +
 					"FROM publicproducts pp " +
 					"INNER JOIN productscategories pc on pp.idproductscategory = pc.id " +
-					"WHERE pp.name = \""+name+"\"";
-			Statement st = this.getCon().createStatement();
-			ResultSet rs = st.executeQuery(query);
+					"WHERE pp.name = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setString(1, name);
+			ResultSet rs = st.executeQuery();
 			ProductsCategory pc = new ProductsCategory();
 			if(rs.first())
 			{
 				int i = 1;
-				p.setId(i++);
+				p.setId(rs.getInt(i++));
 				p.setName(name);
 				p.setNote(rs.getString(i++));
 				p.setLogo(rs.getString(i++));
 				p.setPhotography(rs.getString(i++));
 				pc.setId(rs.getInt(i++));
 				pc.setName(rs.getString(i++));
-				//pc.setCategory(rs.getInt(i++));
 				pc.setDescription(rs.getString(i++));
-				//pc.setLogo(rs.getString(i++));
 				p.setCategory(pc);
 				
 				rs.close();
@@ -289,10 +293,10 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean addProductWithId(PublicProduct product) throws DaoException {
-		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		Boolean valid = product.isVaildOnCreate(dAOFactory);
 		if(valid)
 		{
 			try{
@@ -300,21 +304,17 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 				String photo = product.getPhotography();
 				if(File.separator.equals("\\")){
 					if(logo!=null)
-					{
 						logo = logo.replaceAll("\\\\", "\\\\\\\\");
-					}
 					if(photo!=null)
-					{
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
-					}
 				}
-				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (\""+
-						product.getName()+"\",\""+
-						product.getNote()+"\",\""+
-						logo+"\",\""+
-						photo+"\","+
-						product.getCategory().getId()+")";
+				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, product.getName());
+				st.setString(2, product.getNote());
+				st.setString(3, logo);
+				st.setString(4, photo);
+				st.setInt(5, product.getCategory().getId());
 				st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {

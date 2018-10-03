@@ -132,4 +132,9 @@ public class UserDAOimpl implements UserDAO {
 			Logger.getLogger(ProductDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+
+	@Override
+	public void setToken(User user) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

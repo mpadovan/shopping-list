@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
@@ -10,16 +10,12 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +32,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "EditProductsCategoryServlet", urlPatterns = {"/restricted/admin/EditProductsCategory"})
 public class EditProductsCategoryServlet extends HttpServlet {
 
+	@Inject
+	UploadHandler uploadHandler;
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -47,6 +46,8 @@ public class EditProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
 
@@ -78,62 +79,53 @@ public class EditProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
+		}
+
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer productCategoryId = Integer.parseInt(request.getParameter("id"));
+
 		//parametri stringhe
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+
 		//parametri file
-		String logoURI = "";
-		File fileLogo = null;
-		String logoFileName = "";
-		String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productCategoryLogo" + File.separator;
+		String logoURI = null;
 		Part logo = request.getPart("logo");
+
 		try {
 			ProductsCategory productsCategory = productsCategoryDAO.getById(productCategoryId);
 			productsCategory.setName(name);
 			productsCategory.setDescription(description);
 			productsCategory.setId(productCategoryId);
+
 			if ((logo != null) && (logo.getSize() > 0)) {
-				//creazione cartella se non esiste
-				//delete old logo product category
-				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
-					int ext = productsCategory.getLogo().lastIndexOf(".");
-					File file = new File(logoFolder + productsCategory.getId() + productsCategory.getLogo().substring(ext));
-					if (file.exists()) {
-						Boolean fatto = file.delete();
-					}
-				}
-				//create
-				logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-				int ext = logoFileName.lastIndexOf(".");
-				int noExt = logoFileName.lastIndexOf(File.separator);
-				logoFileName = logoFolder + productsCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-				InputStream fileContentLogo = null;
+				// delete old product category logo
+				uploadHandler.deleteFile(productsCategory.getLogo(), getServletContext());
+				// save new logo
 				try {
-					ext = logoFileName.lastIndexOf(".");
-					noExt = logoFileName.lastIndexOf(File.separator);
-					fileContentLogo = logo.getInputStream();
-					fileLogo = new File(logoFileName);
-					Files.copy(fileContentLogo, fileLogo.toPath());
-					logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
-							+ File.separator + productsCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
 
-				} catch (FileAlreadyExistsException ex) {
-					response.sendError(500, "Server could not store your avatar, "
-							+ "please retry the sign up process. "
-							+ "Notice that you can also upload the image later in you user page.");
-					getServletContext().log("impossible to upload the file", ex);
-
+					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_CATEGORY_LOGO, productsCategory, getServletContext());
+				} catch (IOException ex) {
+					// It is not a fatal error, we ask the user to try again
+					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+					productsCategory.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+					doGet(request, response);
 				}
 				productsCategory.setLogo(logoURI);
 			}
-
-			if (productsCategoryDAO.updateProductsCategory(productCategoryId, productsCategory)) {
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
-			} else {
-				request.setAttribute("productCategory", productsCategory);
-				request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
+			if (!response.isCommitted()) {
+				if (productsCategoryDAO.updateProductsCategory(productCategoryId, productsCategory)) {
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
+				} else {
+					request.setAttribute("productCategory", productsCategory);
+					request.getRequestDispatcher("/WEB-INF/views/admin/EditProductsCategory.jsp").forward(request, response);
+				}
 			}
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);

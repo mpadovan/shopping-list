@@ -7,89 +7,113 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
+<%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
 <layouts:admin pageTitle="Profile">
     <jsp:attribute name="pageContent">
-		<div class="card card-edit">
-			<div class="card-body">
-				<div class="row">
-					<div class="col-3">
-						<c:if test="${not empty sessionScope.user.image}">
-							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${user.image}" alt="Nome Cognome" title="Immagine profilo">
-						</c:if>
-						<c:if test="${empty sessionScope.user.image}">
-							<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar2.png" alt="Nome Cognome" title="Immagine profilo">
-						</c:if>
+		<div class="cointainer-fluid px-2">
+			<div class="card edit-user-card">
+				<div class="card-body">
+					<c:if test="${!empty user.errors}">
+						<div class="alert alert-danger" role="alert">
+							<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
+							<p>Controlla i campi sottostanti.</p>
+						</div>
+					</c:if>
+					<div class="text-center mb-4">
+						<h3 class="mb-3 font-weight-normal">Modifica profilo</h3>
 					</div>
-					<div class="col">
-						<h4 class="card-title text-center">Modifica utente ${sessionScope.user.name} ${sessionScope.user.lastname}</h4>
-						<form action="EditAdmin" method="POST">
-							<div class="form-group row">
-								<label for="name" class="col-sm-3 col-form-label">Nome</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="name" name="name" value="${sessionScope.user.name}">
+					<form class="form-user" action="EditAdmin" method="POST">
+						<div class="form-group">
+							<label for="name">Nome</label>
+							<input type="text" 
+								   id="name"
+								   name="name"
+								   value="${sessionScope.user.name}"
+								   class="form-control ${(user.getFieldErrors("name") != null ? "is-invalid" : "")}"
+								   maxlength="40"
+								   required>
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${user}" field="name" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="lastName">Cognome</label>
+							<input type="text" 
+								   id="lastName"
+								   name="lastName"
+								   value="${sessionScope.user.lastname}"
+								   class="form-control ${(user.getFieldErrors("lastname") != null ? "is-invalid" : "")}"
+								   maxlength="40"
+								   required>
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${user}" field="lastname" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="email">Email</label>
+							<input type="email"readonly
+								   class="form-control"
+								   id="email"
+								   name="email"
+								   value="${sessionScope.user.email}"
+								   maxlength="40"
+								   required>
+						</div>
+						<c:if test="${requestScope.changepassword == true}">
+							<div class="form-group" id="divOldPassword">
+								<label for="password">Password attuale</label>
+								<input type="password"
+									   id="oldPassword"
+									   name="oldpassword"
+									   class="form-control ${(user.getFieldErrors("oldpassword") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback">
+									<shared:fieldErrors entity="${user}" field="oldpassword" />
 								</div>
 							</div>
-							<div class="form-group row">
-								<label for="lastName" class="col-sm-3 col-form-label">Cognome</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="lastName" name="lastName" value="${sessionScope.user.lastname}" required>
+							<div class="form-group" id="divPassword">
+								<label for="password">Nuova password</label>
+								<input type="password" 
+									   id="password" 
+									   name="password" 
+									   class="form-control ${(user.getFieldErrors("password") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback">
+									<shared:fieldErrors entity="${user}" field="password" />
 								</div>
 							</div>
-							<div class="form-group row">
-								<label for="email" class="col-sm-3 col-form-label">Email</label>
-								<div class="col-sm-9">
-									<input type="email" readonly class="form-control" id="email" name="email"value="${sessionScope.user.email}" required>
+							<div class="form-group" id="divCheckPassword">
+								<label for="checkpassword">Nuova password</label>
+								<input type="password" 
+									   id="checkpassword" 
+									   name="checkpassword" 
+									   class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}">
+								<div class="invalid-feedback ">
+									<shared:fieldErrors entity="${user}" field="checkpassword" />
 								</div>
 							</div>
-							<div class="form-group row" style="display: none" id="divPassword">
-								<label for="password" class="col-sm-3 col-form-label">Password attuale</label>
-								<div class="col-sm-9">
-									<input type="password" class="form-control" id="password" name="password">
-								</div>
+						</c:if>
+						<div class="mt-4">
+							<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
+							<c:if test="${not requestScope.changepassword}">
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditAdmin?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Password <i class="fas fa-lock"></i></a>
+							</c:if>
+							<c:if test="${requestScope.changepassword == true}">
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditAdmin" class="btn btn-light float-right mx-2" id="btnUnLock"> <i class="fas fa-unlock"></i></a>
+								</c:if>
+							<div id="btn-back-user">
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 							</div>
-							<div class="form-group row" style="display: none" id="divNewPassword">
-								<label for="newPassword" class="col-sm-3 col-form-label">Nuova password </label>
-								<div class="col-sm-9">
-									<input type="password" class="form-control" id="newPassword" name="newPassword">
-								</div>
+							<div id="btn-back-user-res">
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light"><i class="fas fa-chevron-left"></i></a>
 							</div>
-							<div class="form-group row" style="display: none" id="divCheckPassword">
-								<label for="checkPassword" class="col-sm-3 col-form-label">Conferma nuova password</label>
-								<div class="col-sm-9">
-									<input type="password" class="form-control" id="checkPassword" name="checkPassword">
-								</div>
-							</div>
-							<button type="submit" class="btn btn-primary float-right mx-2">Conferma</button>
-							<button type="button" onclick="show()" class="btn btn-light	 float-right mx-2" id="btnLock">Modifica password <i class="fas fa-lock"></i></button>
-							<button type="button" onclick="hide()" class="btn btn-light	 float-right mx-2" id="btnUnLock" style="display: none;"> <i class="fas fa-unlock"></i></button>
-						</form>
-						<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
-					</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/info_admin.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
-	<jsp:attribute name="customJs">
-		<script>
-			function show() {
-				document.getElementById("divPassword").style.display = "";
-				document.getElementById("divNewPassword").style.display = "";
-				document.getElementById("divCheckPassword").style.display = "";
-				document.getElementById("btnLock").style.display = "none";
-				document.getElementById("btnUnLock").style.display = "";
-			}
-			function hide() {
-				document.getElementById("divPassword").style.display = "none";
-				document.getElementById("divNewPassword").style.display = "none";
-				document.getElementById("divCheckPassword").style.display = "none";
-				document.getElementById("btnLock").style.display = "";
-				document.getElementById("btnUnLock").style.display = "none";
-			}
-		</script>
-	</jsp:attribute>
-
 </layouts:admin>
+

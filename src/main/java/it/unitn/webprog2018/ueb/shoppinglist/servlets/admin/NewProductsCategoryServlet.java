@@ -1,25 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +31,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "NewProductsCategoryServlet", urlPatterns = {"/restricted/admin/NewProductsCategory"})
 public class NewProductsCategoryServlet extends HttpServlet {
 
+	@Inject
+	UploadHandler uploadHandler;
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -47,6 +45,8 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		try {
 			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
@@ -55,9 +55,9 @@ public class NewProductsCategoryServlet extends HttpServlet {
 		} catch (DaoException ex) {
 			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
+		
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -69,62 +69,63 @@ public class NewProductsCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
+		String context = getServletContext().getContextPath();
+		if (!context.endsWith("/")) {
+			context += "/";
+		}
+
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		// parametri stringhe
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+		
 		//parametri file
 		String logoURI = "";
-		File fileLogo = null;
-		String logoFileName = "";
-		String logoFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "public" + File.separator + "productCategoryLogo" + File.separator;
 		Part logo = request.getPart("logo");
+		
 		ProductsCategory productCategory = new ProductsCategory();
 		try {
-
+			
 			productCategory.setName(name);
 			productCategory.setDescription(description);
-
+			
 			if (productsCategoryDAO.addProductsCategory(productCategory)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
-					logoFileName = Paths.get(logo.getSubmittedFileName()).getFileName().toString();
-					int ext = logoFileName.lastIndexOf(".");
-					int noExt = logoFileName.lastIndexOf(File.separator);
-					logoFileName = logoFolder + productCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-					InputStream fileContentLogo = null;
 					try {
-						ext = logoFileName.lastIndexOf(".");
-						noExt = logoFileName.lastIndexOf(File.separator);
-						fileContentLogo = logo.getInputStream();
-						fileLogo = new File(logoFileName);
-						Files.copy(fileContentLogo, fileLogo.toPath());
-						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
-								+ File.separator + productCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
 
-					} catch (FileAlreadyExistsException ex) {
-						fileLogo.delete();
-						Files.copy(fileContentLogo, fileLogo.toPath());
-						logoURI = File.separator + "uploads" + File.separator + "public" + File.separator + "productCategoryLogo"
-								+ File.separator + productCategory.getId() + (ext > noExt ? logoFileName.substring(ext) : "");
-
+						logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_CATEGORY_LOGO, productCategory, getServletContext());
+					} catch (IOException ex) {
+						// It is not a fatal error, we ask the user to try again
+						Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+						productCategory.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+						// allows to forward response with correct loading of accessory information from the database to be shown in the jsp.
+						request.setAttribute("productCategory", productCategory);
+						doGet(request, response);
 					}
-					productCategory.setLogo(logoURI);
-					if (!productsCategoryDAO.updateProductsCategory(productCategory.getId(), productCategory)) {
-						response.sendError(500, "Qualcosa è andato storto. Non è stato possibile aggiornare logo");
+					if (!response.isCommitted()) {
+						productCategory.setLogo(logoURI);
+						if (!productsCategoryDAO.updateProductsCategory(productCategory.getId(), productCategory)) {
+							response.sendError(500, "Qualcosa è andato storto. Non è stato possibile aggiornare logo");
+						}
 					}
 				}
-				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
+				if (!response.isCommitted()) {
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ProductsCategory");
+				}
 			} else {
 				request.setAttribute("productCategory", productCategory);
-				request.getRequestDispatcher("/WEB-INF/views/admin/NewProductsCategory.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/admin/NewCategoryProduct.jsp").forward(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewProductsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Returns a short description of the servlet.
 	 *

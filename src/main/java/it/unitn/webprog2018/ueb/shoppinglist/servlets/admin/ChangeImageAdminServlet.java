@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
@@ -9,15 +9,11 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
-import java.io.File;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +33,9 @@ public class ChangeImageAdminServlet extends HttpServlet {
 
 	UserDAO userDAO;
 
+	@Inject
+	UploadHandler uploadHandler;
+
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
@@ -54,6 +53,8 @@ public class ChangeImageAdminServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/admin/ChangeImageAdmin.jsp").forward(request, response);
 	}
 
@@ -68,6 +69,8 @@ public class ChangeImageAdminServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String context = getServletContext().getContextPath();
 		if (!context.endsWith("/")) {
 			context += "/";
@@ -76,70 +79,42 @@ public class ChangeImageAdminServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
-		String avatarURI = "";
-		File file = null;
-		String avatarFileName = "";
-		String avatarsFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-
-		//crezione cartella se non esiste
-		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
-		File userDir = new File(uploadFolder + File.separator + "restricted" + File.separator + user.getId());
-		File avatarDir = new File(userDir.getAbsolutePath() + File.separator + "avatar");
-		if (!userDir.exists()) {
-			if (!userDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
-		if (!avatarDir.exists()) {
-			if (!avatarDir.mkdir()) {
-				response.sendError(500, "impossibile creare cartella per utente");
-			}
-		}
+		String avatarURI = null;
 
 		Part avatar = request.getPart("image");
 		if ((avatar != null) && (avatar.getSize() > 0)) {
-			System.out.println("entrato");
-			if (user.getImage() != null && !user.getImage().equals("") && !user.getImage().equals("null")) {
-				System.out.println("entrato2");
-				String imageFolder = getServletContext().getInitParameter("uploadFolder") + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar" + File.separator;
-				int extold = user.getImage().lastIndexOf(".");
-				File fileold = new File(imageFolder + user.getId() + user.getImage().substring(extold));
-				if (fileold.exists()) {
-					fileold.delete();
-					System.out.println("entrato3");
-				}
+			// Delete old image
+			if (!uploadHandler.deleteFile(user.getImage(), getServletContext())) {
+				response.sendError(500);
 			}
-			avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			/*
+			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
+			// Extension handling
 			int ext = avatarFileName.lastIndexOf(".");
 			int noExt = avatarFileName.lastIndexOf(File.separator);
-			avatarFileName = avatarsFolder + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-			InputStream fileContent = null;
+			
+			 */
 			try {
-				ext = avatarFileName.lastIndexOf(".");
-				noExt = avatarFileName.lastIndexOf(File.separator);
-				fileContent = avatar.getInputStream();
-				file = new File(avatarFileName);
-				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-
-				System.out.println(avatarFileName + " \n" + avatarURI);
-
-			} catch (FileAlreadyExistsException ex) {
-				file.delete();
-				Files.copy(fileContent, file.toPath());
-				avatarURI = File.separator + "uploads" + File.separator + "restricted" + File.separator + user.getId() + File.separator + "avatar"
-						+ File.separator + user.getId() + (ext > noExt ? avatarFileName.substring(ext) : "");
-
+				avatarURI = uploadHandler.uploadFile(avatar, UploadHandler.FILE_TYPE.AVATAR, user, getServletContext());
+			} catch (IOException ex) {
+				// It is not a fatal error, we ask the user to try again
+				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
+				user.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+				// allows to forward response with correct loading of accessory information from the database to be shown in the jsp.
+				// request.setAttribute("user", user);
+				doGet(request, response);
 			}
-			user.setImage(avatarURI);
-			try {
-				if (userDAO.updateUser(user.getId(), user)) {
-					session.setAttribute("user", user);
-					response.sendRedirect(context + "restricted/admin/InfoAdmin");
+
+			if (!response.isCommitted()) {
+				user.setImage(avatarURI);
+				try {
+					if (userDAO.updateUser(user.getId(), user)) {
+						session.setAttribute("user", user);
+						response.sendRedirect(context + "restricted/admin/InfoAdmin");
+					}
+				} catch (DaoException ex) {
+					Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 				}
-			} catch (DaoException ex) {
-				Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else {
 			response.sendRedirect(context + "restricted/admin/InfoAdmin");
@@ -153,7 +128,6 @@ public class ChangeImageAdminServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Short description";
-	}// </editor-fold>
-
+		return "Servlet that changes the avatar of an admin";
+	}
 }

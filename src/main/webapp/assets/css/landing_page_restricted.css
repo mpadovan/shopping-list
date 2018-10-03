@@ -50,3 +50,26 @@
     padding-bottom: 5%;
     overflow: auto;
 }
+.image-closed-list{
+	width: 300px;
+	height: 300px;
+}
+.div-img-closed-list{
+	max-width: 300px;
+	margin: auto;
+}
+.card-closed-list{
+	margin: auto;
+}
+@media(max-width: 374px){
+	.image-closed-list{
+		width: 250px;
+		height: 250px;
+	}
+}
+@media(max-width: 321px){
+	.image-closed-list{
+		width: 200px;
+		height: 200px;
+	}
+}
