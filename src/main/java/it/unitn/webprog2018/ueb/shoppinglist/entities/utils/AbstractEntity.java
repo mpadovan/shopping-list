@@ -46,11 +46,11 @@ public abstract class AbstractEntity implements Serializable {
 		this.clearErrors();
 		this.validateOnUpdate(dAOFactory);
 		this.validateOnSave(dAOFactory);
-		/*for (Map.Entry<String, Set<String>> entry : errors.entrySet()) {
+		for (Map.Entry<String, Set<String>> entry : errors.entrySet()) {
 			String key = entry.getKey();
 			Set<String> value = entry.getValue();
 			System.out.println(key + " " + value);
-		}*/
+		}
 		return this.errors.isEmpty();
 	}
 
