@@ -18,13 +18,13 @@ body{
 	background-color: #2a5788;
 	color: white;
 }
+.edit-user-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
 .card-edit{
 	margin: 100px auto;
 	max-width: 500px;	
-}
-.card-info{
-	max-width: 1000px;	
-	margin: 100px auto;
 }
 .info-product{
 	background-color: #2a5788 ;

@@ -1,0 +1,171 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 3-ott-2018, 13.48.41
+    Author     : giulia
+*/
+#btn-back-user{
+	display: block;
+}
+
+#btn-back-user-res{
+	display: none;
+}
+
+.card-info{
+	max-width: 1000px;	
+	margin: 100px auto;
+}
+
+.edit-user-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
+
+.form-user {
+	width: 100%;
+	max-width: 450px;
+	padding: 15px;
+	margin: auto;
+}
+
+#content {
+	background-color:lightgrey;
+}
+
+#user .user-image {
+	right: 0;
+	margin-right: 20px;
+	max-height: 200px;
+	min-width: 200px;
+	max-height: 200px;
+	min-height: 200px;
+}
+
+#user .user-image .user-link {
+	position: relative;
+	display: block;
+	max-width: 400px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+#user .user-image .user-link .user-hover {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-transition: all ease 0.5s;
+	transition: all ease 0.5s;
+	opacity: 0;
+	background: rgba(254, 209, 54, 0.9);
+}
+
+#user .user-image .user-link .user-hover:hover {
+	opacity: 1;
+}
+
+#user .user-image .user-link .user-hover .user-hover-content {
+	font-size: 20px;
+	position: absolute;
+	top: 41%;
+	width: 100%;
+	height: 20px;
+	margin-top: -12px;
+	text-align: center;
+	color: white;
+}
+
+#user .user-image .user-link .user-hover .user-hover-content i {
+	margin-top: -12px;
+}
+
+#user .user-image .user-link .user-hover .user-hover-content h3,
+#user .user-image .user-link .user-hover .user-hover-content h4 {
+	margin: 0;
+}
+
+#user * {
+	z-index: 2;
+}
+#user-responsive{
+	display: none;
+}
+#user{
+	display: block;
+}
+
+@media(max-width: 563px){
+	#user-responsive{
+		display: block;
+	}
+	#user{
+		display: none;
+	}
+	#user-responsive .user-image {
+		right: 0;
+		max-height: 200px;
+		min-width: 200px;
+		max-height: 200px;
+		min-height: 200px;
+	}
+
+	#user-responsive .user-image .user-link {
+		position: relative;
+		display: block;
+		max-width: 400px;
+		margin: 0 auto;
+		cursor: pointer;
+	}
+
+	#user-responsive .user-image .user-link .user-hover {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		-webkit-transition: all ease 0.5s;
+		transition: all ease 0.5s;
+		opacity: 0;
+		background: rgba(254, 209, 54, 0.9);
+	}
+
+	#user-responsive .user-image .user-link .user-hover:hover {
+		opacity: 1;
+	}
+
+	#user-responsive .user-image .user-link .user-hover .user-hover-content {
+		font-size: 20px;
+		position: absolute;
+		top: 41%;
+		width: 100%;
+		height: 20px;
+		margin-top: -12px;
+		text-align: center;
+		color: white;
+	}
+
+	#user-responsive .user-image .user-link .user-hover .user-hover-content i {
+		margin-top: -12px;
+	}
+
+	#user-responsive .user-image .user-link .user-hover .user-hover-content h3,
+	#user-responsive .user-image .user-link .user-hover .user-hover-content h4 {
+		margin: 0;
+	}
+
+	#user-responsive * {
+		z-index: 2;
+	}	
+}
+@media(max-width: 420px){
+	#btn-back-user{
+		display: none;
+	}
+	#btn-back-user-res{
+		display: block;
+	}
+	#user-responsive{
+		display: block;
+	}
+}
