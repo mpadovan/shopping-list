@@ -158,7 +158,7 @@ public class NewProductServlet extends HttpServlet {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 				} else {
 					request.setAttribute("product", product);
-					request.getRequestDispatcher("/WEB-INF/views/product/NewProduct.jsp").forward(request, response);
+					doGet(request, response);
 				}
 			}
 		} catch (DaoException ex) {
