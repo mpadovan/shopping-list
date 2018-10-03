@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+Vue.component('autocompleteItemComponent', {
+	props: ['item'],
+	template: '<li v-bind:id="\'item\' + item.sid" class="pointer autocomplete-li" style="padding-left: .5rem;">{{item.name}}<li>'
+});
+
 Vue.component('getCat', {
 	props: ['cat', 'lat', 'lon'],
 	data: function () {
@@ -255,7 +260,19 @@ var app = new Vue({
 		categoriesResults: null,
 		categoryFull: null,
 		showLocals: false,
-		lockSearch: false
+		lockSearch: false,
+		item_selected_id: -2
+	},
+	computed: {
+		autocompleteComputed: function () {
+			console.log(this.autocompleteList);
+			var temp = _.cloneDeep(this.autocompleteList);
+			for (var r = 0; r < temp.length; r++) {
+				temp[r].sid = r;
+			}
+			
+			return temp;
+		}
 	},
 	methods: {
 		searching: function () {
@@ -267,6 +284,7 @@ var app = new Vue({
 			}
 		},
 		listHided: function () {
+			this.item_selected_id = -2;
 			this.showSearch = true;
 			if(this.items.length === 0) toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
@@ -327,6 +345,7 @@ var app = new Vue({
 				(data.length == 0) ? this.autocompleteList = [{
 						name: 'Nessun risultato'
 					}] : this.autocompleteList = data;
+				this.item_selected_id = -2;
 			} else {
 				this.results = data;
 				for (var j = 0; this.results.length > j; j++) {
@@ -417,4 +436,32 @@ var app = new Vue({
 			// });
 		}
 	}
+});
+
+
+$('#search-bar').keydown((e) => {
+	if( e.keyCode === 13 && app.item_selected_id != -2) {
+		app.query = $('#item' + app.item_selected_id)[0].textContent;
+		app.searching();
+	} else if(e.keyCode === 13){
+		app.searching();
+	}
+	if(app.item_selected_id == -2) {
+		app.item_selected_id = 0;
+	}
+	else if (e.keyCode === 40) {
+		app.item_selected_id = app.item_selected_id + 1;
+		if(app.item_selected_id == app.autocompleteComputed.length) {
+			app.item_selected_id = app.item_selected_id - 1;
+		}
+	} else if (e.keyCode === 38) {
+		app.item_selected_id = app.item_selected_id - 1;
+		if(app.item_selected_id == -1) {
+			app.item_selected_id = app.item_selected_id + 1;
+		}
+	}
+	for(var i = 0; i < app.autocompleteComputed.length; i++) {
+		$('#item' + i ).removeClass('selected');
+	}
+	$('#item' + app.item_selected_id ).addClass('selected');
 });

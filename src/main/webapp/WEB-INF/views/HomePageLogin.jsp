@@ -25,7 +25,7 @@
 									</div>
 									-->
 									<div class="input-group mb-0">
-										<input id="search-bar" type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching">
+										<input id="search-bar" type="text" class="form-control" v-bind:placeholder="msg" v-model="query">
 										<div class="input-group-append">
 											<button class="btn btn-outline-secondary" type="button" @click="searching">
 												<i class="fas fa-search"></i>
@@ -35,7 +35,7 @@
 									<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
 										<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
 											<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-										<autocompleteItemComponent v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)" v-bind:item="item" v-bind:item_selected_id="item_selected_id"></autocompleteItemComponent>
+										<autocomplete-item-component v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)" v-bind:item="item" v-bind:item_selected_id="item_selected_id"></autocomplete-item-component>
 									</div>
 									<transition name="fade" v-on:after-leave="searchHided">
 										<div class="list-group" v-if="showSearch">

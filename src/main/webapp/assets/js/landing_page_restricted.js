@@ -8,7 +8,7 @@
 
 Vue.component('autocompleteItemComponent', {
 	props: ['item'],
-	template: '<liv-bind:id="\'item\' + item.sid" class="pointer autocomplete-li">{{item.name}}<li>'
+	template: '<li v-bind:id="\'item\' + item.sid" class="pointer autocomplete-li">{{item.name}}<li>'
 });
 
 Vue.component('ajaxComponent', {
@@ -209,7 +209,7 @@ var app = new Vue({
 			}
 		},
 		listHided: function () {
-			this.item_selected_id = -2
+			this.item_selected_id = -2;
 			this.showSearch = true;
 			if (this.items.length === 0)
 				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
@@ -475,6 +475,12 @@ var app = new Vue({
 });
 
 $('#search-bar').keydown((e) => {
+	if( e.keyCode === 13 && app.item_selected_id != -2) {
+		app.query = $('#item' + app.item_selected_id)[0].textContent;
+		app.searching();
+	} else if(e.keyCode === 13){
+		app.searching();
+	}
 	if(app.item_selected_id == -2) {
 		app.item_selected_id = 0;
 	}
@@ -490,11 +496,7 @@ $('#search-bar').keydown((e) => {
 		}
 	}
 	for(var i = 0; i < app.autocompleteComputed.length; i++) {
-		console.log($('#item' + i ).value);
 		$('#item' + i ).removeClass('selected');
 	}
 	$('#item' + app.item_selected_id ).addClass('selected');
-	if( e.keyCode == 13) {
-		
-	}
 });
