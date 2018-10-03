@@ -148,7 +148,7 @@ public class EditPublicProductServlet extends HttpServlet {
 						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 					} else {
 						request.setAttribute("product", product);
-						request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
+						InitializeCategoryRedirect(request, response, product);
 					}
 				}
 			}

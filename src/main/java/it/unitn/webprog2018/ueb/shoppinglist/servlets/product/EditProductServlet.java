@@ -12,6 +12,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
@@ -71,10 +72,7 @@ public class EditProductServlet extends HttpServlet {
 
 		try {
 			Product product = productDAO.getProduct(productId);
-			List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
-			request.setAttribute("productsCategory", productsCategory);
-			request.setAttribute("product", product);
-			request.getRequestDispatcher("/WEB-INF/views/product/EditProduct.jsp").forward(request, response);
+			InitializeCategoryRedirect(request, response, product);
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
@@ -152,7 +150,7 @@ public class EditProductServlet extends HttpServlet {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 				} else {
 					request.setAttribute("product", product);
-					request.getRequestDispatcher("/WEB-INF/views/product/EditProduct.jsp").forward(request, response);
+					InitializeCategoryRedirect(request, response, product);
 				}
 			}
 		} catch (RecordNotFoundDaoException ex) {
@@ -164,7 +162,12 @@ public class EditProductServlet extends HttpServlet {
 		}
 
 	}
-
+	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response, Product product) throws DaoException, ServletException, IOException {
+		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
+		request.setAttribute("productsCategory", productsCategory);
+		request.setAttribute("product", product);
+		request.getRequestDispatcher("/WEB-INF/views/product/EditProduct.jsp").forward(request, response);
+	}
 	/**
 	 * Returns a short description of the servlet.
 	 *
