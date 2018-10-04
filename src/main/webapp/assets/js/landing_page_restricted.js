@@ -439,7 +439,10 @@ var app = new Vue({
 				this.operation = 1;
 				this.ajaxComponent = true;
 				$('#search-input').focus();	
-		}
+			}
+			if(val === $('#item' + app.item_selected_id)[0].textContent && app.item_selected_id != -2) {
+				app.searching();
+			}
 		},
 		selected: function (val) {
 			if (val == 'all') {
@@ -473,7 +476,6 @@ var app = new Vue({
 $('#search-bar').keydown((e) => {
 	if( e.keyCode === 13 && app.item_selected_id != -2) {
 		app.query = $('#item' + app.item_selected_id)[0].textContent;
-		app.searching();
 	}
 	if(e.keyCode === 13){
 		app.searching();

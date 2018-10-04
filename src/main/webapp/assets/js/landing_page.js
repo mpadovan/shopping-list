@@ -404,6 +404,9 @@ var app = new Vue({
 				this.searchInitializing = 'search';
 				$('#search-input').focus();
 			}
+			if(val === $('#item' + app.item_selected_id)[0].textContent && app.item_selected_id != -2) {
+				app.searching();
+			}
 		},
 		items: function (val) {
 			this.updateLocalStorage();
@@ -442,7 +445,6 @@ var app = new Vue({
 $('#search-bar').keydown((e) => {
 	if( e.keyCode === 13 && app.item_selected_id != -2) {
 		app.query = $('#item' + app.item_selected_id)[0].textContent;
-		app.searching();
 	} else if(e.keyCode === 13){
 		app.searching();
 	}
