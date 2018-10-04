@@ -46,7 +46,7 @@
 									</c:if>
 								</td>
 								<td>
-									<c:if test="${p.photography ne 'null' && not empty p.logo}">
+									<c:if test="${p.photography ne 'null' && not empty p.photography}">
 										<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="" title=""></div>
 									</c:if>
 								</td>

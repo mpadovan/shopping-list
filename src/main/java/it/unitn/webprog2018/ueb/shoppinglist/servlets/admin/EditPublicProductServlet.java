@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -36,10 +36,10 @@ public class EditPublicProductServlet extends HttpServlet {
 
 	private ProductsCategoryDAO productsCategoryDAO;
 	private PublicProductDAO publicProductDAO;
-	
+
 	@Inject
 	UploadHandler uploadHandler;
-	
+
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -50,7 +50,7 @@ public class EditPublicProductServlet extends HttpServlet {
 		productsCategoryDAO = factory.getProductsCategoryDAO();
 		publicProductDAO = factory.getPublicProductDAO();
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -75,9 +75,8 @@ public class EditPublicProductServlet extends HttpServlet {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(500, ex.getMessage());
 		}
-		
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -100,6 +99,7 @@ public class EditPublicProductServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String logoURI = "";
 		String imageURI = "";
+		System.out.println("WEEEEE???");
 		try {
 			PublicProduct product = publicProductDAO.getById(productId);
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
@@ -125,33 +125,33 @@ public class EditPublicProductServlet extends HttpServlet {
 					doGet(request, response);
 				}
 				product.setLogo(logoURI);
+			}
 
-				if (!response.isCommitted()) {
-					if ((photography != null) && (photography.getSize() > 0)) {
-						// delete old product image
-						uploadHandler.deleteFile(product.getPhotography(), getServletContext());
-						// save new image
-						try {
-							imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
-						} catch (IOException ex) {
-							// It is not a fatal error, we ask the user to try again
-							Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
-							product.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-							request.setAttribute("product", product);
-							doGet(request, response);
-						}
-						product.setPhotography(imageURI);
-					}
+			if ((photography != null) && (photography.getSize() > 0)) {
+				// delete old product image
+				uploadHandler.deleteFile(product.getPhotography(), getServletContext());
+				// save new image
+				try {
+					imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
+				} catch (IOException ex) {
+					// It is not a fatal error, we ask the user to try again
+					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+					product.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+					request.setAttribute("product", product);
+					doGet(request, response);
 				}
-				if (!response.isCommitted()) {
-					if (publicProductDAO.updateProduct(productId, product)) {
-						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
-					} else {
-						request.setAttribute("product", product);
-						request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
-					}
+				product.setPhotography(imageURI);
+			}
+			System.out.println("iscommited???");
+			if (!response.isCommitted()) {
+				System.out.println("!response.isCommitted()");
+				if (publicProductDAO.updateProduct(productId, product)) {
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
+				} else {
+					InitializeCategoryRedirect(request, response, product);
 				}
 			}
+			System.out.println("WTF???");
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());
@@ -160,14 +160,14 @@ public class EditPublicProductServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
-	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response, PublicProduct publicProduct) throws DaoException, ServletException, IOException {
+
+	private void InitializeCategoryRedirect(HttpServletRequest request, HttpServletResponse response, PublicProduct publicProduct) throws DaoException, ServletException, IOException {
 		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 		request.setAttribute("productsCategory", productsCategory);
 		request.setAttribute("product", publicProduct);
 		request.getRequestDispatcher("/WEB-INF/views/admin/EditPublicProduct.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -177,5 +177,5 @@ public class EditPublicProductServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit public product servlet";
 	}
-	
+
 }

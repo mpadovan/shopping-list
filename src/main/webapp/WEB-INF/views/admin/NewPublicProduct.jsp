@@ -70,7 +70,7 @@
 						</div>
 					</div>
 					<div>
-						<label for="image">Immagine</label>
+						<label for="image">Fotografia</label>
 						<div class="custom-file">
 							<input type="file"
 								   class="custom-file-input form-control"

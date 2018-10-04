@@ -91,7 +91,7 @@
 						</c:if>
 						<button type="submit" class="btn btn-new float-right mx-2">Conferma</button>
 						<c:if test="${not requestScope.changepassword}">
-							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Modifica password<i class="fas fa-lock"></i></a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser?changepassword=true" class="btn btn-light float-right mx-2" id="btnLock">Modifica password <i class="fas fa-lock"></i></a>
 						</c:if>
 						<c:if test="${requestScope.changepassword == true}">
 							<a href="${pageContext.servletContext.contextPath}/restricted/EditUser" class="btn btn-light float-right mx-2" id="btnUnLock"> <i class="fas fa-unlock"></i></a>
