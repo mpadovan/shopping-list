@@ -80,6 +80,9 @@ and open the template in the editor.
 #user .user-image .user-link .user-hover .user-hover-content i {
 	margin-top: -12px;
 }
+#user .user-image .user-link .user-hover .user-hover-content p {
+	margin-bottom: 0;
+}
 
 #user .user-image .user-link .user-hover .user-hover-content h3,
 #user .user-image .user-link .user-hover .user-hover-content h4 {
@@ -146,6 +149,9 @@ and open the template in the editor.
 
 	#user-responsive .user-image .user-link .user-hover .user-hover-content i {
 		margin-top: -12px;
+	}
+	#user .user-image .user-link .user-hover .user-hover-content p {
+		margin-bottom: 0;
 	}
 
 	#user-responsive .user-image .user-link .user-hover .user-hover-content h3,
