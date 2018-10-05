@@ -75,7 +75,7 @@
 			</div>
 
 		</nav>
-		<div class="container-fluid">
+		<div class="container-fluid mt-3">
 			<jsp:invoke fragment="pageContent" />
 		</div>
 

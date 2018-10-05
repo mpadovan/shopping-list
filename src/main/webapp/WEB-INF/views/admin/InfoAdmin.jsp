@@ -56,7 +56,7 @@
 		</div>
 		<div class="card info-user-card" id="user-responsive">
 			<div class="mx-auto my-2 user-image text-center">
-				<a class="user-link" href="${pageContext.servletContext.contextPath}/restricted/ChangeImageUser">
+				<a class="user-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ChangeImageAdmin">
 					<div class="user-hover">
 						<div class="user-hover-content">
 							<i class="fas fa-plus fa-3x"></i>
