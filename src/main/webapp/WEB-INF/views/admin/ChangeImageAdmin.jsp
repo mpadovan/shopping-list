@@ -8,42 +8,31 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:auth pageTitle="Login">
+<layouts:admin pageTitle="Change image user">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid px-2">
-			<div class="card login-card">
+		<div class="container-fluid px-2 py-2">
+			<div class="card card-change-image">
 				<div class="card-body">
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Cambia immagine profilo</h1>
 					</div>
-					<c:if test="${not empty sessionScope.user.image}">
-						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}${user.image}" alt="Nome Cognome" title="Immagine profilo">
-					</c:if>
-					<c:if test="${empty sessionScope.user.image}">
-						<img style="max-width: 100px; max-height: 100px;" src="${pageContext.servletContext.contextPath}/assets/image/avatar.png" alt="Nome Cognome" title="Immagine profilo">
-					</c:if>
-					<form class="form-signin" action="ChangeImageAdmin" method="POST" enctype='multipart/form-data'>
+					<form  action="ChangeImageUser" method="POST" enctype='multipart/form-data'>
 						<div class="custom-file my-2">
 							<label class="custom-file-label" for="image">Scegli avatar</label>
 							<input type="file" class="custom-file-input" id="image" name="image">
 						</div>
-						<button type="submit" class="btn btn-primary float-right mx-2">Conferma</button>
-						<div class="mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Indietro</a>
-						</div>
+						<div class="float-right mt-3">
+							<a href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin" class="btn btn-light mr-2">Annulla</a>
+							<button type="submit" class="btn btn-change float-right">Conferma</button>
+						</div> 
 					</form>
 				</div>
 			</div>
 		</div>
 	</jsp:attribute>
-	<jsp:attribute name="customJs">
-		<script>
-			$(document).ready(function () {
-				setTimeout(function () {
-					var $Input = $('input:-webkit-autofill');
-					$Input.next("label").addClass('active');
-				}, 100);
-			});
-		</script>
+	<jsp:attribute name="customCss">
+		<link href="${pageContext.servletContext.contextPath}/assets/css/change_image_user.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
-</layouts:auth>
+	<jsp:attribute name="customJs">
+	</jsp:attribute>
+</layouts:admin>
