@@ -59,7 +59,7 @@
 								   name="note" 
 								   value="${product.note}"
 								   maxlength="256"
-								   required>
+								   >
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${product}" field="note" />
 							</div>
