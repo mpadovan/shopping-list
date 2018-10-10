@@ -116,7 +116,7 @@ public class EditPublicProductServlet extends HttpServlet {
 
 				// save new logo
 				try {
-					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
+					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_LOGO, product, getServletContext());
 				} catch (IOException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -132,7 +132,7 @@ public class EditPublicProductServlet extends HttpServlet {
 				uploadHandler.deleteFile(product.getPhotography(), getServletContext());
 				// save new image
 				try {
-					imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
+					imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_IMAGE, product, getServletContext());
 				} catch (IOException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
