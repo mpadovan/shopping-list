@@ -26,6 +26,12 @@ public class HttpErrorHandler {
 	private static String contextPath;
 	public static String ERROR_MESSAGE_500 = "Ooops, sembra che qualcosa sia andato storto sul nostro server."
 			+ " Riprova più tardi o contatta un amministratore";
+	private static String ERROR_MESSAGE_400 = "C'è qualcosa di sbagliato nella tua richiesta. Riprova.";
+	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
+			+ "The resource you are trying to access is none of your business.\n"
+			+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login";
+
+	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
 
 	/**
 	 * Sets the context path of the application that uses the
@@ -40,12 +46,7 @@ public class HttpErrorHandler {
 		HttpErrorHandler.contextPath = contextPath;
 	}
 
-	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
-			+ "The resource you are trying to access is none of your business.\n"
-			+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login";
-
-	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
-
+	
 	/**
 	 * Prepares the string in input to be used for performing SQL string
 	 * matching
@@ -119,8 +120,10 @@ public class HttpErrorHandler {
 	}
 
 	/**
-	 * Takes charge of handling IOException and checking if the response is already committed.
-	 * @param response 
+	 * Takes charge of handling IOException and checking if the response is
+	 * already committed.
+	 *
+	 * @param response
 	 */
 	public static void sendError500(HttpServletResponse response) {
 		if (!response.isCommitted()) {
@@ -131,15 +134,27 @@ public class HttpErrorHandler {
 			}
 		}
 	}
-	
+
 	/**
-	 * Takes charge of handling IOException and checking if the response is already committed.
-	 * @param response 
+	 * Takes charge of handling IOException and checking if the response is
+	 * already committed.
+	 *
+	 * @param response
 	 */
 	public static void sendError401(HttpServletResponse response) {
 		if (!response.isCommitted()) {
 			try {
-				response.sendError(500, HttpErrorHandler.ERROR_MESSAGE_401);
+				response.sendError(401, HttpErrorHandler.ERROR_MESSAGE_401);
+			} catch (IOException ex1) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex1);
+			}
+		}
+	}
+
+	public static void sendError400(HttpServletResponse response) {
+		if (!response.isCommitted()) {
+			try {
+				response.sendError(400, HttpErrorHandler.ERROR_MESSAGE_400);
 			} catch (IOException ex1) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex1);
 			}

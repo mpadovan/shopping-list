@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,15 +51,15 @@ public class InfoListServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		try {
-			List list = listDAO.getList((Integer) request.getAttribute("currentListId"));
-			request.setAttribute("currentList", list);
-			request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
-			request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
+			List list = (List) request.getAttribute("currentList");
+			// request.setAttribute("currentList", list);
+			// request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
+			// request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
 			if (((java.util.List<List>)session.getAttribute("sharedLists")).contains((List)request.getAttribute("currentList"))) {
 				request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
 			}
 		} catch (DaoException ex) {
-			response.sendError(500);
+			HttpErrorHandler.handleDAOException(ex, response);
 			Logger.getLogger(InfoListServlet.class.getName()).log(Level.SEVERE, null, ex);
 			return;
 		}
