@@ -68,7 +68,7 @@
 								</div>
 							</c:if>
 						</c:forEach>
-						
+
 					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory" class="btn btn-light">Annulla</a>
@@ -79,7 +79,7 @@
 		</div>
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-
+		<link href="${pageContext.servletContext.contextPath}/assets/css/admin_form.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 

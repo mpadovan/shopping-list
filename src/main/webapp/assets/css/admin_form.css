@@ -1,0 +1,30 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11-ott-2018, 19.01.44
+    Author     : giulia
+*/
+
+body{
+	background-color: lightgrey;
+}
+#content{
+	background-color: lightgrey;
+}
+.new-list-card{
+	max-width: 500px;	
+	margin: 100px auto;
+}
+.info-list-card{
+	max-width: 1000px;	
+	margin: 100px auto;
+}
+.form-list {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+}
