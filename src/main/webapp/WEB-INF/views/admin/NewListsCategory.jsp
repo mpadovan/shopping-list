@@ -47,18 +47,6 @@
 							<shared:fieldErrors entity="${listsCategory}" field="description" />
 						</div>
 					</div>
-					<div>
-						<label for="image">Fotografia</label>
-						<div class="custom-file">
-							<input type="file"
-								   class="custom-file-input form-control"
-								   id="image"
-								   name="image"
-								   aria-describedby="image"
-								   value="${listsCategoryImage.image}">
-							<label class="custom-file-label" for="image">Scegli file</label>
-						</div>
-					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Crea</button>
@@ -66,12 +54,9 @@
 				</form>
 			</div>
 		</div>
-
-
-
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/admin_form.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 	</jsp:attribute>
