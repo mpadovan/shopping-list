@@ -22,7 +22,7 @@
 								   class="form-control" 
 								   id="nameList"
 								   name="nameList" 
-								   value="${requestScope.list.name}"
+								   value="${requestScope.currentList.name}"
 								   required />
 						</div>
 						<div>
@@ -55,7 +55,7 @@
 								   class="form-control"
 								   id="description"
 								   name="description"
-								   value="${requestScope.list.description}"
+								   value="${requestScope.currentList.description}"
 								   required>
 						</div>
 						<div>
@@ -66,12 +66,12 @@
 									   id="image"
 									   name="image"
 									   aria-describedby="image"
-									   value="${product.photography}">
+									   value="${requestScope.currentList.image}">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList" class="btn btn-light">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Modifica</button>
 						</div> 
 					</form>

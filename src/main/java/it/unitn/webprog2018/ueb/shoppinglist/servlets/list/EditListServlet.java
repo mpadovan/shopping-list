@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
 import java.util.List;
@@ -79,7 +80,11 @@ public class EditListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		if ((boolean)request.getAttribute("hasModifyPermission")) {
+			// INSERT LIST MODIFY CODE HERE
+		} else {
+			HttpErrorHandler.sendError401(response);
+		}
 	}
 	
 	/**
