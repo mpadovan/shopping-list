@@ -59,12 +59,7 @@ public class RootFilter implements Filter {
 					try {
 						User user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
 						newSession.setAttribute("user", user);
-						java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
-						java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
-
-						newSession.setAttribute("personalLists", personalLists);
-						newSession.setAttribute("sharedLists", sharedLists);
-
+						
 						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId());
 						return;
 					} catch (RecordNotFoundDaoException ex) {

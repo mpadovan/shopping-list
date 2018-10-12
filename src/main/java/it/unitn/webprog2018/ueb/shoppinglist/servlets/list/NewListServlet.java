@@ -13,6 +13,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -133,7 +134,12 @@ public class NewListServlet extends HttpServlet {
 				// Add privatelist
 				Boolean valid = listDAO.addList(list);
 				if (!listDAO.linkShoppingListToUser(list, me.getId())) {
-					new SQLException("link non effettutato tra lista e utente");
+					try {
+						throw new SQLException("link non effettutato tra lista e utente");
+					} catch (SQLException ex) {
+						HttpErrorHandler.sendError500(response);
+						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+					}
 				}
 				if (!valid) {
 					everythingOK = false;
@@ -142,16 +148,16 @@ public class NewListServlet extends HttpServlet {
 			} else {
 				// Add shared list
 				LinkedList<User> listShared = new LinkedList();
-				for (int i = 0; i < shared.length; i++) {
+				for (String shared1 : shared) {
 					try {
-						if (!shared[i].isEmpty() && !shared[i].equals(me.getEmail())) {
-							User u = userDAO.getByEmail(shared[i]);
+						if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
+							User u = userDAO.getByEmail(shared1);
 							listShared.add(u);
 						}
 					} catch (RecordNotFoundDaoException ex) {
 						everythingOK = false;
 						ex.printStackTrace();
-						list.setError("shared[]", "l'utente " + shared[i] + " non esiste");
+						list.setError("shared[]", "l'utente " + shared1 + " non esiste");
 						request.setAttribute("list", list);
 					}
 				}
@@ -185,13 +191,7 @@ public class NewListServlet extends HttpServlet {
 			}
 			if (everythingOK) {
 				String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-				if (!isShared) {
-					//set sessione liste not shared
-					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("personalLists")).add(list);
-				} else {
-					//set sessione liste shared
-					((java.util.List<it.unitn.webprog2018.ueb.shoppinglist.entities.List>) session.getAttribute("sharedLists")).add(list);
-				}
+				
 				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 				String imageURI = "";
 				Part image = request.getPart("image");
