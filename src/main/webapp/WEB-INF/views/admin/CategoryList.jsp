@@ -39,10 +39,10 @@
 								<td>${c.name}</td>
 								<td>${c.description}</td>
 								<td class="td-images">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
+									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
 								<td class="td-handler">
 									<a href="#images" data-toggle="modal" data-target="#images"><i class="fas fa-images"></i></a>
 									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a>
@@ -97,33 +97,56 @@
 							<div class="row">
 								<div class="col">
 									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="#">
+										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
 											<div class="img-cat-hover">
 												<div class="img-cat-hover-content">
 													<i class="fas fa-plus fa-3x"></i>
 												</div>
 											</div>
-											<img class="card-img-top img-fluid" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
+											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
 										</a>
 									</div>
 								</div>
 								<div class="col">
-									<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
+									<div class="mx-auto my-2 cat-image text-center">
+										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+											<div class="img-cat-hover">
+												<div class="img-cat-hover-content">
+													<i class="fas fa-plus fa-3x"></i>
+												</div>
+											</div>
+											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+										</a>
+									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col">
-									<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
+									<div class="mx-auto my-2 cat-image text-center">
+										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+											<div class="img-cat-hover">
+												<div class="img-cat-hover-content">
+													<i class="fas fa-plus fa-3x"></i>
+												</div>
+											</div>
+											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+										</a>
+									</div>
 								</div>
 								<div class="col">
-									<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/lista-casa.jpg">
+									<div class="mx-auto my-2 cat-image text-center">
+										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+											<div class="img-cat-hover">
+												<div class="img-cat-hover-content">
+													<i class="fas fa-plus fa-3x"></i>
+												</div>
+											</div>
+											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
 					</div>
 				</div>
 			</div>
