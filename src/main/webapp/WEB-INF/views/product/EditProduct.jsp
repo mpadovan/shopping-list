@@ -21,7 +21,7 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Modifica prodotto</h1>
+						<h3 class="mb-3 font-weight-normal">Modifica prodotto</h3>
 					</div>
 					<form class="form-product" method="POST" action="EditProduct?id=${param.id}" enctype='multipart/form-data'>
 						<input type="hidden" name="id" value="${product.id}">
@@ -32,6 +32,7 @@
 								   id="name"
 								   name="name" 
 								   value="${product.name}"
+								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${product}" field="name" />
@@ -53,11 +54,15 @@
 						<div>
 							<label for="note">Note</label>
 							<input type="text"
-								   class="form-control"
+								   class="form-control ${(product.getFieldErrors("note") != null ? "is-invalid" : "")}"
 								   id="note"
 								   name="note" 
 								   value="${product.note}"
-								   required>
+								   maxlength="256"
+								   >
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${product}" field="note" />
+							</div>
 						</div>
 						<div>
 							<label for="image">Logo</label>

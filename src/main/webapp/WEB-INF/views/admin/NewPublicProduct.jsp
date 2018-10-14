@@ -20,7 +20,7 @@
 					</div>
 				</c:if>
 				<div class="text-center mb-4">
-					<h1 class="h3 mb-3 font-weight-normal">Nuovo prodotto</h1>
+					<h3 class="mb-3 font-weight-normal">Nuovo prodotto</h3>
 				</div>
 				<form  class="form-product" method="POST" action="NewPublicProduct" enctype='multipart/form-data'>
 					<div>
@@ -28,7 +28,8 @@
 						<input type="text"
 							   class="form-control ${(product.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 							   id="name"
-							   name="name" 
+							   name="name"
+							   maxlength="40"
 							   required />
 						<div class="invalid-feedback">
 							<shared:fieldErrors entity="${product}" field="name" />
@@ -50,10 +51,14 @@
 					<div>
 						<label for="note">Note</label>
 						<input type="text"
-							   class="form-control"
+							   class="form-control ${(product.getFieldErrors("note") != null ? "is-invalid" : "")}"
 							   id="note"
-							   name="note" 
+							   name="note"
+							   maxlength="256"
 							   >
+						<div class="invalid-feedback">
+							<shared:fieldErrors entity="${product}" field="note" />
+						</div>
 					</div>
 					<div>
 						<label for="logo">Logo</label>
@@ -67,7 +72,7 @@
 						</div>
 					</div>
 					<div>
-						<label for="image">Immagine</label>
+						<label for="image">Fotografia</label>
 						<div class="custom-file">
 							<input type="file"
 								   class="custom-file-input form-control"

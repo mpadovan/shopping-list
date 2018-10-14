@@ -7,7 +7,18 @@ and open the template in the editor.
     Created on : 8-ago-2018, 14.45.39
     Author     : giulia
 */
-
+#btn-back{
+	display: block;
+}
+#btn-back-res{
+	display: none;
+}
+#btn-new{
+	display: block;
+}
+#btn-new-res{
+	display: none;
+}
 .info-product{
 	background-color: #2a5788 ;
 	max-width: 50px;
@@ -24,14 +35,12 @@ and open the template in the editor.
 	color: #007bff;
 }
 .logo-product{
-	max-width: 40px;
-	max-height: 40px;
-	margin-top: 4px;
+	width: 50px;
+	height: 50px;
 }
 .info-product-image{
-	background-color: white ;
-	max-width: 50px;
-	min-height: 50px;
+	width: 50px;
+	height: 50px;
 	border-radius: 10px;
 }
 .image-product{
@@ -41,12 +50,28 @@ and open the template in the editor.
 	margin-top: 45px;
 }
 .image-product-list{
-	max-width: 50px;
-	max-height: 50px;
+	width: 50px;
+	height: 50px;
 	margin: auto;
 }
 .info-product-card{
 	max-width: 1000px;	
 	margin: 100px auto;
 }
-
+@media(max-width: 457px){
+	#btn-back{
+		display: none;
+	}
+	#btn-back-res{
+		display: block;
+	}
+	#btn-new{
+		display: none;
+	}
+	#btn-new-res{
+		display: block;
+	}
+}
+.font-product-list{
+	font-size: 15px;
+}

@@ -21,7 +21,7 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Nuovo prodotto</h1>
+						<h3 class="mb-3 font-weight-normal">Nuovo prodotto</h3>
 					</div>
 					<form class="form-product" action="NewProduct" method="POST" enctype='multipart/form-data'>
 						<div>
@@ -30,6 +30,7 @@
 								   name="name"
 								   class="form-control ${(product.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="name"
+								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${product}" field="name" />
@@ -51,10 +52,14 @@
 						<div>
 							<label for="note">Note</label>
 							<input type="text"
-								   class="form-control"
+								   class="form-control ${(product.getFieldErrors("note") != null ? "is-invalid" : "")}"
 								   id="note"
 								   name="note" 
+								   maxlength="256"
 								   >
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${product}" field="note" />
+							</div>
 						</div>
 						<div>
 							<label for="logo">Logo</label>

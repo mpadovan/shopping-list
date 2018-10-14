@@ -14,12 +14,18 @@
 		<div class="card m-3">
 			<div class="card-body">
 				<h2 class="card-title text-center">
-					<span class="float-left" style="font-size: 15px;">
+					<div id="btn-back" class="float-left font-product-list">
 						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}"><i class="fas fa-chevron-left"></i> Indietro</a>
-					</span> I tuoi prodotti
-					<span class="float-right" style="font-size: 15px;">
+					</div>
+					<div id="btn-back-res" class="float-left font-product-list">
+						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}"><i class="fas fa-chevron-left"></i></a>
+					</div> I tuoi prodotti
+					<div id="btn-new" class="float-right font-product-list">
 						<a class="info-custom-product-a" href="${pageContext.servletContext.contextPath}/restricted/NewProduct">Crea prodotto <i class="fas fa-plus-circle"></i></a>
-					</span>
+					</div>
+					<div id="btn-new-res" class="float-right font-product-list">
+						<a class="info-custom-product-a" href="${pageContext.servletContext.contextPath}/restricted/NewProduct"><i class="fas fa-plus-circle"></i></a>
+					</div>
 				</h2>
 				<div class="container-fluid mt-3">
 					<table class="table table-responsive-md">
@@ -39,12 +45,12 @@
 									<td><a class="info-custom-product-a"href="${pageContext.servletContext.contextPath}/restricted/InfoProduct?id=${p.id}">${p.name}</a></td>
 									<td>${p.note}</td>
 									<td>
-										<c:if test="${p.logo ne 'null'}" >
-											<div class="info-custom-product text-center"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
+										<c:if test="${p.logo ne 'null' && not empty p.logo}" >
+											<div class="info-custom-product"><img class="logo-product" src="${pageContext.servletContext.contextPath}${p.logo}"></div>
 										</c:if>
 									</td>
 									<td>
-										<c:if test="${p.photography ne 'null'}">
+										<c:if test="${p.photography ne 'null' && not empty p.photography}">
 											<div class="info-product-image text-center"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}"></div>
 										</c:if>
 									</td>

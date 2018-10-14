@@ -113,53 +113,51 @@ public class NewProductServlet extends HttpServlet {
 				product.setName(name);
 				product.setNote(note);
 				product.setCategory(productsCategory);
-				product.setLogo(null);
-				product.setPhotography(null);
 			} catch (RecordNotFoundDaoException ex) {
 				Logger.getLogger(NewProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 				response.sendError(404, ex.getMessage());
 			}
-			if (!response.isCommitted()) {
-				if (productDAO.addProductWithId(product)) {
-					//upload logo
+			if (productDAO.addProductWithId(product)) {
+				//upload logo
+				if ((logo != null) && (logo.getSize() > 0)) {
+					try {
+						logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
+					} catch (IOException ex) {
+						// It is not a fatal error, we ask the user to try again
+						Logger.getLogger(NewProductServlet.class.getName()).log(Level.WARNING, null, ex);
+						product.setError("logo", "Non è stato possibile salvare il logo, riprova più tardi o contatta un amministratore");
+						request.setAttribute("product", product);
+						doGet(request, response);
+					}
+					product.setLogo(logoURI);
+				}
+
+				if (!response.isCommitted()) {
+					//upload image
 					if ((photography != null) && (photography.getSize() > 0)) {
 						try {
-							logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
-						} catch (IOException ex) {
+							imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
+						} catch (FileAlreadyExistsException ex) {
 							// It is not a fatal error, we ask the user to try again
 							Logger.getLogger(NewProductServlet.class.getName()).log(Level.WARNING, null, ex);
-							product.setError("logo", "Non è stato possibile salvare il logo, riprova più tardi o contatta un amministratore");
+							product.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
 							request.setAttribute("product", product);
 							doGet(request, response);
 						}
-						product.setLogo(logoURI);
+						product.setPhotography(imageURI);
 					}
-
-					if (!response.isCommitted()) {
-						//upload image
-						if ((photography != null) && (photography.getSize() > 0)) {
-							try {
-								imageURI = uploadHandler.uploadFile(photography, UploadHandler.FILE_TYPE.PRODUCT_IMAGE, product, getServletContext());
-							} catch (FileAlreadyExistsException ex) {
-								// It is not a fatal error, we ask the user to try again
-								Logger.getLogger(NewProductServlet.class.getName()).log(Level.WARNING, null, ex);
-								product.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-								request.setAttribute("product", product);
-								doGet(request, response);
-							}
-							product.setPhotography(imageURI);
-						}
-					}
-					if (!response.isCommitted()) {
-						if (!productDAO.updateProduct(product.getId(), product)) {
-							response.sendError(500, "Qualcosa è andato storto. Non è stato possibili aggiornare immagine o logo");
-						}
-					}
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
-				} else {
-					request.setAttribute("product", product);
-					request.getRequestDispatcher("/WEB-INF/views/product/NewProduct.jsp").forward(request, response);
 				}
+				if (!response.isCommitted()) {
+					if (!productDAO.updateProduct(product.getId(), product)) {
+						response.sendError(500, "Qualcosa è andato storto. Non è stato possibili aggiornare immagine o logo");
+					} else {
+						response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
+
+					}
+				}
+			} else {
+				request.setAttribute("product", product);
+				doGet(request, response);
 			}
 		} catch (DaoException ex) {
 			Logger.getLogger(NewProductServlet.class

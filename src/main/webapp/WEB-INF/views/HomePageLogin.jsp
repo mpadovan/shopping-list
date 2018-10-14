@@ -25,7 +25,7 @@
 									</div>
 									-->
 									<div class="input-group mb-0">
-										<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
+										<input id="search-bar" type="text" class="form-control" v-bind:placeholder="msg" v-model="query">
 										<div class="input-group-append">
 											<button class="btn btn-outline-secondary" type="button" @click="searching">
 												<i class="fas fa-search"></i>
@@ -35,7 +35,7 @@
 									<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
 										<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
 											<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-										<li v-if="showAutocompleteList" class="pointer autocomplete-li" v-for='item in autocompleteList' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+										<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 									</div>
 									<transition name="fade" v-on:after-leave="searchHided">
 										<div class="list-group" v-if="showSearch">
@@ -151,9 +151,9 @@
 				<c:if test="${empty requestScope.currentList}">
 					<div class="col">
 						<div class="card">
-							<div class="card-body" style="margin:auto;">
-								Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova<br>
-								<div style="width: 300px; margin: auto;"><img style="width: 300px; height: 300px;"src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
+							<div class="card-body card-closed-list text-center">
+								<p class="mb-2">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</p>
+								<div class="div-img-closed-list"><img class="image-closed-list" src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
 							</div>
 						</div>
 					</div>

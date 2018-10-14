@@ -21,7 +21,7 @@
 						</div>
 					</c:if>
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Nuova lista</h1>
+						<h3 class="mb-3 font-weight-normal">Nuova lista</h3>
 					</div>
 					<form class="form-list" method="POST" action="NewList" enctype='multipart/form-data'>
 						<c:if test="${requestScope.duplicateName}">
@@ -33,6 +33,7 @@
 								   class="form-control ${(list.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="nameList"
 								   name="nameList" 
+								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${list}" field="name" />
@@ -51,16 +52,26 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div id="sharedList">Condividi con:<br></div>
-						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
+						<div id="app">
+							<div id="sharedList">Condividi con:<br>
+								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+							</div>
+							<button id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+						</div>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
-								   class="form-control"
+								   class="form-control ${(list.getFieldErrors("description") != null ? "is-invalid" : "")}"
 								   id="description"
 								   name="description"
+								   maxlength="256"
 								   >
+							<div class="invalid-feedback">
+								<shared:fieldErrors entity="${list}" field="description" />
+							</div>
 						</div>
+						<div id="sharedList">Condividi con:<br></div>
+						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
 						<div>
 							<label for="image">Immagine</label>
 							<div class="custom-file">
@@ -101,13 +112,32 @@
 					});
 				});
 			});
-			function addEmail() {
-				var btn = document.createElement("INPUT");
-				btn.setAttribute("type", "email");
-				btn.setAttribute("name", "shared[]");
-				btn.classList.add("form-control");
-				document.getElementById("sharedList").appendChild(btn);
-			}
+			var app = new Vue({
+				el: '#app',
+				data: {
+					emailFields: ['']
+				},
+				watch: {
+					emailFields: function () {
+						var c = 0;
+						for (var i = 0; i < this.emailFields.length; i++) {
+							if (this.emailFields[i] == '')
+								c = 1;
+						}
+						if (c) {
+							$('#btn-add-email').prop('disabled', true);
+						} else {
+							$('#btn-add-email').prop('disabled', false);
+						}
+						console.log(this.emailFields);
+					}
+				},
+				methods: {
+					addEmail: function() {
+						this.emailFields.push('');
+					}
+				}
+			});
 		</script>
 	</jsp:attribute>
 
