@@ -97,7 +97,7 @@
 							<div class="row">
 								<div class="col">
 									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 											<div class="img-cat-hover">
 												<div class="img-cat-hover-content">
 													<i class="fas fa-plus fa-3x"></i>
@@ -151,85 +151,36 @@
 				</div>
 			</div>
 		</div>
+		<!--Load modal -->
+		<div class="modal fade" id="load-image" tabindex="-1" role="dialog" aria-labelledby="load-image" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="load-image">Caricamento immagine</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form  action="ImagesListCategory" method="POST" enctype='multipart/form-data'>
+							<input type="hidden" value="">
+							<div class="custom-file my-2">
+								<label class="custom-file-label" for="image">Scegli immagine</label>
+								<input type="file" class="custom-file-input" id="image" name="image">
+							</div>
+							<div class="float-right mt-3">
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory" class="btn btn-light mr-2">Annulla</a>
+								<button type="submit" class="btn btn-change float-right">Conferma</button>
+							</div> 
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<style>
-			.cat-list-img{
-				width: 50px;
-				height: 50px;
-			}
-			.cat-list-img-modal{
-				width: 200px;
-				height: 200px;
-			}
-			.td-images{
-				width: 300px;
-			}
-			.td-handler{
-				width: 150px;
-			}
-			#img-cat .cat-image {
-				right: 0;
-				margin-right: 20px;
-				max-height: 200px;
-				min-width: 200px;
-				max-height: 200px;
-				min-height: 200px;
-			}
-
-			#img-cat .cat-image .img-cat-link {
-				position: relative;
-				display: block;
-				max-width: 400px;
-				margin: 0 auto;
-				cursor: pointer;
-			}
-
-			#img-cat .cat-image .img-cat-link .img-cat-hover {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				-webkit-transition: all ease 0.5s;
-				transition: all ease 0.5s;
-				opacity: 0;
-				background: rgba(254, 209, 54, 0.9);
-			}
-
-			#img-cat .cat-image .img-cat-link .img-cat-hover:hover {
-				opacity: 1;
-			}
-
-			#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content {
-				font-size: 20px;
-				position: absolute;
-				top: 41%;
-				width: 100%;
-				height: 20px;
-				margin-top: -12px;
-				text-align: center;
-				color: white;
-			}
-
-			#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content i {
-				margin-top: -12px;
-			}
-			#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content p {
-				margin-bottom: 0;
-			}
-
-			#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content h3,
-			#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content h4 {
-				margin: 0;
-			}
-
-			#img-cat * {
-				z-index: 2;
-			}
-			#img-cat{
-				display: block;
-			}
-		</style>
+		<link href="${pageContext.servletContext.contextPath}/assets/css/list_category.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 

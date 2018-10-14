@@ -1,0 +1,95 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14-ott-2018, 19.22.41
+    Author     : giulia
+*/
+.cat-list-img{
+	width: 50px;
+	height: 50px;
+}
+.cat-list-img-modal{
+	width: 200px;
+	height: 200px;
+}
+.td-images{
+	width: 300px;
+}
+.td-handler{
+	width: 150px;
+}
+#img-cat .cat-image {
+	right: 0;
+	margin-right: 20px;
+	max-height: 200px;
+	min-width: 200px;
+	max-height: 200px;
+	min-height: 200px;
+}
+
+#img-cat .cat-image .img-cat-link {
+	position: relative;
+	display: block;
+	max-width: 400px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+#img-cat .cat-image .img-cat-link .img-cat-hover {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-transition: all ease 0.5s;
+	transition: all ease 0.5s;
+	opacity: 0;
+	background: rgba(254, 209, 54, 0.9);
+}
+
+#img-cat .cat-image .img-cat-link .img-cat-hover:hover {
+	opacity: 1;
+}
+
+#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content {
+	font-size: 20px;
+	position: absolute;
+	top: 41%;
+	width: 100%;
+	height: 20px;
+	margin-top: -12px;
+	text-align: center;
+	color: white;
+}
+
+#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content i {
+	margin-top: -12px;
+}
+#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content p {
+	margin-bottom: 0;
+}
+
+#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content h3,
+#img-cat .cat-image .img-cat-link .img-cat-hover .img-cat-hover-content h4 {
+	margin: 0;
+}
+
+#img-cat * {
+	z-index: 2;
+}
+#img-cat{
+	display: block;
+}
+
+.card-change-image{
+	max-width: 600px;	
+	margin: 100px auto;
+}
+#content{
+	background-color: lightgray;
+}
+.btn-change{
+	background-color: #2a5788;
+	color: white;
+}
