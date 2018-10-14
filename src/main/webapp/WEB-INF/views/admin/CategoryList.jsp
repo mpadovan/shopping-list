@@ -109,7 +109,7 @@
 								</div>
 								<div class="col">
 									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 											<div class="img-cat-hover">
 												<div class="img-cat-hover-content">
 													<i class="fas fa-plus fa-3x"></i>
@@ -123,7 +123,7 @@
 							<div class="row">
 								<div class="col">
 									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 											<div class="img-cat-hover">
 												<div class="img-cat-hover-content">
 													<i class="fas fa-plus fa-3x"></i>
@@ -135,7 +135,7 @@
 								</div>
 								<div class="col">
 									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ImagesListCategory">
+										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 											<div class="img-cat-hover">
 												<div class="img-cat-hover-content">
 													<i class="fas fa-plus fa-3x"></i>
