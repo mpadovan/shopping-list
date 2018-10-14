@@ -20,22 +20,7 @@
         <filter-name>UploadFilter</filter-name>
         <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.UploadFilter</filter-class>
     </filter>
-    <filter>
-        <filter-name>ListViewFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListViewFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>ListDeleteFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListDeleteFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>ListProductFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListProductFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>ListEditFilter</filter-name>
-        <filter-class>it.unitn.webprog2018.ueb.shoppinglist.filters.ListEditFilter</filter-class>
-    </filter>
+    
     <filter-mapping>
         <filter-name>RootFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -79,39 +64,7 @@
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-    <filter-mapping>
-        <filter-name>ListViewFilter</filter-name>
-        <url-pattern>/restricted/HomePageLogin/*</url-pattern>
-        <url-pattern>/restricted/InfoList/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>ListDeleteFilter</filter-name>
-        <servlet-name>DeleteListServlet</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>ListProductFilter</filter-name>
-        <servlet-name>HomePageLogin</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>ListEditFilter</filter-name>
-        <servlet-name>EditListServlet</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+    
     <listener>
         <description>ServletContextListener</description>
         <listener-class>it.unitn.webprog2018.ueb.shoppinglist.listeners.DBListener</listener-class>

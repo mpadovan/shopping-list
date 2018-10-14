@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,14 +27,14 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "InfoListServlet", urlPatterns = {"/restricted/InfoList/*"})
 public class InfoListServlet extends HttpServlet {
-	
+
 	private ListDAO listDAO;
-	
+
 	@Override
 	public void init() {
 		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -49,22 +50,26 @@ public class InfoListServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		try {
-			List list = listDAO.getList((Integer) request.getAttribute("currentListId"));
-			request.setAttribute("currentList", list);
-			request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
-			request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
-			if (((java.util.List<List>)session.getAttribute("sharedLists")).contains((List)request.getAttribute("currentList"))) {
-				request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
+		if ((boolean) request.getAttribute("hasViewPermission")) {
+			try {
+				List list = (List) request.getAttribute("currentList");
+				// request.setAttribute("currentList", list);
+				// request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
+				// request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
+				if (((java.util.List<List>) session.getAttribute("sharedLists")).contains((List) request.getAttribute("currentList"))) {
+					request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
+				}
+			} catch (DaoException ex) {
+				HttpErrorHandler.handleDAOException(ex, response);
+				Logger.getLogger(InfoListServlet.class.getName()).log(Level.SEVERE, null, ex);
+				return;
 			}
-		} catch (DaoException ex) {
-			response.sendError(500);
-			Logger.getLogger(InfoListServlet.class.getName()).log(Level.SEVERE, null, ex);
-			return;
+			request.getRequestDispatcher("/WEB-INF/views/list/InfoList.jsp").forward(request, response);
+		} else {
+			HttpErrorHandler.sendError401(response);
 		}
-		request.getRequestDispatcher("/WEB-INF/views/list/InfoList.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -77,7 +82,7 @@ public class InfoListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -87,5 +92,5 @@ public class InfoListServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Short description";
 	}
-	
+
 }

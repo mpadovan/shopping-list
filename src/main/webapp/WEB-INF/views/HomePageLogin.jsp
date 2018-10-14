@@ -14,7 +14,7 @@
 			<div class="row justify-content-center">
 				<c:if test="${!empty requestScope.currentList}">
 					<div class="col" id="app">
-						<c:if test="${!requestScope.addDeletePermission}">
+						<c:if test="${requestScope.addDeletePermission}">
 							<div class="card">
 								<div class="card-body">
 									<!--

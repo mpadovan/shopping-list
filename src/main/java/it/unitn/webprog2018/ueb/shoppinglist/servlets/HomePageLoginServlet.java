@@ -5,14 +5,7 @@
 */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,11 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "HomePageLoginServlet", urlPatterns = {"/restricted/HomePageLogin/*"})
 public class HomePageLoginServlet extends HttpServlet {
 	
-	private ListDAO listDAO;
-	
 	@Override
 	public void init() {
-		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
 	
 	/**
