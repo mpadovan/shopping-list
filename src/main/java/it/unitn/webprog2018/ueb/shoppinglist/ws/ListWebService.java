@@ -408,7 +408,7 @@ public class ListWebService {
 		}
 	}
 
-	protected static boolean checkAddDeletePermission(int listId, int userId) {
+	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			it.unitn.webprog2018.ueb.shoppinglist.entities.List list = listDAO.getList(listId);
@@ -425,8 +425,8 @@ public class ListWebService {
 		}
 		return false;
 	}
-
-	protected static boolean checkViewPermission(int listId, int userId) {
+	
+	private boolean checkViewPermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			it.unitn.webprog2018.ueb.shoppinglist.entities.List list = listDAO.getList(listId);

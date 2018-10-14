@@ -313,9 +313,9 @@ var app = new Vue({
 			this.ajaxSettings = {
 				"async": true,
 				"crossDomain": true,
-				"url": "/ShoppingList/services/products/restricted/" + this.user,
+				"url": "/ShoppingList/services/products/restricted/" + this.user + '/' + this.list,
 				"method": "POST",
-				"data": "{\"name\": " + this.query + "}",
+				"data": "{\"name\": \"" + this.query + "\"}",
 				"headers": {
 					"Content-Type": "application/json",
 					"Cache-Control": "no-cache"
