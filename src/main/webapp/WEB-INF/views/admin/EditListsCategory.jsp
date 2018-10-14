@@ -22,7 +22,7 @@
 				<div class="text-center mb-4">
 					<h3 class="mb-3 font-weight-normal">Modifica categoria di lista</h3>
 				</div>
-				<form class="form-list" method="POST" action="EditListsCategory?id=${param.id}" enctype='multipart/form-data'>
+				<form class="form-list" method="POST" action="EditListsCategory?id=${param.id}">
 					<input type="hidden" name="id" value="${listsCategory.id}">
 					<div>
 						<label for="name">Nome categoria</label>

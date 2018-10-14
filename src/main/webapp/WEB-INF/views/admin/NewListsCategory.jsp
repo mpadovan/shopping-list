@@ -22,7 +22,7 @@
 				<div class="text-center mb-4">
 					<h3 class="mb-3 font-weight-normal">Nuova categoria di lista</h3>
 				</div>
-				<form class="form-list" method="POST" action="NewListsCategory" enctype='multipart/form-data'>
+				<form class="form-list" method="POST" action="NewListsCategory">
 					<div>
 						<label for="name">Nome categoria</label>
 						<input type="text"
