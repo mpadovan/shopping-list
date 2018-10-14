@@ -198,31 +198,48 @@ public class ProductWebService {
 	@Authentication
 	public void addProduct(String content, @PathParam("userId") Integer userId,
 			@PathParam("listId") Integer listId) {
-		if (ListWebService.checkAddDeletePermission(listId, userId)) {
-			Product product = null;
+		if (checkAddDeletePermission(listId, userId)) {
 			try {
 				Gson gson = new Gson();
-				product = gson.fromJson(content, Product.class);
+				Product product = gson.fromJson(content, Product.class);
 				product.setOwner(new User());
+				product.setNote("");
 				product.getOwner().setId(userId);
-				ProductsCategory productsCategory = new ProductsCategory();
-				product.setCategory(productsCategory);
+				product.setCategory(new ProductsCategory());
 				product.getCategory().setId(1);
-				// TODO ADD PRODUCT TO LIST
+				ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
+				ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+				try {
+					if (productDAO.addProduct(product)) {
+						listDAO.addProduct(listId, product);
+					}
+				} catch (DaoException ex) {
+					Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+					HttpErrorHandler.handleDAOException(ex, response);
+				}
 			} catch (JsonSyntaxException ex) {
 				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.sendError500(response);
 			}
-			ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
-			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-			try {
-				productDAO.addProduct(product);
-				listDAO.addProduct(listId, product);
-			} catch (DaoException ex) {
-				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
-				HttpErrorHandler.handleDAOException(ex, response);
-			}
 		}
+	}
+
+	private boolean checkAddDeletePermission(int listId, int userId) {
+		try {
+			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+			it.unitn.webprog2018.ueb.shoppinglist.entities.List list = listDAO.getList(listId);
+
+			if (list.getOwner().getId().equals(userId)
+					|| listDAO.hasAddDeletePermission(listId, userId)) {
+				return true;
+			} else {
+				HttpErrorHandler.sendError401(response);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+		return false;
 	}
 
 }
