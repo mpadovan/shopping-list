@@ -84,7 +84,7 @@
 		</div>
 		<!--Images Modal -->
 		<div class="modal fade" id="images" tabindex="-1" role="dialog" aria-labelledby="images" aria-hidden="true">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="images">Immagini di categoria di lista</h5>
