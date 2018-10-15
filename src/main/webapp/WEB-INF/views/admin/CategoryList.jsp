@@ -44,7 +44,7 @@
 									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
 									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
 								<td class="td-handler">
-									<a href="#images" data-toggle="modal" data-target="#images"><i class="fas fa-images"></i></a>
+									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images"></i></a>
 									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a>
 									<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a>
 								</td>
@@ -85,70 +85,7 @@
 		<!--Images Modal -->
 		<div class="modal fade" id="images" tabindex="-1" role="dialog" aria-labelledby="images" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="images">Immagini di categoria di lista</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="container-fluid" id="img-cat">
-							<div class="row">
-								<div class="col">
-									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
-											<div class="img-cat-hover">
-												<div class="img-cat-hover-content">
-													<i class="fas fa-plus fa-3x"></i>
-												</div>
-											</div>
-											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-										</a>
-									</div>
-								</div>
-								<div class="col">
-									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
-											<div class="img-cat-hover">
-												<div class="img-cat-hover-content">
-													<i class="fas fa-plus fa-3x"></i>
-												</div>
-											</div>
-											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
-											<div class="img-cat-hover">
-												<div class="img-cat-hover-content">
-													<i class="fas fa-plus fa-3x"></i>
-												</div>
-											</div>
-											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-										</a>
-									</div>
-								</div>
-								<div class="col">
-									<div class="mx-auto my-2 cat-image text-center">
-										<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
-											<div class="img-cat-hover">
-												<div class="img-cat-hover-content">
-													<i class="fas fa-plus fa-3x"></i>
-												</div>
-											</div>
-											<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<div class="modal-content"></div>
 			</div>
 		</div>
 		<!--Load modal -->
@@ -163,7 +100,6 @@
 					</div>
 					<div class="modal-body">
 						<form  action="ImagesListCategory" method="POST" enctype='multipart/form-data'>
-							<input type="hidden" value="">
 							<div class="custom-file my-2">
 								<label class="custom-file-label" for="image">Scegli immagine</label>
 								<input type="file" class="custom-file-input" id="image" name="image">
@@ -183,6 +119,16 @@
 		<link href="${pageContext.servletContext.contextPath}/assets/css/list_category.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-
+		<script>
+			$(function(){
+				$('#images').on('shown.bs.modal', function (e) {
+					loadModalImages($(e.relatedTarget).data("category-id"));
+				})
+			})
+			function loadModalImages(id) {
+				console.log(id);
+				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId="+id);
+			}
+		</script>
 	</jsp:attribute>
 </layouts:admin>
