@@ -18,4 +18,5 @@ public interface ListsCategoryImagesDAO {
 	public List<ListsCategoriesImage> getAll() throws DaoException;
 	public Boolean updateListsCategoriesImage(Integer categoryId, ListsCategoriesImage listCategoriesImage) throws DaoException;
 	public ListsCategoriesImage getById(Integer id) throws DaoException;
+	public List <ListsCategoriesImage> getByCategoriesID(Integer CategoryID) throws DaoException;
 }
