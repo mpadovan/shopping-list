@@ -12,6 +12,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesD
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -45,6 +46,13 @@ public class ListCategoryImagesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Integer categoryId = Integer.parseInt(request.getParameter("categoryId"));
+		try {
+			List<ListsCategoriesImage> images = listsCategoryImagesDAO.getByCategoriesID(categoryId);
+			request.setAttribute("images", images);
+			request.getRequestDispatcher("/WEB-INF/views/admin/ListCategoryImages.jsp").forward(request, response);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListCategoryImagesServlet.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 	}
 

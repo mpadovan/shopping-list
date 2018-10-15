@@ -161,18 +161,17 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		try {
 			List <ListsCategoriesImage> lci = new ArrayList <ListsCategoriesImage> ();
 			String query = "select lci.id, lci.image"
-					+ "from listscategoriesimages lci"
-					+ "where lci.idcategory = ?";
+					+ " from listscategoriesimages lci"
+					+ " where lci.idcategory = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, CategoryID);
 			ResultSet rs = st.executeQuery();
-			int j = 0;
 			while (rs.next()) {
-				int i = 1;
-
-				lci.get(j).setId(rs.getInt(i++));
-				lci.get(j).setImage(rs.getString(i++));
-				j++;
+				ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
+				listsCategoriesImage.setId(rs.getInt("id"));
+				listsCategoriesImage.setImage(rs.getString("image"));
+				lci.add(listsCategoriesImage);
+				
 			}
 			rs.close();
 			st.close();

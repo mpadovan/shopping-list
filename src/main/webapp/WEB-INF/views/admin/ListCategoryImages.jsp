@@ -3,7 +3,7 @@
     Created on : 15-ott-2018, 10.45.02
     Author     : giulia
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="modal-header">
 	<h5 class="modal-title" id="images">Immagini di categoria di lista</h5>
 	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,18 +14,20 @@
 	<div class="container-fluid" id="img-cat">
 		<div class="row">
 			<div class="col">
-				<div class="mx-auto my-2 cat-image text-center">
+				<c:forEach var="i" items="${requestScope.images}">
+					<div class="mx-auto my-2 cat-image text-center">
 					<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 						<div class="img-cat-hover">
 							<div class="img-cat-hover-content">
 								<i class="fas fa-plus fa-3x"></i>
 							</div>
 						</div>
-						<img class="cat-list-img-modal" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+						<img class="cat-list-img-modal" src="${i.image}">
 					</a>
 				</div>
+				</c:forEach>
 			</div>
-			<div class="col">
+		<div class="col">
 				<div class="mx-auto my-2 cat-image text-center">
 					<a class="img-cat-link" href="#load-image" data-toggle="modal" data-target="#load-image">
 						<div class="img-cat-hover">
