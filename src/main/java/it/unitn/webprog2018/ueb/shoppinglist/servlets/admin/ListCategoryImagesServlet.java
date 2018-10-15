@@ -5,8 +5,15 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +26,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListCategoryImagesServlet", urlPatterns = {"/restricted/admin/ListCategory/Images"})
 public class ListCategoryImagesServlet extends HttpServlet {
-
+	private ListsCategoryImagesDAO listsCategoryImagesDAO;
+	
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		listsCategoryImagesDAO = factory.getListsCategoryImageDAO();
+	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -31,7 +44,8 @@ public class ListCategoryImagesServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/admin/ListCategoryImages.jsp").forward(request, response);
+		Integer categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
 	}
 
 	/**
