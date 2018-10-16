@@ -69,6 +69,9 @@
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="password" />
 							</div>
+							<div id="passwordStrength" class="progress d-none" style="height: 13pt; margin-top: 4pt;">
+								<div id="progressBar" name="progressBar" class="progress-bar bg-danger" role="progressbar" style="width: 33.3%">bad</div>
+							</div>
 						</div>
 						<div class="form-label-group">
 							<input type="password" id="checkPassword" name="checkPassword" class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}" placeholder="Conferma password" required>
@@ -100,12 +103,83 @@
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
+			var weakTh = 30,goodTh = 60, strongTh = 80;		//Thresholds: weak,good or strong password; is valid when is good or strong
 			$(document).ready(function () {
+				var animActive = false;
+				var state=1;
 				setTimeout(function () {
 					var $Input = $('input:-webkit-autofill');
 					$Input.next("label").addClass('active');
 				}, 100);
+				$("#password").on("keypress keyup keydown", function() {
+					var pass = $(this).val();
+					if(!animActive){
+						$("#passwordStrength").removeClass("d-none").addClass("zoomIn");
+						$("#progressBar").addClass("from0to33");
+						animActive = true;
+					}
+					var passStrength = checkPassStrength(pass);
+					var passScore = scorePassword(pass);
+					//console.log(passScore);
+					$("#progressBar").html(passStrength).val(passScore);
+					if(passScore <= goodTh && state===2){
+						$("#progressBar").removeClass("from66to33").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
+						state=1;
+					}
+					else if(passScore > goodTh && passScore<=strongTh){
+						if(state===1)
+							$("#progressBar").removeClass("bg-danger").addClass("from33to66").addClass("bg-warning").width("66.6%").removeClass("from0to33").removeClass("from66to33");
+						else if (state === 3)
+							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from100to66").removeClass("bg-success");
+						state=2;
+					}
+					else if(passScore > strongTh && state === 2){
+						$("#progressBar").removeClass("bg-warning").addClass("from66to100").addClass("bg-success").width("100%").removeClass("from100to66").removeClass("from33to66");
+						state=3;
+					}
+				});
 			});
+			
+			function scorePassword(pass) {
+				var score = 0;
+				if (!pass)
+					return score;
+
+				// award every unique letter until 5 repetitions
+				var letters = new Object();
+				for (var i=0; i<pass.length; i++) {
+					letters[pass[i]] = (letters[pass[i]] || 0) + 1;
+					score += 5.0 / letters[pass[i]];
+				}
+
+				// bonus points for mixing it up
+				var variations = {
+					digits: /\d/.test(pass),
+					lower: /[a-z]/.test(pass),
+					upper: /[A-Z]/.test(pass),
+					nonWords: /\W/.test(pass),
+				}
+
+				variationCount = 0;
+				for (var check in variations) {
+					variationCount += (variations[check] == true) ? 1 : 0;
+				}
+				score += (variationCount - 1) * 10;
+
+				return parseInt(score);
+			}
+
+			function checkPassStrength(pass) {
+				var score = scorePassword(pass);
+				if (score > strongTh)
+					return "forte";
+				if (score > goodTh)
+					return "buona";
+				if (score >= weakTh)
+					return "debole";
+
+				return "cattiva";
+			}
 
 		</script>
 	</jsp:attribute>

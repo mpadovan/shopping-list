@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package it.unitn.webprog2018.ueb.shoppinglist.entities;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -12,13 +12,15 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
+import java.util.HashMap;
+import java.util.Map;
 /**
  * Entity class that implements the User entity (aka user table in database)
  *
  * @author Giulia Carocari
  */
 public class User extends AbstractEntity {
-
+	
 	private String email;
 	private String password;
 	private String checkpassword;
@@ -35,7 +37,7 @@ public class User extends AbstractEntity {
 	public String getCheckpassword() {
 		return checkpassword;
 	}
-
+	
 	public void setCheckpassword(String checkpassword) {
 		this.checkpassword = checkpassword;
 	}
@@ -48,7 +50,7 @@ public class User extends AbstractEntity {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param email email to associate with the user
 	 */
 	public void setEmail(String email) {
@@ -63,7 +65,7 @@ public class User extends AbstractEntity {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param password encrypted password to associate with the user
 	 */
 	public void setPassword(String password) {
@@ -78,7 +80,7 @@ public class User extends AbstractEntity {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param name first name to associate with the user
 	 */
 	public void setName(String name) {
@@ -91,29 +93,29 @@ public class User extends AbstractEntity {
 	public String getLastname() {
 		return lastname;
 	}
-
+	
 	/**
-	 * 
+	 *
 	 * @param lastname last name to associate with the user
 	 */
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-
+	
 	/**
 	 * @return the path of t@Override
-	public String getHash() {
-		return Sha256.doHash(token);
-	}he avatar image associated with the user
+	 * public String getHash() {
+	 * return Sha256.doHash(token);
+	 * }he avatar image associated with the user
 	 */
 	public String getImage() {
 		return image;
 	}
-
+	
 	public void setImage(String image) {
 		this.image = image;
 	}
-
+	
 	/**
 	 * @return true if the user is an administrator of the page
 	 */
@@ -122,7 +124,7 @@ public class User extends AbstractEntity {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param administrator if true then the user becomes an administrator to the page-
 	 */
 	public void setAdministrator(Boolean administrator) {
@@ -132,7 +134,7 @@ public class User extends AbstractEntity {
 	public String getTokenpassword() {
 		return tokenpassword;
 	}
-
+	
 	public void setTokenpassword(String tokenpassword) {
 		this.tokenpassword = tokenpassword;
 	}
@@ -168,6 +170,9 @@ public class User extends AbstractEntity {
 		if (password == null || password.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("password", "Non può essere lasciato vuoto");
 		}
+		if(scorePassword(password) <= 60){
+			setError("password","Password troppo debole, prova aggiungendo lettere maiuscole,numeri o caratteri");
+		}
 		if (checkpassword == null || checkpassword.equals("") || password.equals(Sha256.doHash(""))) {
 			setError("checkpassword", "Non può essere lasciato vuoto");
 		}
@@ -175,11 +180,11 @@ public class User extends AbstractEntity {
 			setError("checkpassword", "Deve coincidere con password");
 		}
 	}
-
+	
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
 	}
-
+	
 	@Override
 	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException{
 		if(errors.isEmpty())
@@ -191,11 +196,38 @@ public class User extends AbstractEntity {
 				/*User user = userDAO.getById(id);
 				if(id!=user.getId())
 				{
-					setError("email", "email già esistente");
+				setError("email", "email già esistente");
 				}*/
 			} catch (RecordNotFoundDaoException ex) {
 				//tutto andato a buon fine, nessun duplicato
 			}
 		}
+	}
+	
+	private Integer scorePassword(String pass){
+		float score = 0;
+		if(pass == null || pass.length() < 1)
+			return 0;
+		
+		Map<Character, Integer> letters = new HashMap();
+		for (int i=0; i<pass.length(); i++) {
+			Character c =(Character)pass.charAt(i);
+			letters.put(c, letters.containsKey(c)? letters.get(c)+1 : 1);
+			score += 5.0 / letters.get(c);
+		}
+		
+		Boolean[] variations = new Boolean[4];
+		variations[0] = pass.matches("(.)*(\\d)(.)*");
+		variations[1] = pass.matches("(.)*([a-z])(.)*");
+		variations[2] = pass.matches("(.)*([A-Z])(.)*");
+		variations[3] = pass.matches("(.)*(\\W)(.)*");
+		
+		int variationCount = 0;
+		for(int i = 0; i < variations.length; i++)
+			variationCount += (variations[i] ? 1 : 0);
+				
+		score += (variationCount - 1)*10;
+		//System.out.println((int)score);
+		return (int) score;
 	}
 }
