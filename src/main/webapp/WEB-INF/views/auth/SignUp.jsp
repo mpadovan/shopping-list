@@ -69,6 +69,9 @@
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${user}" field="password" />
 							</div>
+							<div id="passwordStrength" class="progress d-none" style="height: 13pt; margin-top: 4pt;">
+								<div id="progressBar" class="progress-bar bg-danger" role="progressbar" style="width: 33.3%">bad</div>
+							</div>
 						</div>
 						<div class="form-label-group">
 							<input type="password" id="checkPassword" name="checkPassword" class="form-control ${(user.getFieldErrors("checkpassword") != null ? "is-invalid" : "")}" placeholder="Conferma password" required>
@@ -101,13 +104,37 @@
 	<jsp:attribute name="customJs">
 		<script>
 			$(document).ready(function () {
+				var animActive = false;
+				var state=1;
 				setTimeout(function () {
 					var $Input = $('input:-webkit-autofill');
 					$Input.next("label").addClass('active');
 				}, 100);
 				$("#password").on("keypress keyup keydown", function() {
 					var pass = $(this).val();
-					console.log(checkPassStrength(pass));
+					if(!animActive){
+						$("#passwordStrength").removeClass("d-none").addClass("zoomIn");
+						$("#progressBar").addClass("from0to33");
+						animActive = true;
+					}
+					var passStrength = checkPassStrength(pass);
+					$("#progressBar").html(passStrength);
+					var passScore = scorePassword(pass);
+					if(passScore <= 60 && state==2){
+						$("#progressBar").removeClass("from66to33").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
+						state=1;
+					}
+					else if(passScore > 60 && passScore<=80){
+						if(state==1)
+							$("#progressBar").removeClass("bg-danger").addClass("from33to66").addClass("bg-warning").width("66.6%").removeClass("from0to33").removeClass("from66to33");
+						else if (state == 3)
+							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from100to66").removeClass("bg-success");
+						state=2;
+					}
+					else if(passScore > 80 && state == 2){
+						$("#progressBar").removeClass("bg-warning").addClass("from66to100").addClass("bg-success").width("100%").removeClass("from100to66").removeClass("from33to66");
+						state=3;
+					}
 				});
 			});
 			
@@ -149,7 +176,7 @@
 				if (score >= 30)
 					return "weak";
 
-				return "";
+				return "bad";
 			}
 
 		</script>
