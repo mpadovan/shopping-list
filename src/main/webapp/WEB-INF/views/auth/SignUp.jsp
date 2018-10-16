@@ -70,7 +70,7 @@
 								<shared:fieldErrors entity="${user}" field="password" />
 							</div>
 							<div id="passwordStrength" class="progress d-none" style="height: 13pt; margin-top: 4pt;">
-								<div id="progressBar" class="progress-bar bg-danger" role="progressbar" style="width: 33.3%">bad</div>
+								<div id="progressBar" name="progressBar" class="progress-bar bg-danger" role="progressbar" style="width: 33.3%">bad</div>
 							</div>
 						</div>
 						<div class="form-label-group">
@@ -103,6 +103,7 @@
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
+			var weakTh = 30,goodTh = 60, strongTh = 80;		//Thresholds: weak,good or strong password; is valid when is good or strong
 			$(document).ready(function () {
 				var animActive = false;
 				var state=1;
@@ -118,20 +119,21 @@
 						animActive = true;
 					}
 					var passStrength = checkPassStrength(pass);
-					$("#progressBar").html(passStrength);
 					var passScore = scorePassword(pass);
-					if(passScore <= 60 && state==2){
+					//console.log(passScore);
+					$("#progressBar").html(passStrength).val(passScore);
+					if(passScore <= goodTh && state===2){
 						$("#progressBar").removeClass("from66to33").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
 						state=1;
 					}
-					else if(passScore > 60 && passScore<=80){
-						if(state==1)
+					else if(passScore > goodTh && passScore<=strongTh){
+						if(state===1)
 							$("#progressBar").removeClass("bg-danger").addClass("from33to66").addClass("bg-warning").width("66.6%").removeClass("from0to33").removeClass("from66to33");
-						else if (state == 3)
+						else if (state === 3)
 							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from100to66").removeClass("bg-success");
 						state=2;
 					}
-					else if(passScore > 80 && state == 2){
+					else if(passScore > strongTh && state === 2){
 						$("#progressBar").removeClass("bg-warning").addClass("from66to100").addClass("bg-success").width("100%").removeClass("from100to66").removeClass("from33to66");
 						state=3;
 					}
@@ -169,14 +171,14 @@
 
 			function checkPassStrength(pass) {
 				var score = scorePassword(pass);
-				if (score > 80)
-					return "strong";
-				if (score > 60)
-					return "good";
-				if (score >= 30)
-					return "weak";
+				if (score > strongTh)
+					return "forte";
+				if (score > goodTh)
+					return "buona";
+				if (score >= weakTh)
+					return "debole";
 
-				return "bad";
+				return "cattiva";
 			}
 
 		</script>
