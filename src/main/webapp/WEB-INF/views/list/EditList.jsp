@@ -45,9 +45,11 @@
 									name="category" 
 									required
 									>
-								<option selected value="-1">Nessuna</option>
+								<option selected value="${requestScope.currentList.category.id}">${requestScope.currentList.category.name}</option>
 								<c:forEach var="c" items="${requestScope.listsCategory}">
-									<option value="${c.id}">${c.name}</option>
+									<c:if test="${requestScope.currentList.category.id != c.id}">
+										<option value="${c.id}">${c.name}</option>
+									</c:if>
 								</c:forEach>
 							</select>
 						</div>
@@ -64,8 +66,12 @@
 								<shared:fieldErrors entity="${currentList}" field="description" />
 							</div>
 						</div>
-						<div id="sharedList">Condividi con:<br></div>
-						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
+						<div id="app">
+							<div id="sharedList">Condividi con:<br>
+								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+							</div>
+							<button id="btn-add-email" type="button" disabled class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+						</div>
 						<div>
 							<label for="image">Immagine</label>
 							<div class="custom-file">
@@ -108,13 +114,32 @@
 					});
 				});
 			});
-			function addEmail() {
-				var btn = document.createElement("INPUT");
-				btn.setAttribute("type", "email");
-				btn.setAttribute("name", "shared[]");
-				btn.classList.add("form-control");
-				document.getElementById("sharedList").appendChild(btn);
-			}
+			var app = new Vue({
+				el: '#app',
+				data: {
+					emailFields: ['']
+				},
+				watch: {
+					emailFields: function () {
+						var c = 0;
+						for (var i = 0; i < this.emailFields.length; i++) {
+							if (this.emailFields[i] == '' || this.emailFields[i] === null)
+								c = 1;
+						}
+						if (c) {
+							$('#btn-add-email').prop('disabled', true);
+						} else {
+							$('#btn-add-email').prop('disabled', false);
+						}
+						console.log(this.emailFields);
+					}
+				},
+				methods: {
+					addEmail: function() {
+						this.emailFields.push('');
+					}
+				}
+			});
 		</script>
 	</jsp:attribute>
 
