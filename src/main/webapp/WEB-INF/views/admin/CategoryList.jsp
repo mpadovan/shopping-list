@@ -39,10 +39,11 @@
 								<td>${c.name}</td>
 								<td>${c.description}</td>
 								<td class="td-images">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
-									<img class="cat-list-img" src="${pageContext.servletContext.contextPath}/assets/images/default.jpeg">
+									<c:forEach var="i" items="${requestScope.listsCategoryImage}">
+										<c:if test="${c.id == i.category.id}">
+											<img class="cat-list-img" src="${pageContext.servletContext.contextPath}${i.image}">
+										</c:if>
+									</c:forEach>
 								<td class="td-handler">
 									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images"></i></a>
 									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a>
@@ -86,7 +87,7 @@
 		<div class="modal fade" id="images" tabindex="-1" role="dialog" aria-labelledby="images" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
-					
+
 				</div>
 			</div>
 		</div>
@@ -119,17 +120,28 @@
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/list_category.css" type="text/css" rel="stylesheet"/>
+		<style>
+			.carousel-item {
+				/**height: 100vh;**/
+				min-height: 300px;
+				background: no-repeat center center scroll;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+			}
+		</style>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
-			$(function(){
+			$(function () {
 				$('#images').on('shown.bs.modal', function (e) {
 					loadModalImages($(e.relatedTarget).data("category-id"));
 				})
 			})
 			function loadModalImages(id) {
 				console.log(id);
-				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId="+id);
+				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId=" + id);
 			}
 		</script>
 	</jsp:attribute>

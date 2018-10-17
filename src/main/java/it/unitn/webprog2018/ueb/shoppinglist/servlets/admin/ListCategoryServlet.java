@@ -27,7 +27,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListCategoryServlet", urlPatterns = {"/restricted/admin/ListCategory"})
 public class ListCategoryServlet extends HttpServlet {
-	
+	private ListsCategoryImagesDAO listsCategoryImagesDAO;
+	private ListsCategoryDAO listsCategoryDAO;
+	@Override
+	public void init() {
+		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
+		listsCategoryImagesDAO = factory.getListsCategoryImageDAO();
+		listsCategoryDAO = factory.getListsCategoryDAO();
+	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -41,8 +48,7 @@ public class ListCategoryServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryDAO();
-		ListsCategoryImagesDAO listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
+		
 		String searchParam = request.getParameter("search");
 		Integer checkParam = 0;
 		
