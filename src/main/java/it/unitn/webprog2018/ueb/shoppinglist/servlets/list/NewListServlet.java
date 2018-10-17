@@ -42,7 +42,7 @@ public class NewListServlet extends HttpServlet {
 	ListsCategoryDAO listsCategoryDAO;
 	ListDAO listDAO;
 	UserDAO userDAO;
-	
+
 	@Inject
 	private UploadHandler uploadHandler;
 
@@ -123,8 +123,8 @@ public class NewListServlet extends HttpServlet {
 
 			// check if there are any users in the shared[] textfields
 			if (shared != null && shared.length != 0) {
-				for (int i = 0; i < shared.length; i++) {
-					if (!shared[i].isEmpty() && !shared[i].equals(me.getEmail())) {
+				for (String shared1 : shared) {
+					if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
 						isShared = true;
 					}
 				}
@@ -146,7 +146,7 @@ public class NewListServlet extends HttpServlet {
 						}
 					} catch (RecordNotFoundDaoException ex) {
 						everythingOK = false;
-						ex.printStackTrace();
+						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 						list.setError("shared[]", "l'utente " + shared1 + " non esiste");
 						request.setAttribute("list", list);
 					}
@@ -161,14 +161,12 @@ public class NewListServlet extends HttpServlet {
 				}
 				if (valid) {
 					for (User u : listShared) {	// connect list to users, apart from the owner
-						if (!u.getEmail().equals(me.getEmail())) {
-							if (!listDAO.linkShoppingListToUser(list, u.getId())) {
-								everythingOK = false;
-								try {
-									throw new SQLException("link non effettutato tra lista e utente");
-								} catch (SQLException ex) {
-									Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-								}
+						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+							everythingOK = false;
+							try {
+								throw new SQLException("link non effettutato tra lista e utente");
+							} catch (SQLException ex) {
+								Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 							}
 						}
 					}
@@ -179,7 +177,7 @@ public class NewListServlet extends HttpServlet {
 			}
 			if (everythingOK) {
 				String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-				
+
 				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 				String imageURI = "";
 				Part image = request.getPart("image");

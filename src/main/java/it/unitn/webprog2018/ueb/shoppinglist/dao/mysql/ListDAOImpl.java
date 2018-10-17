@@ -655,8 +655,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 		java.util.List<List> list = new ArrayList<>();
 		try{
 			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image \n" +
-					"from lists l inner join sharedlists s on l.id != s.idlist\n" +
-					"where l.iduser = ?";
+					"from lists l \n" +
+					"where l.iduser = ? AND l.id NOT IN (SELECT DISTINCT idlist FROM sharedlists)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
