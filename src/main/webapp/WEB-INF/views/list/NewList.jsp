@@ -70,8 +70,6 @@
 								<shared:fieldErrors entity="${list}" field="description" />
 							</div>
 						</div>
-						<div id="sharedList">Condividi con:<br></div>
-						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
 						<div>
 							<label for="image">Immagine</label>
 							<div class="custom-file">

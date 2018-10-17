@@ -124,7 +124,7 @@ public class NewListServlet extends HttpServlet {
 			// check if there are any users in the shared[] textfields
 			if (shared != null && shared.length != 0) {
 				for (int i = 0; i < shared.length; i++) {
-					if (!shared[i].isEmpty()) {
+					if (!shared[i].isEmpty() && !shared[i].equals(me.getEmail())) {
 						isShared = true;
 					}
 				}
@@ -132,18 +132,8 @@ public class NewListServlet extends HttpServlet {
 
 			if (!isShared) {
 				// Add privatelist
-				Boolean valid = listDAO.addList(list);
-				if (!listDAO.linkShoppingListToUser(list, me.getId())) {
-					try {
-						throw new SQLException("link non effettutato tra lista e utente");
-					} catch (SQLException ex) {
-						HttpErrorHandler.sendError500(response);
-						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-				if (!valid) {
+				if (!listDAO.addList(list)) {
 					everythingOK = false;
-					request.setAttribute("list", list);
 				}
 			} else {
 				// Add shared list
@@ -166,10 +156,8 @@ public class NewListServlet extends HttpServlet {
 					valid = listDAO.addList(list);
 				} catch (DaoException ex) {
 					everythingOK = false;
-					// TODO impostare correttamente l'errore
-					list.setError("sth", "Qualcosa è andato storto mentre cercavamo di salvare la lista");
-					request.setAttribute("list", list);
-					ex.printStackTrace();
+					HttpErrorHandler.handleDAOException(ex, response);
+					Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				if (valid) {
 					for (User u : listShared) {	// connect list to users, apart from the owner

@@ -14,7 +14,7 @@
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
-					<c:if test="${!empty list.errors}">
+					<c:if test="${!empty currentList.errors}">
 						<div class="alert alert-danger" role="alert">
 							<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
 							<p>Controlla i campi sottostanti.</p>
@@ -27,14 +27,14 @@
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
-								   class="form-control ${(list.getFieldErrors("name") != null ? "is-invalid" : "")}" 
+								   class="form-control ${(currentList.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="nameList"
 								   name="nameList" 
 								   value="${requestScope.currentList.name}"
 								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
-								<shared:fieldErrors entity="${list}" field="name" />
+								<shared:fieldErrors entity="${currentList}" field="name" />
 							</div>
 						</div>
 						<div>
@@ -54,14 +54,14 @@
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
-								   class="form-control ${(list.getFieldErrors("description") != null ? "is-invalid" : "")}"
+								   class="form-control ${(currentList.getFieldErrors("description") != null ? "is-invalid" : "")}"
 								   id="description"
 								   name="description"
 								   value="${requestScope.currentList.description}"
 								   maxlength="256"
 								   required>
 							<div class="invalid-feedback">
-								<shared:fieldErrors entity="${list}" field="description" />
+								<shared:fieldErrors entity="${currentList}" field="description" />
 							</div>
 						</div>
 						<div id="sharedList">Condividi con:<br></div>
