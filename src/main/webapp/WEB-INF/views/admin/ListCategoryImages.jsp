@@ -24,11 +24,48 @@
 					<div class="carousel-item <c:if test="${j.index == 0}">active</c:if>"
 						 style="background-image: url('${pageContext.servletContext.contextPath}${i.image}')">
 						<div class="carousel-caption d-none d-md-block">
-							<h3>First Slide</h3>
-							<p>This is a description for the first slide.</p>
+							<a href="#edit-${i.id}" class="btn btn-light" data-toggle="modal" data-target="#edit-${i.id}">Modifica</a>
+							<a href="#" class="btn btn-light">Elimina</a>
 						</div>
+							<form class="form-control" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
+								<input name="categoryId" value="${param}" hidden="true">
+								<input name="imageId" value="${i.id}" hidden="true">
+							<div class="custom-file">
+								<input type="file"
+									   class="custom-file-input form-control"
+									   id="image"
+									   name="image"
+									   aria-describedby="image">
+								<label class="custom-file-label" for="image">Scegli file</label>
+							</div>
+						</form>
 					</div>
+					<!-- Modal 
+					<div class="modal fade" id="edit-${i.id}" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="edit-${i.id}">Modal title</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary">Save changes</button>
+								</div>
+							</div>
+						</div>
+					</div> -->
 				</c:forEach>
+				<div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+					<div class="carousel-caption d-none d-md-block">
+						<a href="#" class="btn btn-light">Aggiungi</a>
+					</div>
+				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -39,5 +76,6 @@
 				<span class="sr-only">Next</span>
 			</a>
 		</div>
+
 	</header>
 </div>
