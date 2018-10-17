@@ -23,7 +23,7 @@
 					<div class="text-center mb-4">
 						<h3 class="mb-3 font-weight-normal">Modifica lista</h3>
 					</div>
-					<form class="form-list" method="POST" action="EditList">
+					<form class="form-list" method="POST" action="" enctype='multipart/form-data'>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
@@ -60,8 +60,7 @@
 								   id="description"
 								   name="description"
 								   value="${requestScope.currentList.description}"
-								   maxlength="256"
-								   required>
+								   maxlength="256">
 							<div class="invalid-feedback">
 								<shared:fieldErrors entity="${currentList}" field="description" />
 							</div>
