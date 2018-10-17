@@ -116,91 +116,96 @@ public class NewListServlet extends HttpServlet {
 			try {
 				listCategory = listsCategoryDAO.getById(categoryId);
 			} catch (RecordNotFoundDaoException ex) {
+				everythingOK = false;
 				list.setError("category", "questa categoria non esiste");
 				request.setAttribute("list", list);
 			}
 			list.setCategory(listCategory);
-
-			// check if there are any users in the shared[] textfields
-			if (shared != null && shared.length != 0) {
-				for (String shared1 : shared) {
-					if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
-						isShared = true;
-					}
-				}
-			}
-
-			if (!isShared) {
-				// Add privatelist
-				if (!listDAO.addList(list)) {
-					everythingOK = false;
-				}
-			} else {
-				// Add shared list
-				LinkedList<User> listShared = new LinkedList();
-				for (String shared1 : shared) {
-					try {
+			if (list.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory"))) {
+				// check if there are any users in the shared[] textfields
+				if (shared != null && shared.length != 0) {
+					for (String shared1 : shared) {
 						if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
-							User u = userDAO.getByEmail(shared1);
-							listShared.add(u);
+							isShared = true;
 						}
-					} catch (RecordNotFoundDaoException ex) {
-						everythingOK = false;
-						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-						list.setError("shared[]", "l'utente " + shared1 + " non esiste");
-						request.setAttribute("list", list);
 					}
 				}
-				boolean valid = false;
-				try {
-					valid = listDAO.addList(list);
-				} catch (DaoException ex) {
-					everythingOK = false;
-					HttpErrorHandler.handleDAOException(ex, response);
-					Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				if (valid) {
-					for (User u : listShared) {	// connect list to users, apart from the owner
-						if (!listDAO.linkShoppingListToUser(list, u.getId())) {
-							everythingOK = false;
-							try {
-								throw new SQLException("link non effettutato tra lista e utente");
-							} catch (SQLException ex) {
-								Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-							}
-						}
+
+				if (!isShared) {
+					// Add privatelist
+					if (!listDAO.addList(list)) {
+						everythingOK = false;
 					}
 				} else {
-					everythingOK = false;
-					request.setAttribute("list", list);
-				}
-			}
-			if (everythingOK) {
-				String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
-
-				// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
-				String imageURI = "";
-				Part image = request.getPart("image");
-				if ((image != null) && (image.getSize() > 0)) {
+					// Add shared list
+					LinkedList<User> listShared = new LinkedList();
+					for (String shared1 : shared) {
+						try {
+							if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
+								User u = userDAO.getByEmail(shared1);
+								listShared.add(u);
+							}
+						} catch (RecordNotFoundDaoException ex) {
+							everythingOK = false;
+							Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+							list.setError("shared[]", "l'utente " + shared1 + " non esiste");
+							request.setAttribute("list", list);
+						}
+					}
+					boolean valid = false;
 					try {
-						imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.LIST_IMAGE, list, getServletContext());
-					} catch (IOException ex) {
+						valid = listDAO.addList(list);
+					} catch (DaoException ex) {
+						everythingOK = false;
+						HttpErrorHandler.handleDAOException(ex, response);
 						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-						list.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+					}
+					if (valid) {
+						for (User u : listShared) {	// connect list to users, apart from the owner
+							if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+								everythingOK = false;
+								try {
+									throw new SQLException("link non effettutato tra lista e utente");
+								} catch (SQLException ex) {
+									Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+								}
+							}
+						}
+					} else {
+						everythingOK = false;
 						request.setAttribute("list", list);
-						doGet(request, response);
 					}
 				}
-				if (!response.isCommitted()) {
-					list.setImage(imageURI);
-					// Update the list after setting the image URI
-					listDAO.updateList(list.getId(), list);
-					response.sendRedirect(path);
+				if (everythingOK) {
+					String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+
+					// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
+					String imageURI = "";
+					Part image = request.getPart("image");
+					if ((image != null) && (image.getSize() > 0)) {
+						try {
+							imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.LIST_IMAGE, list, getServletContext());
+						} catch (IOException ex) {
+							Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+							list.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+							request.setAttribute("list", list);
+							doGet(request, response);
+						}
+					}
+					if (!response.isCommitted()) {
+						list.setImage(imageURI);
+						// Update the list after setting the image URI
+						listDAO.updateList(list.getId(), list);
+						response.sendRedirect(path);
+					}
+				} else {
+					// reload the page keeping request and response objects
+					// redirect would remove request associated objects
+					// forward would prevent the categories from being reloaded because request is directly processed by jsp, without servlet interception
+					doGet(request, response);
 				}
 			} else {
-				// reload the page keeping request and response objects
-				// redirect would remove request associated objects
-				// forward would prevent the categories from being reloaded because request is directly processed by jsp, without servlet interception
+				request.setAttribute("list", list);
 				doGet(request, response);
 			}
 		} catch (DaoException ex) {

@@ -54,7 +54,7 @@
 						</div>
 						<div id="app">
 							<div id="sharedList">Condividi con:<br>
-								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+								<input disabled type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
 							</div>
 							<button id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
 						</div>
