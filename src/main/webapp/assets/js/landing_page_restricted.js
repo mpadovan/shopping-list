@@ -366,6 +366,8 @@ var app = new Vue({
 						this.addResultsToIstance(data);
 						break;
 					case 2:
+						this.showAutocomplete = false;
+						this.query = '';
 						toastr['success'](this.operationData.product_name + ' creato ed aggiunto alla lista attuale');
 						break;
 					case 3:
@@ -428,6 +430,9 @@ var app = new Vue({
 			if (val == 0 || this.lockAjaxComponent) {
 				this.showAutocomplete = false;
 				this.hideSearch();
+			} else if(val == '' && this.item_selected_id != -2) {
+				$('#item' + this.item_selected_id ).removeClass('selected');
+				this.item_selected_id = -2;
 			} else {
 				this.showAutocomplete = true;
 				this.ajaxSettings = {
