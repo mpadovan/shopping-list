@@ -152,28 +152,30 @@ public class NewListServlet extends HttpServlet {
 							request.setAttribute("list", list);
 						}
 					}
-					boolean valid = false;
-					try {
-						valid = listDAO.addList(list);
-					} catch (DaoException ex) {
-						everythingOK = false;
-						HttpErrorHandler.handleDAOException(ex, response);
-						Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-					}
-					if (valid) {
-						for (User u : listShared) {	// connect list to users, apart from the owner
-							if (!listDAO.linkShoppingListToUser(list, u.getId())) {
-								everythingOK = false;
-								try {
-									throw new SQLException("link non effettutato tra lista e utente");
-								} catch (SQLException ex) {
-									Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+					if (everythingOK) {
+						boolean valid = false;
+						try {
+							valid = listDAO.addList(list);
+						} catch (DaoException ex) {
+							everythingOK = false;
+							HttpErrorHandler.handleDAOException(ex, response);
+							Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+						}
+						if (valid) {
+							for (User u : listShared) {	// connect list to users, apart from the owner
+								if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+									everythingOK = false;
+									try {
+										throw new SQLException("link non effettutato tra lista e utente");
+									} catch (SQLException ex) {
+										Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+									}
 								}
 							}
+						} else {
+							everythingOK = false;
+							request.setAttribute("list", list);
 						}
-					} else {
-						everythingOK = false;
-						request.setAttribute("list", list);
 					}
 				}
 				if (everythingOK) {

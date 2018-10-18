@@ -54,9 +54,12 @@
 						</div>
 						<div id="app">
 							<div id="sharedList">Condividi con:<br>
-								<input disabled type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+								<div class="invalid-feedback" style="display:block;">
+									<shared:fieldErrors entity="${list}" field="shared[]" />
+								</div>
 							</div>
-							<button id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+							<button disabled id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
 						</div>
 						<div>
 							<label for="description">Descrizione</label>
@@ -131,7 +134,7 @@
 					}
 				},
 				methods: {
-					addEmail: function() {
+					addEmail: function () {
 						this.emailFields.push('');
 					}
 				}

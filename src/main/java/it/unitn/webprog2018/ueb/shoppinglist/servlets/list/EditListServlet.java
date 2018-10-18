@@ -123,7 +123,7 @@ public class EditListServlet extends HttpServlet {
 						currentList.setError("category", "Questa categoria non esiste");
 						request.setAttribute("currentList", currentList);
 					}
-					
+
 					// check if there are any users in the shared[] textfields
 					if (shared != null && shared.length != 0) {
 						for (String shared1 : shared) {
@@ -152,22 +152,23 @@ public class EditListServlet extends HttpServlet {
 								request.setAttribute("list", currentList);
 							}
 						}
-
-						if (listDAO.updateList(currentList.getId(), currentList)) {
-							// Add new users
-							for (User u : listShared) {	// connect list to users, apart from the owner
-								if (!listDAO.linkShoppingListToUser(currentList, u.getId())) {
-									everythingOK = false;
-									try {
-										throw new SQLException("link non effettutato tra lista e utente");
-									} catch (SQLException ex) {
-										Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+						if (everythingOK) {
+							if (listDAO.updateList(currentList.getId(), currentList)) {
+								// Add new users
+								for (User u : listShared) {	// connect list to users, apart from the owner
+									if (!listDAO.linkShoppingListToUser(currentList, u.getId())) {
+										everythingOK = false;
+										try {
+											throw new SQLException("link non effettutato tra lista e utente");
+										} catch (SQLException ex) {
+											Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
+										}
 									}
 								}
+							} else {
+								everythingOK = false;
+								request.setAttribute("list", currentList);
 							}
-						} else {
-							everythingOK = false;
-							request.setAttribute("list", currentList);
 						}
 					} else {
 						if (!listDAO.updateList(currentList.getId(), currentList)) {
