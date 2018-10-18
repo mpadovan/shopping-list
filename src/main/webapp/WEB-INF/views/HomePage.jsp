@@ -33,7 +33,7 @@
 												</button>
 											</div>
 										</div>
-										<div class="p-1 pt-3 pb-2 autocomplete" v-show="showAutocomplete">
+										<div class="p-1 pt-3 pb-2 autocomplete" v-if="showAutocomplete">
 											<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" style="padding-left: .5rem;" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 										</div>
 										<transition name="fade" v-on:after-leave="searchHided">

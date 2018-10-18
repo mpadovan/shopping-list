@@ -27,21 +27,21 @@ Vue.component('getCat', {
 					toastr['error']("This browser does not support desktop notification");
 				}
 				/*
-				// Let's check whether notification permissions have already been granted
-				else if (Notification.permission === "granted") {
-					// If it's okay let's create a notification
-					var notification = new Notification(self.data[0].category + ' vicino a te!');
-				}
-
-				// Otherwise, we need to ask the user for permission
-				else if (Notification.permission !== "denied") {
-					Notification.requestPermission(function (permission) {
-						// If the user accepts, let's create a notification
-						if (permission === "granted") {
-							var notification = new Notification(self.data[0].category + ' vicino a te!');
-						}
-					});
-				}*/
+				 // Let's check whether notification permissions have already been granted
+				 else if (Notification.permission === "granted") {
+				 // If it's okay let's create a notification
+				 var notification = new Notification(self.data[0].category + ' vicino a te!');
+				 }
+				 
+				 // Otherwise, we need to ask the user for permission
+				 else if (Notification.permission !== "denied") {
+				 Notification.requestPermission(function (permission) {
+				 // If the user accepts, let's create a notification
+				 if (permission === "granted") {
+				 var notification = new Notification(self.data[0].category + ' vicino a te!');
+				 }
+				 });
+				 }*/
 			}
 		});
 	},
@@ -185,7 +185,7 @@ Vue.component('search-item', {
 			timer: null
 		};
 	},
-	created: function() {
+	created: function () {
 		this.item.photography = (this.item.photography == "null") ? null : this.item.photography;
 		this.item.logo = (this.item.logo == "null") ? null : this.item.logo;
 	},
@@ -202,20 +202,20 @@ Vue.component('search-item', {
 				item: self.item
 			});
 		},
-		oneClick: function(event){
-          this.clicks++ 
-          if(this.clicks === 1) {
-            var self = this
-            this.timer = setTimeout(function() {
-              self.show = !self.show;
-              self.clicks = 0
-            }, this.delay);
-          } else{
-             clearTimeout(this.timer);  
-             this.callParent();
-             this.clicks = 0;
-          }         
-        }
+		oneClick: function (event) {
+			this.clicks++
+			if (this.clicks === 1) {
+				var self = this
+				this.timer = setTimeout(function () {
+					self.show = !self.show;
+					self.clicks = 0
+				}, this.delay);
+			} else {
+				clearTimeout(this.timer);
+				this.callParent();
+				this.clicks = 0;
+			}
+		}
 	},
 	template: '<li class="list-group-item noselect"> \
 					<div class="row align-items-center" @click="oneClick"> \
@@ -270,7 +270,7 @@ var app = new Vue({
 			for (var r = 0; r < temp.length; r++) {
 				temp[r].sid = r;
 			}
-			
+
 			return temp;
 		}
 	},
@@ -286,7 +286,8 @@ var app = new Vue({
 		listHided: function () {
 			this.item_selected_id = -2;
 			this.showSearch = true;
-			if(this.items.length === 0) toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
+			if (this.items.length === 0)
+				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
 		searchHided: function () {
 			this.showList = true;
@@ -404,7 +405,7 @@ var app = new Vue({
 				this.searchInitializing = 'search';
 				$('#search-input').focus();
 			}
-			if(val === $('#item' + app.item_selected_id)[0].textContent && app.item_selected_id != -2) {
+			if (app.item_selected_id != -2 && val === $('#item' + app.item_selected_id)[0].textContent) {
 				app.searching();
 			}
 		},
@@ -421,6 +422,13 @@ var app = new Vue({
 				if (this.results[i].category.name == val)
 					this.resultsSorted.push(this.results[i]);
 			}
+		},
+		item_selected_id: function () {
+			for (var i = 0; i < this.autocompleteComputed.length; i++) {
+				$('#item' + i).removeClass('selected');
+			}
+			$('#item' + this.item_selected_id).addClass('selected');
+			console.log(this.item_selected_id);
 		}
 	},
 	created: function () {
@@ -442,28 +450,23 @@ var app = new Vue({
 });
 
 
-$('#search-bar').keydown((e) => {
-	if( e.keyCode === 13 && app.item_selected_id != -2) {
+$('#search-input').keydown((e) => {
+	if (e.keyCode === 13 && app.item_selected_id != -2) {
 		app.query = $('#item' + app.item_selected_id)[0].textContent;
-	} else if(e.keyCode === 13){
+	} else if (e.keyCode === 13) {
 		app.searching();
 	}
-	if(app.item_selected_id == -2) {
+	if(app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
 		app.item_selected_id = 0;
-	}
-	else if (e.keyCode === 40) {
+	} else if (e.keyCode === 40) {
 		app.item_selected_id = app.item_selected_id + 1;
-		if(app.item_selected_id == app.autocompleteComputed.length) {
+		if (app.item_selected_id == app.autocompleteComputed.length) {
 			app.item_selected_id = app.item_selected_id - 1;
 		}
 	} else if (e.keyCode === 38) {
 		app.item_selected_id = app.item_selected_id - 1;
-		if(app.item_selected_id == -1) {
+		if (app.item_selected_id == -1) {
 			app.item_selected_id = app.item_selected_id + 1;
 		}
 	}
-	for(var i = 0; i < app.autocompleteComputed.length; i++) {
-		$('#item' + i ).removeClass('selected');
-	}
-	$('#item' + app.item_selected_id ).addClass('selected');
 });

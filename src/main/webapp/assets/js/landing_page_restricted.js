@@ -366,6 +366,8 @@ var app = new Vue({
 						this.addResultsToIstance(data);
 						break;
 					case 2:
+						this.showAutocomplete = false;
+						this.query = '';
 						toastr['success'](this.operationData.product_name + ' creato ed aggiunto alla lista attuale');
 						break;
 					case 3:
@@ -428,6 +430,9 @@ var app = new Vue({
 			if (val == 0 || this.lockAjaxComponent) {
 				this.showAutocomplete = false;
 				this.hideSearch();
+			} else if(val == '' && this.item_selected_id != -2) {
+				$('#item' + this.item_selected_id ).removeClass('selected');
+				this.item_selected_id = -2;
 			} else {
 				this.showAutocomplete = true;
 				this.ajaxSettings = {
@@ -440,7 +445,7 @@ var app = new Vue({
 				this.ajaxComponent = true;
 				$('#search-input').focus();	
 			}
-			if(val === $('#item' + app.item_selected_id)[0].textContent && app.item_selected_id != -2) {
+			if(app.item_selected_id != -2 && val === $('#item' + app.item_selected_id)[0].textContent) {
 				app.searching();
 			}
 		},
@@ -457,6 +462,13 @@ var app = new Vue({
 		},
 		chat: function (val) {
 			$('#chat').css('display', 'block');
+		},
+		item_selected_id: function () {
+			for (var i = 0; i < this.autocompleteComputed.length; i++) {
+				$('#item' + i).removeClass('selected');
+			}
+			$('#item' + this.item_selected_id).addClass('selected');
+			console.log(this.item_selected_id);
 		}
 	},
 	created: function () {
@@ -480,7 +492,7 @@ $('#search-bar').keydown((e) => {
 	if(e.keyCode === 13){
 		app.searching();
 	}
-	if(app.item_selected_id == -2) {
+	if(app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
 		app.item_selected_id = 0;
 	}
 	else if (e.keyCode === 40) {
@@ -494,8 +506,4 @@ $('#search-bar').keydown((e) => {
 			app.item_selected_id = app.item_selected_id + 1;
 		}
 	}
-	for(var i = 0; i < app.autocompleteComputed.length; i++) {
-		$('#item' + i ).removeClass('selected');
-	}
-	$('#item' + app.item_selected_id ).addClass('selected');
 });
