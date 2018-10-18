@@ -261,7 +261,8 @@ var app = new Vue({
 		categoryFull: null,
 		showLocals: false,
 		lockSearch: false,
-		item_selected_id: -2
+		item_selected_id: -2,
+		loaded_list: false
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -446,6 +447,9 @@ var app = new Vue({
 			// 	}
 			// });
 		}
+	},
+	mounted: function() {
+		this.loaded_list = true;
 	}
 });
 

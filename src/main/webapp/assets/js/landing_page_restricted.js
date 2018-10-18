@@ -177,7 +177,8 @@ var app = new Vue({
 		chat: false,
 		permission: false,
 		lockAjaxComponent: false,
-		item_selected_id: -2
+		item_selected_id: -2,
+		loaded_list: false
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -482,6 +483,9 @@ var app = new Vue({
 		} else {
 			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
 		}*/
+	},
+	mounted: function() {
+		this.loaded_list = true;
 	}
 });
 
