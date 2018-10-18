@@ -322,7 +322,6 @@ var app = new Vue({
 			this.showSearch = false;
 		},
 		replaceQuerySearch: function (val) {
-			alert(val);
 			this.lockAjaxComponent = true;
 			this.query = val;
 			this.ajaxComponent = false;
