@@ -54,8 +54,12 @@
 						</div>
 						<div id="app">
 							<div id="sharedList">Condividi con:<br>
-								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
-								<div class="invalid-feedback" style="display:block;">
+								<input type="email"
+									   name="shared[]"
+									   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}"
+									   v-for="(field, index) in emailFields"
+									   v-model="emailFields[index]">
+								<div class="invalid-feedback">
 									<shared:fieldErrors entity="${list}" field="shared[]" />
 								</div>
 							</div>

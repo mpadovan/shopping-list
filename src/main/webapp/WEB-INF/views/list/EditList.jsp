@@ -67,9 +67,13 @@
 						</div>
 						<div id="app">
 							<div id="sharedList">Condividi con:<br>
-								<input type="email" name="shared[]" class="form-control" v-for="(field, index) in emailFields" v-model="emailFields[index]">
+								<input type="email" 
+									   name="shared[]" 
+									   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}" 
+									   v-for="(field, index) in emailFields" 
+									   v-model="emailFields[index]">
 								<div class="invalid-feedback">
-									<shared:fieldErrors entity="${currentList}" field="description" />
+									<shared:fieldErrors entity="${currentList}" field="shared[]" />
 								</div>
 							</div>
 							<button id="btn-add-email" type="button" disabled class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
