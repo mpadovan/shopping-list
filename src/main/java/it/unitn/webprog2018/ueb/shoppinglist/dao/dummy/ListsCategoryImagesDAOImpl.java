@@ -89,6 +89,11 @@ public class ListsCategoryImagesDAOImpl implements ListsCategoryImagesDAO {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+	@Override
+	public Boolean deleteImage(Integer id) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 	
 	
 }
