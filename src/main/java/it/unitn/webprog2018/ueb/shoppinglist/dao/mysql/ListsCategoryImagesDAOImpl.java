@@ -8,6 +8,7 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
@@ -181,4 +182,23 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 			throw new DaoException(ex);
 		}
 	}
+	
+	@Override
+	public Boolean deleteImage(Integer id) throws DaoException {
+		try{
+			String query = "DELETE FROM listscategoriesimages WHERE id = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, id);
+			int count = st.executeUpdate();
+			st.close();
+			if(count != 1)
+				throw new RecordNotFoundDaoException("product "+id+" not found");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
+	}
+	
 }
