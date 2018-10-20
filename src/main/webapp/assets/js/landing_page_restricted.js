@@ -69,18 +69,21 @@ Vue.component('search-item', {
 			show: false,
 			delay: 190,
 			clicks: 0,
-			timer: null
+			timer: null,
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
 		};
 	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.name);
 			return capitalized;
+		},
+		photoComputed: function() {
+			return (this.item.photography == "null" || this.item.photography == undefined ) ? this.defaultImage : this.item.photography;
+		},
+		logoComputed: function() {
+			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : this.item.logo;
 		}
-	},
-	created: function () {
-		this.item.photography = (this.item.photography == "null") ? null : this.item.photography;
-		this.item.logo = (this.item.logo == "null") ? null : this.item.logo;
 	},
 	methods: {
 		callParent: function () {
@@ -104,22 +107,15 @@ Vue.component('search-item', {
 			}
 		}
 	},
-	template: '<li class="list-group-item noselect"> \
-					<div class="row align-items-center" @click="oneClick"> \
-						<div v-if="item.photography" class="float-left"><img v-bind:src="item.photography" class="img-thumbnail" v-bind:alt="capitalized" style="width:10%"></div> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
+	template: '<div class="col-lg"> \
+					<div class="outer-search-item"> \
+						<div class="inner-search-item" v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }"> \
+                 \
 					</div> \
-					<div class="row align-items-center mt-2" v-show="show"> \
-						<div class="col-1 align-self-left" v-if="item.logo"> \
-							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
-						</div> \
-						<div class="col align-self-left"> \
-							<div >{{item.note }}</div> \
-						</div> \
-						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
+					<h5 @click="callParent" class="pointer">{{ capitalized }}</h5> \
+					<h6>{{ item.category.name }}</h6> \
 					</div> \
-				</li>'
+				</div>'
 });
 
 Vue.component('fetchListComponent', {
@@ -430,8 +426,8 @@ var app = new Vue({
 			if (val == 0 || this.lockAjaxComponent) {
 				this.showAutocomplete = false;
 				this.hideSearch();
-			} else if(val == '' && this.item_selected_id != -2) {
-				$('#item' + this.item_selected_id ).removeClass('selected');
+			} else if (val == '' && this.item_selected_id != -2) {
+				$('#item' + this.item_selected_id).removeClass('selected');
 				this.item_selected_id = -2;
 			} else {
 				this.showAutocomplete = true;
@@ -443,9 +439,9 @@ var app = new Vue({
 				};
 				this.operation = 1;
 				this.ajaxComponent = true;
-				$('#search-input').focus();	
+				$('#search-input').focus();
 			}
-			if(app.item_selected_id != -2 && val === $('#item' + app.item_selected_id)[0].textContent) {
+			if (app.item_selected_id != -2 && val === $('#item' + app.item_selected_id)[0].textContent) {
 				app.searching();
 			}
 		},
@@ -476,36 +472,35 @@ var app = new Vue({
 		this.list = window.location.pathname.split('HomePageLogin/')[1].split('/')[1];
 		this.fetchList();
 		/*if (typeof (Worker) !== "undefined") {
-			if (typeof (w) == "undefined") {
-				w = new Worker("/ShoppingList/assets/js/workers/sw.js");
-			}
-		} else {
-			toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
-		}*/
+		 if (typeof (w) == "undefined") {
+		 w = new Worker("/ShoppingList/assets/js/workers/sw.js");
+		 }
+		 } else {
+		 toastr['error']('Non riusciamo a mandare notifiche a questo PC, aggiorna il browser e riprova.');
+		 }*/
 	},
-	mounted: function() {
+	mounted: function () {
 		this.loaded_list = true;
 	}
 });
 
 $('#search-bar').keydown((e) => {
-	if( e.keyCode === 13 && app.item_selected_id != -2) {
+	if (e.keyCode === 13 && app.item_selected_id != -2) {
 		app.query = $('#item' + app.item_selected_id)[0].textContent;
 	}
-	if(e.keyCode === 13){
+	if (e.keyCode === 13) {
 		app.searching();
 	}
-	if(app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
+	if (app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
 		app.item_selected_id = 0;
-	}
-	else if (e.keyCode === 40) {
+	} else if (e.keyCode === 40) {
 		app.item_selected_id = app.item_selected_id + 1;
-		if(app.item_selected_id == app.autocompleteComputed.length) {
+		if (app.item_selected_id == app.autocompleteComputed.length) {
 			app.item_selected_id = app.item_selected_id - 1;
 		}
 	} else if (e.keyCode === 38) {
 		app.item_selected_id = app.item_selected_id - 1;
-		if(app.item_selected_id == -1) {
+		if (app.item_selected_id == -1) {
 			app.item_selected_id = app.item_selected_id + 1;
 		}
 	}

@@ -55,10 +55,9 @@
 															Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
 														</div>
 													</div>
-													<ul class="search-results list-group list-group-flush">
-														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"
-																	 class="search-result pointer"></search-item>
-													</ul>
+													<div class="search-results row justify-content-center">
+														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"></search-item>
+													</div>
 												</div>
 											</transition>
 										</div>
