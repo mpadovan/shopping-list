@@ -37,7 +37,7 @@
 											<div class="p-1 pt-3 pb-2 autocomplete" v-if="showAutocomplete">
 												<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
 													<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name + item.id' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 											</div>
 											<transition name="fade" v-on:after-leave="searchHided">
 												<div class="list-group" v-if="showSearch">
@@ -72,7 +72,7 @@
 											<u>${requestScope.currentList.name}</u></a>
 									</h5>
 
-									<c:if test="${!empty requestScope.sharedUsers}">
+									<c:if test="${sessionScope.sharedLists.contains(requestScope.currentList)}">
 										<div class="d-flex justify-content-end">
 
 											<p class="pointer" @click="chat = !chat">Chat
