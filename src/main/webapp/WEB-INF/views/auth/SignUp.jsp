@@ -105,32 +105,36 @@
 		<script>
 			var weakTh = 30,goodTh = 60, strongTh = 80;		//Thresholds: weak,good or strong password; is valid when is good or strong
 			$(document).ready(function () {
-				var animActive = false;
-				var state=1;
+				var state=0;
 				setTimeout(function () {
 					var $Input = $('input:-webkit-autofill');
 					$Input.next("label").addClass('active');
 				}, 100);
-				$("#password").on("keypress keyup keydown", function() {
+				$("#password").on("input", function() {
 					var pass = $(this).val();
-					if(!animActive){
-						$("#passwordStrength").removeClass("d-none").addClass("zoomIn");
-						$("#progressBar").addClass("from0to33");
-						animActive = true;
+					if((pass == null || pass.length == 0) && state === 1){
+						$("#progressBar").removeClass("from0to33").removeClass("from66to33").addClass("from33to0");
+						$("#passwordStrength").removeClass("zoomIn").addClass("zoomOut");
+						state = 0;
+					}
+					if(state === 0 && pass.length > 0){
+						$("#passwordStrength").removeClass("d-none").removeClass("zoomOut").addClass("zoomIn");
+						$("#progressBar").removeClass("from33to0").addClass("from0to33");
+						state = 1;
 					}
 					var passStrength = checkPassStrength(pass);
 					var passScore = scorePassword(pass);
 					//console.log(passScore);
 					$("#progressBar").html(passStrength).val(passScore);
 					if(passScore <= goodTh && state===2){
-						$("#progressBar").removeClass("from66to33").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
+						$("#progressBar").removeClass("from100to66").removeClass("from33to66").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
 						state=1;
 					}
 					else if(passScore > goodTh && passScore<=strongTh){
 						if(state===1)
 							$("#progressBar").removeClass("bg-danger").addClass("from33to66").addClass("bg-warning").width("66.6%").removeClass("from0to33").removeClass("from66to33");
 						else if (state === 3)
-							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from100to66").removeClass("bg-success");
+							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from66to100").removeClass("bg-success");
 						state=2;
 					}
 					else if(passScore > strongTh && state === 2){
