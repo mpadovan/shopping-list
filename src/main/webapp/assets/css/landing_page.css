@@ -105,3 +105,16 @@ li {
 		max-width: 20vw;
 	}
 }
+
+.search-item-more-info-overlay {
+	opacity:0;
+	background-color: #e8e8e8;
+}
+
+.search-item-more-info-overlay:hover {
+	opacity: .8;
+}
+
+.add-product-to-list:hover {
+	text-decoration: underline;
+}

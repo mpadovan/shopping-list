@@ -6,6 +6,89 @@
  * and open the template in the editor.
  */
 
+Vue.component('infoModal', {
+	props: ['item'],
+	data: function() {
+		return {
+			data: {
+				name: '',
+				categoryName: '',
+				notes: '',
+				isPrivate: '',
+				photo: '',
+				logo: '',
+				amIAnon: ''
+			},
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
+		}
+	},
+	mounted: function () {
+		console.log(this.item);
+		this.data.name = this.item.item.name;
+		this.data.categoryName = this.item.item.category.name;
+		this.data.notes = this.item.item.note;
+		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : this.path + this.item.item.logo;
+		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : this.path + this.item.item.photography;
+		$('#info-modal').modal('show');
+	},
+	methods: {
+		hideModal: function() {
+			this.$emit('close');
+		}
+	},
+	computed: {
+		path: function () {
+			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
+		}
+	},
+	template: `
+				<div id="info-modal" class="modal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Informazioni Prodotto</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-10 text-center" style="margin:auto;">
+										<img class="image-product" v-bind:src="data.photo" style="max-width:100%; max-height: 15rem;">
+									</div>
+									<div class="col">
+									<h5 class="card-title text-center mt-2">Informazioni prodotto </h5>
+									<table class="table table-responsive-md">
+										<tbody>
+											<tr>
+												<th scope="row">Nome</th>
+												<td>{{data.name}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Note</th>
+												<td>{{data.notes}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Logo</th>
+													<td>
+														<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
+													</td>
+											</tr>
+											<tr>
+												<th scope="row">Categoria</th>
+												<td>{{data.categoryName}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				`
+});
+
 Vue.component('ajaxComponent', {
 	props: ['settings'],
 	data: function () {
@@ -52,14 +135,14 @@ Vue.component('list-item', {
 			$('#item-modal').modal('show');
 		}
 	},
-	template: '<tr> \
-				<td>{{ capitalized }}</td> \
-				<td>{{ item.amount }}</td> \
-				<td>{{ item.item.note }}</td> \
-				<td>{{ item.item.category.name }}</td> \
-				<td v-if="permission" @click="updateItem"><i class="fas fa-pen-square"></i></td> \
-				<td v-if="permission" @click="deleteItem"><i class="fas fa-trash"></i></td> \
-			</tr>'
+	template: `<tr> 
+				<td>{{ capitalized }}</td> 
+				<td>{{ item.amount }}</td> 
+				<td>{{ item.item.note }}</td> 
+				<td>{{ item.item.category.name }}</td> 
+				<td v-if="permission" @click="updateItem"><i class="fas fa-pen-square"></i></td> 
+				<td v-if="permission" @click="deleteItem"><i class="fas fa-trash"></i></td> 
+			</tr>`
 });
 
 Vue.component('search-item', {
@@ -78,11 +161,14 @@ Vue.component('search-item', {
 			var capitalized = _.capitalize(this.item.name);
 			return capitalized;
 		},
-		photoComputed: function() {
-			return (this.item.photography == "null" || this.item.photography == undefined ) ? this.defaultImage : this.item.photography;
+		photoComputed: function () {
+			return (this.item.photography == "null" || this.item.photography == undefined) ? this.defaultImage : this.path + this.item.photography;
 		},
-		logoComputed: function() {
-			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : this.item.logo;
+		logoComputed: function () {
+			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : this.path + this.item.logo;
+		},
+		path: function () {
+			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
@@ -92,7 +178,7 @@ Vue.component('search-item', {
 				item: self.item
 			});
 		},
-		oneClick: function (event) {
+		oneClick: function (event) { // DEPRECATED
 			this.clicks++
 			if (this.clicks === 1) {
 				var self = this
@@ -105,17 +191,28 @@ Vue.component('search-item', {
 				this.callParent();
 				this.clicks = 0;
 			}
+		},
+		infoModal: function () {
+			var self = this;
+			this.$emit('info', {
+				item: self.item
+			})
 		}
 	},
-	template: '<div class="col-lg"> \
-					<div class="outer-search-item"> \
-						<div class="inner-search-item" v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }"> \
-                 \
-					</div> \
-					<h5 @click="callParent" class="pointer">{{ capitalized }}</h5> \
-					<h6>{{ item.category.name }}</h6> \
-					</div> \
-				</div>'
+	template: `<div class="col-lg-3"> 
+					<div class="outer-search-item"> 
+						<div class="inner-search-item" v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }"> 
+							<div class="row align-items-center search-item-more-info-overlay" style="width:100%; height:100%;margin:0;"> 
+								<div style="width:fit-content; margin:auto;"> 
+									<div @click="callParent" style="display:inline-block"><i class="fas fa-plus-circle" style="font-size:4rem;margin-right:1rem;"></i></div> 
+									<div @click="infoModal" style="display:inline-block"><i class="fas fa-question-circle" style="font-size:4rem;"></i></div> 
+								</div> 
+							</div> 
+						</div> 
+					<h5 @click="callParent" class="pointer add-product-to-list" style="border-top:#333 solid 1px;">{{ capitalized }}</h5> 
+					<h6>{{ item.category.name }}</h6> 
+					</div> 
+				</div>`
 });
 
 Vue.component('fetchListComponent', {
@@ -174,7 +271,8 @@ var app = new Vue({
 		permission: false,
 		lockAjaxComponent: false,
 		item_selected_id: -2,
-		loaded_list: false
+		loaded_list: false,
+		showInfoModal: false
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -419,6 +517,12 @@ var app = new Vue({
 				this.items.push(data[i]);
 			}
 			$('#chat').height($('#app').height());
+		},
+		infoItemOnModal: function (item) {
+			this.showInfoModal = item;
+		},
+		infoModalClosed: function() {
+			this.showInfoModal = false;
 		}
 	},
 	watch: {

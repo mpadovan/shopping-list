@@ -37,7 +37,7 @@
 											<div class="p-1 pt-3 pb-2 autocomplete" v-if="showAutocomplete">
 												<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
 													<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name + item.id' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 											</div>
 											<transition name="fade" v-on:after-leave="searchHided">
 												<div class="list-group" v-if="showSearch">
@@ -55,8 +55,8 @@
 															Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
 														</div>
 													</div>
-													<div class="search-results row justify-content-center">
-														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"></search-item>
+													<div class="search-results row">
+														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList" @info="infoItemOnModal"></search-item>
 													</div>
 												</div>
 											</transition>
@@ -126,6 +126,7 @@
 								</div>
 							</div>
 						</div>
+						<info-modal v-if="showInfoModal" v-bind:item="showInfoModal" @close="infoModalClosed"></info-modal>
 					</div>
 				</div>
 				<div class="chat col-lg-5" id="chat">

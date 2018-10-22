@@ -45,14 +45,14 @@ Vue.component('getCat', {
 			}
 		});
 	},
-	template: '<div class="col-md-3 mt-4"> \
-					<div class="card"> \
-						<div class="card-body"> \
-							<div>{{ data[0].category }} vicini a te:</div> \
-							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>\
-						</div> \
-					</div> \
-				</div>'
+	template: `<div class="col-md-3 mt-4"> 
+					<div class="card"> 
+						<div class="card-body"> 
+							<div>{{ data[0].category }} vicini a te:</div> 
+							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>
+						</div> 
+					</div> 
+				</div>`
 });
 
 Vue.component('categories', {
@@ -64,12 +64,12 @@ Vue.component('categories', {
 			category: null
 		};
 	},
-	template: ' <div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> \
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
-				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> \
-				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
-				</select></div></div>',
+	template: `<div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> 
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
+				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> 
+				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> 
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
+				</select></div></div>`,
 	watch: {
 		cat: function (val) {
 			localStorage.setItem("category", val.name);
@@ -166,14 +166,14 @@ Vue.component('list-item', {
 			$('#item-modal').modal('show');
 		}
 	},
-	template: '<tr> \
-				<td>{{ capitalized }}</td> \
-				<td>{{ item.amount }}</td> \
-				<td>{{ item.item.note }}</td> \
-				<td>{{ item.item.category.name }}</td> \
-				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
-				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
-			</tr>'
+	template: `<tr> 
+				<td>{{ capitalized }}</td> 
+				<td>{{ item.amount }}</td> 
+				<td>{{ item.item.note }}</td> 
+				<td>{{ item.item.category.name }}</td> 
+				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> 
+				<td @click="deleteItem"><i class="fas fa-trash"></i></td> 
+			</tr>`
 });
 Vue.component('search-item', {
 	props: ['item'],
@@ -217,22 +217,22 @@ Vue.component('search-item', {
 			}
 		}
 	},
-	template: '<li class="list-group-item noselect"> \
-					<div class="row align-items-center" @click="oneClick"> \
-						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
-					</div> \
-					<div class="row align-items-center mt-2" v-show="show"> \
-						<div class="col-1 align-self-left" v-if="item.logo"> \
-							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
-						</div> \
-						<div class="col align-self-left"> \
-							<div >{{item.note }}</div> \
-						</div> \
-						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
-					</div> \
-				</li>'
+	template: `<li class="list-group-item noselect"> 
+					<div class="row align-items-center" @click="oneClick"> 
+						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> 
+						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>
+				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> 
+					</div> 
+					<div class="row align-items-center mt-2" v-show="show">
+						<div class="col-1 align-self-left" v-if="item.logo"> 
+							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> 
+						</div> 
+						<div class="col align-self-left"> 
+							<div >{{item.note }}</div> 
+						</div> 
+						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div>
+					</div> 
+				</li>`
 });
 
 var app = new Vue({
