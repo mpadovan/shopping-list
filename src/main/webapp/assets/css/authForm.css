@@ -105,11 +105,40 @@ a:hover{
 @-webkit-keyframes from0to33 {
 	0%{
 		width: 0;
+		font-size: 0;
 	}
 }
 @keyframes from0to33 {
 	0%{
 		width: 0;
+		font-size: 0;
+	}
+}
+
+.from33to0{
+	-webkit-animation-name: from33to0;
+	animation-name: from33to0;
+	-webkit-animation-duration: 0.4s;
+	animation-duration: 0.4s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes from33to0 {
+	0%{
+		width: 33.3;
+	}
+	100%{
+		width: 0;
+		font-size: 0;
+	}
+}
+@keyframes from33to0 {
+	0%{
+		width: 33.3;
+	}
+	100%{
+		width: 0;
+		font-size: 0;
 	}
 }
 
@@ -241,5 +270,32 @@ a:hover{
 	}
 	50% {
 		opacity: 1;
+	}
+}
+
+.zoomOut {
+	-webkit-animation-name: zoomOut;
+	animation-name: zoomOut;
+	-webkit-animation-duration: 0.4s;
+	animation-duration: 0.4s;
+	-webkit-animation-delay: 0.25s;
+	animation-delay: 0.25s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes zoomOut {
+	100% {
+		height: 0;
+		opacity: 40;
+		-webkit-transform: scale3d(.3, 1, .3);
+		transform: scale3d(.3, 1, .3);
+	}
+}
+@keyframes zoomOut {
+	100% {
+		height: 0;
+		opacity: 40;
+		-webkit-transform: scale3d(.3, 1, .3);
+		transform: scale3d(.3, 1, .3);
 	}
 }
