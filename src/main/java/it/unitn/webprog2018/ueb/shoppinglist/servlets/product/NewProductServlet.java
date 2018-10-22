@@ -117,7 +117,9 @@ public class NewProductServlet extends HttpServlet {
 				Logger.getLogger(NewProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 				response.sendError(404, ex.getMessage());
 			}
-			if (productDAO.addProductWithId(product)) {
+			// If the product passes validation and is correctly added to the database (see: lazy evaluation)
+			if (product.isVaildOnCreate((DAOFactory) getServletContext().getAttribute("daoFactory"))
+					&& productDAO.addProductWithId(product)) {
 				//upload logo
 				if ((logo != null) && (logo.getSize() > 0)) {
 					try {
@@ -152,7 +154,6 @@ public class NewProductServlet extends HttpServlet {
 						response.sendError(500, "Qualcosa è andato storto. Non è stato possibili aggiornare immagine o logo");
 					} else {
 						response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
-
 					}
 				}
 			} else {

@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.ws;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -19,8 +20,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Filter that checks if a user has the right to access user-specific information in a web service.
- * If the user is trying to access information different than his own he will be sent an Error 401.
+ * Filter that checks if a user has the right to access user-specific
+ * information in a web service. If the user is trying to access information
+ * different than his own he will be sent an Error 401.
  *
  * @author Giulia Carocari
  */
@@ -47,15 +49,13 @@ public class UserAuthenticationFilter implements ContainerRequestFilter {
 
 		if (user != null) {
 			String uri = servletRequest.getRequestURI();
-			if(!uri.endsWith("/")) {
+			if (!uri.endsWith("/")) {
 				uri += "/";
 			}
 			if (!Pattern.matches(".*/restricted/" + user.getId() + "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				if (!servletResponse.isCommitted()) {
-					((HttpServletResponse) servletResponse).sendError(401, "YOU SHALL NOT PASS!\n"
-							+ "The resource you are trying to access is none of your business.\n"
-							+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
+					HttpErrorHandler.sendError401(servletResponse);
 				}
 			}
 		}

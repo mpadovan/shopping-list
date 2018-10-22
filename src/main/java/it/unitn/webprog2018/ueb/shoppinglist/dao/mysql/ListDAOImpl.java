@@ -24,34 +24,34 @@ import java.util.logging.Logger;
 /**
  * @author Michele
  */
-public class ListDAOImpl extends AbstractDAO implements ListDAO{
-	
+public class ListDAOImpl extends AbstractDAO implements ListDAO {
+
 	public ListDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
 	}
+
 	/**
 	 * ATTENZIONE: non da e-mail, password e image degli owner
 	 */
 	@Override
 	public List getList(Integer id) throws DaoException {
-		try{
+		try {
 			List list = new List();
-			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image," +
-					"u.name,u.lastname,u.administrator," +
-					"lc.name,lc.description " +
-					"FROM lists l " +
-					"INNER JOIN users u ON l.iduser = u.id " +
-					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE l.id = ?";
+			String query = "SELECT l.name,l.iduser,l.idcategory,l.description,l.image,"
+					+ "u.name,u.lastname,u.administrator,"
+					+ "lc.name,lc.description "
+					+ "FROM lists l "
+					+ "INNER JOIN users u ON l.iduser = u.id "
+					+ "INNER JOIN listscategories lc ON l.idcategory = lc.id "
+					+ "WHERE l.id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
 			int i = 1;
-			if(rs.first())
-			{
+			if (rs.first()) {
 				User user = new User();
 				ListsCategory lc = new ListsCategory();
-				
+
 				list.setId(id);
 				list.setName(rs.getString(i++));
 				user.setId(rs.getInt(i++));
@@ -68,36 +68,34 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				user.setPassword("");
 				list.setOwner(user);
 				list.setCategory(lc);
-				
+
 				rs.close();
 				st.close();
 				return list;
 			}
 			throw new RecordNotFoundDaoException("List with id: " + id + " not found");
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public List getList(String name, User owner) throws DaoException {
 		try {
 			List list = new List();
-			String query = "SELECT l.id,l.idcategory,l.description,l.image," +
-					"lc.name,lc.description " +
-					"FROM lists l " +
-					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE l.name = ? AND l.iduser = ?";
+			String query = "SELECT l.id,l.idcategory,l.description,l.image,"
+					+ "lc.name,lc.description "
+					+ "FROM lists l "
+					+ "INNER JOIN listscategories lc ON l.idcategory = lc.id "
+					+ "WHERE l.name = ? AND l.iduser = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setString(1, name);
 			st.setInt(2, owner.getId());
 			ResultSet rs = st.executeQuery();
 			ListsCategory lc = new ListsCategory();
 			int i = 1;
-			if(rs.first())
-			{
+			if (rs.first()) {
 				list.setId(rs.getInt(i++));
 				lc.setId(rs.getInt(i++));
 				list.setDescription(rs.getString(i++));
@@ -107,7 +105,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				list.setName(name);
 				list.setCategory(lc);
 				list.setOwner(owner);
-				
+
 				rs.close();
 				st.close();
 				return list;
@@ -118,26 +116,25 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Map<PublicProduct, Integer> getPublicProductsOnList(Integer listId) throws DaoException {
 		Map<PublicProduct, Integer> list = new HashMap<>();
-		try{
-			String query =	"SELECT pp.id,pp.name,pp.note,pp.logo,pp.photography,ppl.quantity,pp.idproductscategory," +
-					"pc.name,pc.category,pc.description,pc.logo " +
-					"FROM publicproductsonlists ppl " +
-					"INNER JOIN publicproducts pp ON ppl.idpublicproduct = pp.id " +
-					"INNER JOIN productscategories pc ON pc.id = pp.idproductscategory " +
-					"WHERE ppl.quantity >= 0 AND ppl.idlist = ?";
+		try {
+			String query = "SELECT pp.id,pp.name,pp.note,pp.logo,pp.photography,ppl.quantity,pp.idproductscategory,"
+					+ "pc.name,pc.category,pc.description,pc.logo "
+					+ "FROM publicproductsonlists ppl "
+					+ "INNER JOIN publicproducts pp ON ppl.idpublicproduct = pp.id "
+					+ "INNER JOIN productscategories pc ON pc.id = pp.idproductscategory "
+					+ "WHERE ppl.quantity >= 0 AND ppl.idlist = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			ResultSet rs = st.executeQuery();
 			PublicProduct p;
-			ProductsCategory pc,pcp;
+			ProductsCategory pc, pcp;
 			Integer quantity;
 			int i = 1;
-			while(rs.next())
-			{
+			while (rs.next()) {
 				i = 1;
 				p = new PublicProduct();
 				pc = new ProductsCategory();
@@ -160,37 +157,36 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
+
 	/**
 	 * ATTENZIONE: non da e-mail, password e image degli owner
 	 */
 	@Override
 	public Map<Product, Integer> getProductsOnList(Integer listId) throws DaoException {
 		Map<Product, Integer> list = new HashMap<>();
-		try{
-			String query =	"SELECT p.id,p.name,p.note,p.logo,p.photography,pl.quantity," +
-					"p.iduser,u.name,u.lastname,u.administrator," +
-					"p.idproductscategory,pc.name,pc.category,pc.description,pc.logo " +
-					"FROM productsonlists pl " +
-					"INNER JOIN products p ON pl.idproduct = p.id " +
-					"INNER JOIN productscategories pc ON pc.id = p.idproductscategory " +
-					"INNER JOIN users u ON p.iduser = u.id " +
-					"WHERE pl.quantity >= 0 AND pl.idlist = ?";
+		try {
+			String query = "SELECT p.id,p.name,p.note,p.logo,p.photography,pl.quantity,"
+					+ "p.iduser,u.name,u.lastname,u.administrator,"
+					+ "p.idproductscategory,pc.name,pc.category,pc.description,pc.logo "
+					+ "FROM productsonlists pl "
+					+ "INNER JOIN products p ON pl.idproduct = p.id "
+					+ "INNER JOIN productscategories pc ON pc.id = p.idproductscategory "
+					+ "INNER JOIN users u ON p.iduser = u.id "
+					+ "WHERE pl.quantity >= 0 AND pl.idlist = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			ResultSet rs = st.executeQuery();
 			Product p;
-			ProductsCategory pc,pcp;
+			ProductsCategory pc, pcp;
 			User u;
 			Integer quantity;
 			int i = 1;
-			while(rs.next())
-			{
+			while (rs.next()) {
 				i = 1;
 				p = new Product();
 				pc = new ProductsCategory();
@@ -219,21 +215,21 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
+
 	/**
-	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate updateAmount()
+	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate
+	 * updateAmount()
 	 */
 	@Override
 	public Boolean addProduct(Integer listId, Product product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String query = "CALL addProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, product.getId());
@@ -241,23 +237,23 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				st.executeUpdate();
 				st.close();
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
+
 	/**
-	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate updateAmount()
+	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate
+	 * updateAmount()
 	 */
 	@Override
 	public Boolean addPublicProduct(Integer listId, PublicProduct product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String query = "CALL addPublicProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, product.getId());
@@ -265,30 +261,28 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				st.executeUpdate();
 				st.close();
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean isOnList(Integer listId, PublicProduct product) throws DaoException {
 		Boolean exist;
 		try {
-			String query = "SELECT EXISTS(SELECT 1 " +
-					"FROM publicproductsonlists " +
-					"WHERE idlist = ? AND idpublicproduct = ? AND quantity >= 0) AS exist";
+			String query = "SELECT EXISTS(SELECT 1 "
+					+ "FROM publicproductsonlists "
+					+ "WHERE idlist = ? AND idpublicproduct = ? AND quantity >= 0) AS exist";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			st.setInt(2, product.getId());
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				exist = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return exist;
@@ -299,22 +293,21 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean isOnList(Integer listId, Product product) throws DaoException {
 		Boolean exist;
 		try {
-			String query = "SELECT EXISTS(SELECT 1 " +
-					"FROM productsonlists " +
-					"WHERE idlist = ? AND idproduct = ? AND quantity >= 0) AS exist";
+			String query = "SELECT EXISTS(SELECT 1 "
+					+ "FROM productsonlists "
+					+ "WHERE idlist = ? AND idproduct = ? AND quantity >= 0) AS exist";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			st.setInt(2, product.getId());
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				exist = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return exist;
@@ -325,121 +318,119 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product, Integer newAmount) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
-		if(newAmount < 0)
+		if (newAmount < 0) {
 			throw new DaoException("invalid quantity value");
-		if(valid)
-		{
-			try{
-				String query = "UPDATE publicproductsonlists " +
-						"SET quantity = ?"+
-						" WHERE idlist = ?"+
-						" AND idpublicproduct = ?";
+		}
+		if (valid) {
+			try {
+				String query = "UPDATE publicproductsonlists "
+						+ "SET quantity = ?"
+						+ " WHERE idlist = ?"
+						+ " AND idpublicproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, newAmount);
 				st.setInt(2, listId);
 				st.setInt(3, product.getId());
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product: "+product.getId()+" not exist in list: "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in list: " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean updateAmount(Integer listId, Product product, Integer newAmount) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
-		if(newAmount < 0)
+		if (newAmount < 0) {
 			throw new DaoException("invalid quantity value");
-		if(valid)
-		{
-			try{
-				String query = "UPDATE productsonlists " +
-						"SET quantity = ?"+
-						" WHERE idlist = ?"+
-						" AND idproduct = ?";
+		}
+		if (valid) {
+			try {
+				String query = "UPDATE productsonlists "
+						+ "SET quantity = ?"
+						+ " WHERE idlist = ?"
+						+ " AND idproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, newAmount);
 				st.setInt(2, listId);
 				st.setInt(3, product.getId());
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product: "+product.getId()+" not exist in list: "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in list: " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
-		Boolean valid =	true; // product.isVaildOnUpdate(dAOFactory);
-		if(valid)
-		{
-			try{
-				String query = "UPDATE publicproductsonlists " +
-						"SET quantity = quantity + 1"+
-						" WHERE idlist = ?"+
-						" AND idpublicproduct = ?";
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			try {
+				String query = "UPDATE publicproductsonlists "
+						+ "SET quantity = quantity + 1"
+						+ " WHERE idlist = ?"
+						+ " AND idpublicproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, listId);
 				st.setInt(2, product.getId());
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product: "+product.getId()+" not exist in list: "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in list: " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
-		if(valid)
-		{
-			try{
-				String query = "UPDATE productsonlists " +
-						"SET quantity = quantity + 1"+
-						" WHERE idlist = ?"+
-						" AND idproduct = ?";
+		if (valid) {
+			try {
+				String query = "UPDATE productsonlists "
+						+ "SET quantity = quantity + 1"
+						+ " WHERE idlist = ?"
+						+ " AND idproduct = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, listId);
 				st.setInt(2, product.getId());
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product: "+product.getId()+" not exist in list: "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in list: " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean hasAddDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -449,21 +440,20 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			st.setInt(1, userId);
 			st.setInt(2, listId);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return hasPermission;
 			}
-			throw new RecordNotFoundDaoException("list "+listId+" is not shared by: "+userId);
+			throw new RecordNotFoundDaoException("list " + listId + " is not shared by: " + userId);
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -473,21 +463,20 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			st.setInt(1, userId);
 			st.setInt(2, listId);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return hasPermission;
 			}
-			throw new RecordNotFoundDaoException("list "+listId+" is not shared by: "+userId);
+			throw new RecordNotFoundDaoException("list " + listId + " is not shared by: " + userId);
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean hasDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -497,40 +486,39 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			st.setInt(1, userId);
 			st.setInt(2, listId);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return hasPermission;
 			}
-			throw new RecordNotFoundDaoException("list "+listId+" is not shared by: "+userId);
+			throw new RecordNotFoundDaoException("list " + listId + " is not shared by: " + userId);
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
+
 	/**
 	 * ATTENZIONE: l'owner é null
 	 */
 	@Override
 	public java.util.List<List> getByUser(Integer userId) throws DaoException {
 		java.util.List<List> list = new ArrayList<>();
-		try{
-			String query =	"SELECT l.id,l.name,l.description,l.image," +
-					"l.idcategory,lc.name,lc.description " +
-					"FROM lists l " +
-					"INNER JOIN listscategories lc ON l.idcategory = lc.id " +
-					"WHERE iduser = ?";
+		try {
+			String query = "SELECT l.id,l.name,l.description,l.image,"
+					+ "l.idcategory,lc.name,lc.description "
+					+ "FROM lists l "
+					+ "INNER JOIN listscategories lc ON l.idcategory = lc.id "
+					+ "WHERE iduser = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, userId);
 			ResultSet rs = st.executeQuery();
 			List l;
 			ListsCategory lc;
 			int i;
-			while(rs.next())
-			{
+			while (rs.next()) {
 				i = 1;
 				l = new List();
 				lc = new ListsCategory();
@@ -548,61 +536,58 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException {
 		Boolean valid = product.isVaildOnDestroy(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String query = "CALL deletePublicProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, product.getId());
 				st.setInt(2, listId);
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product "+product.getId()+" not found in list "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product " + product.getId() + " not found in list " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean deleteFromList(Integer listId, Product product) throws DaoException {
 		Boolean valid = product.isVaildOnDestroy(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String query = "CALL deleteProductOnList(?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, product.getId());
 				st.setInt(2, listId);
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("product "+product.getId()+" not found in list "+listId);
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product " + product.getId() + " not found in list " + listId);
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -612,10 +597,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			st.setInt(1, listId);
 			st.setInt(2, userId);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-				
+
 				rs.close();
 				st.close();
 				return hasPermission;
@@ -626,37 +610,39 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
-		try{
-			String query =	"select iduser from sharedlists where idlist = ?";
+		try {
+			String query = "select u.id, u.email "
+					+ "from sharedlists s INNER JOIN users u ON s.iduser = u.id"
+					+ "where s.idlist = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			ResultSet rs = st.executeQuery();
-			while(rs.next())
+			while (rs.next()) {
 				list.add(rs.getInt(1));
+			}
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	/*
 		Questo metodo deve ritornare tutte le liste dello user escluse quelle che si trovano nella tabella sharedlists
-	*/
+	 */
 	@Override
-	public java.util.List<List> getPersonalLists(Integer id) throws DaoException{
+	public java.util.List<List> getPersonalLists(Integer id) throws DaoException {
 		java.util.List<List> list = new ArrayList<>();
-		try{
-			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image \n" +
-					"from lists l inner join sharedlists s on l.id != s.idlist\n" +
-					"where l.iduser = ?";
+		try {
+			String query = "select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image \n"
+					+ "from lists l \n"
+					+ "where l.iduser = ? AND l.id NOT IN (SELECT DISTINCT idlist FROM sharedlists)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
@@ -664,8 +650,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			User u;
 			ListsCategory lc;
 			int i;
-			while(rs.next()){
-				i =  1;
+			while (rs.next()) {
+				i = 1;
 				l = new List();
 				u = new User();
 				lc = new ListsCategory();
@@ -675,7 +661,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				lc.setId(rs.getInt(i++));
 				l.setDescription(rs.getString(i++));
 				l.setImage(rs.getString(i++));
-				
+
 				l.setOwner(u);
 				l.setCategory(lc);
 				list.add(l);
@@ -683,25 +669,24 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	/*
 		Questo metodo deve restituire tutte le liste per cui vale:
 		- user è owner e ci sono entry corrispondenti alla lista in sharedLists
 		- user non è owner ma ci sono entry con la sua id in sharedlists per quella lista
-	*/
+	 */
 	@Override
-	public java.util.List<List> getSharedLists(Integer id)throws DaoException{
+	public java.util.List<List> getSharedLists(Integer id) throws DaoException {
 		java.util.List<List> list = new ArrayList<>();
-		try{
-			String query =	"select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image\n" +
-					"from lists l inner join sharedlists s on l.id = s.idlist\n" +
-					"where l.iduser = ?";
+		try {
+			String query = "select distinct l.id,l.name,l.iduser,l.idcategory,l.description,l.image\n"
+					+ "from lists l inner join sharedlists s on l.id = s.idlist\n"
+					+ "where l.iduser = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
@@ -709,8 +694,8 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			User u;
 			ListsCategory lc;
 			int i;
-			while(rs.next()){
-				i =  1;
+			while (rs.next()) {
+				i = 1;
 				l = new List();
 				u = new User();
 				lc = new ListsCategory();
@@ -720,7 +705,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				lc.setId(rs.getInt(i++));
 				l.setDescription(rs.getString(i++));
 				l.setImage(rs.getString(i++));
-				
+
 				l.setOwner(u);
 				l.setCategory(lc);
 				list.add(l);
@@ -728,60 +713,61 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	//Restituisce solo l'id dell'utente
 	@Override
 	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
 		java.util.List<User> list = new ArrayList<>();
-		try{
-			String query =	"select iduser from sharedlists where idlist = ?";
+		try {
+			String query = "SELECT u.id, u.email\n"
+					+ "FROM sharedlists s inner join users u on s.iduser = u.id\n"
+					+ "WHERE s.idlist = ?;";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			ResultSet rs = st.executeQuery();
 			User u;
-			while(rs.next()){
+			while (rs.next()) {
 				u = new User();
 				u.setId(rs.getInt(1));
+				u.setEmail(rs.getString(2));
 				list.add(u);
 			}
-			
+
 			rs.close();
 			st.close();
 			return list;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public boolean deleteList(Integer listId) throws DaoException {
-		try{
+		try {
 			String query = "delete from lists where id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			int count = st.executeUpdate();
 			st.close();
-			if(count != 1)
-				throw new RecordNotFoundDaoException("list "+listId+" not found");
+			if (count != 1) {
+				throw new RecordNotFoundDaoException("list " + listId + " not found");
+			}
 			return true;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new UpdateException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
-		try{
+		try {
 			String query = "insert into sharedlists (iduser,idlist) values (?,?)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, idpartecipant);
@@ -789,22 +775,21 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 			int count = st.executeUpdate();
 			st.close();
 			return count == 1;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new UpdateException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean addList(List list) throws DaoException {
 		Boolean valid = list.isVaildOnCreate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String image = list.getImage();
-				if(File.separator.equals("\\") && image != null)
+				if (File.separator.equals("\\") && image != null) {
 					image = image.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "insert into lists (name,iduser,idcategory,description,image) values (?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, list.getName());
@@ -814,29 +799,28 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				st.setString(5, image);
 				int count = st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
-				if(rs.next()){
+				if (rs.next()) {
 					list.setId(rs.getInt(1));
 				}
 				st.close();
 				return valid && (count == 1);
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 	@Override
-	public Boolean updateList(Integer id, List list) throws DaoException{
+	public Boolean updateList(Integer id, List list) throws DaoException {
 		Boolean valid = list.isVaildOnUpdate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String image = list.getImage();
-				if(File.separator.equals("\\") && image != null)
+				if (File.separator.equals("\\") && image != null) {
 					image = image.replaceAll("\\\\", "\\\\\\\\");
+				}
 				String query = "UPDATE lists SET name = ?,iduser = ?,idcategory = ?,description = ?,image = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, list.getName());
@@ -847,16 +831,16 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO{
 				st.setInt(6, id);
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("List "+id+" not found");
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("List " + id + " not found");
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
 		}
 		return valid;
 	}
-	
+
 }

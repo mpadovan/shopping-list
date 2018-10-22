@@ -130,10 +130,12 @@ $(document).ready(function () {
 	Socket.onerror = function (evt) {
 		chat.handleMessage(evt);
 	};
-	console.log($('#message-container'));
-	$('#message-container').addEventListener('resize', function(e) {
-		console.log(e);
-		$('#message-container').scrollTop($('#message-container')[0].scrollHeight);
-	});
-	
+	try {
+		$('#message-container').addEventListener('resize', function (e) {
+			console.log(e);
+			$('#message-container').scrollTop($('#message-container')[0].scrollHeight);
+		});
+	} catch (e) {
+		console.log('privata');
+	}
 });

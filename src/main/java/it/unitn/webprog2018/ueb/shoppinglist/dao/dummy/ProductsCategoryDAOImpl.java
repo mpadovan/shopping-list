@@ -148,4 +148,9 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 		throw new RecordNotFoundDaoException("Product category with name: " + name + " not found");
 	}
 
+	@Override
+	public ProductsCategory getDefault() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

@@ -217,4 +217,18 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 			throw new DaoException(ex);
 		}
 	}
+	
+	/**
+	 * Retrieves the product category for rapid-create products.
+	 * The name of the category is "Default".
+	 * 
+	 * @return Default product category.
+	 */
+	@Override
+	public ProductsCategory getDefault() {
+		// TODO use a query (?)
+		ProductsCategory productsCategory = new ProductsCategory();
+		productsCategory.setId(1);
+		return productsCategory;
+	}
 }

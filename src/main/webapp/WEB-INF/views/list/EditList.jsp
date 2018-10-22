@@ -14,7 +14,7 @@
 		<div class="container-fluid">	
 			<div class="card new-list-card">
 				<div class="card-body">
-					<c:if test="${!empty list.errors}">
+					<c:if test="${!empty currentList.errors}">
 						<div class="alert alert-danger" role="alert">
 							<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
 							<p>Controlla i campi sottostanti.</p>
@@ -23,18 +23,18 @@
 					<div class="text-center mb-4">
 						<h3 class="mb-3 font-weight-normal">Modifica lista</h3>
 					</div>
-					<form class="form-list" method="POST" action="EditList">
+					<form class="form-list" method="POST" action="" enctype='multipart/form-data'>
 						<div>
 							<label for="nameList">Nome lista</label>
 							<input type="text"
-								   class="form-control ${(list.getFieldErrors("name") != null ? "is-invalid" : "")}" 
+								   class="form-control ${(currentList.getFieldErrors("name") != null ? "is-invalid" : "")}" 
 								   id="nameList"
 								   name="nameList" 
 								   value="${requestScope.currentList.name}"
 								   maxlength="40"
 								   required />
 							<div class="invalid-feedback">
-								<shared:fieldErrors entity="${list}" field="name" />
+								<shared:fieldErrors entity="${currentList}" field="name" />
 							</div>
 						</div>
 						<div>
@@ -45,27 +45,39 @@
 									name="category" 
 									required
 									>
-								<option selected value="-1">Nessuna</option>
+								<option selected value="${requestScope.currentList.category.id}">${requestScope.currentList.category.name}</option>
 								<c:forEach var="c" items="${requestScope.listsCategory}">
-									<option value="${c.id}">${c.name}</option>
+									<c:if test="${requestScope.currentList.category.id != c.id}">
+										<option value="${c.id}">${c.name}</option>
+									</c:if>
 								</c:forEach>
 							</select>
 						</div>
 						<div>
 							<label for="description">Descrizione</label>
 							<input type="text"
-								   class="form-control ${(list.getFieldErrors("description") != null ? "is-invalid" : "")}"
+								   class="form-control ${(currentList.getFieldErrors("description") != null ? "is-invalid" : "")}"
 								   id="description"
 								   name="description"
 								   value="${requestScope.currentList.description}"
-								   maxlength="256"
-								   required>
+								   maxlength="256">
 							<div class="invalid-feedback">
-								<shared:fieldErrors entity="${list}" field="description" />
+								<shared:fieldErrors entity="${currentList}" field="description" />
 							</div>
 						</div>
-						<div id="sharedList">Condividi con:<br></div>
-						<button type="button" class="btn btn-light" onclick="addEmail()">Aggiungi un'email</button>
+						<div id="app">
+							<div id="sharedList">Condividi con:<br>
+								<input type="email" 
+									   name="shared[]" 
+									   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}" 
+									   v-for="(field, index) in emailFields" 
+									   v-model="emailFields[index]">
+								<div class="invalid-feedback">
+									<shared:fieldErrors entity="${currentList}" field="shared[]" />
+								</div>
+							</div>
+							<button id="btn-add-email" type="button" disabled class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+						</div>
 						<div>
 							<label for="image">Immagine</label>
 							<div class="custom-file">
@@ -108,13 +120,32 @@
 					});
 				});
 			});
-			function addEmail() {
-				var btn = document.createElement("INPUT");
-				btn.setAttribute("type", "email");
-				btn.setAttribute("name", "shared[]");
-				btn.classList.add("form-control");
-				document.getElementById("sharedList").appendChild(btn);
-			}
+			var app = new Vue({
+				el: '#app',
+				data: {
+					emailFields: ['']
+				},
+				watch: {
+					emailFields: function () {
+						var c = 0;
+						for (var i = 0; i < this.emailFields.length; i++) {
+							if (this.emailFields[i] == '' || this.emailFields[i] === null)
+								c = 1;
+						}
+						if (c) {
+							$('#btn-add-email').prop('disabled', true);
+						} else {
+							$('#btn-add-email').prop('disabled', false);
+						}
+						console.log(this.emailFields);
+					}
+				},
+				methods: {
+					addEmail: function () {
+						this.emailFields.push('');
+					}
+				}
+			});
 		</script>
 	</jsp:attribute>
 

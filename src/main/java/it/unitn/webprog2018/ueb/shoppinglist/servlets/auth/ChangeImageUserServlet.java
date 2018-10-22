@@ -100,6 +100,7 @@ public class ChangeImageUserServlet extends HttpServlet {
 			if (!response.isCommitted()) {
 				user.setImage(avatarURI);
 				try {
+					user.setCheckpassword(user.getPassword());
 					if (userDAO.updateUser(user.getId(), user)) {
 						session.setAttribute("user", user);
 						response.sendRedirect(context + "restricted/InfoUser");
