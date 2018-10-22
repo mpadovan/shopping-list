@@ -242,7 +242,6 @@ public class ListWebService {
 			try {
 				Gson gson = new Gson();
 				product = gson.fromJson(content, Product.class);
-				System.out.println("Content: " + content + ", productId:" + product.getId());
 			} catch (JsonSyntaxException ex) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.sendError500(response);

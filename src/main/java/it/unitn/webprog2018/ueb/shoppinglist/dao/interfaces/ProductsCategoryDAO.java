@@ -30,4 +30,6 @@ public interface ProductsCategoryDAO {
 	
 	public ProductsCategory getByName(String name) throws DaoException;
 
+	public ProductsCategory getDefault();
+
 }
