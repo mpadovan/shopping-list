@@ -42,6 +42,7 @@ public class HomePageServlet extends HttpServlet {
 		if (!found) {
 			Cookie cookie = new Cookie("anonToken", 
 					((DAOFactory)getServletContext().getAttribute("daoFactory")).getTokenDAO().getAnonimousToken());
+			cookie.setMaxAge(60 * 60 * 24 * 365 * 10); // expires in 10 years
 			response.addCookie(cookie);
 		}
 		request.getRequestDispatcher("/WEB-INF/views/HomePage.jsp").forward(request, response);
