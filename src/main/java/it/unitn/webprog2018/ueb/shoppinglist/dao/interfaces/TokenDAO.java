@@ -24,5 +24,5 @@ public interface TokenDAO {
 	
 	public void removeToken(Token token);
 	
-	public String getAnonimousToken(Token token);
+	public String getAnonimousToken();
 }
