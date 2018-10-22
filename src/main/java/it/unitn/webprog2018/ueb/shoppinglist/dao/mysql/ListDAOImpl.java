@@ -842,5 +842,29 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
+	
+	// ---------------------------------------------------------------------- //
+	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
+	// ---------------------------------------------------------------------- //
+	
+	@Override
+	public boolean addProduct(String token, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean updateAmount(String token, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean deleteFromList(String token, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
 }

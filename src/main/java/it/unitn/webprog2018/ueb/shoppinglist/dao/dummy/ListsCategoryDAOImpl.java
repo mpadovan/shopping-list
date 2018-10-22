@@ -9,8 +9,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,5 +133,10 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 		found.setName(c.getName());
 		found.setDescription(c.getDescription());
 
+	}
+
+	@Override
+	public boolean setListCategory(String token, ListsCategory listsCategory) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

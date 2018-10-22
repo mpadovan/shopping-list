@@ -212,4 +212,13 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		}
 		return valid;
 	}
+	
+	// ---------------------------------------------------------------------- //
+	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
+	// ---------------------------------------------------------------------- //
+	
+	@Override
+	public boolean setListCategory(String token, ListsCategory listsCategory) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

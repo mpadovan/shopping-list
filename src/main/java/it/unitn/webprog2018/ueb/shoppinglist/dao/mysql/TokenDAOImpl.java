@@ -5,10 +5,8 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,5 +69,10 @@ public class TokenDAOImpl implements TokenDAO {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String getAnonimousToken(Token token) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

@@ -82,4 +82,41 @@ public interface ListDAO {
 	public boolean deleteList(Integer listId) throws DaoException;
 	
 	public Boolean updateList(Integer id, List list) throws DaoException;
+	
+	/**
+	 * Adds a public product to an anonymous list identified by a token setting its amount to 1.
+	 * @param token	String token that identifies the list
+	 * @param product	Product to be added to the list
+	 * @return	true if the list-product connection was successfully persisted
+	 * @throws DaoException	if either the list or the product do not exist
+	 */
+	public boolean addProduct(String token, PublicProduct product) throws DaoException;
+	
+	/**
+	 * Sets the amount of a public product on an anonymous list identified by a token.
+	 * @param token	String token that identifies the list
+	 * @param product	Product to be updated
+	 * @param newAmount	If the call was successful the new amount of the product on the list will be <code>newAmount</code>
+	 * @return	true if the persistence was successful
+	 * @throws DaoException If the product is not on the list or the list does not exist
+	 */
+	public boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException;
+	
+	/**
+	 * Increases the amount of a product on an anonymous list by 1.
+	 * @param token	String token that identifies the list
+	 * @param product	Product to be updated
+	 * @return	true if the call was successful
+	 * @throws DaoException If the product is not on the list or the list does not exist
+	 */
+	public boolean updateAmount(String token, PublicProduct product) throws DaoException;
+	
+	/**
+	 * Deletes a product from an anonimous list.
+	 * @param token	String token that identifies the list
+	 * @param product	Product to be updated
+	 * @return	true if the call was successful
+	 * @throws DaoException If the product is not on the list or the list does not exist
+	 */
+	public boolean deleteFromList(String token, PublicProduct product) throws DaoException;
 }
