@@ -4,8 +4,10 @@ alter table lists alter idcategory set default 1;
 
 create table anonusers(
 token int unsigned not null auto_increment,
+idlistcategory integer not null default 1,
 lastaccess datetime default now() not null,
-primary key(token)
+primary key(token),
+foreign key(idlistcategory) references listscategories(id)
 );
 
 create table anonlists(

@@ -615,9 +615,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
 		try {
-			String query = "select u.id, u.email "
-					+ "from sharedlists s INNER JOIN users u ON s.iduser = u.id"
-					+ "where s.idlist = ?";
+			String query = "select u.id, u.email from sharedlists s INNER JOIN users u ON s.iduser = u.id where s.idlist = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, listId);
 			ResultSet rs = st.executeQuery();
