@@ -50,26 +50,6 @@
 							<shared:fieldErrors entity="${listsCategory}" field="description" />
 						</div>
 					</div>
-					<div>
-						<c:forEach var="i" items="${requestScope.listsCategoryImage}">
-							<c:if test="${listsCategory.id==i.category.id}"><input type="hidden" name="imageId" value="${i.id}"></c:if>
-						</c:forEach>
-						<c:forEach var="c" items="${requestScope.listsCategoryImage}">
-							<c:if test="${listsCategory.id==c.category.id}">
-								<label for="image">Fotografia</label>
-								<p><i>1- ${pageContext.servletContext.contextPath}${c.image}</i></p>
-								<div class="custom-file">
-									<input type="file"
-										   class="custom-file-input form-control"
-										   name="image"
-										   aria-describedby="image"
-										   value="${c.image}">
-									<label class="custom-file-label" for="image">Scegli file</label>
-								</div>
-							</c:if>
-						</c:forEach>
-
-					</div>
 					<div class="float-right mt-3">
 						<a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory" class="btn btn-light">Annulla</a>
 						<button class="btn btn-new ml-2" type="submit">Modifica</button>

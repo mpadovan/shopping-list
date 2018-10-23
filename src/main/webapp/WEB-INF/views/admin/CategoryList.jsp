@@ -41,12 +41,15 @@
 								<td class="td-images">
 									<c:forEach var="i" items="${requestScope.listsCategoryImage}">
 										<c:if test="${c.id == i.category.id}">
-											<img class="cat-list-img" src="${pageContext.servletContext.contextPath}${i.image}">
+											<c:if test="${empty i.image}"></c:if>
+											<c:if test="${not empty i.image}">
+												<img class="cat-list-img" src="${pageContext.servletContext.contextPath}${i.image}">
+											</c:if>
 										</c:if>
 									</c:forEach>
 								<td class="td-handler">
-									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images"></i></a>
-									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square"></i></a>
+									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images margin-table-btn"></i></a>
+									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square margin-table-btn"></i></a>
 									<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a>
 								</td>
 							</tr>
@@ -87,7 +90,7 @@
 		<div class="modal fade" id="images" tabindex="-1" role="dialog" aria-labelledby="images" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
-					
+
 				</div>
 			</div>
 		</div>
@@ -130,6 +133,12 @@
 				-o-background-size: cover;
 				background-size: cover;
 			}
+			.choose-file-none{
+				display: none;
+			}
+			.btn-hide{
+				display: none;
+			}
 		</style>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
@@ -138,10 +147,32 @@
 				$('#images').on('shown.bs.modal', function (e) {
 					loadModalImages($(e.relatedTarget).data("category-id"));
 				})
+				$('#images').on('hidden.bs.modal', function (e) {
+					clearModalImages();
+				})
 			})
 			function loadModalImages(id) {
 				console.log(id);
-				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId=" + id);
+				function onLoadCallback() {
+
+				}
+
+				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId=" + id, onLoadCallback);
+			}
+			function reloadModalImages(id) {
+				console.log(id);	
+			}
+			function editImage(id) {
+				console.log(id);
+				console.log("bottone modifica cliccato");
+				$("#form-file-" + id).toggleClass("choose-file-none");
+				$("#btn-back-" + id).toggleClass("btn-hide");
+				$("#edit-btn-" + id).toggleClass("btn-hide");
+				$("#delete-btn-" + id).toggleClass("btn-hide");
+				console.log($("#delete-" + id))
+			}
+			function clearModalImages() {
+				$("#images .modal-content").html('');
 			}
 		</script>
 	</jsp:attribute>
