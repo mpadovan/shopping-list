@@ -24,12 +24,12 @@
 					<div class="carousel-item <c:if test="${j.index == 0}">active</c:if>"
 						 style="background-image: url('${pageContext.servletContext.contextPath}${i.image}')">
 						<div class="carousel-caption d-none d-md-block">
-							<a href="#edit-${i.id}" class="btn btn-light" data-toggle="modal" data-target="#edit-${i.id}">Modifica</a>
-							<a href="#" class="btn btn-light">Elimina</a>
+							<!--<a href="#edit-${i.id}" class="btn btn-light" data-toggle="modal" data-target="#edit-${i.id}">Modifica</a>-->
+							<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeleteListCategoryImage?imageId=${i.id}" class="btn btn-light">Elimina</a>
 						</div>
-							<form class="form-control" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
-								<input name="categoryId" value="${param}" hidden="true">
-								<input name="imageId" value="${i.id}" hidden="true">
+						<form class="form-control" action="EditListCategoryImage" method="POST" enctype='multipart/form-data'>
+							<input name="categoryId" value="${param}" hidden="true">
+							<input name="imageId" value="${i.id}" hidden="true">
 							<div class="custom-file">
 								<input type="file"
 									   class="custom-file-input form-control"
@@ -38,6 +38,7 @@
 									   aria-describedby="image">
 								<label class="custom-file-label" for="image">Scegli file</label>
 							</div>
+							<button type="submit">Modifica</button>
 						</form>
 					</div>
 					<!-- Modal 
@@ -62,9 +63,21 @@
 					</div> -->
 				</c:forEach>
 				<div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
-					<div class="carousel-caption d-none d-md-block">
-						<a href="#" class="btn btn-light">Aggiungi</a>
-					</div>
+					<!--<div class="carousel-caption d-none d-md-block">
+						<a href="${pageContext.servletContext.contextPath}/restricted/admin/NewListCategoryImage?imageId=${i.id}" class="btn btn-light">Aggiungi</a>
+					</div>-->
+					<form class="form-control" action="NewListCategoryImage" method="POST" enctype='multipart/form-data'>
+						<input name="categoryId" value="${param}" hidden="true">
+						<div class="custom-file">
+							<input type="file"
+								   class="custom-file-input form-control"
+								   id="image"
+								   name="image"
+								   aria-describedby="image">
+							<label class="custom-file-label" for="image">Scegli file</label>
+						</div>
+						<button type="submit">Aggiungi</button>
+					</form>
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
