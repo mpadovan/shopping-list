@@ -6,30 +6,27 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author simon
  */
-@WebServlet(name = "DeleteListCategoryImageServlet", urlPatterns = {"/restricted/admin/DeleteListCategoryImage"})
-public class DeleteListCategoryImageServlet extends HttpServlet {
-
+@MultipartConfig
+@WebServlet(name = "NewListCategoryImageServlet", urlPatterns = {"/restricted/admin/NewListCategoryImage"})
+public class NewListCategoryImageServlet extends HttpServlet {
+	
 	ListsCategoryImagesDAO listsCategoryImagesDAO;
 
 	@Inject
@@ -40,7 +37,7 @@ public class DeleteListCategoryImageServlet extends HttpServlet {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		listsCategoryImagesDAO = factory.getListsCategoryImageDAO();
 	}
-
+	
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *
@@ -52,20 +49,6 @@ public class DeleteListCategoryImageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Integer imageID = Integer.parseInt(request.getParameter("imageId"));
-		try {
-			ListsCategoriesImage listsCategoriesImage = listsCategoryImagesDAO.getById(imageID);
-			listsCategoryImagesDAO.deleteImage(imageID);
-			File image = new File(getServletContext().getAttribute("uploadFolder") + listsCategoriesImage.getImage());
-			image.delete();
-			response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-		} catch (RecordNotFoundDaoException ex) {
-			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(404, "l'immagine non esiste");
-		} catch (DaoException ex) {
-			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(500, "errore interno");
-		}
 	}
 
 	/**
@@ -79,7 +62,12 @@ public class DeleteListCategoryImageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		Integer categoryId = Integer.parseInt(request.getParameter("categoryId"));
+		Part image = request.getPart("image");
+		System.out.println(categoryId);
+		
+		//carica immagine
+		
 	}
 
 	/**

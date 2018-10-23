@@ -55,7 +55,7 @@
 						<div class="carousel-item <c:if test="${j.index == 0}">active</c:if>"
 							 style="background-image: url('${pageContext.servletContext.contextPath}${i.image}')">
 							<div>
-								<form id="form-file-${i.id}"class="form-control choose-file-none form-file" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
+								<form id="form-file-${i.id}"class="form-control choose-file-none form-file" action="EditListCategoryImage" method="POST" enctype='multipart/form-data'>
 									<input name="imageId" value="${i.id}" hidden="true">
 									<div class="input-group">
 										<div class="custom-file">
@@ -75,7 +75,7 @@
 							<div class="carousel-caption d-none d-md-block">
 								<button id="btn-back-${i.id}" onclick="editImage(${i.id})"class="btn btn-light btn-hide">Indietro</button>
 								<button id="edit-btn-${i.id}" onclick="editImage(${i.id})" class="btn btn-light">Modifica</button>
-								<a href="#" id="delete-btn-${i.id}" class="btn btn-danger">Elimina</a>
+								<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeleteListCategoryImage?imageId=${i.id}" id="delete-btn-${i.id}" class="btn btn-danger">Elimina</a>
 							</div>
 						</div>
 					</c:forEach>

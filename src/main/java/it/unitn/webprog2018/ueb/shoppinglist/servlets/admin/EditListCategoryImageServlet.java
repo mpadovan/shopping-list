@@ -18,17 +18,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author simon
  */
-@WebServlet(name = "DeleteListCategoryImageServlet", urlPatterns = {"/restricted/admin/DeleteListCategoryImage"})
-public class DeleteListCategoryImageServlet extends HttpServlet {
+@MultipartConfig
+@WebServlet(name = "EditListCategoryImageServlet", urlPatterns = {"/restricted/admin/EditListCategoryImage"})
+public class EditListCategoryImageServlet extends HttpServlet {
 
 	ListsCategoryImagesDAO listsCategoryImagesDAO;
 
@@ -52,20 +55,6 @@ public class DeleteListCategoryImageServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Integer imageID = Integer.parseInt(request.getParameter("imageId"));
-		try {
-			ListsCategoriesImage listsCategoriesImage = listsCategoryImagesDAO.getById(imageID);
-			listsCategoryImagesDAO.deleteImage(imageID);
-			File image = new File(getServletContext().getAttribute("uploadFolder") + listsCategoriesImage.getImage());
-			image.delete();
-			response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-		} catch (RecordNotFoundDaoException ex) {
-			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(404, "l'immagine non esiste");
-		} catch (DaoException ex) {
-			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
-			response.sendError(500, "errore interno");
-		}
 	}
 
 	/**
@@ -79,7 +68,33 @@ public class DeleteListCategoryImageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		Integer imageID = Integer.parseInt(request.getParameter("imageId"));
+		Part image = request.getPart("image");
+		String imageURI = null;
+		try {
+			ListsCategoriesImage listsCategoriesImage = listsCategoryImagesDAO.getById(imageID);
+			// delete old product category logo
+			uploadHandler.deleteFile(listsCategoriesImage.getImage(), getServletContext());
+			// save new logo
+			try {
+				imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.LIST_CATEGORY_IMAGE, listsCategoriesImage, getServletContext());
+			} catch (IOException ex) {
+				// It is not a fatal error, we ask the user to try again
+				Logger.getLogger(EditProductsCategoryServlet.class.getName()).log(Level.WARNING, null, ex);
+				response.sendError(500, "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
+			}
+			listsCategoriesImage.setImage(imageURI);
+			if (!response.isCommitted()) {
+				listsCategoryImagesDAO.updateListsCategoriesImage(imageID, listsCategoriesImage);
+				response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
+			}
+		} catch (RecordNotFoundDaoException ex) {
+			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(404, "l'immagine non esiste");
+		} catch (DaoException ex) {
+			Logger.getLogger(DeleteListCategoryImageServlet.class.getName()).log(Level.SEVERE, null, ex);
+			response.sendError(500, "errore interno");
+		}
 	}
 
 	/**
