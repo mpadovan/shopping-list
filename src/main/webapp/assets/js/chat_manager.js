@@ -72,7 +72,6 @@ var chat = new Vue({
 			var data = JSON.parse(e.data);
 			switch (data.operation) {
 				case "2":
-					console.log();
 					if ($('#chat').css('display') == 'none') {
 						data.payload.forEach(element => {
 							if (element.listId === app.list) {
@@ -80,12 +79,13 @@ var chat = new Vue({
 							}
 							//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
 						});
+					} else {
+						var msg = {
+							operation: 1,
+							payload: app.list
+						};
+						Socket.send(JSON.stringify(msg));
 					}
-					var msg = {
-						operation: 1,
-						payload: app.list
-					};
-					Socket.send(JSON.stringify(msg));
 					break;
 				case "3":
 					this.manageMessages(data.payload);
