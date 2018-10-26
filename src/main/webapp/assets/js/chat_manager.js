@@ -78,6 +78,11 @@ var chat = new Vue({
 						}
 						//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
 					});
+					var msg = {
+						operation: 1,
+						payload: app.list
+					};
+					Socket.send(JSON.stringify(msg));
 					break;
 				case "3":
 					this.manageMessages(data.payload);
@@ -87,6 +92,7 @@ var chat = new Vue({
 		},
 		send: function () {
 			if (this.text) {
+				this.message.operation = 0;
 				this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
 				this.message.payload.list.id = app.list;
 				this.message.payload.sender.id = this.user;
