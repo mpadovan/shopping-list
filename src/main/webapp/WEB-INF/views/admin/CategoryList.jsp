@@ -124,55 +124,22 @@
 	<jsp:attribute name="customCss">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/list_category.css" type="text/css" rel="stylesheet"/>
 		<style>
-			.carousel-item {
-				/**height: 100vh;**/
-				min-height: 300px;
-				background: no-repeat center center scroll;
-				-webkit-background-size: cover;
-				-moz-background-size: cover;
-				-o-background-size: cover;
-				background-size: cover;
-			}
-			.choose-file-none{
-				display: none;
-			}
-			.btn-hide{
-				display: none;
-			}
+
 		</style>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
+		<script src="${pageContext.servletContext.contextPath}/assets/js/list_category.js"></script>
 		<script>
 			$(function () {
 				$('#images').on('shown.bs.modal', function (e) {
 					loadModalImages($(e.relatedTarget).data("category-id"));
-				})
+				});
 				$('#images').on('hidden.bs.modal', function (e) {
 					clearModalImages();
-				})
-			})
+				});
+			});
 			function loadModalImages(id) {
-				console.log(id);
-				function onLoadCallback() {
-
-				}
-
-				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId=" + id, onLoadCallback);
-			}
-			function reloadModalImages(id) {
-				console.log(id);	
-			}
-			function editImage(id) {
-				console.log(id);
-				console.log("bottone modifica cliccato");
-				$("#form-file-" + id).toggleClass("choose-file-none");
-				$("#btn-back-" + id).toggleClass("btn-hide");
-				$("#edit-btn-" + id).toggleClass("btn-hide");
-				$("#delete-btn-" + id).toggleClass("btn-hide");
-				console.log($("#delete-" + id))
-			}
-			function clearModalImages() {
-				$("#images .modal-content").html('');
+				$("#images .modal-content").load("${pageContext.servletContext.contextPath}/restricted/admin/ListCategory/Images?categoryId=" + id);
 			}
 		</script>
 	</jsp:attribute>

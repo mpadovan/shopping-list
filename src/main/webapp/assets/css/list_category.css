@@ -43,4 +43,49 @@ and open the template in the editor.
 .carousel-control-next, .carousel-control-prev {
 	width: 5%;
 }
+/* css images*/
+.carousel-item {
+	/**height: 100vh;**/
+	min-height: 300px;
+	background: no-repeat center center scroll;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.choose-file-none{
+	display: none;
+}
+.btn-hide{
+	display: none;
+}
+.d-none {
+	display: none!important;
+}
+.d-md-block {
+	display: block!important;
+}
+.form-up {
+	-webkit-animation-name: form-up; /* Safari 4.0 - 8.0 */
+	-webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+	animation-name: form-up;
+	animation-duration: 1s;
+	position: relative;
+}
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes form-up {
+	0%  {left:0px; top:0px;}
+	0%  {left:200px; top:0px;}
+	0%  {left:200px; top:200px;}
+	0%  {left:0px; top:200px;}
+	100% {left:0px; top:0px;}
+}
 
+/* Standard syntax */
+@keyframes form-up {
+	0%  {left:0px; top:0px;}
+	0%  {left:200px; top:0px;}
+	0%  {left:200px; top:200px;}
+	0%  {left:0px; top:200px;}
+	100% {left:0px; top:0px;}
+}

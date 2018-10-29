@@ -28,8 +28,26 @@
 				<c:if test="${empty requestScope.images}">
 					<div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
 						<div class="carousel-caption d-none d-md-block">
-							<a href="#" class="btn btn-light">Aggiungi</a>
+							<button id="btn-add" onclick="newImage()" class="btn btn-light">Aggiungi</button>
+							<button id="btn-back" onclick="newImage()" class="btn btn-light btn-hide">Indietro</button>
 						</div>
+						<form id="form-new-file"class="form-control choose-file-none form-up" action="NewListCategoryImage" method="POST" enctype='multipart/form-data'>
+							<input name="categoryId" value="${param.categoryId}" hidden="true">
+							<input name="imageId" value="${i.id}" hidden="true">
+							<div class="input-group">
+								<div class="custom-file">
+									<input type="file"
+										   class="custom-file-input form-control"
+										   id="image"
+										   name="image"
+										   aria-describedby="image">
+									<label class="custom-file-label" for="image">Scegli file</label>
+								</div>
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-primary">Salva</button>
+								</div>
+							</div>
+						</form>
 					</div>
 				</c:if>
 				<c:if test="${not empty requestScope.images}">
@@ -37,8 +55,24 @@
 						<div class="carousel-item <c:if test="${j.index == 0}">active</c:if>"
 							 style="background-image: url('${pageContext.servletContext.contextPath}${i.image}')">
 							<div>
-								<form id="form-file-${i.id}"class="form-control choose-file-none form-file" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
-									<input name="categoryId" value="${param}" hidden="true">
+								<form id="form-file-${i.id}"class="form-control choose-file-none form-file form-up" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
+									<input name="imageId" value="${i.id}" hidden="true">
+									<div class="input-group">
+										<div class="custom-file">
+											<input type="file"
+												   class="custom-file-input form-control"
+												   id="image"
+												   name="image"
+												   aria-describedby="image">
+											<label class="custom-file-label" for="image">Scegli file</label>
+										</div>
+										<div class="input-group-append">
+											<button type="submit" class="btn btn-primary">Salva</button>
+										</div>
+									</div>
+								</form>
+								<form id="form-new-file"class="form-control choose-file-none form-file" action="ListCategoryServlet" method="POST" enctype='multipart/form-data'>
+									<input name="categoryId" value="${param.categoryId}" hidden="true">
 									<input name="imageId" value="${i.id}" hidden="true">
 									<div class="input-group">
 										<div class="custom-file">
