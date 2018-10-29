@@ -7,6 +7,9 @@ and open the template in the editor.
     Created on : 14-ott-2018, 19.22.41
     Author     : giulia
 */
+.btn-options{
+	font-size: 18px;
+}
 .cat-list-img{
 	width: 50px;
 	height: 50px;
@@ -67,25 +70,38 @@ and open the template in the editor.
 }
 .form-up {
 	-webkit-animation-name: form-up; /* Safari 4.0 - 8.0 */
-	-webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+	-webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
 	animation-name: form-up;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	position: relative;
 }
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes form-up {
-	0%  {left:0px; top:0px;}
-	0%  {left:200px; top:0px;}
-	0%  {left:200px; top:200px;}
-	0%  {left:0px; top:200px;}
-	100% {left:0px; top:0px;}
+	0%  {top:200px;}
+	100% {top:0px;}
 }
 
 /* Standard syntax */
 @keyframes form-up {
-	0%  {left:0px; top:0px;}
-	0%  {left:200px; top:0px;}
-	0%  {left:200px; top:200px;}
-	0%  {left:0px; top:200px;}
-	100% {left:0px; top:0px;}
+	0%  {top:200px;}
+	100% {top:0px;}
 }
+/*
+.form-down {
+	-webkit-animation-name: form-down; /* Safari 4.0 - 8.0 */
+	/*-webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+	/*animation-name: form-down;
+	animation-duration: 1s;
+	position: relative;
+}_
+/* Safari 4.0 - 8.0 */
+/*@-webkit-keyframes form-down {
+	0%  {top:0px;}
+	100% {top:200px;}
+}
+
+/* Standard syntax */
+/*@keyframes form-down {
+	0%  {top:0px;}
+	100% {top:200px;}
+}*/

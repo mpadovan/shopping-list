@@ -48,9 +48,9 @@
 										</c:if>
 									</c:forEach>
 								<td class="td-handler">
-									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images margin-table-btn"></i></a>
-									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square margin-table-btn"></i></a>
-									<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash"></i></a>
+									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images margin-table-btn btn-options"></i></a>
+									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square margin-table-btn btn-options"></i></a>
+									<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash btn-options"></i></a>
 								</td>
 							</tr>
 							<!-- Modal -->
