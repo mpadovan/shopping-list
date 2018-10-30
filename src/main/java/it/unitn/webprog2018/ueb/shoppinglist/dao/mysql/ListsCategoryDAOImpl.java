@@ -13,6 +13,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -203,6 +204,34 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 				st.close();
 				if(count != 1)
 					throw new RecordNotFoundDaoException("list category "+categoryId+" not found");
+				return valid;
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
+	}
+	
+	// ---------------------------------------------------------------------- //
+	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
+	// ---------------------------------------------------------------------- //
+	
+	@Override
+	public Boolean setListCategory(String token, ListsCategory listsCategory) throws DaoException{
+		Boolean valid = listsCategory.isVaildOnUpdate(dAOFactory);
+		if(valid)
+		{
+			try{
+				String query = "UPDATE anonusers SET idlistcategory = ? WHERE token = ?";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, listsCategory.getId());
+				st.setInt(2, Integer.parseInt(CookieCipher.decrypt(token)));
+				int count = st.executeUpdate();
+				st.close();
+				if(count != 1)
+					throw new RecordNotFoundDaoException("anonusers "+Integer.parseInt(CookieCipher.decrypt(token))+" not found");
 				return valid;
 			}
 			catch(SQLException ex){

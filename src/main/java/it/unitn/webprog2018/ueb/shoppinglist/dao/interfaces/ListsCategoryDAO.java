@@ -7,7 +7,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,4 +27,15 @@ public interface ListsCategoryDAO {
 	public Boolean deleteListsCategory(Integer id) throws DaoException; 
 	
 	public Boolean updateListsCategory(Integer categoryId, ListsCategory listsCategorys) throws DaoException;
+	
+	// NOTE TO TEX: l'idea è che ci sono 2 tabelle che matchano un token con una categoria di lista
+	// e un token con i prodotti nella lista anonima. Prova a valutare tu se ti sembra più conveniente
+	// tenere i token in una tabella e poi matcharli tramite fk o fare i match alla cieca.
+	/**
+	 * Associates a list category to an anonymous list identified by the token string.
+	 * @param token
+	 * @param listsCategory
+	 * @return true if the match was successful
+	 */
+	public Boolean setListCategory(String token, ListsCategory listsCategory) throws DaoException;
 }
