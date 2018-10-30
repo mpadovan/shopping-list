@@ -13,6 +13,8 @@ foreign key(idlistcategory) references listscategories(id)
 create table anonlists(
 tokenid int unsigned not null,
 publicproductid integer not null,
+quantity mediumint not null default 1,
 foreign key(tokenid) references anonusers(token) on delete cascade,
-foreign key(publicproductid) references publicproducts(id) on delete cascade
+foreign key(publicproductid) references publicproducts(id) on delete cascade,
+unique(tokenid,publicproductid)
 );

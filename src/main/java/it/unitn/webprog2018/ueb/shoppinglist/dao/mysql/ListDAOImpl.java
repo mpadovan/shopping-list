@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -746,7 +747,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 	}
 
 	@Override
-	public boolean deleteList(Integer listId) throws DaoException {
+	public Boolean deleteList(Integer listId) throws DaoException {
 		try {
 			String query = "delete from lists where id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
@@ -846,23 +847,102 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 	// ---------------------------------------------------------------------- //
 	
 	@Override
-	public boolean addProduct(String token, PublicProduct product) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Boolean addProduct(String token, PublicProduct product) throws DaoException {
+		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
+		if (valid) {
+			try {
+				String query = "INSERT INTO anonlists (tokenid,publicproductid) VALUES (?,?)";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
+				st.setInt(2, product.getId());
+				st.executeUpdate();
+				st.close();
+				return valid;
+			} catch (SQLException ex) {
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 
 	@Override
-	public boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
+		if (newAmount <= 0) {
+			throw new DaoException("invalid quantity value");
+		}
+		if (valid) {
+			try {
+				String query = "UPDATE anonlists"
+						+ " SET quantity = ?"
+						+ " WHERE tokenid = ?"
+						+ " AND publicproductid = ?";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, newAmount);
+				st.setInt(2, Integer.parseInt(CookieCipher.decrypt(token)));
+				st.setInt(3, product.getId());
+				int count = st.executeUpdate();
+				st.close();
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in anonuser: " + Integer.parseInt(CookieCipher.decrypt(token)));
+				}
+				return valid;
+			} catch (SQLException ex) {
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
 	}
 
 	@Override
-	public boolean updateAmount(String token, PublicProduct product) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Boolean updateAmount(String token, PublicProduct product) throws DaoException {
+		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
+		if (valid) {
+			try {
+				String query = "UPDATE anonlists"
+						+ " SET quantity = quantity + 1"
+						+ " WHERE tokenid = ?"
+						+ " AND publicproductid = ?";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
+				st.setInt(2, product.getId());
+				int count = st.executeUpdate();
+				st.close();
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product: " + product.getId() + " not exist in anonuser: " + Integer.parseInt(CookieCipher.decrypt(token)));
+				}
+				return valid;
+			} catch (SQLException ex) {
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new DaoException(ex);
+			}
+		}
+		return valid;
 	}
 
 	@Override
-	public boolean deleteFromList(String token, PublicProduct product) throws DaoException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException {
+		Boolean valid = product.isVaildOnDestroy(dAOFactory);
+		if (valid) {
+			try {
+				String query = "DELETE FROM anonlists WHERE tokenid = ? AND publicproductid = ?";
+				PreparedStatement st = this.getCon().prepareStatement(query);
+				st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
+				st.setInt(2, product.getId());
+				int count = st.executeUpdate();
+				st.close();
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("product " + product.getId() + " not found in anonuser " + Integer.parseInt(CookieCipher.decrypt(token)));
+				}
+				return valid;
+			} catch (SQLException ex) {
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
+		}
+		return valid;
 	}
 
 }
