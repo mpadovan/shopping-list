@@ -37,5 +37,5 @@ public interface ListsCategoryDAO {
 	 * @param listsCategory
 	 * @return true if the match was successful
 	 */
-	public boolean setListCategory(String token, ListsCategory listsCategory);
+	public Boolean setListCategory(String token, ListsCategory listsCategory) throws DaoException;
 }

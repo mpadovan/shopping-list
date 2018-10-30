@@ -136,7 +136,8 @@ public class ListsCategoryDAOImpl implements ListsCategoryDAO {
 	}
 
 	@Override
-	public boolean setListCategory(String token, ListsCategory listsCategory) {
+	public Boolean setListCategory(String token, ListsCategory listsCategory) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 }
