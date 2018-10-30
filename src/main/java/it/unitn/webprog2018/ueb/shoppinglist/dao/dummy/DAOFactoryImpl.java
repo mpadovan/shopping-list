@@ -1,5 +1,8 @@
 package it.unitn.webprog2018.ueb.shoppinglist.dao.dummy;
 
+import com.mysql.cj.conf.HostInfo;
+import com.mysql.cj.jdbc.ConnectionImpl;
+import com.mysql.cj.jdbc.ConnectionWrapper;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.TokenDAOImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ExampleDAO;
@@ -13,6 +16,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.PublicProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
+import java.sql.Connection;
+import java.util.Properties;
 
 /**
  *
@@ -22,7 +27,7 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	private final ExampleDAO EXAMPLE_DAO = new ExampleDAOImpl(this);
 	private final UserDAO USER_DAO = new UserDAOimpl(this);
-	private final TokenDAO TOKEN_DAO = new TokenDAOImpl();
+	private final TokenDAO TOKEN_DAO = null;
 	private final ProductDAO PRODUCT_DAO = new ProductDAOImpl(this);
 	private final PublicProductDAO PUBLIC_PRODUCT_DAO = new PublicProductDAOImpl(this);
 	private final ListsCategoryDAO LISTS_CATEGORY_DAO = new ListsCategoryDAOImpl(this);

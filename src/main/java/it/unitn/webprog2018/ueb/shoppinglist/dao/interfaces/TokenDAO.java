@@ -5,6 +5,7 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import java.util.List;
 
@@ -14,13 +15,15 @@ import java.util.List;
  * @author Giulia Carocari
  */
 public interface TokenDAO {
-	Token getByTokenString(String token);
+	public Token getByTokenString(String token);
 	
-	Token getByEmail(String token);
+	public Token getByEmail(String token);
 
-	boolean addToken(Token token);
+	public boolean addToken(Token token);
 	
-	void removeExpiredTokens();
+	public void removeExpiredTokens();
 	
 	public void removeToken(Token token);
+	
+	public String getAnonimousToken() throws UpdateException;
 }
