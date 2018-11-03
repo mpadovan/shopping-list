@@ -98,6 +98,7 @@
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css">
+		<link href="${pageContext.servletContext.contextPath}/assets/css/admin_form.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>

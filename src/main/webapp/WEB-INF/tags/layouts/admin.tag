@@ -54,24 +54,28 @@
 						<a id="categoryList" class="nav-link" href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory">Categorie di lista</a>
 					</li>
 				</ul>
-				<div class="btn-group">
-					<c:if test="${not empty sessionScope.user.image}">
-						<img style="max-width: 40px; max-height: 40px;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
-					</c:if>
-					<c:if test="${empty sessionScope.user.image}">
-						<img style="max-width: 40px; max-height: 40px;"src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
-					</c:if>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item dropdown">
+						<c:if test="${not empty sessionScope.user.image}">
+							<img style="max-width: 40px; max-height: 40px; display: inline;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+						</c:if>
+						<c:if test="${empty sessionScope.user.image}">
+							<img style="max-width: 40px; max-height: 40px; display: inline;"src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+						</c:if> 
 
-					<a class="nav-link active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
-						${sessionScope.user.name} ${sessionScope.user.lastname}
-					</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Profilo</a>
-						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}">Vai al sito</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/Logout">Logout</a>
-					</div>
-				</div>
+						<a href="#" class="nav-link active dropdown-toggle" 
+						   style="display: inline;"
+						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+							${sessionScope.user.name} ${sessionScope.user.lastname}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Profilo</a>
+							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}">Vai al sito</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/Logout">Logout</a>
+						</div>
+					</li>
+				</ul>
 			</div>
 
 		</nav>
