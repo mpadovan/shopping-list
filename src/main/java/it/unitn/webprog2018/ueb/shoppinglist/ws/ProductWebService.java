@@ -37,7 +37,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
- * REST Web Service for Products and Public Products
+ * REST Web Service for Products and Public Products. Allows to search them by
+ * queries and, for logged users to rapidly create a new one.
  *
  * @author Giulia Carocari
  */
@@ -55,14 +56,17 @@ public class ProductWebService {
 	public ProductWebService() {
 	}
 
+// -------------------------------------------------------------------------- //
+////////////////////////////// COMMON METHODS //////////////////////////////////
+// -------------------------------------------------------------------------- //
 	/**
-	 * Retrieves representation of instances of
-	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct</code>.
+	 * Retrieves a list of public products that match the query, if it is
+	 * present, all products otherwise.
 	 *
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
-	 * @return an instance of java.lang.String that represents the products in
-	 * Json format
+	 * @return json representation of a {@link java.util.list} containing the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -99,16 +103,60 @@ public class ProductWebService {
 	}
 
 	/**
-	 * Retrieves representation of instances of
-	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>.
+	 * Retrieves representations of product categories used for grouping and
+	 * sorting purposes.
 	 *
-	 * @param userId Id of the user that wants to access his custom products
+	 * @param search Parameter to filter the results by name
+	 * @param compact Parameter to obtain only name and id field of the object
+	 *
+	 * @return json representation of a {@link java.util.list} containing
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory}
+	 */
+	@GET
+	@Path("/categories")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getProductCategories(@QueryParam("search") String search,
+			@QueryParam("compact") String compact) {
+
+		String query = HttpErrorHandler.getQuery(search);
+
+		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
+
+		List<ProductsCategory> productsCategories = null;
+		try {
+			productsCategories = productsCategoryDAO.getFromQuery(query);
+		} catch (DaoException ex) {
+			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
+		try {
+			return productsCategories == null ? "{[]}" : gson.toJson(productsCategories);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return null;
+		}
+	}
+
+// -------------------------------------------------------------------------- //
+/////////////////////////// LOGGED USER METHODS ////////////////////////////////
+// -------------------------------------------------------------------------- //
+	/**
+	 * Retrieves representation of instances of
+	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code> whose
+	 * name matches the query (all instances if no query is specified).
+	 *
+	 * @param userId unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
 	 * @param privateOnly if value is "true" then returns only custom products
 	 *
-	 * @return an instance of java.lang.String that represents the products in
-	 * Json format
+	 * @return json representation of a {@link java.util.list} containing the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct} (if
+	 * required) and
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
 	 */
 	@GET
 	@Path("/restricted/{userId}")
@@ -148,49 +196,15 @@ public class ProductWebService {
 	}
 
 	/**
-	 * Retrieves representation of instances of
-	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code>.
-	 *
-	 * @param search Parameter to filter the results by name
-	 * @param compact Parameter to obtain only name and id field of the object
-	 *
-	 * @return an instance of java.lang.String that represents the products in
-	 * Json format
-	 */
-	@GET
-	@Path("/categories")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getProductCategories(@QueryParam("search") String search,
-			@QueryParam("compact") String compact) {
-
-		String query = HttpErrorHandler.getQuery(search);
-
-		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
-
-		List<ProductsCategory> productsCategories = null;
-		try {
-			productsCategories = productsCategoryDAO.getFromQuery(query);
-		} catch (DaoException ex) {
-			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
-			HttpErrorHandler.handleDAOException(ex, response);
-		}
-		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
-		try {
-			return productsCategories == null ? "{[]}" : gson.toJson(productsCategories);
-		} catch (JsonSyntaxException ex) {
-			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
-			HttpErrorHandler.sendError500(response);
-			return null;
-		}
-	}
-
-	/**
 	 * Creates a new personal object for the specified user and adds it to the
 	 * specified list.
 	 *
-	 * @param content String in JSON format that contains the field "name"
-	 * @param userId Id of the owner of the product
-	 * @param listId
+	 * @param content String in JSON format, built as: { "name" : __name }
+	 *
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 */
 	@POST
 	@Path("restricted/{userId}/{listId}")
@@ -210,7 +224,7 @@ public class ProductWebService {
 				product.getOwner().setId(userId);
 				product.setCategory(productsCategoryDAO.getDefault());
 				try {
-					if (product.isVaildOnCreate((DAOFactory) servletContext.getAttribute("daoFactory")) 
+					if (product.isVaildOnCreate((DAOFactory) servletContext.getAttribute("daoFactory"))
 							&& productDAO.addProduct(product)) {
 						listDAO.addProduct(listId, product);
 					}
@@ -225,6 +239,9 @@ public class ProductWebService {
 		}
 	}
 
+// -------------------------------------------------------------------------- //
+////////////////////////////// PRIVATE METHODS /////////////////////////////////
+// -------------------------------------------------------------------------- //
 	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();

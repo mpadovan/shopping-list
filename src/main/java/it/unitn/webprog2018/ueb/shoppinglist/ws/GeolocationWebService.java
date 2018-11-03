@@ -29,9 +29,11 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 
 /**
- * REST Web Service
+ * REST Web Service to handle shopping suggestions to both anonymous and logged
+ * users. Up to this version, the Facebook graphs web service is used to
+ * retrieve data.
  *
- * @author giulia
+ * @author Giulia Carocari
  */
 @Path("/geolocation")
 public class GeolocationWebService {
@@ -51,14 +53,22 @@ public class GeolocationWebService {
 	public GeolocationWebService() {
 	}
 
+	
+// -------------------------------------------------------------------------- //
+/////////////////////////// LOGGED USER METHODS ////////////////////////////////
+// -------------------------------------------------------------------------- //
+	
 	/**
-	 * Retrieves representation of an instance of
-	 * it.unitn.webprobramming.geolocationtest.entities.Shop
+	 * Retrieves shops in a 2 km radius that match the categories of the lists
+	 * owned by and shared with the user.
 	 *
-	 * @param userId
-	 * @param location
-	 * @param category
-	 * @return an instance of java.lang.String
+	 * @param userId unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param location	coordinates of the user in the form
+	 * <code>latitude,longitude</code>
+	 *
+	 * @return a Json representation of the mapping between the list categories
+	 * and the relative shops (names and addresses)
 	 */
 	@GET
 	@Path("/restricted/{userId}")
@@ -67,7 +77,7 @@ public class GeolocationWebService {
 	public String getShopsByUser(@PathParam("userId") int userId,
 			@QueryParam("location") String location) throws DaoException {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-		
+
 		Set<String> categories = new HashSet<>();
 		java.util.List<List> lists = listDAO.getByUser(userId);
 		for (List l : lists) {
@@ -104,12 +114,13 @@ public class GeolocationWebService {
 	}
 
 	/**
-	 * Retrieves representation of an instance of
-	 * it.unitn.webprobramming.geolocationtest.entities.Shop
+	 * Retrieves shops in a 2 km radius that match the category of the anonymous list.
 	 *
-	 * @param location
-	 * @param category
-	 * @return an instance of java.lang.String
+	 * @param location	coordinates of the user in the form
+	 * <code>latitude,longitude</code>
+	 * @param category	name of the list category associated with the anonymous list
+	 * @return a Json representation of the mapping between the list category
+	 * and the relative shops (names and addresses)
 	 */
 	@GET
 	@Path("/{category}")

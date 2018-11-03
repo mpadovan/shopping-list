@@ -12,8 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +23,7 @@ import javax.ws.rs.ext.Provider;
 
 /**
  * Filter that checks whether a user has the permission to access a certain
- * personal product
+ * personal product. Notice that only the owner of the product can add it to a list.
  *
  * @author Giulia Carocari
  */
