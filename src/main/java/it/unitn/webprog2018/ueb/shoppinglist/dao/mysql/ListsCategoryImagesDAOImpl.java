@@ -201,4 +201,22 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		}
 	}
 	
+	@Override
+	public Boolean deleteImageTemporary(Integer idcategory) throws DaoException {
+		try{
+			String query = "DELETE FROM listscategoriesimages WHERE idcategory = ? AND image = 'temporary'";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, idcategory);
+			int count = st.executeUpdate();
+			st.close();
+			if(count != 1)
+				throw new RecordNotFoundDaoException("Image with "+idcategory+" not found");
+			return true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
+		}
+	}
+	
 }
