@@ -13,7 +13,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
