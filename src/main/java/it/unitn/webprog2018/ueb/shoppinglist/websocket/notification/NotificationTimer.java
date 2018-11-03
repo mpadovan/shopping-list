@@ -10,6 +10,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -74,14 +76,19 @@ public class NotificationTimer {
 		@Override
 		public void run() {
 			String productName =(notification.getProduct() instanceof Product ? ((Product)notification.getProduct()).getName() : ((PublicProduct)notification.getProduct()).getName());
-			// If it fails, deal with it.
-			if (!EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
-					"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
-							notification.getList().getName() + "?\n"
-									+ "Clicca qui per connetterti subito al portale:"
-									+ "http://localhost:8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list=" +
-									+ notification.getList().getId())) {
-				System.err.println("Could not reach email address");
+			try {
+				// If it fails, deal with it.
+				if (!EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
+						"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
+								notification.getList().getName() + "?\n"
+										+ "Clicca qui per connetterti subito al portale:"
+										+ "http://" + InetAddress.getLocalHost().getHostName()
+								+ ":8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list=" +
+								+ notification.getList().getId())) {
+					System.err.println("Could not reach email address");
+				}
+			} catch (UnknownHostException ex) {
+				Logger.getLogger(NotificationTimer.class.getName()).log(Level.SEVERE, null, ex);
 			}
 			if (notificationSessionHandler.isConnected(notification.getUser().getId())) {
 				notificationSessionHandler.notifyUser(notification.getUser().getId());

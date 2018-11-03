@@ -66,7 +66,7 @@ public class UserFilter implements Filter {
 				// TODO add redirection to correct error page.
 				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 						+ "The resource you are trying to access is none of your business.\n"
-						+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login");
+						+ "If you think you have the right to access it, prove it by logging in");
 				return;
 			}
 			if (!response.isCommitted()) {

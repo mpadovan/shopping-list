@@ -5,6 +5,8 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
 import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -19,7 +21,14 @@ public class DBListener implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		String dburl = "jdbc:mysql://localhost:3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
+		String dburl;
+		try {
+			dburl = "jdbc:mysql://" +
+					InetAddress.getLocalHost().getHostName() + ":3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
+		} catch (UnknownHostException ex) {
+			Logger.getLogger(DBListener.class.getName()).log(Level.SEVERE, null, ex);
+			return;
+		}
 		String dbUsername = "root";
 		String dbPassword = "root";
 

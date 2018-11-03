@@ -11,16 +11,13 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLEncoder;
+import java.net.InetAddress;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,7 +86,8 @@ public class ResetPasswordServlet extends HttpServlet {
 			user.setTokenpassword(token);
 			try {
 				userDAO.setToken(user);
-				String link = "http://localhost:8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
+				String link = "http://" + InetAddress.getLocalHost().getHostName() 
+						+ ":8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
 				if (EmailSender.send(user.getEmail(), "Reset Password",
 						"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {
 					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmSendEmail.jsp").forward(request, response);
