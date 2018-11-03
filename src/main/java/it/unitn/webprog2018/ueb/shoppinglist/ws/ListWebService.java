@@ -416,43 +416,192 @@ public class ListWebService {
 	// ---------------------------------------------------------------------- //
 	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
 	// ---------------------------------------------------------------------- //
-	
+	/**
+	 * Sets the list category of an anonymous list.
+	 *
+	 * @param token
+	 * @param content must be in the form of { "id" : _id, "name" : _name, ...}.
+	 * See <code>ListsCategory</code> entity.
+	 */
 	@PUT
 	@Path("/anon/{token}/listCategory")
-	public void setAnonCategory(String content) {
-		
+	public void setAnonCategory(@PathParam("token") String token, String content) {
+		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
+		Gson gson = new Gson();
+		ListsCategory listsCategory;
+		try {
+			listsCategory = gson.fromJson(content, ListsCategory.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+
+		try {
+			listsCategoryDAO.setListCategory(token, listsCategory);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
 	@GET
 	@Path("/anon/{token}/listCategory")
-	public String getAnonCategory(String content) {
-		return "";
+	public String getAnonCategory(@PathParam("token") String token) {
+		try {
+			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
+			ListsCategory listsCategory = listsCategoryDAO.getListCategory(token);
+			Gson gson = CustomGsonBuilder.create(true);
+			String json;
+			try {
+				json = gson.toJson(listsCategory, ListsCategory.class);
+			} catch (JsonException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+				HttpErrorHandler.sendError500(response);
+				return null;
+			}
+			return json;
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+		return null;
 	}
-	
+
+	/**
+	 * Retrieves a json representation of all (public) products on an anonymous
+	 * list. The products are all mapped to their amount. The Json
+	 * representation is an array in the form: [ { "product" : {}, "amount" : x
+	 * }, {...}, ...]
+	 *
+	 * @param token
+	 * @return
+	 */
 	@GET
 	@Path("/anon/{token}/product")
 	public String getProductsOnAnonList(@PathParam("token") String token) {
-		return "";
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Map<PublicProduct, Integer> productsOnList;
+		Gson gson = CustomGsonBuilder.create(true);
+		String json = null;
+		try {
+			productsOnList = listDAO.getProductsOnList(token);
+			json = "[";
+			try {
+				for (Map.Entry<PublicProduct, Integer> entry : productsOnList.entrySet()) {
+					try {
+						json += "{\"product\":" + gson.toJson(entry.getKey()) + ","
+								+ "\"amount\":" + entry.getValue().toString() + "},";
+					} catch (JsonSyntaxException ex) {
+						Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+						HttpErrorHandler.sendError500(response);
+						return null;
+					}
+				}
+				if (json.endsWith(",")) {
+					char[] tmp = json.toCharArray();
+					tmp[json.lastIndexOf(",")] = ']';
+					json = new String(tmp);
+				}
+			} catch (JsonException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+				HttpErrorHandler.sendError500(response);
+				return null;
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+
+		return json;
 	}
-	
+
+	/**
+	 * Adds a (public) product to an anonymous list. The content of the post
+	 * request must be in the form of { _id }.
+	 *
+	 * @param token
+	 * @param content
+	 */
 	@POST
 	@Path("/anon/{token}/product")
 	public void addProductOnAnonList(@PathParam("token") String token, String content) {
-		
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Gson gson = new Gson();
+		Integer productId = null;
+		try {
+			productId = gson.fromJson(content, Integer.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+
+		try {
+			// check if product is already on list, then increase amount by one or newly insert the product
+			Map<PublicProduct, Integer> prodOnList = listDAO.getProductsOnList(token);
+			if (prodOnList.containsKey(product)) {
+				listDAO.updateAmount(token, product);
+			} else {
+				listDAO.addProduct(token, product);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
+	/**
+	 * Updates the amount of a (public) product on an anonymous list. The
+	 * content of the post request must be in the form of { _newAmount }.
+	 *
+	 * @param token
+	 * @param productId
+	 * @param content
+	 */
 	@PUT
-	@Path("/anon/{token}/product")
-	public String updateProductOnAnonList(@PathParam("token") String token, String content) {
-		return "";
+	@Path("/anon/{token}/product/{prod_id}")
+	public void updateProductOnAnonList(@PathParam("token") String token,
+			@PathParam("prod_id") Integer productId, String content) {
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Gson gson = new Gson();
+		Integer newAmount = null;
+		try {
+			newAmount = gson.fromJson(content, Integer.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+
+		try {
+			listDAO.updateAmount(token, product, newAmount);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
 	@DELETE
-	@Path("/anon/{token}/product")
-	public void deleteProductsFromAnonList(@PathParam("token") String token) {
-		
+	@Path("/anon/{token}/product/{prod_id}")
+	public void deleteProductsFromAnonList(@PathParam("token") String token,
+			@PathParam("prod_id") Integer productId) {
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+
+		try {
+			listDAO.deleteFromList(token, product);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
 	// ---------------------------------------------------------------------- //
 	//////////////////////////// PRIVATE METHODS ///////////////////////////////
 	// ---------------------------------------------------------------------- //

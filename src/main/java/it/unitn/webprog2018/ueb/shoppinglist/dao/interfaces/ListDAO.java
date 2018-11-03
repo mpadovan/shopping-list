@@ -119,4 +119,12 @@ public interface ListDAO {
 	 * @throws DaoException If the product is not on the list or the list does not exist
 	 */
 	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException;
+	
+	/**
+	 * Retrieve public products on anonymous list, mapped to their amounts
+	 * 
+	 * @param token The identifier of the list
+	 * @return A mapping between products on a list and their amount on that list
+	 */
+	public Map<PublicProduct, Integer> getProductsOnList(String token) throws DaoException;
 }

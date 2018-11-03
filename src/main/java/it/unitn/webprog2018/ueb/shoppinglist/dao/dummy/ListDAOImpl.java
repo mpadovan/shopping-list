@@ -487,5 +487,10 @@ public class ListDAOImpl implements ListDAO {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
+	@Override
+	public Map<PublicProduct, Integer> getProductsOnList(String token) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 
 }

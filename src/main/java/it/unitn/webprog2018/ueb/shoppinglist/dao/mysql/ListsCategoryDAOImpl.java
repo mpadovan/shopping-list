@@ -241,4 +241,9 @@ public class ListsCategoryDAOImpl extends AbstractDAO implements ListsCategoryDA
 		}
 		return valid;
 	}
+
+	@Override
+	public ListsCategory getListCategory(String token) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

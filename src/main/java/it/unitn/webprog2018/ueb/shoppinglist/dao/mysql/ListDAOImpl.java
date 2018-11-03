@@ -945,4 +945,9 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		return valid;
 	}
 
+	@Override
+	public Map<PublicProduct, Integer> getProductsOnList(String token) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }
