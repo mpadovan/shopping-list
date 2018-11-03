@@ -444,7 +444,7 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean deleteList(Integer listId) throws DaoException {
+	public Boolean deleteList(Integer listId) throws DaoException {
 		try {
 			switch (listId) {
 				case 1:
@@ -468,23 +468,24 @@ public class ListDAOImpl implements ListDAO {
 	}
 
 	@Override
-	public boolean addProduct(String token, PublicProduct product) throws DaoException {
+	public Boolean addProduct(String token, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
+	public Boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public boolean updateAmount(String token, PublicProduct product) throws DaoException {
+	public Boolean updateAmount(String token, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public boolean deleteFromList(String token, PublicProduct product) throws DaoException {
+	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 
 }

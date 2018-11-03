@@ -79,7 +79,7 @@ public interface ListDAO {
 
 	public java.util.List<List> getSharedLists(Integer id) throws DaoException;
 
-	public boolean deleteList(Integer listId) throws DaoException;
+	public Boolean deleteList(Integer listId) throws DaoException;
 	
 	public Boolean updateList(Integer id, List list) throws DaoException;
 	
@@ -90,7 +90,7 @@ public interface ListDAO {
 	 * @return	true if the list-product connection was successfully persisted
 	 * @throws DaoException	if either the list or the product do not exist
 	 */
-	public boolean addProduct(String token, PublicProduct product) throws DaoException;
+	public Boolean addProduct(String token, PublicProduct product) throws DaoException;
 	
 	/**
 	 * Sets the amount of a public product on an anonymous list identified by a token.
@@ -100,7 +100,7 @@ public interface ListDAO {
 	 * @return	true if the persistence was successful
 	 * @throws DaoException If the product is not on the list or the list does not exist
 	 */
-	public boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException;
+	public Boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException;
 	
 	/**
 	 * Increases the amount of a product on an anonymous list by 1.
@@ -109,7 +109,7 @@ public interface ListDAO {
 	 * @return	true if the call was successful
 	 * @throws DaoException If the product is not on the list or the list does not exist
 	 */
-	public boolean updateAmount(String token, PublicProduct product) throws DaoException;
+	public Boolean updateAmount(String token, PublicProduct product) throws DaoException;
 	
 	/**
 	 * Deletes a product from an anonimous list.
@@ -118,5 +118,5 @@ public interface ListDAO {
 	 * @return	true if the call was successful
 	 * @throws DaoException If the product is not on the list or the list does not exist
 	 */
-	public boolean deleteFromList(String token, PublicProduct product) throws DaoException;
+	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException;
 }

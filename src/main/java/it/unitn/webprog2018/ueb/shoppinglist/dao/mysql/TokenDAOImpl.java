@@ -5,22 +5,33 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.dao.mysql;
 
+import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.UpdateException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Persistence is handled at runtime through a <code>List</code>
  *
  * @author Giulia Carocari
  */
-public class TokenDAOImpl implements TokenDAO {
+public class TokenDAOImpl extends AbstractDAO implements TokenDAO {
 
 	private static Map<String, Token> tokens;
 
-	public TokenDAOImpl() {
+	public TokenDAOImpl(Connection con, DAOFactory dAOFactory) {
+		super(con,dAOFactory);
 		tokens = new HashMap<>();
 	}
 
@@ -72,7 +83,24 @@ public class TokenDAOImpl implements TokenDAO {
 	}
 
 	@Override
-	public String getAnonimousToken() {
-		return "Questoèilvaloredeltuocookieanonimo";
+	public String getAnonimousToken() throws UpdateException {
+		try{
+				String query = "INSERT INTO anonusers () VALUES ()";
+				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.executeUpdate();
+				ResultSet rs = st.getGeneratedKeys();
+				Integer token;
+				if(rs.next())
+					token = rs.getInt(1);
+				else
+					throw new UpdateException("Token not Generated");
+				st.close();
+				System.out.println(token.toString());
+				return CookieCipher.encrypt(token.toString());
+			}
+			catch(SQLException ex){
+				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+				throw new UpdateException(ex);
+			}
 	}
 }

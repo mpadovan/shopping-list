@@ -23,7 +23,7 @@ public class DAOFactoryImpl implements DAOFactory {
 	private final Connection con;
 	private final ExampleDAO EXAMPLE_DAO;
 	private final UserDAO USER_DAO;
-	private final TokenDAO TOKEN_DAO = new TokenDAOImpl();
+	private final TokenDAO TOKEN_DAO;
 	private final ProductDAO PRODUCT_DAO;
 	private final PublicProductDAO PUBLIC_PRODUCT_DAO;
 	private final ListsCategoryDAO LISTS_CATEGORY_DAO;
@@ -44,6 +44,7 @@ public class DAOFactoryImpl implements DAOFactory {
 		this.USER_DAO = new UserDAOimpl(con, this);
 		this.EXAMPLE_DAO = new ExampleDAOImpl(con, this);
 		this.MESSAGE_DAO = new MessageDAOImpl(con, this);
+		this.TOKEN_DAO = new TokenDAOImpl(con, this);
 		// this.NOTIFICATION_DAO = new NotificationDaoImpl(con,this);
 	}
 
