@@ -90,7 +90,7 @@ public class SignUpServlet extends HttpServlet {
 					token.setExpirationFromNow(TOKEN_EXP);
 					token.setUser(user);
 					
-					String link = "http://" + InetAddress.getLocalHost().getHostName() + 
+					String link = "http://" + InetAddress.getLocalHost().getHostAddress()+ 
 							":8080" + context + "AccountConfirmation?token=" + token.getToken();
 					
 					if (tokenDAO.addToken(token)) {

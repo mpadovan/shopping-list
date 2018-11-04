@@ -82,7 +82,7 @@ public class NotificationTimer {
 						"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
 								notification.getList().getName() + "?\n"
 										+ "Clicca qui per connetterti subito al portale:"
-										+ "http://" + InetAddress.getLocalHost().getHostName()
+										+ "http://" + InetAddress.getLocalHost().getHostAddress()
 								+ ":8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list=" +
 								+ notification.getList().getId())) {
 					System.err.println("Could not reach email address");

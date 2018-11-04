@@ -23,8 +23,8 @@ public class DBListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		String dburl;
 		try {
-			dburl = "jdbc:mysql://" +
-					InetAddress.getLocalHost().getHostName() + ":3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
+			dburl = "jdbc:mysql://" + InetAddress.getLocalHost().getHostAddress() +
+					":3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
 		} catch (UnknownHostException ex) {
 			Logger.getLogger(DBListener.class.getName()).log(Level.SEVERE, null, ex);
 			return;
