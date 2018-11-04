@@ -43,7 +43,7 @@ public class DeleteProductsCategoryServlet extends HttpServlet {
 		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getProductsCategoryDAO();
 		Integer categoryId = Integer.parseInt(request.getParameter("id"));
 		try {
-			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
+		ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
 			if (productsCategoryDAO.deleteProductsCategory(productsCategory.getId())) {
 				if (productsCategory.getLogo() != null && !productsCategory.getLogo().equals("") && !productsCategory.getLogo().equals("null")) {
 					File logo = new File(getServletContext().getAttribute("uploadFolder") + productsCategory.getLogo());

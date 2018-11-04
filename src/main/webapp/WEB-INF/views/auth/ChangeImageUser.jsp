@@ -14,7 +14,7 @@
 			<div class="card card-change-image">
 				<div class="card-body">
 					<div class="text-center mb-4">
-						<h1 class="h3 mb-3 font-weight-normal">Cambia immagine profilo</h1>
+						<h3 class="mb-3 font-weight-normal">Cambia immagine profilo</h3>
 					</div>
 					<form class="form-signin" action="ChangeImageUser" method="POST" enctype='multipart/form-data'>
 						<div class="custom-file my-2">

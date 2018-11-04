@@ -85,16 +85,16 @@ public class EditListsCategoryServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
 		
-		String image = request.getParameter("image");
-		String imageIdString = request.getParameter("imageId");
+		//String image = request.getParameter("image");
+		//String imageIdString = request.getParameter("imageId");
 		
-		Integer imageId = null;
+		//Integer imageId = null;
 		ListsCategory listsCategory = new ListsCategory();
-		ListsCategoriesImage categoriesImage = null;
+		//ListsCategoriesImage categoriesImage = null;
 		listsCategory.setId(categoryId);
 		listsCategory.setName(name);
 		listsCategory.setDescription(description);
-		if (imageIdString != null && !imageIdString.equals("")) {
+		/*if (imageIdString != null && !imageIdString.equals("")) {
 			imageId = Integer.parseInt(imageIdString);
 			categoriesImage = new ListsCategoriesImage();
 			categoriesImage.setImage(image);
@@ -109,7 +109,7 @@ public class EditListsCategoryServlet extends HttpServlet {
 				Logger.getLogger(EditListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
 				response.sendError(500, ex.getMessage());
 			}
-		}
+		}*/
 		
 		try {
 			if (listsCategoryDAO.updateListsCategory(categoryId, listsCategory)) {

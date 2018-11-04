@@ -1,17 +1,17 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.admin;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
-import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,15 +25,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giulia
  */
-@WebServlet(name = "ListCategoryServlet", urlPatterns = {"/restricted/admin/ListCategory"})
-public class ListCategoryServlet extends HttpServlet {
+@WebServlet(name = "ListCategoryImagesServlet", urlPatterns = {"/restricted/admin/ListCategory/Images"})
+public class ListCategoryImagesServlet extends HttpServlet {
 	private ListsCategoryImagesDAO listsCategoryImagesDAO;
-	private ListsCategoryDAO listsCategoryDAO;
+	
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		listsCategoryImagesDAO = factory.getListsCategoryImageDAO();
-		listsCategoryDAO = factory.getListsCategoryDAO();
 	}
 	/**
 	 * Handles the HTTP <code>GET</code> method.
@@ -46,41 +45,17 @@ public class ListCategoryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		String searchParam = request.getParameter("search");
-		Integer checkParam = 0;
-		
-		List<ListsCategory> listsCategory = null;
-		List<ListsCategoriesImage> listsCategoryImage = null;
-		if (searchParam == null) {
-			searchParam = "";
+		Integer categoryId = Integer.parseInt(request.getParameter("categoryId"));
+		try {
+			List<ListsCategoriesImage> images = listsCategoryImagesDAO.getByCategoriesID(categoryId);
+			request.setAttribute("images", images);
+			request.getRequestDispatcher("/WEB-INF/views/admin/ListCategoryImages.jsp").forward(request, response);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListCategoryImagesServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		if (searchParam.equals("")) {
-			checkParam = 0;
-			try {
-				listsCategory = listsCategoryDAO.getAll();
-				listsCategoryImage = listsCategoryImagesDAO.getAll();
-			} catch (DaoException ex) {
-				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		} else {
-			checkParam = 1;
-			try {
-				listsCategory = listsCategoryDAO.getFromQuery(searchParam);
-				
-			} catch (DaoException ex) {
-				Logger.getLogger(ListCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-		request.setAttribute("listsCategory", listsCategory);
-		request.setAttribute("listsCategoryImage", listsCategoryImage);
-		request.setAttribute("searchParam", searchParam);
-		request.setAttribute("checkParam", checkParam);
-		request.getRequestDispatcher("/WEB-INF/views/admin/CategoryList.jsp").forward(request, response);
+
 	}
-	
+
 	/**
 	 * Handles the HTTP <code>POST</code> method.
 	 *
@@ -92,8 +67,9 @@ public class ListCategoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -101,6 +77,7 @@ public class ListCategoryServlet extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Servlet for admin category list";
+		return "Short description";
 	}
+
 }

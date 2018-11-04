@@ -7,8 +7,10 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -89,7 +91,8 @@ public class SignUpServlet extends HttpServlet {
 					token.setExpirationFromNow(TOKEN_EXP);
 					token.setUser(user);
 					
-					String link = "http://localhost:8080" + context + "AccountConfirmation?token=" + token.getToken();
+					String link = "http://" + Network.getServerAddress() +
+							":8080" + context + "AccountConfirmation?token=" + token.getToken();
 					
 					if (tokenDAO.addToken(token)) {
 						if (EmailSender.send(user.getEmail(), "Conferma account",

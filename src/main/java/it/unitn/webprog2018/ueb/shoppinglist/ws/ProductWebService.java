@@ -200,17 +200,18 @@ public class ProductWebService {
 			@PathParam("listId") Integer listId) {
 		if (checkAddDeletePermission(listId, userId)) {
 			try {
+				ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
+				ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+				ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 				Gson gson = new Gson();
 				Product product = gson.fromJson(content, Product.class);
 				product.setOwner(new User());
 				product.setNote("");
 				product.getOwner().setId(userId);
-				product.setCategory(new ProductsCategory());
-				product.getCategory().setId(1);
-				ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
-				ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+				product.setCategory(productsCategoryDAO.getDefault());
 				try {
-					if (productDAO.addProduct(product)) {
+					if (product.isVaildOnCreate((DAOFactory) servletContext.getAttribute("daoFactory")) 
+							&& productDAO.addProduct(product)) {
 						listDAO.addProduct(listId, product);
 					}
 				} catch (DaoException ex) {

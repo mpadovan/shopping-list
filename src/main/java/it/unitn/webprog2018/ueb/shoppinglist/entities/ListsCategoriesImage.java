@@ -39,10 +39,10 @@ public class ListsCategoriesImage extends AbstractEntity {
 	
 	@Override
 	protected void validateOnSave(DAOFactory dAOFactory) throws DaoException {
-		if (image==null || image.equals(""))
+		/*if (image==null || image.equals(""))
 		{
 			setError("image", "image può essere lasciato vuoto");
-		}
+		}*/
 	}
 
 	@Override

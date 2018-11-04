@@ -27,7 +27,6 @@ import javax.servlet.http.Part;
  *
  * @author giulia
  */
-@MultipartConfig
 @WebServlet(name = "NewListsCategoryServlet", urlPatterns = {"/restricted/admin/NewListsCategory"})
 public class NewListsCategoryServlet extends HttpServlet {
 	
@@ -72,8 +71,7 @@ public class NewListsCategoryServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-		Part image = request.getPart("image");
-		System.out.println();
+		//Part image = request.getPart("image");
 		
 		ListsCategory listsCategory = new ListsCategory();
 		listsCategory.setName(name);
@@ -81,9 +79,9 @@ public class NewListsCategoryServlet extends HttpServlet {
 		
 		try {
 			if (listsCategoryDAO.addListCategory(listsCategory)) {
-				if (image == null) {
+				//if (image == null) {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-				} else {
+				/*} else {
 					listsCategory = listsCategoryDAO.getByName(name);
 					ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
 					listsCategoriesImage.setImage("string");
@@ -93,7 +91,7 @@ public class NewListsCategoryServlet extends HttpServlet {
 					} else {
 						response.sendError(500, "qualcosa è andato storto");
 					}
-				}
+				}*/
 			} else {
 				request.setAttribute("listsCategory", listsCategory);
 				request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);

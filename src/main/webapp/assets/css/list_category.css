@@ -1,0 +1,107 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14-ott-2018, 19.22.41
+    Author     : giulia
+*/
+.btn-options{
+	font-size: 18px;
+}
+.cat-list-img{
+	width: 50px;
+	height: 50px;
+}
+.cat-list-img-modal{
+	width: 300px;
+	height: 300px;
+}
+.td-images{
+	width: 300px;
+}
+.td-handler{
+	width: 150px;
+}
+.card-change-image{
+	max-width: 600px;	
+	margin: 100px auto;
+}
+#content{
+	background-color: lightgray;
+}
+.btn-change{
+	background-color: #2a5788;
+	color: white;
+}
+.margin-table-btn{
+	margin-right: 5px;
+}
+@media(max-width: 516px){
+	.margin-table-btn{
+		margin-right: 0;
+	}
+}
+.carousel-control-next, .carousel-control-prev {
+	width: 5%;
+}
+/* css images*/
+.carousel-item {
+	/**height: 100vh;**/
+	min-height: 300px;
+	background: no-repeat center center scroll;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.choose-file-none{
+	display: none;
+}
+.btn-hide{
+	display: none;
+}
+.d-none {
+	display: none!important;
+}
+.d-md-block {
+	display: block!important;
+}
+.form-up {
+	-webkit-animation-name: form-up; /* Safari 4.0 - 8.0 */
+	-webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
+	animation-name: form-up;
+	animation-duration: 0.5s;
+	position: relative;
+}
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes form-up {
+	0%  {top:200px;}
+	100% {top:0px;}
+}
+
+/* Standard syntax */
+@keyframes form-up {
+	0%  {top:200px;}
+	100% {top:0px;}
+}
+/*
+.form-down {
+	-webkit-animation-name: form-down; /* Safari 4.0 - 8.0 */
+	/*-webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+	/*animation-name: form-down;
+	animation-duration: 1s;
+	position: relative;
+}_
+/* Safari 4.0 - 8.0 */
+/*@-webkit-keyframes form-down {
+	0%  {top:0px;}
+	100% {top:200px;}
+}
+
+/* Standard syntax */
+/*@keyframes form-down {
+	0%  {top:0px;}
+	100% {top:200px;}
+}*/

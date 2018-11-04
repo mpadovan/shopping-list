@@ -12,7 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
-import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
@@ -146,7 +145,8 @@ public class EditProductServlet extends HttpServlet {
 				product.setPhotography(imageURI);
 			}
 			if (!response.isCommitted()) { // everything went well, we can persist the changes
-				if (productDAO.updateProduct(productId, product)) {
+				if (product.isVaildOnUpdate((DAOFactory) getServletContext().getAttribute("daoFactory")) 
+						&& productDAO.updateProduct(productId, product)) {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
 				} else {
 					request.setAttribute("product", product);

@@ -56,6 +56,9 @@ public class ListWebService {
 	public ListWebService() {
 	}
 
+	// ---------------------------------------------------------------------- //
+	//////////////////////////// COMMON METHODS ////////////////////////////////
+	// ---------------------------------------------------------------------- //
 	/**
 	 * Retrieves representation of the possible categories of a list
 	 *
@@ -97,6 +100,9 @@ public class ListWebService {
 		return null;
 	}
 
+	// ---------------------------------------------------------------------- //
+	///////////////////////// LOGGED USER METHODS //////////////////////////////
+	// ---------------------------------------------------------------------- //
 	/**
 	 * Retrieves all the products in a list
 	 *
@@ -117,7 +123,7 @@ public class ListWebService {
 			try {
 				publicProductsOnList = listDAO.getPublicProductsOnList(listId);
 			} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.handleDAOException(ex, response);
 			}
 			if (publicProductsOnList == null || publicProductsOnList.isEmpty()) {
@@ -146,7 +152,7 @@ public class ListWebService {
 			try {
 				productsOnList = listDAO.getProductsOnList(listId);
 			} catch (DaoException ex) {
-			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.handleDAOException(ex, response);
 			}
 			if (productsOnList == null || productsOnList.isEmpty()) {
@@ -242,7 +248,6 @@ public class ListWebService {
 			try {
 				Gson gson = new Gson();
 				product = gson.fromJson(content, Product.class);
-				System.out.println("Content: " + content + ", productId:" + product.getId());
 			} catch (JsonSyntaxException ex) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.sendError500(response);
@@ -284,7 +289,7 @@ public class ListWebService {
 	@Authentication
 	public void editProductOnList(@PathParam("userId") int userId, @PathParam("listId") int listId,
 			@PathParam("productId") int productId, String content) {
-		if (checkAddDeletePermission(listId, userId) && checkProductPermission(productId,userId)) {
+		if (checkAddDeletePermission(listId, userId) && checkProductPermission(productId, userId)) {
 			Integer newAmount = -1;
 			try {
 				Gson gson = new Gson();
@@ -408,6 +413,49 @@ public class ListWebService {
 		}
 	}
 
+	// ---------------------------------------------------------------------- //
+	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
+	// ---------------------------------------------------------------------- //
+	
+	@PUT
+	@Path("/anon/{token}/listCategory")
+	public void setAnonCategory(String content) {
+		
+	}
+	
+	@GET
+	@Path("/anon/{token}/listCategory")
+	public String getAnonCategory(String content) {
+		return "";
+	}
+	
+	@GET
+	@Path("/anon/{token}/product")
+	public String getProductsOnAnonList(@PathParam("token") String token) {
+		return "";
+	}
+	
+	@POST
+	@Path("/anon/{token}/product")
+	public void addProductOnAnonList(@PathParam("token") String token, String content) {
+		
+	}
+	
+	@PUT
+	@Path("/anon/{token}/product")
+	public String updateProductOnAnonList(@PathParam("token") String token, String content) {
+		return "";
+	}
+	
+	@DELETE
+	@Path("/anon/{token}/product")
+	public void deleteProductsFromAnonList(@PathParam("token") String token) {
+		
+	}
+	
+	// ---------------------------------------------------------------------- //
+	//////////////////////////// PRIVATE METHODS ///////////////////////////////
+	// ---------------------------------------------------------------------- //
 	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
@@ -425,7 +473,7 @@ public class ListWebService {
 		}
 		return false;
 	}
-	
+
 	private boolean checkViewPermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
