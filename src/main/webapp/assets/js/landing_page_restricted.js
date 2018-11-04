@@ -23,7 +23,7 @@ Vue.component('infoModal', {
 		}
 	},
 	mounted: function () {
-		console.log(this.item);
+		this.item = (this.item.item.category == undefined) ? this.item.item : this.item;
 		this.data.name = this.item.item.name;
 		this.data.categoryName = this.item.item.category.name;
 		this.data.notes = this.item.item.note;
@@ -133,13 +133,18 @@ Vue.component('list-item', {
 				item: self.item,
 			});
 			$('#item-modal').modal('show');
+		},
+		infoModal: function () {
+			var self = this;
+			this.$emit('info', {
+				item: self.item
+			});
 		}
 	},
 	template: `<tr> 
-				<td>{{ capitalized }}</td> 
-				<td>{{ item.amount }}</td> 
-				<td>{{ item.item.note }}</td> 
-				<td>{{ item.item.category.name }}</td> 
+				<td>{{ capitalized }}</td>
+				<td>{{ item.amount }}</td>
+				<td @click="infoModal"><i class="fas fa-question-circle"></i></td>
 				<td v-if="permission" @click="updateItem"><i class="fas fa-pen-square"></i></td> 
 				<td v-if="permission" @click="deleteItem"><i class="fas fa-trash"></i></td> 
 			</tr>`
@@ -166,9 +171,6 @@ Vue.component('search-item', {
 		},
 		logoComputed: function () {
 			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : this.path + this.item.logo;
-		},
-		path: function () {
-			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
@@ -201,7 +203,7 @@ Vue.component('search-item', {
 	},
 	template: `<div class="col-lg-3"> 
 					<div class="outer-search-item"> 
-						<div class="inner-search-item" v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }"> 
+						<div v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }" class="inner-search-item"> 
 							<div class="row align-items-center search-item-more-info-overlay" style="width:100%; height:100%;margin:0;"> 
 								<div style="width:fit-content; margin:auto;"> 
 									<div @click="callParent" style="display:inline-block"><i class="fas fa-plus-circle" style="font-size:4rem;margin-right:1rem;"></i></div> 
@@ -281,6 +283,9 @@ var app = new Vue({
 				temp[r].sid = r;
 			}
 			return temp;
+		},
+		path: function () {
+			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
@@ -288,7 +293,7 @@ var app = new Vue({
 			if (this.query != '') {
 				this.showList = false;
 				this.ajaxSettings = {
-					"url": '/ShoppingList/services/products/restricted/' + this.user + '?search=' + this.query,
+					"url": this.path + 'services/products/restricted/' + this.user + '?search=' + this.query,
 					"method": 'GET',
 					"async": true,
 					"crossDomain": true
@@ -313,7 +318,7 @@ var app = new Vue({
 		isInList: function (item) {
 			var isPrivate = (item.item.owner) ? 'personal' : 'public';
 			this.ajaxSettings = {
-				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + isPrivate,
+				"url": this.path + 'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + isPrivate,
 				"method": 'POST',
 				"async": true,
 				"crossDomain": true,
@@ -338,7 +343,7 @@ var app = new Vue({
 		},
 		updateComponent: function () {
 			this.ajaxSettings = {
-				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
+				"url": this.path + 'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
 				"method": 'PUT',
 				"async": true,
 				"crossDomain": true,
@@ -362,7 +367,7 @@ var app = new Vue({
 		},
 		deleteComponent: function () {
 			this.ajaxSettings = {
-				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
+				"url": this.path +'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products/' + this.item_owner + '/' + this.item_id,
 				"method": 'DELETE',
 				"async": true,
 				"crossDomain": true
@@ -425,7 +430,7 @@ var app = new Vue({
 			this.ajaxSettings = {
 				"async": true,
 				"crossDomain": true,
-				"url": "/ShoppingList/services/products/restricted/" + this.user + '/' + this.list,
+				"url": this.path + "services/products/restricted/" + this.user + '/' + this.list,
 				"method": "POST",
 				"data": "{\"name\": \"" + this.query + "\"}",
 				"headers": {
@@ -443,7 +448,7 @@ var app = new Vue({
 			this.fetchListSettings = {
 				"async": true,
 				"crossDomain": true,
-				"url": '/ShoppingList/services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
+				"url": this.path + 'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
 				"method": "GET",
 			};
 			this.fetchListComponent = true;
@@ -519,6 +524,7 @@ var app = new Vue({
 			$('#chat').height($('#app').height());
 		},
 		infoItemOnModal: function (item) {
+			console.log(item);
 			this.showInfoModal = item;
 		},
 		infoModalClosed: function() {
@@ -536,7 +542,7 @@ var app = new Vue({
 			} else {
 				this.showAutocomplete = true;
 				this.ajaxSettings = {
-					"url": '/ShoppingList/services/products/restricted/' + this.user + '/?search=' + this.query + '&compact=true',
+					"url": this.path + 'services/products/restricted/' + this.user + '/?search=' + this.query + '&compact=true',
 					"method": 'GET',
 					"async": true,
 					"crossDomain": true

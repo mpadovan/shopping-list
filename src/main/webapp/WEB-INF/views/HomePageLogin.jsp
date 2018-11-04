@@ -87,13 +87,11 @@
 												<tr>
 													<th scope="col">Nome prodotto</th>
 													<th scope="col">Quantità</th>
-													<th scope="col">Note</th>
-													<th scope="col">Categoria</th>
-													<th v-if="permission" scope="col" colspan="2">Gestisci</th>
+													<th v-if="permission" scope="col" colspan="3">Gestisci</th>
 												</tr>
 											</thead>
 											<tbody>
-												<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" v-bind:permission="permission" @update="updateWithModal"
+												<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" v-bind:permission="permission" @info="infoItemOnModal" @update="updateWithModal"
 													@delete="deleteWithModal"></tr>
 											</tbody>
 										</table>
