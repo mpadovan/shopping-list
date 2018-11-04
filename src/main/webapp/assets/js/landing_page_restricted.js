@@ -27,18 +27,13 @@ Vue.component('infoModal', {
 		this.data.name = this.item.item.name;
 		this.data.categoryName = this.item.item.category.name;
 		this.data.notes = this.item.item.note;
-		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : this.path + this.item.item.logo;
-		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : this.path + this.item.item.photography;
+		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : app.path + this.item.item.logo;
+		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : app.path + this.item.item.photography;
 		$('#info-modal').modal('show');
 	},
 	methods: {
 		hideModal: function() {
 			this.$emit('close');
-		}
-	},
-	computed: {
-		path: function () {
-			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	template: `
@@ -167,10 +162,10 @@ Vue.component('search-item', {
 			return capitalized;
 		},
 		photoComputed: function () {
-			return (this.item.photography == "null" || this.item.photography == undefined) ? this.defaultImage : this.path + this.item.photography;
+			return (this.item.photography == "null" || this.item.photography == undefined) ? this.defaultImage : app.path + this.item.photography;
 		},
 		logoComputed: function () {
-			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : this.path + this.item.logo;
+			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : app.path + this.item.logo;
 		}
 	},
 	methods: {

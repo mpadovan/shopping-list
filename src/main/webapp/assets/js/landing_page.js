@@ -33,11 +33,6 @@ Vue.component('infoModal', {
 			this.$emit('close');
 		}
 	},
-	computed: {
-		path: function () {
-			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
-		}
-	},
 	template: `
 				<div id="info-modal" class="modal" tabindex="-1" role="dialog">
 					<div class="modal-dialog" role="document">
