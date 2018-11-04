@@ -73,7 +73,8 @@ public interface ListDAO {
 
 	public java.util.List<List> getPersonalLists(Integer id) throws DaoException;
 	
-	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException;
+	public Boolean linkShoppingListToUser(List list, Integer idpartecipant, Boolean addDeletePermission,
+			Boolean editPermission, Boolean deletePermission) throws DaoException;
 
 	public Boolean addList (List list) throws DaoException;
 
