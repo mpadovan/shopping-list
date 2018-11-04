@@ -3,6 +3,85 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+Vue.component('infoModal', {
+	props: ['item'],
+	data: function() {
+		return {
+			data: {
+				name: '',
+				categoryName: '',
+				notes: '',
+				isPrivate: '',
+				photo: '',
+				logo: '',
+				amIAnon: ''
+			},
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
+		}
+	},
+	mounted: function () {
+		this.item = (this.item.item.category == undefined) ? this.item.item : this.item;
+		this.data.name = this.item.item.name;
+		this.data.categoryName = this.item.item.category.name;
+		this.data.notes = this.item.item.note;
+		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : app.path + this.item.item.logo;
+		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : app.path + this.item.item.photography;
+		$('#info-modal').modal('show');
+	},
+	methods: {
+		hideModal: function() {
+			this.$emit('close');
+		}
+	},
+	template: `
+				<div id="info-modal" class="modal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Informazioni Prodotto</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-10 text-center" style="margin:auto;">
+										<img class="image-product" v-bind:src="data.photo" style="max-width:100%; max-height: 15rem;">
+									</div>
+									<div class="col">
+									<h5 class="card-title text-center mt-2">Informazioni prodotto </h5>
+									<table class="table table-responsive-md">
+										<tbody>
+											<tr>
+												<th scope="row">Nome</th>
+												<td>{{data.name}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Note</th>
+												<td>{{data.notes}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Logo</th>
+													<td>
+														<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
+													</td>
+											</tr>
+											<tr>
+												<th scope="row">Categoria</th>
+												<td>{{data.categoryName}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>`,
+	created: function() {
+		console.log(this.item);
+	}
+});
 
 Vue.component('autocompleteItemComponent', {
 	props: ['item'],
@@ -20,7 +99,7 @@ Vue.component('getCat', {
 		var self = this;
 		console.log(self.lat + ',' + self.lon);
 		$.get({
-			url: '/ShoppingList/services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
+			url: app.path + 'services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
 				self.data = data;
 				if (!("Notification" in window)) {
@@ -45,14 +124,14 @@ Vue.component('getCat', {
 			}
 		});
 	},
-	template: '<div class="col-md-3 mt-4"> \
-					<div class="card"> \
-						<div class="card-body"> \
-							<div>{{ data[0].category }} vicini a te:</div> \
-							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>\
-						</div> \
-					</div> \
-				</div>'
+	template: `<div class="col-md-3 mt-4"> 
+					<div class="card"> 
+						<div class="card-body"> 
+							<div>{{ data[0].category }} vicini a te:</div> 
+							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>
+						</div> 
+					</div> 
+				</div>`
 });
 
 Vue.component('categories', {
@@ -64,12 +143,12 @@ Vue.component('categories', {
 			category: null
 		};
 	},
-	template: ' <div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> \
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
-				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> \
-				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> \
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> \
-				</select></div></div>',
+	template: `<div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> 
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
+				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> 
+				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> 
+					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
+				</select></div></div>`,
 	watch: {
 		cat: function (val) {
 			localStorage.setItem("category", val.name);
@@ -89,7 +168,7 @@ Vue.component('categories', {
 				self.geoOK = true;
 				self.category = localStorage.getItem("category");
 				$.get({
-					url: '/ShoppingList/services/lists/categories',
+					url: app.path + 'services/lists/categories',
 					success: function (data) {
 						data = _.sortBy(data, ['name']);
 						self.categories = data;
@@ -164,16 +243,21 @@ Vue.component('list-item', {
 				item: self.item,
 			});
 			$('#item-modal').modal('show');
+		},
+		infoModal: function () {
+			var self = this;
+			this.$emit('info', {
+				item: self.item
+			});
 		}
 	},
-	template: '<tr> \
-				<td>{{ capitalized }}</td> \
-				<td>{{ item.amount }}</td> \
-				<td>{{ item.item.note }}</td> \
-				<td>{{ item.item.category.name }}</td> \
-				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
-				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
-			</tr>'
+	template: `<tr> 
+				<td>{{ capitalized }}</td> 
+				<td>{{ item.amount }}</td>
+				<td @click="infoModal"><i class="fas fa-question-circle"></i></td>
+				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> 
+				<td @click="deleteItem"><i class="fas fa-trash"></i></td> 
+			</tr>`
 });
 Vue.component('search-item', {
 	props: ['item'],
@@ -182,17 +266,20 @@ Vue.component('search-item', {
 			show: false,
 			delay: 190,
 			clicks: 0,
-			timer: null
+			timer: null,
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
 		};
-	},
-	created: function () {
-		this.item.photography = (this.item.photography == "null") ? null : this.item.photography;
-		this.item.logo = (this.item.logo == "null") ? null : this.item.logo;
 	},
 	computed: {
 		capitalized: function () {
 			var capitalized = _.capitalize(this.item.name);
 			return capitalized;
+		},
+		photoComputed: function () {
+			return (this.item.photography == "null" || this.item.photography == undefined) ? this.defaultImage : app.path + this.item.photography;
+		},
+		logoComputed: function () {
+			return (this.item.logo == "null" || this.item.photography == undefined) ? this.defaultImage : app.path + this.item.logo;
 		}
 	},
 	methods: {
@@ -202,7 +289,7 @@ Vue.component('search-item', {
 				item: self.item
 			});
 		},
-		oneClick: function (event) {
+		oneClick: function (event) { // DEPRECATED
 			this.clicks++
 			if (this.clicks === 1) {
 				var self = this
@@ -215,24 +302,28 @@ Vue.component('search-item', {
 				this.callParent();
 				this.clicks = 0;
 			}
+		},
+		infoModal: function () {
+			var self = this;
+			this.$emit('info', {
+				item: self.item
+			})
 		}
 	},
-	template: '<li class="list-group-item noselect"> \
-					<div class="row align-items-center" @click="oneClick"> \
-						<img v-if="item.photography" v-bind:src="item.photography" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:10%"> \
-						<div class="col align-self-center float-left"><h5>{{ capitalized }}</h5><h6>{{ item.category.name }}</h6></div>\
-				 		<div class="col align-self-center float-right"><div><i class="fas fa-chevron-down float-right" style="font-size:1.5em"></i></div></div> \
-					</div> \
-					<div class="row align-items-center mt-2" v-show="show"> \
-						<div class="col-1 align-self-left" v-if="item.logo"> \
-							<img v-bind:src="item.logo" class="img-thumbnail float-left" v-bind:alt="capitalized" style="width:100%"> \
-						</div> \
-						<div class="col align-self-left"> \
-							<div >{{item.note }}</div> \
-						</div> \
-						<div class="col align-self-right"><button @click="callParent" type="button" class="btn btn-primary float-right">Aggiungi alla lista</button></div> \
-					</div> \
-				</li>'
+	template: `<div class="col-lg-3"> 
+					<div class="outer-search-item"> 
+						<div v-bind:style="{ backgroundImage: \'url(\' + photoComputed + \')\' }" class="inner-search-item"> 
+							<div class="row align-items-center search-item-more-info-overlay" style="width:100%; height:100%;margin:0;"> 
+								<div style="width:fit-content; margin:auto;"> 
+									<div @click="callParent" style="display:inline-block"><i class="fas fa-plus-circle" style="font-size:4rem;margin-right:1rem;"></i></div> 
+									<div @click="infoModal" style="display:inline-block"><i class="fas fa-question-circle" style="font-size:4rem;"></i></div> 
+								</div> 
+							</div> 
+						</div> 
+					<h5 @click="callParent" class="pointer add-product-to-list" style="border-top:#333 solid 1px;">{{ capitalized }}</h5> 
+					<h6>{{ item.category.name }}</h6> 
+					</div> 
+				</div>`
 });
 
 var app = new Vue({
@@ -262,7 +353,8 @@ var app = new Vue({
 		showLocals: false,
 		lockSearch: false,
 		item_selected_id: -2,
-		loaded_list: false
+		loaded_list: false,
+		showInfoModal: false
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -273,13 +365,16 @@ var app = new Vue({
 			}
 
 			return temp;
+		},
+		path: function () {
+			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
-				this.url = '/ShoppingList/services/products/?search=' + this.query;
+				this.url = this.path + 'services/products/?search=' + this.query;
 				this.searchInitializing = 'search';
 				this.showAutocomplete = false;
 			}
@@ -393,6 +488,12 @@ var app = new Vue({
 			this.lat = data.lat;
 			this.lon = data.lon;
 			this.showLocals = true;
+		},
+		infoItemOnModal: function (item) {
+			this.showInfoModal = item;
+		},
+		infoModalClosed: function() {
+			this.showInfoModal = false;
 		}
 	},
 	watch: {

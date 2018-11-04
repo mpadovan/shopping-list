@@ -53,9 +53,9 @@
 													Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
 												</div>
 											</div>
-											<ul class="search-results list-group list-group-flush">
-												<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:item="result" @add="addItemToList" class="search-result pointer"></search-item>
-											</ul>
+											<div class="search-results row">
+												<search-item v-for="result in resultsSorted" v-bind:key="result.name" v-bind:item="result" @add="addItemToList" @info="infoItemOnModal" class="search-result pointer"></search-item>
+											</div>
 										</div>
 									</transition>
 								</div>
@@ -74,14 +74,12 @@
 													<tr>
 														<th scope="col">Nome prodotto</th>
 														<th scope="col">Quantità</th>
-														<th scope="col">Note</th>
-														<th scope="col">Categoria</th>
-														<th scope="col" colspan="2">Gestisci</th>
+														<th scope="col" colspan="3">Gestisci</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" @update="updateWithModal"
-														@delete="deleteWithModal"></tr>
+														@delete="deleteWithModal" @info="infoItemOnModal"></tr>
 												</tbody>
 											</table>
 										</div>
@@ -119,6 +117,7 @@
 						</div>
 					</div>
 				</div>
+				<info-modal v-if="showInfoModal" v-bind:item="showInfoModal" @close="infoModalClosed"></info-modal>
 			</div>
 		</div>
 </jsp:attribute>

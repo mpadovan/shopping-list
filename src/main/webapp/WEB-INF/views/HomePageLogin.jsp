@@ -37,7 +37,7 @@
 											<div class="p-1 pt-3 pb-2 autocomplete" v-if="showAutocomplete">
 												<li class="pointer autocomplete-li" v-if="!showAutocompleteList" @click="quickAddProduct()">Non troviamo alcun prodotto con nome
 													<b> {{ query }}</b>. Clicca qui per crearlo.</li>
-												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
+												<li v-bind:id="'item' + item.sid" class="pointer autocomplete-li" v-if="showAutocompleteList" v-for='item in autocompleteComputed' v-bind:key='item.name + item.id' @click="replaceQuerySearch(item.name)">{{ item.name }}</li>
 											</div>
 											<transition name="fade" v-on:after-leave="searchHided">
 												<div class="list-group" v-if="showSearch">
@@ -55,10 +55,9 @@
 															Non troviamo nulla che soddisfi la tua ricerca ¯\_(ツ)_/¯
 														</div>
 													</div>
-													<ul class="search-results list-group list-group-flush">
-														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList"
-																	 class="search-result pointer"></search-item>
-													</ul>
+													<div class="search-results row">
+														<search-item v-for="result in resultsSorted" v-bind:key="result.name + result.id" v-bind:item="result" @add="addItemToList" @info="infoItemOnModal"></search-item>
+													</div>
 												</div>
 											</transition>
 										</div>
@@ -88,13 +87,11 @@
 												<tr>
 													<th scope="col">Nome prodotto</th>
 													<th scope="col">Quantità</th>
-													<th scope="col">Note</th>
-													<th scope="col">Categoria</th>
-													<th v-if="permission" scope="col" colspan="2">Gestisci</th>
+													<th v-if="permission" scope="col" colspan="3">Gestisci</th>
 												</tr>
 											</thead>
 											<tbody>
-												<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" v-bind:permission="permission" @update="updateWithModal"
+												<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" v-bind:permission="permission" @info="infoItemOnModal" @update="updateWithModal"
 													@delete="deleteWithModal"></tr>
 											</tbody>
 										</table>
@@ -127,6 +124,7 @@
 								</div>
 							</div>
 						</div>
+						<info-modal v-if="showInfoModal" v-bind:item="showInfoModal" @close="infoModalClosed"></info-modal>
 					</div>
 				</div>
 				<div class="chat col-lg-5" id="chat">
