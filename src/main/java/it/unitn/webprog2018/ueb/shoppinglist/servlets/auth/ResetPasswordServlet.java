@@ -11,6 +11,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoExc
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.UUID;
@@ -86,7 +87,7 @@ public class ResetPasswordServlet extends HttpServlet {
 			user.setTokenpassword(token);
 			try {
 				userDAO.setToken(user);
-				String link = "http://" + InetAddress.getLocalHost().getHostAddress()
+				String link = "http://" + Network.getServerAddress()
 						+ ":8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
 				if (EmailSender.send(user.getEmail(), "Reset Password",
 						"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {

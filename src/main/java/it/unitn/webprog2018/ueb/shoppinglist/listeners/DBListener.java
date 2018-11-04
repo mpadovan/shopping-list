@@ -4,9 +4,8 @@ import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DAOFactoryImpl;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.mysql.DatabaseManager;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import it.unitn.webprog2018.ueb.shoppinglist.websocket.SessionHandler;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -18,17 +17,12 @@ import javax.servlet.ServletContextListener;
  * @author giuliapeserico
  */
 public class DBListener implements ServletContextListener {
-	
+
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		String dburl;
-		try {
-			dburl = "jdbc:mysql://" + InetAddress.getLocalHost().getHostAddress() +
-					":3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
-		} catch (UnknownHostException ex) {
-			Logger.getLogger(DBListener.class.getName()).log(Level.SEVERE, null, ex);
-			return;
-		}
+		dburl = "jdbc:mysql://" + Network.getDatabaseAddress()
+				+ ":3306/shoppinglistdb?serverTimezone=WET&allowMultiQueries=true";
 		String dbUsername = "root";
 		String dbPassword = "root";
 
@@ -42,10 +36,10 @@ public class DBListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		try{
+		try {
 			AbandonedConnectionCleanupThread.checkedShutdown();
-			((DatabaseManager)sce.getServletContext().getAttribute("dbManager")).shutdown();
-		} catch (NullPointerException e){
+			((DatabaseManager) sce.getServletContext().getAttribute("dbManager")).shutdown();
+		} catch (NullPointerException e) {
 			String msg = "DatabaseManager has already destroyed. Skipping...";
 			Logger.getLogger(this.getClass().getName()).log(Level.WARNING, msg);
 		}

@@ -10,6 +10,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Notification;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
@@ -30,18 +31,19 @@ import javax.inject.Inject;
 @ApplicationScoped
 @Startup
 public class NotificationTimer {
+
 	private static final int POLLING_RATE = 60 * 1000; // every minute
 	private ScheduledThreadPoolExecutor executor;
-	
+
 	@Inject
 	private NotificationSessionHandler notificationSessionHandler;
-	
+
 	public NotificationTimer() {
 		executor = new ScheduledThreadPoolExecutor(4);
 		executor.scheduleAtFixedRate(new DatabaseQueryTask(), POLLING_RATE, POLLING_RATE, TimeUnit.MILLISECONDS);
 		System.out.println("Notification timer ok");
 	}
-	
+
 	/**
 	 * Task that retrieves notifications from the database for them to be
 	 * scheduled for sending.
@@ -67,28 +69,27 @@ public class NotificationTimer {
 	 * connected at time of execution, via the web-site.
 	 */
 	private class NotificationTask implements Runnable {
+
 		private final Notification notification;
 
 		public NotificationTask(Notification notification) {
 			this.notification = notification;
 		}
-		
+
 		@Override
 		public void run() {
-			String productName =(notification.getProduct() instanceof Product ? ((Product)notification.getProduct()).getName() : ((PublicProduct)notification.getProduct()).getName());
-			try {
-				// If it fails, deal with it.
-				if (!EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
-						"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista " +
-								notification.getList().getName() + "?\n"
-										+ "Clicca qui per connetterti subito al portale:"
-										+ "http://" + InetAddress.getLocalHost().getHostAddress()
-								+ ":8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list=" +
-								+ notification.getList().getId())) {
-					System.err.println("Could not reach email address");
-				}
-			} catch (UnknownHostException ex) {
-				Logger.getLogger(NotificationTimer.class.getName()).log(Level.SEVERE, null, ex);
+			String productName = (notification.getProduct() instanceof Product ? 
+					((Product) notification.getProduct()).getName() : 
+					((PublicProduct) notification.getProduct()).getName());
+			// If it fails, deal with it.
+			if (!EmailSender.send(notification.getUser().getEmail(), "Controlla la tua dispensa, potresti aver finito " + productName,
+					"Secondo i nostri calcoli a breve potresti aver bisogno del prodotto " + productName + ", perché non lo inserisci nella lista "
+					+ notification.getList().getName() + "?\n"
+					+ "Clicca qui per connetterti subito al portale:"
+					+ "http://" + Network.getServerAddress()
+					+ ":8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list="
+					+ +notification.getList().getId())) {
+				System.err.println("Could not reach email address");
 			}
 			if (notificationSessionHandler.isConnected(notification.getUser().getId())) {
 				notificationSessionHandler.notifyUser(notification.getUser().getId());
@@ -96,8 +97,7 @@ public class NotificationTimer {
 		}
 
 	}
-	
-	
+
 	@PreDestroy
 	void destroy() {
 		executor.purge();

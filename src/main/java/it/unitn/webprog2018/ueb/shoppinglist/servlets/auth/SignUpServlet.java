@@ -7,6 +7,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Token;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -90,7 +91,7 @@ public class SignUpServlet extends HttpServlet {
 					token.setExpirationFromNow(TOKEN_EXP);
 					token.setUser(user);
 					
-					String link = "http://" + InetAddress.getLocalHost().getHostAddress()+ 
+					String link = "http://" + Network.getServerAddress() +
 							":8080" + context + "AccountConfirmation?token=" + token.getToken();
 					
 					if (tokenDAO.addToken(token)) {
