@@ -433,20 +433,7 @@ var app = new Vue({
 		}
 	},
 	created: function () {
-		//console.log(JSON.parse(localStorage.getItem("items")));
-		if (localStorage.getItem("items")) {
-			this.items = JSON.parse(localStorage.getItem("items"));
-		} else {
-			// this.items.push({
-			// 	item: {
-			// 		name: 'il tuo primo oggetto in lista',
-			// 	},
-			// 	amount: 1,
-			// 	category: {
-			// 		name: 'default'
-			// 	}
-			// });
-		}
+		console.log(Cookies.get());
 	},
 	mounted: function() {
 		this.loaded_list = true;

@@ -126,6 +126,7 @@
 	<link href="assets/css/landing_page.css" type="text/css" rel="stylesheet" />
 </jsp:attribute>
 <jsp:attribute name="customJs">
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="assets/js/landing_page.js"></script>
 </jsp:attribute>
 
