@@ -20,7 +20,7 @@ Vue.component('getCat', {
 		var self = this;
 		console.log(self.lat + ',' + self.lon);
 		$.get({
-			url: '/ShoppingList/services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
+			url: app.path + 'services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
 				self.data = data;
 				if (!("Notification" in window)) {
@@ -89,7 +89,7 @@ Vue.component('categories', {
 				self.geoOK = true;
 				self.category = localStorage.getItem("category");
 				$.get({
-					url: '/ShoppingList/services/lists/categories',
+					url: app.path + 'services/lists/categories',
 					success: function (data) {
 						data = _.sortBy(data, ['name']);
 						self.categories = data;
@@ -173,7 +173,10 @@ Vue.component('list-item', {
 				<td>{{ item.item.category.name }}</td> \
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> \
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> \
-			</tr>'
+			</tr>',
+	created: function () {
+		console.log(this.item);
+	}
 });
 Vue.component('search-item', {
 	props: ['item'],
@@ -262,7 +265,8 @@ var app = new Vue({
 		showLocals: false,
 		lockSearch: false,
 		item_selected_id: -2,
-		loaded_list: false
+		loaded_list: false,
+		token: null
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -273,13 +277,16 @@ var app = new Vue({
 			}
 
 			return temp;
+		},
+		path: function () {
+			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
-				this.url = '/ShoppingList/services/products/?search=' + this.query;
+				this.url = app.path + 'services/products/?search=' + this.query;
 				this.searchInitializing = 'search';
 				this.showAutocomplete = false;
 			}
@@ -297,8 +304,17 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
-			toastr["success"](item.item.name + ' aggiunto');
-			for (var i = 0; this.items.length > i; i++) {
+			var settings = {
+				method: 'POST',
+				url: app.path + 'services/lists/anon/' + app.token + '/product',
+				data: '{' + item.item.id + '}',
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			ajaxFunction(settings, true);
+			/*for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
 					this.updateLocalStorage();
@@ -306,7 +322,7 @@ var app = new Vue({
 				}
 			}
 			item.amount = 1;
-			this.items.push(item);
+			this.items.push(item);*/
 		},
 		updateLocalStorage: function () {
 			localStorage.setItem("items", JSON.stringify(this.items));
@@ -318,13 +334,24 @@ var app = new Vue({
 			this.item_amount = val.item.amount;
 		},
 		updateComponent: function () {
-			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
-					this.updateLocalStorage();
-					return;
+			var settings = {
+				method: 'PUT',
+				url: app.path + 'services/lists/anon/' + app.token + '/product',
+				data: '{' + this.item_name + '}',
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
 				}
-			}
+			};
+			ajaxFunction(settings);
+			/*
+			 for (var i = 0; this.items.length > i; i++) {
+			 if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
+			 (this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
+			 this.updateLocalStorage();
+			 return;
+			 }
+			 }*/
 		},
 		deleteWithModal: function (val) {
 			this.updatingItem = false;
@@ -333,13 +360,24 @@ var app = new Vue({
 			this.item_amount = undefined;
 		},
 		deleteComponent: function () {
+			var settings = {
+				method: 'DELETE',
+				url: app.path + 'services/lists/anon/' + app.token + '/product',
+				data: '{' + this.item_amount + '}',
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			ajaxFunction(settings);
+			/*
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
 					this.items.splice(i, 1);
 					this.updateLocalStorage();
 					return;
 				}
-			}
+			}*/
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
@@ -402,7 +440,7 @@ var app = new Vue({
 				this.hideSearch();
 			} else {
 				this.showAutocomplete = true;
-				this.url = '/ShoppingList/services/products/?search=' + this.query + '&compact=true';
+				this.url = app.path + 'services/products/?search=' + this.query + '&compact=true';
 				this.searchInitializing = 'search';
 				$('#search-input').focus();
 			}
@@ -433,9 +471,38 @@ var app = new Vue({
 		}
 	},
 	created: function () {
-		console.log(Cookies.get());
+		var self = this;
+		this.token = Cookies.get('anonToken');
+		$.get({
+			url: self.path + 'services/lists/anon/' + self.token + '/product',
+			success: function (res) {
+				for (var i = 0; i < res.length; i++) {
+					res[i].item = res[i].product;
+				}
+				self.items = res;
+			},
+			error: function (e) {
+				var test = [
+					{
+						product: {
+							category: {name: "Prova1", id: 1},
+							id: 2,
+							logo: null,
+							name: "Fragole",
+							note: "Secondo prodotto prova ",
+							photography: null
+						},
+						amount: 1
+					}
+				]
+				for (var i = 0; i < test.length; i++) {
+					test[i].item = test[i].product;
+				}
+				self.items = test;
+			}
+		});
 	},
-	mounted: function() {
+	mounted: function () {
 		this.loaded_list = true;
 	}
 });
@@ -447,7 +514,7 @@ $('#search-input').keydown((e) => {
 	} else if (e.keyCode === 13) {
 		app.searching();
 	}
-	if(app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
+	if (app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
 		app.item_selected_id = 0;
 	} else if (e.keyCode === 40) {
 		app.item_selected_id = app.item_selected_id + 1;
@@ -461,3 +528,43 @@ $('#search-input').keydown((e) => {
 		}
 	}
 });
+
+function ajaxFunction(data, isNew) {
+	$.ajax(data).done(function (res) {
+		if(isNew) toastr["success"](item.item.name + ' aggiunto');
+		updateView();
+	}).fail(function (e) {
+		updateView();
+	});
+}
+
+function updateView() {
+	$.get({
+		url: app.path + 'services/lists/anon/' + app.token + '/product',
+		success: function (res) {
+			for (var i = 0; i < res.length; i++) {
+				res[i].item = res[i].product;
+			}
+			app.items = res;
+		},
+		error: function (e) {
+			var test = [
+				{
+					product: {
+						category: {name: "Prova1", id: 1},
+						id: 2,
+						logo: null,
+						name: "Frakolle",
+						note: "Secondo prodotto prova ",
+						photography: null
+					},
+					amount: 1
+				}
+			]
+			for (var i = 0; i < test.length; i++) {
+				test[i].item = test[i].product;
+			}
+			app.items = test;
+		}
+	});
+}
