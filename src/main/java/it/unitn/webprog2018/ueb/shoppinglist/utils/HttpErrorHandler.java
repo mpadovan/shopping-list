@@ -29,7 +29,7 @@ public class HttpErrorHandler {
 	private static String ERROR_MESSAGE_400 = "C'è qualcosa di sbagliato nella tua richiesta. Riprova.";
 	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
 			+ "The resource you are trying to access is none of your business.\n"
-			+ "If you think you have the right to access it, prove it by logging in: localhost:8080/ShoppingList/Login";
+			+ "If you think you have the right to access it, prove it by logging in";
 
 	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
 
