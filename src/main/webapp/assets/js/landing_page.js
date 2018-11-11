@@ -5,7 +5,7 @@
  */
 Vue.component('infoModal', {
 	props: ['item'],
-	data: function() {
+	data: function () {
 		return {
 			data: {
 				name: '',
@@ -29,13 +29,13 @@ Vue.component('infoModal', {
 		$('#info-modal').modal('show');
 	},
 	methods: {
-		hideModal: function() {
+		hideModal: function () {
 			this.$emit('close');
 		}
 	},
 	template: `
 				<div id="info-modal" class="modal" tabindex="-1" role="dialog">
-					<div class="modal-dialog" role="document">
+					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title">Informazioni Prodotto</h5>
@@ -78,7 +78,7 @@ Vue.component('infoModal', {
 						</div>
 					</div>
 				</div>`,
-	created: function() {
+	created: function () {
 		console.log(this.item);
 	}
 });
@@ -124,17 +124,14 @@ Vue.component('getCat', {
 			}
 		});
 	},
-	template: `<div class="col-md-3 mt-4"> 
-					<div class="card"> 
-						<div class="card-body"> 
-							<div>{{ data[0].category }} vicini a te:</div> 
-							<ul style="list-style: disc !important; max-height: 20rem; overflow:auto;"><li style="list-style: initial" v-for="element in data[0].response.data">{{ element.name }}</li></ul>
-						</div> 
-					</div> 
+	template: `
+				<div class="list-group d-flex flex-row flex-wrap" style="overflow:auto;" v-if="data != null">
+					<div class="list-group-item list-group-item-action" style="width:49%; margin:0.5%; border-radius:.25rem; border:1px solid rgba(0,0,0,.125);" v-for="element in data[0].response.data">{{ element.name }}</div>
 				</div>`
 });
 
-Vue.component('categories', {
+var cat = Vue.component('categories', {
+	props: ['dataCat', 'dataPosition'],
 	data: function () {
 		return {
 			categories: [],
@@ -143,54 +140,61 @@ Vue.component('categories', {
 			category: null
 		};
 	},
-	template: `<div><div v-show="geoOK && category">Ricevi notifiche sui rivenditori vicini a te, hai selezionato: {{ category }}. Oppure cambia categoria: <select v-model="cat"> 
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
-				</select></div><div v-show="!geoOK">Attiva la geolocalizzazione per esplorare i dintorni</div> 
-				<div v-show="!category && geoOK">Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria: <select v-model="cat"> 
-					<option v-for="category in categories" v-bind:value="category">{{ category.name }}</option> 
-				</select></div></div>`,
+	template: `<h5 style="margin:0;">
+					<div class="row align-items-center" v-if="geoOK && category">
+						<div class="float-md-left col-md-8">{{ _.capitalize(category) }} vicino a te: </div>
+						<div class="float-md-right col-md-4">
+							<label><h6 style="margin:0">Cambia categoria</h6></label>
+							<select v-model="cat" class="custom-select custom-select-sm">
+								<option v-for="category in categories" v-bind:value="category">{{ _.capitalize(category.name) }}</option>
+							</select>
+						</div>
+					</div>
+					<div v-if="!geoOK" style="margin:auto; width:fit-content;">
+						<div style="margin:auto; width:fit-content;"><h3>.·´¯\`(>▂<)´¯\`·.</h3></div>
+						<div class="mt-2">Attiva la geolocalizzazione per esplorare i dintorni</div>
+					</div> 
+					<div v-if="!category && geoOK" class="row align-items-center">
+						<div class="col">
+							Ricevi notifiche sui rivenditori vicini a te, seleziona una categoria:
+							<select v-model="cat" class="custom-select custom-select-sm" style="width:auto;">
+								<option v-for="category in categories" v-bind:value="category">{{ _.capitalize(category.name) }}</option> 
+							</select>
+						</div>
+					</div>
+				</h5>`,
 	watch: {
 		cat: function (val) {
 			localStorage.setItem("category", val.name);
 			toastr['success']('Notifiche attivate per ' + val.name);
 			window.location.reload();
+		},
+		dataCat: function() {
+			this.getData();
 		}
 	},
 	methods: {
 		error: function (error) {
 			this.geoOK = false;
+		},
+		getData: function() {
+			this.geoOK = true;
+			var self = this;
+			this.categories = _.sortBy(this.dataCat, ['name']);
+			if (this.category != null) {
+				this.$emit('done', {
+					cat: self.category,
+					lat: self.dataPosition.coords.latitude,
+					lon: self.dataPosition.coords.longitude
+				});
+			}
 		}
 	},
 	created: function () {
 		var self = this;
+		self.category = localStorage.getItem("category");
 		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (position) {
-				self.geoOK = true;
-				self.category = localStorage.getItem("category");
-				$.get({
-					url: app.path + 'services/lists/categories',
-					success: function (data) {
-						data = _.sortBy(data, ['name']);
-						self.categories = data;
-						console.log(self.category);
-						if (self.category != null) {
-							self.$emit('done', {
-								cat: self.category,
-								lat: position.coords.latitude,
-								lon: position.coords.longitude
-							});
-						}
-					},
-					error: function (error) {
-						alert('Errore nel caricamento delle categorie');
-						console.log(error);
-					}
-				});
-			}, self.error, {
-				enableHighAccuracy: true,
-				timeout: 5000,
-				maximumAge: 0
-			});
+			getLocation();
 		}
 	}
 });
@@ -354,7 +358,9 @@ var app = new Vue({
 		lockSearch: false,
 		item_selected_id: -2,
 		loaded_list: false,
-		showInfoModal: false
+		showInfoModal: false,
+		dataCat: null,
+		dataPosition: null
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -492,8 +498,12 @@ var app = new Vue({
 		infoItemOnModal: function (item) {
 			this.showInfoModal = item;
 		},
-		infoModalClosed: function() {
+		infoModalClosed: function () {
 			this.showInfoModal = false;
+		},
+		positioning: function(data) {
+			this.dataPosition = data[0];
+			this.dataCat = data[1];
 		}
 	},
 	watch: {
@@ -549,7 +559,7 @@ var app = new Vue({
 			// });
 		}
 	},
-	mounted: function() {
+	mounted: function () {
 		this.loaded_list = true;
 	}
 });
@@ -561,7 +571,7 @@ $('#search-input').keydown((e) => {
 	} else if (e.keyCode === 13) {
 		app.searching();
 	}
-	if(app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
+	if (app.item_selected_id == -2 && (e.keyCode === 40 || e.keyCode === 38)) {
 		app.item_selected_id = 0;
 	} else if (e.keyCode === 40) {
 		app.item_selected_id = app.item_selected_id + 1;
@@ -575,3 +585,26 @@ $('#search-input').keydown((e) => {
 		}
 	}
 });
+
+
+function getLocation() {
+	navigator.geolocation.getCurrentPosition(function (position) {
+		$.get({
+			url: app.path + 'services/lists/categories',
+			success: function (data) {
+				app.positioning([position, data]);
+				return;
+			},
+			error: function (error) {
+				alert('Errore nel caricamento delle categorie');
+				console.log(error);
+			}
+		});
+	}, function() {
+		toastr['error']('Non riusciamo a trovare la tua posizione ö');
+	}, {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+	});
+}

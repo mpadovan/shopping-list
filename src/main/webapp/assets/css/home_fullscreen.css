@@ -1,0 +1,35 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 7-nov-2018, 18.12.34
+    Author     : mpado
+*/
+
+
+.fullpage-outer {
+	background: url('http://www.t3basilicata.com/wp-content/uploads/2018/02/agrosat-campi-grano.jpg') no-repeat center center fixed;
+	background-size: cover;
+}
+
+.section {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background-color: transparent;
+	display: table; 
+	width:100%;
+}
+
+.centered {
+  display: table-cell; 
+  vertical-align: middle;
+}
+.intro_top_home {
+	margin:auto;
+	width:fit-content;
+	color: red;
+}
