@@ -140,7 +140,7 @@ var cat = Vue.component('categories', {
 			category: null
 		};
 	},
-	template: `<h5 style="margin:0;">
+	template: `<h4 style="margin:0;">
 					<div class="row align-items-center" v-if="geoOK && category">
 						<div class="float-md-left col-md-8">{{ _.capitalize(category) }} vicino a te: </div>
 						<div class="float-md-right col-md-4">
@@ -162,7 +162,7 @@ var cat = Vue.component('categories', {
 							</select>
 						</div>
 					</div>
-				</h5>`,
+				</h4>`,
 	watch: {
 		cat: function (val) {
 			localStorage.setItem("category", val.name);
@@ -360,7 +360,8 @@ var app = new Vue({
 		loaded_list: false,
 		showInfoModal: false,
 		dataCat: null,
-		dataPosition: null
+		dataPosition: null,
+		listTitle: 'La tua lista'
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -379,6 +380,7 @@ var app = new Vue({
 	methods: {
 		searching: function () {
 			if (this.query != '') {
+				this.listTitle = 'Risultati per: ' + this.query;
 				this.showList = false;
 				this.url = this.path + 'services/products/?search=' + this.query;
 				this.searchInitializing = 'search';
@@ -388,10 +390,9 @@ var app = new Vue({
 		listHided: function () {
 			this.item_selected_id = -2;
 			this.showSearch = true;
-			if (this.items.length === 0)
-				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
 		searchHided: function () {
+			this.listTitle = 'La tua lista';
 			this.showList = true;
 		},
 		addItemToList: function (item) {

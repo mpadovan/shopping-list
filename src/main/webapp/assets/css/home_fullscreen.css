@@ -8,28 +8,31 @@ and open the template in the editor.
     Author     : mpado
 */
 
+.section {
+	padding-top: 15vh;
+	padding-bottom: 15vh;
+}
 
-.fullpage-outer {
+.section:first-of-type {
+	padding:0;
+	margin:0;
+	display: table;
+	width: 100%;
+}
+
+.intro_top_home {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.home {
 	background: url('http://www.t3basilicata.com/wp-content/uploads/2018/02/agrosat-campi-grano.jpg') no-repeat center center fixed;
 	background-size: cover;
+	height:100vh;
 }
 
-.section {
-	border: 0;
-	margin: 0;
-	padding: 0;
-	min-height: 100vh;
-	background-color: transparent;
-	display: table; 
-	width:100%;
-}
-
-.centered {
-  display: table-cell; 
-  vertical-align: middle;
-}
-.intro_top_home {
+.inner_home {
 	margin:auto;
 	width:fit-content;
-	color: red;
+	background-color: rgb(247, 247, 247);
 }
