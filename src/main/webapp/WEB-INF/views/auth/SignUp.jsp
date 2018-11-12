@@ -85,7 +85,7 @@
 								<input class="form-check-input ${ requestScope.privacy != null ? "is-invalid" : ""}"
 									   type="checkbox" value="privacy" name="privacy" id="privacy" required >
 								<label class="form-check-label" for="privacy">
-									Normativa privacy
+									<a href="${pageContext.servletContext.contextPath}/assets/privacy.html">Normativa privacy</a>
 								</label>
 								<div class="invalid-feedback">
 									${requestScope.privacy}
