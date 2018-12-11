@@ -9,23 +9,27 @@
 
 <layouts:empty pageTitle="Landing Page Anonimus">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid" id="app">
-			<div class="row justify-content-center">
-				<div class="col-10 mt-5">
-					<h1 class="text-center mt-3">Prova una lista</h1>
-					<h3 class="text-center mt-3">Per avere tutte le funzionalità:</h3>
-					<div class="row justify-content-center">
-						<div class="col-2 mt-3">
-							<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
+		<div id="app">
+			<div class="section home">
+				<div class="intro_top_home">
+					<div class="inner_home">
+						<h1 style="margin-bottom: 0;" class="display-3 text-center">Ciao! Inizia ad usare la tua prima lista!<br>Scorri in giù per iniziare</h1>
+						<div class="row justify-content-center">
+							<div class="col-2 mt-3">
+								<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
+								</div>
 							</div>
 						</div>
-					</div>
+					</div>					
 				</div>
+			</div>
+			<div class="container-fluid section" style="background-image: linear-gradient(rgba(127, 210, 236, 1), rgba(30, 136, 214, 1));">
 				<transition name="fade">
 					<div class="row justify-content-center" v-show="loaded_list" style="display: none;">
-						<div class="col-md-9 mt-4">
+						<div class="col-md-10 align-self-center">
 							<div class="card">
-								<div class="card-body">
+								<div class="card-header">
+									<h4 style="text-align: center;">{{listTitle}}</h4>
 									<div class="input-group mb-0">
 										<input type="text" class="form-control" v-bind:placeholder="msg" v-model="query" @keyup.enter="searching" id="search-input">
 										<div class="input-group-append">
@@ -59,42 +63,38 @@
 										</div>
 									</transition>
 								</div>
-							</div>
-							<transition name="fade" v-on:after-leave="listHided">
-								<div class="card" id="list" v-if="showList">
-									<div class="card-body">
-										<nav class="navbar navbar-dark bg-primary">
-											<div class="form-group" style="margin-bottom:0;">
-												<categories @done="showCat"></categories>
+								<transition name="fade" v-on:after-leave="listHided">
+									<div id="list" v-if="showList">
+										<div class="card-body">
+											<!--<nav class="navbar navbar-dark bg-primary">
+												<div class="form-group" style="margin-bottom:0;">
+													<categories @done="showCat" v-bind:data-cat="dataCat" v-bind:data-position="dataPosition"></categories>
+												</div>
+											</nav>-->
+											<div class="table-wrapper-2 table-responsive-md">
+												<table class="table table-striped">
+													<thead>
+														<tr>
+															<th scope="col">Nome prodotto</th>
+															<th scope="col">Quantità</th>
+															<th scope="col" colspan="3">Gestisci</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" @update="updateWithModal"
+															@delete="deleteWithModal" @info="infoItemOnModal"></tr>
+													</tbody>
+												</table>
 											</div>
-										</nav>
-										<div class="table-wrapper-2 table-responsive-md">
-											<table class="table table-striped">
-												<thead>
-													<tr>
-														<th scope="col">Nome prodotto</th>
-														<th scope="col">Quantità</th>
-														<th scope="col" colspan="3">Gestisci</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr is="list-item" v-for='item in items' v-bind:key='item.item.name + item.item.id' v-bind:item="item" @update="updateWithModal"
-														@delete="deleteWithModal" @info="infoItemOnModal"></tr>
-												</tbody>
-											</table>
 										</div>
 									</div>
-								</div>
-							</transition>
+								</transition>
+							</div>
 						</div>
-						<transition name="fade">
-							<get-cat v-if="showLocals" v-bind:cat="category" v-bind:lat="lat" v-bind:lon="lon"></get-cat>
-						</transition>
-					</div>
 				</transition>
 				<component v-bind:is="searchInitializing" @search="addResultsToIstance" v-bind:url="url"></component>
 				<div id="item-modal" class="modal" tabindex="-1" role="dialog">
-					<div class="modal-dialog" role="document">
+					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 v-show="updatingItem" class="modal-title">Modifica {{ item_name }}</h5>
@@ -120,9 +120,37 @@
 				<info-modal v-if="showInfoModal" v-bind:item="showInfoModal" @close="infoModalClosed"></info-modal>
 			</div>
 		</div>
+		<div class="section cat-res" style="background-image: linear-gradient(rgba(30, 136, 214, 1), rgba(15, 99, 191, 1));"> 
+			<transition name="fade">
+				<div class="row justify-content-center" style="width:100%; margin: 0;">
+					<div class="col-md-9" style="border:0px; padding:0px; padding-left: 15px; padding-right: 15px;">
+						<div class="card" style="max-height:70vh;">
+							<div class="card-header p-3">
+								<categories @done="showCat" v-bind:data-cat="dataCat" v-bind:data-position="dataPosition"></categories>
+							</div>
+							<get-cat v-if="showLocals" v-bind:cat="category" v-bind:lat="lat" v-bind:lon="lon"></get-cat>
+						</div>
+					</div>
+				</div>
+			</transition>
+		</div>
+		<div class="section" style="background-color: rgba(15, 99, 191, 1);">
+			<div class="row justify-content-center" style="margin:0;">
+				<div class="col-10 mt-5">
+					<h3 class="text-center mt-3 display-4">Accedi ovunque alle tue liste<br>Condividile con i tuoi amici</h3>
+					<div class="row justify-content-center">
+						<div class="col-2 mt-3">
+						<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </jsp:attribute>
 <jsp:attribute name="customCss">
 	<link href="assets/css/landing_page.css" type="text/css" rel="stylesheet" />
+	<link href="assets/css/home_fullscreen.css" type="text/css" rel="stylesheet" />
 </jsp:attribute>
 <jsp:attribute name="customJs">
 	<script src="assets/js/landing_page.js"></script>

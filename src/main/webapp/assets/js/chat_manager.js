@@ -136,6 +136,5 @@ $(document).ready(function () {
 			$('#message-container').scrollTop($('#message-container')[0].scrollHeight);
 		});
 	} catch (e) {
-		console.log('privata');
 	}
 });
