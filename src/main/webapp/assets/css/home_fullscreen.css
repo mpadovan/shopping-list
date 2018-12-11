@@ -34,5 +34,8 @@ and open the template in the editor.
 .inner_home {
 	margin:auto;
 	width:fit-content;
-	background-color: rgb(247, 247, 247);
+}
+
+.display-4, .display-3 {
+	color: white;
 }

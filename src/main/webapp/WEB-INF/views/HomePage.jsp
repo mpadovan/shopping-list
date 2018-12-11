@@ -13,10 +13,11 @@
 			<div class="section home">
 				<div class="intro_top_home">
 					<div class="inner_home">
-						<h1 style="margin-bottom: 0;">Ciao! Inizia ad usare la tua prima lista! Scorri in giù per iniziare</h1>
-						<div class="row justify-content-center m-0">
+						<h1 style="margin-bottom: 0;" class="display-3 text-center">Ciao! Inizia ad usare la tua prima lista!<br>Scorri in giù per iniziare</h1>
+						<div class="row justify-content-center">
 							<div class="col-2 mt-3">
 								<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
+								</div>
 							</div>
 						</div>
 					</div>					
@@ -136,16 +137,16 @@
 		<div class="section" style="background-color: rgba(15, 99, 191, 1);">
 			<div class="row justify-content-center" style="margin:0;">
 				<div class="col-10 mt-5">
-					<h3 class="text-center mt-3">Accedi ovunque alle tue liste, condividile con i tuoi amici</h3>
+					<h3 class="text-center mt-3 display-4">Accedi ovunque alle tue liste<br>Condividile con i tuoi amici</h3>
 					<div class="row justify-content-center">
 						<div class="col-2 mt-3">
-							<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
-							</div>
+						<jsp:include page="./partials/LoginLogoutPartial.jsp"></jsp:include>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 </jsp:attribute>
 <jsp:attribute name="customCss">
 	<link href="assets/css/landing_page.css" type="text/css" rel="stylesheet" />
