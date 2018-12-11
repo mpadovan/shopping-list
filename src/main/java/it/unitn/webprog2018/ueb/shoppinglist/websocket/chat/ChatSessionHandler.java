@@ -23,14 +23,26 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
+ * Session handler for sessions opened with the
+ * {@link it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatWebSocketServer}.
+ * It is responsible for retrieving chats, sending messages and notifying other
+ * connected users.
  *
  * @author Giulia Carocari
  */
 @ApplicationScoped
 public class ChatSessionHandler extends SessionHandler {
 
+	// Used for serialization and desearlization
 	private static final Gson GSON = new Gson();
 
+	/**
+	 * Adds a the message to the chat of a list.
+	 *
+	 * @param message Message to be added
+	 * @return	true if the operation was successful, false otherwise
+	 * @throws DaoException if persisting the message fails in some ways
+	 */
 	public boolean persistMessage(Message message) throws DaoException {
 		if (checkViewPermission(message.getList().getId(), message.getSender().getId())) {
 			getDaoFactory().getMessageDAO().addMessage(message);
@@ -40,6 +52,16 @@ public class ChatSessionHandler extends SessionHandler {
 		}
 	}
 
+	/**
+	 * Retrieves the most recent messages of the chat of a list.
+	 *
+	 * @param userId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param listId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @return	A list of the messages in the chat
+	 * @throws DaoException if retrieving fails in some ways
+	 */
 	public List<Message> getMessages(Integer userId, Integer listId) throws DaoException {
 		if (checkViewPermission(listId, userId)) {
 			User user = new User();
@@ -47,11 +69,20 @@ public class ChatSessionHandler extends SessionHandler {
 			it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 			list.setId(listId);
 			return getDaoFactory().getMessageDAO().getLastMessages(list, user);
-		} else { 
+		} else {
 			return null;
 		}
 	}
 
+	/**
+	 * Retrieves the number of unread messages for a user.
+	 *
+	 * @param userId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @return	A list of chat - count associations represented as a
+	 * ChatWebsocketUnreadCount
+	 * @throws DaoException if retrieving fails in some ways
+	 */
 	public List<ChatWebSocketUnreadCount> getUnreadCount(Integer userId) throws DaoException {
 		Map<Integer, Integer> map = getDaoFactory().getMessageDAO().getUnreadCount(userId);
 		List<ChatWebSocketUnreadCount> ret = new LinkedList<>();
@@ -61,6 +92,16 @@ public class ChatSessionHandler extends SessionHandler {
 		return ret;
 	}
 
+	/**
+	 * Sends an "unread count" notifications to users in the list chat currently
+	 * connected to the web socket server. The notifications run in a distinct
+	 * thread to improve performance.
+	 *
+	 * @param senderId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param listId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 */
 	void notifyNewMessage(Integer senderId, Integer listId) {
 		if (checkViewPermission(listId, senderId)) {
 			NotificationThread notificationThread = new NotificationThread(senderId, listId);
@@ -68,6 +109,10 @@ public class ChatSessionHandler extends SessionHandler {
 		}
 	}
 
+// -------------------------------------------------------------------------- //
+////////////////////// PRIVATE CLASSES AND METHODS /////////////////////////////
+// -------------------------------------------------------------------------- //
+	// Thread that notifies connected users of the new incoming message
 	private class NotificationThread extends Thread {
 
 		private final Integer senderId;
@@ -97,6 +142,7 @@ public class ChatSessionHandler extends SessionHandler {
 		}
 	}
 
+	// Checks if the user can actuallu access the chat
 	private boolean checkViewPermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = SessionHandler.getDaoFactory().getListDAO();

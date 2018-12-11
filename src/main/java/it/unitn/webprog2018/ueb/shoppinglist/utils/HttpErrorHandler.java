@@ -28,9 +28,8 @@ public class HttpErrorHandler {
 			+ " Riprova più tardi o contatta un amministratore";
 	private static String ERROR_MESSAGE_400 = "C'è qualcosa di sbagliato nella tua richiesta. Riprova.";
 	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
-			+ "The resource you are trying to access is none of your business.\n"
-			+ "If you think you have the right to access it, prove it by logging in";
-
+			+ "La risorsa a cui stai cercando di accedere non ti riguarda.\n"
+			+ "Se pensi di avere accesso alla risorsa provalo tramite login.";
 	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
 
 	/**
@@ -69,28 +68,6 @@ public class HttpErrorHandler {
 	}
 
 	/**
-	 * Handles the correct setting to use jsp validation when using a form with
-	 * multipart content.
-	 *
-	 * @param ex	Exception thrown by the servlet
-	 * @param entity	The entity that the form was accessing
-	 * @param response	The response associated with the request object that
-	 * submitted the form data
-	 * @param path	the path to which the response has to be redirected
-	 */
-	/*
-	public static void handleUploadError(Exception ex, AbstractEntity entity, HttpServletResponse response, String path) {
-		// It is not a fatal error, we ask the user to try again
-		Logger.getLogger(ChangeImageAdminServlet.class.getName()).log(Level.WARNING, null, ex);
-		entity.setError("image", "Non è stato possibile salvare l'immagine, riprova più tardi o contatta un amministratore");
-		try {
-			response.sendRedirect(path);
-		} catch (IOException ex1) {
-			Logger.getLogger(HttpErrorHandler.class.getName()).log(Level.SEVERE, null, ex1);
-		}
-	}
-	 */
-	/**
 	 * Handles the response to be committed in case a DaoException is thrown. If
 	 * the exception is an instance of a RecordNotFoundDaoException then the
 	 * response returns Error 404 to the client, else it returns a general Error
@@ -123,7 +100,7 @@ public class HttpErrorHandler {
 	 * Takes charge of handling IOException and checking if the response is
 	 * already committed.
 	 *
-	 * @param response
+	 * @param response response to send the error to
 	 */
 	public static void sendError500(HttpServletResponse response) {
 		if (!response.isCommitted()) {
@@ -136,10 +113,11 @@ public class HttpErrorHandler {
 	}
 
 	/**
+	 * Handles an Unathorized error response.
 	 * Takes charge of handling IOException and checking if the response is
 	 * already committed.
 	 *
-	 * @param response
+	 * @param response response to send the error to
 	 */
 	public static void sendError401(HttpServletResponse response) {
 		if (!response.isCommitted()) {
@@ -151,6 +129,13 @@ public class HttpErrorHandler {
 		}
 	}
 
+	/**
+	 * Handles a Bad Request error response.
+	 * Takes charge of handling IOException and checking if the response is
+	 * already committed.
+	 *
+	 * @param response response to send the error to
+	 */
 	public static void sendError400(HttpServletResponse response) {
 		if (!response.isCommitted()) {
 			try {

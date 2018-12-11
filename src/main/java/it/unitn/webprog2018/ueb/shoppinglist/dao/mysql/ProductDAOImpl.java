@@ -150,10 +150,6 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO{
 		return valid;
 	}
 	
-	/**
-	 * ATTENZIONE: gli owner dei prodotti restituiti sono null per alleggerire
-	 * la Query (dato che il chiamante conosce giá l'utente)
-	 */
 	@Override
 	public List<Product> getByUser(Integer userId, String matching) throws DaoException {
 		List<Product> list = new ArrayList<>();

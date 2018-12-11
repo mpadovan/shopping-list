@@ -24,6 +24,9 @@ import javax.validation.constraints.NotNull;
 @ApplicationScoped
 public class UploadHandler {
 
+	/**
+	 * Type of image file that can be uploaded to the application
+	 */
 	public static enum FILE_TYPE {
 		AVATAR,
 		LIST_IMAGE,
@@ -36,12 +39,14 @@ public class UploadHandler {
 	}
 
 	/**
+	 * Handles the upload of a file given its part, the {@link FILE_TYPE} and the entity type it is
+	 * associated to.
 	 *
-	 * @param filePart
-	 * @param type
-	 * @param entity 
-	 * @param context
-	 * @return
+	 * @param filePart File part that contains the file to be saved on the server
+	 * @param type	Type of the image to be uploaded
+	 * @param entity 	The entity to which this image is associated
+	 * @param context	Servlet context of the application
+	 * @return	The URI of the uploaded image
 	 * @throws java.io.IOException
 	 */
 	public String uploadFile(@NotNull Part filePart, @NotNull FILE_TYPE type, @NotNull AbstractEntity entity, ServletContext context)
@@ -96,10 +101,11 @@ public class UploadHandler {
 	}
 	
 	/**
+	 * Deletes a file from the server given its uri
 	 * 
-	 * @param URI
-	 * @param context
-	 * @return 
+	 * @param URI	URI of the file to be deleted
+	 * @param context	Servlet context of the application
+	 * @return True if deletion was successful
 	 */
 	public boolean deleteFile(String URI, ServletContext context) {
 		String uploadFolder = (String) context.getAttribute("uploadFolder");

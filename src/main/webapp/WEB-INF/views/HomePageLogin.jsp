@@ -71,7 +71,7 @@
 											<u>${requestScope.currentList.name}</u></a>
 									</h5>
 
-									<c:if test="${!empty requestScope.sharedUsers}">
+									<c:if test="${sessionScope.sharedLists.contains(requestScope.currentList)}">
 										<div class="d-flex justify-content-end">
 
 											<p class="pointer" @click="chat = !chat">Chat

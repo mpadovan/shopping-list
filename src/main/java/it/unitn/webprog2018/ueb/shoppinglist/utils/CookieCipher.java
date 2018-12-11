@@ -9,6 +9,9 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Class for encrypting puroposes. It is used to encrypt usernames to be used in cookies.
+ */
 public class CookieCipher {
 
 	private static final String KEY = "b#e^s&t*g!r5o2up"; //must be with exactly 16 characters
@@ -16,6 +19,11 @@ public class CookieCipher {
 	private static SecretKeySpec secretKey;
 	private static Cipher cipher;
 
+	/**
+	 * Encrypts a string
+	 * @param value String to be encrypted
+	 * @return the encrypted string
+	 */
 	public static String encrypt(String value) {
 		generateKey();
 		byte[] output = new byte[value.length()];
@@ -29,6 +37,11 @@ public class CookieCipher {
 		return Base64.getEncoder().encodeToString(output).replace('+', '-').replace('/', '_').replaceAll("%", "%25").replaceAll("\n", "%0A");
 	}
 
+	/**
+	 * Decrypts a string encrypted using this cypher
+	 * @param value the encrypted string to be decryped
+	 * @return the decryped string
+	 */
 	public static String decrypt(String value) {
 		generateKey();
 		// 

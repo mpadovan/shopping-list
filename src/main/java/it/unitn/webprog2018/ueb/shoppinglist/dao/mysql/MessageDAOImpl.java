@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,9 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 	public List<Message> getLastMessages(it.unitn.webprog2018.ueb.shoppinglist.entities.List list, User user) throws DaoException {
 		List<Message> listOut = new ArrayList<>();
 		try{
-			String query =	"SELECT m.id,m.sendtime,m.text,m.iduser,u.name,u.lastname FROM messages m inner join users u on m.iduser = u.id WHERE m.idlist = ? ORDER BY sendtime limit 30";
+			String query =	"SELECT m.id,m.sendtime,m.text,m.iduser,u.name,u.lastname "
+					+ "FROM messages m inner join users u on m.iduser = u.id "
+					+ "WHERE m.idlist = ? ORDER BY sendtime DESC limit 30";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, list.getId());
 			ResultSet rs = st.executeQuery();
@@ -71,6 +74,7 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 			}
 			rs.close();
 			st.close();
+			Collections.reverse(listOut);
 			return listOut;
 		}
 		catch(SQLException ex){

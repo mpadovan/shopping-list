@@ -72,12 +72,20 @@ var chat = new Vue({
 			var data = JSON.parse(e.data);
 			switch (data.operation) {
 				case "2":
-					data.payload.forEach(element => {
-						if (element.listId === app.list) {
-							toastr['success']('Hai ' + element.unreadCount + ' messaggi non letti su questa lista');
-						}
-						//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
-					});
+					if ($('#chat').css('display') == 'none') {
+						data.payload.forEach(element => {
+							if (element.listId === app.list) {
+								toastr['success']('Hai ' + element.unreadCount + ' messaggi non letti su questa lista');
+							}
+							//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
+						});
+					} else {
+						var msg = {
+							operation: 1,
+							payload: app.list
+						};
+						Socket.send(JSON.stringify(msg));
+					}
 					break;
 				case "3":
 					this.manageMessages(data.payload);
@@ -87,6 +95,7 @@ var chat = new Vue({
 		},
 		send: function () {
 			if (this.text) {
+				this.message.operation = 0;
 				this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
 				this.message.payload.list.id = app.list;
 				this.message.payload.sender.id = this.user;
@@ -105,6 +114,14 @@ var chat = new Vue({
 					this.messages[j].isMine = 'message-r';
 			}
 		}
+	},
+	updated: function () {
+		if (this.text == null || this.text == '') {
+			var elem = document.getElementById('message-container');
+			console.log(elem.scrollHeight);
+			elem.scrollTop = elem.scrollHeight;
+		}
+		;
 	}
 });
 
