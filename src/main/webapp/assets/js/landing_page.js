@@ -145,7 +145,7 @@ Vue.component('list-item', {
 	props: ['item'],
 	computed: {
 		capitalized: function () {
-			console.log(this.item);
+			console.log(this.item.item.name);
 			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
@@ -167,7 +167,7 @@ Vue.component('list-item', {
 		}
 	},
 	template: '<tr> \
-				<td>{{ capitalized }}</td> \
+				<td>{{ item.item.name }}</td> \
 				<td>{{ item.amount }}</td> \
 				<td>{{ item.item.note }}</td> \
 				<td>{{ item.item.category.name }}</td> \
@@ -304,10 +304,11 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
+			console.log(item.item.id);
 			var settings = {
 				method: 'POST',
 				url: app.path + 'services/lists/anon/' + app.token + '/product',
-				data: '{' + item.item.id + '}',
+				data: '' + item.item.id + '',
 				headers: {
 					"Content-Type": "application/json",
 					"Cache-Control": "no-cache"
@@ -323,9 +324,6 @@ var app = new Vue({
 			}
 			item.amount = 1;
 			this.items.push(item);*/
-		},
-		updateLocalStorage: function () {
-			localStorage.setItem("items", JSON.stringify(this.items));
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
@@ -448,9 +446,6 @@ var app = new Vue({
 				app.searching();
 			}
 		},
-		items: function (val) {
-			this.updateLocalStorage();
-		},
 		selected: function (val) {
 			if (val == 'all') {
 				this.resultsSorted = this.results;
@@ -468,6 +463,9 @@ var app = new Vue({
 			}
 			$('#item' + this.item_selected_id).addClass('selected');
 			console.log(this.item_selected_id);
+		},
+		items: function(val) {
+			console.log(val);
 		}
 	},
 	created: function () {
@@ -476,6 +474,7 @@ var app = new Vue({
 		$.get({
 			url: self.path + 'services/lists/anon/' + self.token + '/product',
 			success: function (res) {
+				res = JSON.parse(res);
 				for (var i = 0; i < res.length; i++) {
 					res[i].item = res[i].product;
 				}

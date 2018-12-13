@@ -536,7 +536,7 @@ public class ListWebService {
 	public String getProductsOnAnonList(@PathParam("token") String token) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 		Map<PublicProduct, Integer> productsOnList;
-		Gson gson = CustomGsonBuilder.create(true);
+		Gson gson = CustomGsonBuilder.create(false);
 		String json = null;
 		try {
 			productsOnList = listDAO.getProductsOnList(token);
@@ -556,6 +556,8 @@ public class ListWebService {
 					char[] tmp = json.toCharArray();
 					tmp[json.lastIndexOf(",")] = ']';
 					json = new String(tmp);
+				} else {
+					json += ']';
 				}
 			} catch (JsonException ex) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
@@ -596,7 +598,7 @@ public class ListWebService {
 		}
 		PublicProduct product = new PublicProduct();
 		product.setId(productId);
-
+		System.out.println(content);
 		try {
 			// check if product is already on list, then increase amount by one or newly insert the product
 			Map<PublicProduct, Integer> prodOnList = listDAO.getProductsOnList(token);

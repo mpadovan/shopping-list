@@ -946,7 +946,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		Map<PublicProduct, Integer> ret = new HashMap<>();
 		try {
 			String query = "SELECT P.id, P.idproductscategory, P.logo, P.name, P.note, P.photography, L.quantity "
-					+ "FROM anonlists L inner join publicproducts P "
+					+ "FROM anonlists L inner join publicproducts P on L.publicproductid = P.id "
 					+ "WHERE tokenid = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
