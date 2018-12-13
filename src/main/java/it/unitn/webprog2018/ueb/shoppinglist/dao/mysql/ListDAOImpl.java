@@ -26,11 +26,11 @@ import java.util.logging.Logger;
  * @author Michele
  */
 public class ListDAOImpl extends AbstractDAO implements ListDAO {
-
+	
 	public ListDAOImpl(Connection con, DAOFactory dAOFactory) {
 		super(con, dAOFactory);
 	}
-
+	
 	/**
 	 * ATTENZIONE: non da e-mail, password e image degli owner
 	 */
@@ -52,7 +52,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			if (rs.first()) {
 				User user = new User();
 				ListsCategory lc = new ListsCategory();
-
+				
 				list.setId(id);
 				list.setName(rs.getString(i++));
 				user.setId(rs.getInt(i++));
@@ -69,7 +69,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 				user.setPassword("");
 				list.setOwner(user);
 				list.setCategory(lc);
-
+				
 				rs.close();
 				st.close();
 				return list;
@@ -80,7 +80,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public List getList(String name, User owner) throws DaoException {
 		try {
@@ -106,7 +106,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 				list.setName(name);
 				list.setCategory(lc);
 				list.setOwner(owner);
-
+				
 				rs.close();
 				st.close();
 				return list;
@@ -117,7 +117,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Map<PublicProduct, Integer> getPublicProductsOnList(Integer listId) throws DaoException {
 		Map<PublicProduct, Integer> list = new HashMap<>();
@@ -163,7 +163,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/**
 	 * ATTENZIONE: non da e-mail, password e image degli owner
 	 */
@@ -221,7 +221,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/**
 	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate
 	 * updateAmount()
@@ -245,7 +245,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	/**
 	 * ATTENZIONE: la quantitá é settata a 1, se volete cambiarla chiamate
 	 * updateAmount()
@@ -269,7 +269,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean isOnList(Integer listId, PublicProduct product) throws DaoException {
 		Boolean exist;
@@ -283,7 +283,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				exist = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return exist;
@@ -294,7 +294,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean isOnList(Integer listId, Product product) throws DaoException {
 		Boolean exist;
@@ -308,7 +308,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				exist = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return exist;
@@ -319,7 +319,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product, Integer newAmount) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -349,7 +349,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateAmount(Integer listId, Product product, Integer newAmount) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -379,7 +379,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateAmount(Integer listId, PublicProduct product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -405,7 +405,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateAmount(Integer listId, Product product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -431,7 +431,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean hasAddDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -443,7 +443,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return hasPermission;
@@ -454,7 +454,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean hasModifyPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -466,7 +466,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return hasPermission;
@@ -477,7 +477,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean hasDeletePermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -489,7 +489,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return hasPermission;
@@ -500,7 +500,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/**
 	 * ATTENZIONE: l'owner é null
 	 */
@@ -542,7 +542,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean deleteFromList(Integer listId, PublicProduct product) throws DaoException {
 		Boolean valid = product.isVaildOnDestroy(dAOFactory);
@@ -565,7 +565,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean deleteFromList(Integer listId, Product product) throws DaoException {
 		Boolean valid = product.isVaildOnDestroy(dAOFactory);
@@ -588,7 +588,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean hasViewPermission(Integer listId, Integer userId) throws DaoException {
 		Boolean hasPermission;
@@ -600,7 +600,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.first()) {
 				hasPermission = rs.getInt(1) == 1;
-
+				
 				rs.close();
 				st.close();
 				return hasPermission;
@@ -611,7 +611,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public java.util.List<Integer> getConnectedUsersIds(Integer listId) throws DaoException {
 		java.util.List<Integer> list = new ArrayList<>();
@@ -638,10 +638,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/*
-		Questo metodo deve ritornare tutte le liste dello user escluse quelle che si trovano nella tabella sharedlists
-	 */
+	Questo metodo deve ritornare tutte le liste dello user escluse quelle che si trovano nella tabella sharedlists
+	*/
 	@Override
 	public java.util.List<List> getPersonalLists(Integer id) throws DaoException {
 		java.util.List<List> list = new ArrayList<>();
@@ -667,7 +667,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 				lc.setId(rs.getInt(i++));
 				l.setDescription(rs.getString(i++));
 				l.setImage(rs.getString(i++));
-
+				
 				l.setOwner(u);
 				l.setCategory(lc);
 				list.add(l);
@@ -680,12 +680,12 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	/*
-		Questo metodo deve restituire tutte le liste per cui vale:
-		- user è owner e ci sono entry corrispondenti alla lista in sharedLists
-		- user non è owner ma ci sono entry con la sua id in sharedlists per quella lista
-	 */
+	Questo metodo deve restituire tutte le liste per cui vale:
+	- user è owner e ci sono entry corrispondenti alla lista in sharedLists
+	- user non è owner ma ci sono entry con la sua id in sharedlists per quella lista
+	*/
 	@Override
 	public java.util.List<List> getSharedLists(Integer id) throws DaoException {
 		java.util.List<List> list = new ArrayList<>();
@@ -712,7 +712,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 				lc.setId(rs.getInt(i++));
 				l.setDescription(rs.getString(i++));
 				l.setImage(rs.getString(i++));
-
+				
 				l.setOwner(u);
 				l.setCategory(lc);
 				list.add(l);
@@ -725,7 +725,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	//Restituisce solo l'id dell'utente
 	@Override
 	public java.util.List<User> getConnectedUsers(Integer listId) throws DaoException {
@@ -744,7 +744,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 				u.setEmail(rs.getString(2));
 				list.add(u);
 			}
-
+			
 			rs.close();
 			st.close();
 			return list;
@@ -753,7 +753,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new DaoException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean deleteList(Integer listId) throws DaoException {
 		try {
@@ -771,14 +771,23 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
 		try {
-			String query = "insert into sharedlists (iduser,idlist) values (?,?)";
+			boolean insertOwner = false;
+			String query = "insert into sharedlists (iduser,idlist) values (?,?);";
+			if(getConnectedUsers(list.getId()).size() == 0){
+				query += "insert into sharedlists (iduser,idlist) values (?,?);";
+				insertOwner = true;
+			}
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, idpartecipant);
 			st.setInt(2, list.getId());
+			if(insertOwner){
+				st.setInt(3, list.getOwner().getId());
+				st.setInt(4, list.getId());
+			}
 			int count = st.executeUpdate();
 			st.close();
 			return count == 1;
@@ -787,7 +796,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 			throw new UpdateException(ex);
 		}
 	}
-
+	
 	@Override
 	public Boolean addList(List list) throws DaoException {
 		Boolean valid = list.isVaildOnCreate(dAOFactory);
@@ -818,7 +827,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateList(Integer id, List list) throws DaoException {
 		Boolean valid = list.isVaildOnUpdate(dAOFactory);
@@ -873,7 +882,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateAmount(String token, PublicProduct product, Integer newAmount) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -903,7 +912,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean updateAmount(String token, PublicProduct product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnUpdate(dAOFactory);
@@ -929,7 +938,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException {
 		Boolean valid = product.isVaildOnDestroy(dAOFactory);
@@ -952,5 +961,5 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-
+	
 }
