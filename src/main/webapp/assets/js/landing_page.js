@@ -167,7 +167,7 @@ Vue.component('list-item', {
 		}
 	},
 	template: '<tr> \
-				<td>{{ item.item.name }}</td> \
+				<td>{{ capitalized }}</td> \
 				<td>{{ item.amount }}</td> \
 				<td>{{ item.item.note }}</td> \
 				<td>{{ item.item.category.name }}</td> \
@@ -277,9 +277,6 @@ var app = new Vue({
 			}
 
 			return temp;
-		},
-		path: function () {
-			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
@@ -314,7 +311,7 @@ var app = new Vue({
 					"Cache-Control": "no-cache"
 				}
 			};
-			ajaxFunction(settings, true);
+			ajaxFunction(settings, true, item.item.name);
 			/*for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
@@ -334,8 +331,8 @@ var app = new Vue({
 		updateComponent: function () {
 			var settings = {
 				method: 'PUT',
-				url: app.path + 'services/lists/anon/' + app.token + '/product',
-				data: '{' + this.item_name + '}',
+				url: app.path + 'services/lists/anon/' + app.token + '/product/' + this.item_id,
+				data: '' + this.item_amount + '',
 				headers: {
 					"Content-Type": "application/json",
 					"Cache-Control": "no-cache"
@@ -360,8 +357,7 @@ var app = new Vue({
 		deleteComponent: function () {
 			var settings = {
 				method: 'DELETE',
-				url: app.path + 'services/lists/anon/' + app.token + '/product',
-				data: '{' + this.item_amount + '}',
+				url: app.path + 'services/lists/anon/' + app.token + '/product/' + this.item_id,
 				headers: {
 					"Content-Type": "application/json",
 					"Cache-Control": "no-cache"
@@ -471,6 +467,7 @@ var app = new Vue({
 	created: function () {
 		var self = this;
 		this.token = Cookies.get('anonToken');
+		this.path = _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		$.get({
 			url: self.path + 'services/lists/anon/' + self.token + '/product',
 			success: function (res) {
@@ -528,9 +525,9 @@ $('#search-input').keydown((e) => {
 	}
 });
 
-function ajaxFunction(data, isNew) {
+function ajaxFunction(data, isNew, item_name) {
 	$.ajax(data).done(function (res) {
-		if(isNew) toastr["success"](item.item.name + ' aggiunto');
+		if(isNew) toastr["success"](item_name + ' aggiunto');
 		updateView();
 	}).fail(function (e) {
 		updateView();
@@ -541,6 +538,7 @@ function updateView() {
 	$.get({
 		url: app.path + 'services/lists/anon/' + app.token + '/product',
 		success: function (res) {
+			res = JSON.parse(res);
 			for (var i = 0; i < res.length; i++) {
 				res[i].item = res[i].product;
 			}
