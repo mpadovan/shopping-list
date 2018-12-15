@@ -858,11 +858,10 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 		}
 		return valid;
 	}
-	
+
 	// ---------------------------------------------------------------------- //
 	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
 	// ---------------------------------------------------------------------- //
-	
 	@Override
 	public Boolean addProduct(String token, PublicProduct product) throws DaoException {
 		Boolean valid = true; // product.isVaildOnCreate(dAOFactory);
@@ -941,25 +940,52 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 	
 	@Override
 	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException {
-		Boolean valid = product.isVaildOnDestroy(dAOFactory);
-		if (valid) {
-			try {
-				String query = "DELETE FROM anonlists WHERE tokenid = ? AND publicproductid = ?";
-				PreparedStatement st = this.getCon().prepareStatement(query);
-				st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
-				st.setInt(2, product.getId());
-				int count = st.executeUpdate();
-				st.close();
-				if (count != 1) {
-					throw new RecordNotFoundDaoException("product " + product.getId() + " not found in anonuser " + Integer.parseInt(CookieCipher.decrypt(token)));
-				}
-				return valid;
-			} catch (SQLException ex) {
-				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-				throw new UpdateException(ex);
+		try {
+			String query = "DELETE FROM anonlists WHERE tokenid = ? AND publicproductid = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
+			st.setInt(2, product.getId());
+			int count = st.executeUpdate();
+			st.close();
+			if (count != 1) {
+				throw new RecordNotFoundDaoException("product " + product.getId() + " not found in anonuser " + Integer.parseInt(CookieCipher.decrypt(token)));
 			}
+		} catch (SQLException ex) {
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new UpdateException(ex);
 		}
-		return valid;
+		return true;
+	}
+
+	@Override
+	public Map<PublicProduct, Integer> getProductsOnList(String token) throws DaoException {
+
+		Map<PublicProduct, Integer> ret = new HashMap<>();
+		try {
+			String query = "SELECT P.id, P.idproductscategory, P.logo, P.name, P.note, P.photography, L.quantity "
+					+ "FROM anonlists L inner join publicproducts P on L.publicproductid = P.id "
+					+ "WHERE tokenid = ?";
+			PreparedStatement st = this.getCon().prepareStatement(query);
+			st.setInt(1, Integer.parseInt(CookieCipher.decrypt(token)));
+			ResultSet res = st.executeQuery();
+			int i;
+			while (res.next()) {
+				i = 1;
+				PublicProduct p = new PublicProduct();
+				p.setId(res.getInt(i++));
+				p.setCategory(dAOFactory.getProductsCategoryDAO().getById(res.getInt(i++)));
+				p.setLogo(res.getString(i++));
+				p.setName(res.getString(i++));
+				p.setNote(res.getString(i++));
+				p.setPhotography(res.getString(i++));
+				ret.put(p, res.getInt(i++));
+			}
+			st.close();
+		} catch (SQLException ex) {
+			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+			throw new RecordNotFoundDaoException(ex);
+		}
+		return ret;
 	}
 	
 }

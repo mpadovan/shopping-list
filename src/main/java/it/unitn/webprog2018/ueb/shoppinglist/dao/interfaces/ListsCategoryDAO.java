@@ -38,4 +38,11 @@ public interface ListsCategoryDAO {
 	 * @return true if the match was successful
 	 */
 	public Boolean setListCategory(String token, ListsCategory listsCategory) throws DaoException;
+	
+	/**
+	 * Returns the list category associated with an anonymous list
+	 * @param token	List identifier
+	 * @return The list category
+	 */
+	public ListsCategory getListCategory(String token) throws DaoException;
 }

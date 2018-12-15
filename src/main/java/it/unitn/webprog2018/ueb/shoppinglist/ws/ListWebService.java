@@ -38,7 +38,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
- * REST Web Service
+ * REST Web Service for asynchronous list handling. It provides methods for both
+ * logged users (identified by the <code>userId</code> and anonymous users
+ * (identified by the <code>token</code>). Operations on list categories and
+ * products on the list are provided.
+ *
+ * @see
+ * it.unitn.webprog2018.ueb.shoppinglist.servlets.HomePageServlet#doGet(javax.servlet.http.HttpServletRequest,
+ * javax.servlet.http.HttpServletResponse) for anon token generation.
  *
  * @author Giulia Carocari
  */
@@ -56,15 +63,20 @@ public class ListWebService {
 	public ListWebService() {
 	}
 
-	// ---------------------------------------------------------------------- //
-	//////////////////////////// COMMON METHODS ////////////////////////////////
-	// ---------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
+////////////////////////////// COMMON METHODS //////////////////////////////////
+// -------------------------------------------------------------------------- //
 	/**
-	 * Retrieves representation of the possible categories of a list
+	 * Retrieves representation of the possible list category entities
 	 *
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
-	 * @return an instance of java.lang.String
+	 * @return an instance of java.lang.String representing, in Json format, a
+	 * {@link java.util.List} of
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory}
+	 *
+	 * @see
+	 * it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO#getFromQuery(java.lang.String)
 	 */
 	@GET
 	@Path("/categories")
@@ -100,15 +112,22 @@ public class ListWebService {
 		return null;
 	}
 
-	// ---------------------------------------------------------------------- //
-	///////////////////////// LOGGED USER METHODS //////////////////////////////
-	// ---------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
+/////////////////////////// LOGGED USER METHODS ////////////////////////////////
+// -------------------------------------------------------------------------- //
 	/**
 	 * Retrieves all the products in a list
 	 *
-	 * @param listId
-	 * @param userId
-	 * @return an instance of java.lang.String
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 *
+	 * @return an instance of java.lang.String representing, in Json format, a
+	 * {@link java.util.List} of
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product} and
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 * mapped to their respective amount on the list
 	 */
 	@GET
 	@Path("/restricted/{userId}/permission/{listId}/products")
@@ -194,11 +213,15 @@ public class ListWebService {
 
 	/**
 	 * Adds a PUBLIC product to a list. If the product is already present, its
-	 * amount on the list is incremented by 1.
+	 * amount on the list is incremented by 1. The action may only be performed
+	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param userId
-	 * @param listId
-	 * @param content body of the request
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param content	body of the request in the form of { "id" : product_id }
+	 * (more information may be provided but is not relevant)
 	 */
 	@POST
 	@Path("/restricted/{userId}/permission/{listId}/products/public")
@@ -230,10 +253,13 @@ public class ListWebService {
 
 	/**
 	 * Adds a PERSONAL product to a	list. If the product is already present, its
-	 * amount on the list is incremented by 1.
+	 * amount on the list is incremented by 1. The action may only be performed
+	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param listId id of the list that is to be modified
-	 * @param userId id of the user making the request
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
@@ -275,11 +301,16 @@ public class ListWebService {
 
 	/**
 	 * Edits the amount of a PERSONAL product on a list. If the product is
-	 * already present, its amount on the list is incremented by 1.
+	 * already present, its amount on the list is incremented by 1. The action
+	 * may only be performed if the user has the permission to edit the products
+	 * on the list.
 	 *
-	 * @param userId
-	 * @param listId
-	 * @param productId
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param productId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
@@ -320,11 +351,16 @@ public class ListWebService {
 
 	/**
 	 * Edits the amount of a PUBLIC product on a list. If the product is already
-	 * present, its amount on the list is incremented by 1.
+	 * present, its amount on the list is incremented by 1.The action may only
+	 * be performed if the user has the permission to edit the products on the
+	 * list.
 	 *
-	 * @param userId
-	 * @param listId
-	 * @param productId
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param productId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
@@ -364,11 +400,15 @@ public class ListWebService {
 	}
 
 	/**
-	 * Removes a PERSONAL product from a list.
+	 * Removes a PERSONAL product from a list. The action may only be performed
+	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param userId
-	 * @param listId id of the list to be edited
-	 * @param productId	id of the product to be deleted
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param productId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
@@ -389,11 +429,15 @@ public class ListWebService {
 	}
 
 	/**
-	 * Removes a public product from a list.
+	 * Removes a public product from a list. The action may only be performed if
+	 * the user has the permission to edit the products on the list.
 	 *
-	 * @param userId
-	 * @param listId
-	 * @param productId
+	 * @param listId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
+	 * @param userId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
+	 * @param productId	unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
 	 */
 	@DELETE
 	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
@@ -413,49 +457,220 @@ public class ListWebService {
 		}
 	}
 
-	// ---------------------------------------------------------------------- //
-	//////////////////////// ANONYMOUS USER METHODS ////////////////////////////
-	// ---------------------------------------------------------------------- //
-	
+// -------------------------------------------------------------------------- //
+////////////////////////// ANONYMOUS USER METHODS //////////////////////////////
+// -------------------------------------------------------------------------- //
+	/**
+	 * Sets the list category of an anonymous list.
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @param content Json representation of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory} Only
+	 * id is necessary; more information may be provided but is irrelevant.
+	 */
 	@PUT
 	@Path("/anon/{token}/listCategory")
-	public void setAnonCategory(String content) {
-		
+	public void setAnonCategory(@PathParam("token") String token, String content) {
+		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
+		Gson gson = new Gson();
+		ListsCategory listsCategory;
+		try {
+			listsCategory = gson.fromJson(content, ListsCategory.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+
+		try {
+			listsCategoryDAO.setListCategory(token, listsCategory);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
+	/**
+	 * Retrieves the list category associated with an anonymous list.
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @return Json representation of
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory}
+	 */
 	@GET
 	@Path("/anon/{token}/listCategory")
-	public String getAnonCategory(String content) {
-		return "";
+	public String getAnonCategory(@PathParam("token") String token) {
+		try {
+			ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
+			ListsCategory listsCategory = listsCategoryDAO.getListCategory(token);
+			Gson gson = CustomGsonBuilder.create(false); // sending all the information
+			String json;
+			try {
+				json = gson.toJson(listsCategory, ListsCategory.class);
+			} catch (JsonException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+				HttpErrorHandler.sendError500(response);
+				return null;
+			}
+			return json;
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+		return null;
 	}
-	
+
+	/**
+	 * Retrieves a json representation of all (public) products on an anonymous
+	 * list. The products are all mapped to their amount. The Json
+	 * representation is an array in the form: [ { "product" : {}, "amount" : x
+	 * }, {...}, ...]
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @return Json representation of a list (array) of
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 * linked to their amount, represented as {@link java.lang.Integer}
+	 */
 	@GET
 	@Path("/anon/{token}/product")
 	public String getProductsOnAnonList(@PathParam("token") String token) {
-		return "";
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Map<PublicProduct, Integer> productsOnList;
+		Gson gson = CustomGsonBuilder.create(false);
+		String json = null;
+		try {
+			productsOnList = listDAO.getProductsOnList(token);
+			json = "[";
+			try {
+				for (Map.Entry<PublicProduct, Integer> entry : productsOnList.entrySet()) {
+					try {
+						json += "{\"product\":" + gson.toJson(entry.getKey()) + ","
+								+ "\"amount\":" + entry.getValue().toString() + "},";
+					} catch (JsonSyntaxException ex) {
+						Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+						HttpErrorHandler.sendError500(response);
+						return null;
+					}
+				}
+				if (json.endsWith(",")) {
+					char[] tmp = json.toCharArray();
+					tmp[json.lastIndexOf(",")] = ']';
+					json = new String(tmp);
+				} else {
+					json += ']';
+				}
+			} catch (JsonException ex) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+				HttpErrorHandler.sendError500(response);
+				return null;
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
+
+		return json;
 	}
-	
+
+	/**
+	 * Adds a (public) product to an anonymous list. If the product is already
+	 * present on the list then its amount is increased by 1. The content of the
+	 * post request must be in the form of { _id }.
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @param content Json representation of a single integer representing the
+	 * id of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct} to
+	 * be added on the list
+	 */
 	@POST
 	@Path("/anon/{token}/product")
 	public void addProductOnAnonList(@PathParam("token") String token, String content) {
-		
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Gson gson = new Gson();
+		Integer productId;
+		try {
+			productId = gson.fromJson(content, Integer.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+		System.out.println(content);
+		try {
+			// check if product is already on list, then increase amount by one or newly insert the product
+			Map<PublicProduct, Integer> prodOnList = listDAO.getProductsOnList(token);
+			if (prodOnList.containsKey(product)) {
+				listDAO.updateAmount(token, product);
+			} else {
+				listDAO.addProduct(token, product);
+			}
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
+	/**
+	 * Updates the amount of a (public) product on an anonymous list. The
+	 * content of the post request must be in the form of { _newAmount }.
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @param productId Unique identifier of the {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 * @param content Json representation of a single integer that is the new amount of the product on the list.
+	 */
 	@PUT
-	@Path("/anon/{token}/product")
-	public String updateProductOnAnonList(@PathParam("token") String token, String content) {
-		return "";
+	@Path("/anon/{token}/product/{prod_id}")
+	public void updateProductOnAnonList(@PathParam("token") String token,
+			@PathParam("prod_id") Integer productId, String content) {
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		Gson gson = new Gson();
+		Integer newAmount = null;
+		try {
+			newAmount = gson.fromJson(content, Integer.class);
+		} catch (JsonSyntaxException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.sendError500(response);
+			return;
+		}
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+
+		try {
+			listDAO.updateAmount(token, product, newAmount);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
+
+	/**
+	 * Deletes a (public) product from an anonymous list.
+	 *
+	 * @param token	Unique identifier of the anonymous list
+	 * @param productId Unique identifier of the {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 */
 	@DELETE
-	@Path("/anon/{token}/product")
-	public void deleteProductsFromAnonList(@PathParam("token") String token) {
-		
+	@Path("/anon/{token}/product/{prod_id}")
+	public void deleteProductsFromAnonList(@PathParam("token") String token,
+			@PathParam("prod_id") Integer productId) {
+		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		PublicProduct product = new PublicProduct();
+		product.setId(productId);
+
+		try {
+			listDAO.deleteFromList(token, product);
+		} catch (DaoException ex) {
+			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
+			HttpErrorHandler.handleDAOException(ex, response);
+		}
 	}
-	
-	// ---------------------------------------------------------------------- //
-	//////////////////////////// PRIVATE METHODS ///////////////////////////////
-	// ---------------------------------------------------------------------- //
+
+// -------------------------------------------------------------------------- //
+////////////////////////////// PRIVATE METHODS /////////////////////////////////
+// -------------------------------------------------------------------------- //
 	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();

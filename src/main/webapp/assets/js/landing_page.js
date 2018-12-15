@@ -228,7 +228,7 @@ Vue.component('list-item', {
 	props: ['item'],
 	computed: {
 		capitalized: function () {
-			console.log(this.item);
+			console.log(this.item.item.name);
 			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
@@ -399,8 +399,18 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
-			toastr["success"](item.item.name + ' aggiunto');
-			for (var i = 0; this.items.length > i; i++) {
+			console.log(item.item.id);
+			var settings = {
+				method: 'POST',
+				url: app.path + 'services/lists/anon/' + app.token + '/product',
+				data: '' + item.item.id + '',
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			ajaxFunction(settings, true, item.item.name);
+			/*for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == item.item.name && this.items[i].item.id == item.item.id) {
 					this.items[i].amount++;
 					this.updateLocalStorage();
@@ -408,10 +418,7 @@ var app = new Vue({
 				}
 			}
 			item.amount = 1;
-			this.items.push(item);
-		},
-		updateLocalStorage: function () {
-			localStorage.setItem("items", JSON.stringify(this.items));
+			this.items.push(item);*/
 		},
 		updateWithModal: function (val) {
 			this.updatingItem = true;
@@ -420,13 +427,24 @@ var app = new Vue({
 			this.item_amount = val.item.amount;
 		},
 		updateComponent: function () {
-			for (var i = 0; this.items.length > i; i++) {
-				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
-					(this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
-					this.updateLocalStorage();
-					return;
+			var settings = {
+				method: 'PUT',
+				url: app.path + 'services/lists/anon/' + app.token + '/product/' + this.item_id,
+				data: '' + this.item_amount + '',
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
 				}
-			}
+			};
+			ajaxFunction(settings);
+			/*
+			 for (var i = 0; this.items.length > i; i++) {
+			 if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
+			 (this.item_amount == 0) ? this.items.splice(i, 1) : this.items[i].amount = this.item_amount;
+			 this.updateLocalStorage();
+			 return;
+			 }
+			 }*/
 		},
 		deleteWithModal: function (val) {
 			this.updatingItem = false;
@@ -435,13 +453,23 @@ var app = new Vue({
 			this.item_amount = undefined;
 		},
 		deleteComponent: function () {
+			var settings = {
+				method: 'DELETE',
+				url: app.path + 'services/lists/anon/' + app.token + '/product/' + this.item_id,
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-cache"
+				}
+			};
+			ajaxFunction(settings);
+			/*
 			for (var i = 0; this.items.length > i; i++) {
 				if (this.items[i].item.name == this.item_name && this.items[i].item.id == this.item_id) {
 					this.items.splice(i, 1);
 					this.updateLocalStorage();
 					return;
 				}
-			}
+			}*/
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
@@ -514,16 +542,13 @@ var app = new Vue({
 				this.hideSearch();
 			} else {
 				this.showAutocomplete = true;
-				this.url = '/ShoppingList/services/products/?search=' + this.query + '&compact=true';
+				this.url = app.path + 'services/products/?search=' + this.query + '&compact=true';
 				this.searchInitializing = 'search';
 				$('#search-input').focus();
 			}
 			if (app.item_selected_id != -2 && val === $('#item' + app.item_selected_id)[0].textContent) {
 				app.searching();
 			}
-		},
-		items: function (val) {
-			this.updateLocalStorage();
 		},
 		selected: function (val) {
 			if (val == 'all') {
@@ -542,23 +567,44 @@ var app = new Vue({
 			}
 			$('#item' + this.item_selected_id).addClass('selected');
 			console.log(this.item_selected_id);
+		},
+		items: function(val) {
+			console.log(val);
 		}
 	},
 	created: function () {
-		//console.log(JSON.parse(localStorage.getItem("items")));
-		if (localStorage.getItem("items")) {
-			this.items = JSON.parse(localStorage.getItem("items"));
-		} else {
-			// this.items.push({
-			// 	item: {
-			// 		name: 'il tuo primo oggetto in lista',
-			// 	},
-			// 	amount: 1,
-			// 	category: {
-			// 		name: 'default'
-			// 	}
-			// });
-		}
+		var self = this;
+		this.token = Cookies.get('anonToken');
+		this.path = _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
+		$.get({
+			url: self.path + 'services/lists/anon/' + self.token + '/product',
+			success: function (res) {
+				res = JSON.parse(res);
+				for (var i = 0; i < res.length; i++) {
+					res[i].item = res[i].product;
+				}
+				self.items = res;
+			},
+			error: function (e) {
+				var test = [
+					{
+						product: {
+							category: {name: "Prova1", id: 1},
+							id: 2,
+							logo: null,
+							name: "Fragole",
+							note: "Secondo prodotto prova ",
+							photography: null
+						},
+						amount: 1
+					}
+				]
+				for (var i = 0; i < test.length; i++) {
+					test[i].item = test[i].product;
+				}
+				self.items = test;
+			}
+		});
 	},
 	mounted: function () {
 		this.loaded_list = true;

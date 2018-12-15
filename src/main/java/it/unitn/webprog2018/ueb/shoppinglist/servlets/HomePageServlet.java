@@ -45,7 +45,8 @@ public class HomePageServlet extends HttpServlet {
 		if (!found) {
 			try {
 				Cookie cookie = new Cookie("anonToken",
-				((DAOFactory)getServletContext().getAttribute("daoFactory")).getTokenDAO().getAnonimousToken());
+						((DAOFactory)getServletContext().getAttribute("daoFactory")).getTokenDAO().getAnonimousToken());
+				cookie.setMaxAge(60 * 60 * 24 * 365 * 10); // expires in 10 years
 				response.addCookie(cookie);
 			} catch (UpdateException ex) {
 				Logger.getLogger(HomePageServlet.class.getName()).log(Level.SEVERE, null, ex);
