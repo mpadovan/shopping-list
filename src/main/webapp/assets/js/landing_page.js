@@ -261,7 +261,10 @@ Vue.component('list-item', {
 				<td @click="infoModal"><i class="fas fa-question-circle"></i></td>
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> 
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> 
-			</tr>`
+			</tr>`,
+	created: function() {
+		console.log(this.item);
+	}
 });
 Vue.component('search-item', {
 	props: ['item'],
@@ -372,9 +375,6 @@ var app = new Vue({
 			}
 
 			return temp;
-		},
-		path: function () {
-			return _.split(window.location.href, '/', 4).toString().replace(new RegExp(',', 'g'), '/') + '/';
 		}
 	},
 	methods: {
@@ -567,9 +567,6 @@ var app = new Vue({
 			}
 			$('#item' + this.item_selected_id).addClass('selected');
 			console.log(this.item_selected_id);
-		},
-		items: function(val) {
-			console.log(val);
 		}
 	},
 	created: function () {
@@ -653,5 +650,46 @@ function getLocation() {
 		enableHighAccuracy: true,
 		timeout: 5000,
 		maximumAge: 0
+	});
+}
+
+function ajaxFunction(data, isNew, item_name) {
+	$.ajax(data).done(function (res) {
+		if(isNew) toastr["success"](item_name + ' aggiunto');
+		updateView();
+	}).fail(function (e) {
+		updateView();
+	});
+}
+
+function updateView() {
+	$.get({
+		url: app.path + 'services/lists/anon/' + app.token + '/product',
+		success: function (res) {
+			res = JSON.parse(res);
+			for (var i = 0; i < res.length; i++) {
+				res[i].item = res[i].product;
+			}
+			app.items = res;
+		},
+		error: function (e) {
+			var test = [
+				{
+					product: {
+						category: {name: "Prova1", id: 1},
+						id: 2,
+						logo: null,
+						name: "Frakolle",
+						note: "Secondo prodotto prova ",
+						photography: null
+					},
+					amount: 1
+				}
+			]
+			for (var i = 0; i < test.length; i++) {
+				test[i].item = test[i].product;
+			}
+			app.items = test;
+		}
 	});
 }
