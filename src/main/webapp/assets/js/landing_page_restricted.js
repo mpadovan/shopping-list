@@ -462,7 +462,7 @@ var app = new Vue({
 					case 2:
 						this.showAutocomplete = false;
 						this.query = '';
-						toastr['success'](this.operationData.product_name + ' creato ed aggiunto alla lista attuale');
+						toastr['success'](_.capitalize(this.operationData.product_name) + ' creato ed aggiunto alla lista attuale');
 						break;
 					case 3:
 						data = data.products.concat(data.publicProducts);
@@ -478,13 +478,13 @@ var app = new Vue({
 						}
 						break;
 					case 5:
-						toastr["success"](this.operationData.product_name + ' aggiunto');
+						toastr["success"](_.capitalize(this.operationData.product_name) + ' aggiunto');
 						break;
 					case 6:
-						toastr["success"](this.operationData.product_name + ' aggiornato');
+						toastr["success"](_.capitalize(this.operationData.product_name) + ' aggiornato');
 						break;
 					case 7:
-						toastr["success"](this.operationData.product_name + ' cancellato');
+						toastr["success"](_.capitalize(this.operationData.product_name) + ' cancellato');
 						break;
 					default:
 						break;

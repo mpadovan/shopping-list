@@ -655,7 +655,7 @@ function getLocation() {
 
 function ajaxFunction(data, isNew, item_name) {
 	$.ajax(data).done(function (res) {
-		if(isNew) toastr["success"](item_name + ' aggiunto');
+		if(isNew) toastr["success"](_.capitalize(item_name) + ' aggiunto');
 		updateView();
 	}).fail(function (e) {
 		updateView();

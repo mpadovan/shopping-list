@@ -7,6 +7,6 @@
 <%@page session="false" %>
 
 <div class="d-flex justify-content-center">
-	<a href="SignUp" class="btn btn_sidenav btn-outline-light mr-sm-1"><h5>Registrati</h5></a>
-				<a href="Login" class="btn btn_sidenav btn-outline-light mr-sm-1"><h5>Accedi</h5></a>
+	<a href="SignUp" class="btn btn_sidenav btn-outline-light mr-sm-1"><h5 style="margin-bottom: 0;">Registrati</h5></a>
+				<a href="Login" class="btn btn_sidenav btn-outline-light mr-sm-1"><h5 style="margin-bottom: 0;">Accedi</h5></a>
 </div>
