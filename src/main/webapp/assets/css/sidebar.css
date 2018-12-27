@@ -21,7 +21,8 @@ body {
 	margin-top: 20px;
 }
 .p-new-sidebar:hover{
-	color: #204065;
+	/*color: #204065;*/
+	color: #0080C0;
 }
 .p-products-sidebar{
     font-weight: 300;
@@ -31,7 +32,8 @@ body {
 	font-size: 20px;
 }
 .p-products-sidebar:hover{
-	color: #204065;
+	/*color: #204065;*/
+	color: #0080C0;
 }
 .user-image{
 	max-width: 80px;
@@ -86,6 +88,10 @@ a:focus {
     color: #fff;
     transition: all 0.3s;
 	box-shadow: 2px 0px 15px 0px #0c2646;
+	overflow-y: scroll;
+}
+#sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 #sidebar.active {
@@ -148,6 +154,18 @@ a:focus {
 
 .div-info-user{
 	margin-top: 10px;
+}
+.div-info-user p{
+	margin: 0;
+}
+.div-info-user p:hover{
+	color: #0080C0;
+}
+.div-info-user .p-size{
+	size: 15px;
+}
+.div-info-user .h5-user-name:hover{
+	color: #0080C0;
 }
 
 #mCSB_1_container{
@@ -232,6 +250,9 @@ a.article:hover {
     height: auto;
     max-height: 200px;
     overflow-x: hidden;
+}
+.scrollable-menu::-webkit-scrollbar {
+  display: none;
 }
 
 /* ---------------------------------------------------
