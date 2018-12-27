@@ -14,10 +14,10 @@
 			</c:if>
 		</div>
 		<div class="text-center div-info-user">
-			<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser"><h6>${sessionScope.user.name} ${sessionScope.user.lastname}</h6></a>
-			<a href="${pageContext.servletContext.contextPath}/restricted/Logout"><span style="font-size: 15px;">Logout </span><i class="fas fa-sign-out-alt"></i></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser"><h5 class="h5-user-name">${sessionScope.user.name} ${sessionScope.user.lastname}</h5></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/Logout"><p><span class="p-size">Logout </span><i class="fas fa-sign-out-alt"></i></p></a>
 				<c:if test="${sessionScope.user.administrator}">
-				<a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><span style="font-size: 15px;"><br>Amministrazione </span></a>
+				<a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><p><span class="p-size">Amministrazione</span></p></a>
 				</c:if>
 		</div>
 	</div>
