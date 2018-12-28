@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +45,7 @@ public class NotificationDAOImpl extends AbstractDAO implements NotificationDAO{
 					"inner join users u on l.iduser = u.id\n" +
 					"left join products p on pn.idproduct = p.id\n" +
 					"left join publicproducts pp on pn.idpublicproduct = pp.id\n" +
-					"where time <= ?";
+					"where time <= ? and time >= now(1)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setString(1, dateFormat.format(nextRequest));
 			ResultSet rs = st.executeQuery();
