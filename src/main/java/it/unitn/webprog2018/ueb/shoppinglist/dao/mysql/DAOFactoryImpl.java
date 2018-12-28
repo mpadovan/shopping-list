@@ -31,7 +31,7 @@ public class DAOFactoryImpl implements DAOFactory {
 	private final ListDAO LIST_DAO;
 	private final ListsCategoryImagesDAO LISTS_CATEGORY_IMAGE_DAO;
 	private final MessageDAO MESSAGE_DAO;
-	// private final NotificationDAO NOTIFICATION_DAO;
+	private final NotificationDAO NOTIFICATION_DAO;
 	
 	public DAOFactoryImpl(Connection con) {
 		this.con = con;
@@ -45,7 +45,7 @@ public class DAOFactoryImpl implements DAOFactory {
 		this.EXAMPLE_DAO = new ExampleDAOImpl(con, this);
 		this.MESSAGE_DAO = new MessageDAOImpl(con, this);
 		this.TOKEN_DAO = new TokenDAOImpl(con, this);
-		// this.NOTIFICATION_DAO = new NotificationDaoImpl(con,this);
+		this.NOTIFICATION_DAO = new NotificationDAOImpl(con,this);
 	}
 
 	@Override
@@ -100,8 +100,7 @@ public class DAOFactoryImpl implements DAOFactory {
 
 	@Override
 	public NotificationDAO getNotificationDAO() {
-		// return NOTIFICATION_DAO;
-		throw new UnsupportedOperationException("Operation not supported");
+		return NOTIFICATION_DAO;
 	}
 
 }

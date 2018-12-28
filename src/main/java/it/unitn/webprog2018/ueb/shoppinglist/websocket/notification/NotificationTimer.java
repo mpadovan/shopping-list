@@ -11,8 +11,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -55,7 +53,7 @@ public class NotificationTimer {
 			try {
 				List<Notification> notifications = notificationSessionHandler.getNextNotifications(new Timestamp(System.currentTimeMillis() + POLLING_RATE));
 				for (Notification n : notifications) {
-					executor.schedule(new NotificationTask(n), n.getTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+					executor.schedule(new NotificationTask(n), ((int)Math.random()) % POLLING_RATE, TimeUnit.MILLISECONDS);
 				}
 			} catch (DaoException ex) { // if DAO fails then we try again on the next poll
 				Logger.getLogger(NotificationTimer.class.getName()).log(Level.SEVERE, null, ex);
