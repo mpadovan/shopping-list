@@ -135,7 +135,7 @@ public class GeolocationWebService {
 		URI uri = null;
 		String response = "";
 		try {
-			uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name&"
+			uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name,single_line_address,website&"
 					+ "center=" + location + "&distance" + RADIUS + "&"
 					+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + category.toLowerCase(), null);
 		} catch (URISyntaxException ex) {
