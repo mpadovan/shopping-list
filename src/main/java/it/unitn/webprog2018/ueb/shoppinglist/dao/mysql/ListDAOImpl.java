@@ -768,7 +768,7 @@ public class ListDAOImpl extends AbstractDAO implements ListDAO {
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant, Boolean addDeletePermission,
 			Boolean editPermission, Boolean deletePermission) throws DaoException {
 		try {
-			String query = "insert into sharedlists (iduser,idlist,modifylist,deletelist,addelete) values (?,?,?,?,?)";
+			String query = "insert into sharedlists (iduser,idlist,modifylist,deletelist,adddelete) values (?,?,?,?,?)";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, idpartecipant);
 			st.setInt(2, list.getId());
