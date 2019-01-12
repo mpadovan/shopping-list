@@ -166,12 +166,14 @@ public class NewListServlet extends HttpServlet {
 							for (User u : listShared) {	// connect list to users, apart from the owner
 								String[] perm = request.getParameterValues("permission-"+u.getEmail());
 								boolean adddelete = true, edit = false, delete = false;
-								if (perm[0].equals("basic")) {
-									adddelete = true; edit = false; delete = false;
-								} else if (perm[0].equals("edit")) {
-									adddelete = true; edit = true; delete = false;
-								} else if (perm[0].equals("full")) {
-									adddelete = true; edit = true; delete = true;
+								switch (perm[0]) {
+									case "basic":
+										adddelete = true; edit = false; delete = false; break;
+									case "edit":
+										adddelete = true; edit = true; delete = false; break;
+									case "full":
+										adddelete = true; edit = true; delete = true; break;
+									default: break;
 								}
 								if (!listDAO.linkShoppingListToUser(list, u.getId(), adddelete, edit, delete)) {
 									everythingOK = false;

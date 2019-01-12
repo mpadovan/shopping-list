@@ -156,7 +156,18 @@ public class EditListServlet extends HttpServlet {
 							if (listDAO.updateList(currentList.getId(), currentList)) {
 								// Add new users
 								for (User u : listShared) {	// connect list to users, apart from the owner
-									if (!listDAO.linkShoppingListToUser(currentList, u.getId(), true, false, false)) {
+									String[] perm = request.getParameterValues("permission-" + u.getEmail());
+									boolean adddelete = true, edit = false, delete = false;
+									switch (perm[0]) {
+										case "basic":
+											adddelete = true; edit = false; delete = false; break;
+										case "edit":
+											adddelete = true; edit = true; delete = false; break;
+										case "full":
+											adddelete = true; edit = true; delete = true; break;
+										default: break;
+									}
+									if (!listDAO.linkShoppingListToUser(currentList, u.getId(), adddelete, edit, delete)) {
 										everythingOK = false;
 										try {
 											throw new SQLException("link non effettutato tra lista e utente");
