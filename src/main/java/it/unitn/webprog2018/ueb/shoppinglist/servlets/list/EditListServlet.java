@@ -156,7 +156,7 @@ public class EditListServlet extends HttpServlet {
 							if (listDAO.updateList(currentList.getId(), currentList)) {
 								// Add new users
 								for (User u : listShared) {	// connect list to users, apart from the owner
-									if (!listDAO.linkShoppingListToUser(currentList, u.getId())) {
+									if (!listDAO.linkShoppingListToUser(currentList, u.getId(), true, false, false)) {
 										everythingOK = false;
 										try {
 											throw new SQLException("link non effettutato tra lista e utente");
