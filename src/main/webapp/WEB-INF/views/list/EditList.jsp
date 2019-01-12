@@ -66,17 +66,33 @@
 							</div>
 						</div>
 						<div id="app">
-							<div id="sharedList">Condividi con:<br>
-								<input type="email" 
-									   name="shared[]" 
-									   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}" 
-									   v-for="(field, index) in emailFields" 
-									   v-model="emailFields[index]">
+							<div id="sharedList">
+								Condividi con:<br>
+								<div v-for="(field, index) in emailFields">
+									<input type="email"
+										   name="shared[]"
+										   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}"
+										   v-model="emailFields[index]">
+									<label class="radio-inline" style="margin-right:5px;">
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic" checked>Basic permissions
+									</label>
+									<label class="radio-inline" style="margin-right:5px;">
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="edit">Edit list
+									</label>
+									<label class="radio-inline">
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Full permissions
+									</label>
+								</div>
 								<div class="invalid-feedback">
-									<shared:fieldErrors entity="${currentList}" field="shared[]" />
+									<shared:fieldErrors entity="${list}" field="shared[]" />
 								</div>
 							</div>
-							<button id="btn-add-email" type="button" disabled class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+							<button disabled id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
+							<div class="alert alert-secondary" role="alert" style="margin: 10px 0 10px 0;">
+								<b>Basic permissions</b>: Permission to add and delete products from the list.<br>
+								<b>Edit list</b>: Basic permissions + edit list info.<br>
+								<b>Full permissions</b>: Full control over list and items.<br>
+							</div>
 						</div>
 						<div>
 							<label for="image">Immagine</label>
