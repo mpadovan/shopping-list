@@ -164,7 +164,16 @@ public class NewListServlet extends HttpServlet {
 						}
 						if (valid) {
 							for (User u : listShared) {	// connect list to users, apart from the owner
-								if (!listDAO.linkShoppingListToUser(list, u.getId(), true, false, false)) {
+								String[] perm = request.getParameterValues("permission-"+u.getEmail());
+								boolean adddelete = true, edit = false, delete = false;
+								if (perm[0].equals("basic")) {
+									adddelete = true; edit = false; delete = false;
+								} else if (perm[0].equals("edit")) {
+									adddelete = true; edit = true; delete = false;
+								} else if (perm[0].equals("full")) {
+									adddelete = true; edit = true; delete = true;
+								}
+								if (!listDAO.linkShoppingListToUser(list, u.getId(), adddelete, edit, delete)) {
 									everythingOK = false;
 									try {
 										throw new SQLException("link non effettutato tra lista e utente");
