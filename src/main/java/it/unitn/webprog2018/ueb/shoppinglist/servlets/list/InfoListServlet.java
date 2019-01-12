@@ -56,7 +56,7 @@ public class InfoListServlet extends HttpServlet {
 				// request.setAttribute("currentList", list);
 				// request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
 				// request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
-				if (((java.util.List<List>) session.getAttribute("sharedLists")).contains((List) request.getAttribute("currentList"))) {
+				if (((java.util.List<List>) request.getAttribute("sharedLists")).contains((List) request.getAttribute("currentList"))) {
 					request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
 				}
 			} catch (DaoException ex) {

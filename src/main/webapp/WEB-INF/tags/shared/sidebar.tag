@@ -28,14 +28,14 @@
 			<a href="${pageContext.servletContext.contextPath}/restricted/NewList"><p class="p-new-sidebar"><i class="fas fa-plus-circle"></i> Nuova Lista</p></a>
 		</div>
 		<ul class="list-unstyled components">
-			<c:if test="${!empty sessionScope.personalLists}">
+			<c:if test="${!empty requestScope.personalLists}">
 				<li>
 					<span class="font-weight-bold" style="font-size: 20px;">
 						Liste personali
 					</span>
 					<div class="divider"></div>
 					<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
-						<c:forEach items="${sessionScope.personalLists}" var="list">
+						<c:forEach items="${requestScope.personalLists}" var="list">
 							<li id="personal-list-${list.id}">
 								<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 							</li>
@@ -43,14 +43,14 @@
 					</ul>
 				</li>
 			</c:if>
-			<c:if test="${!empty sessionScope.sharedLists}">
+			<c:if test="${!empty requestScope.sharedLists}">
 				<li>
 					<span class="font-weight-bold" style="font-size: 20px;">
 						Liste condivise
 					</span>
 					<div class="divider"></div>
 					<ul class="list-unstyled scrollable-menu" id="shareList">
-						<c:forEach items="${sessionScope.sharedLists}" var="list">
+						<c:forEach items="${requestScope.sharedLists}" var="list">
 							<li id="shared-list-${list.id}" >
 								<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
 							</li>

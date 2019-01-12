@@ -31,8 +31,8 @@ import javax.inject.Inject;
 public class NotificationTimer {
 
 	private static final int POLLING_RATE = 60 * 1000; // every minute
-	private ScheduledThreadPoolExecutor executor;
-
+	private final ScheduledThreadPoolExecutor executor;
+	
 	@Inject
 	private NotificationSessionHandler notificationSessionHandler;
 

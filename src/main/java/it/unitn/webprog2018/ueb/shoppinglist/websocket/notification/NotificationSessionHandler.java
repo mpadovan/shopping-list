@@ -23,7 +23,7 @@ import javax.websocket.Session;
  * @author Giulia Carocari
  */
 public class NotificationSessionHandler extends SessionHandler {
-	private static Gson GSON = new Gson();
+	private static final Gson GSON = new Gson();
 	
 	protected List<Notification> getNotifications(Integer userId) throws DaoException {
 		return getDaoFactory().getNotificationDAO().getUnreadNotifications(userId);

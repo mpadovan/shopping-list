@@ -105,7 +105,7 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared[]");
-
+		
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -117,8 +117,9 @@ public class NewListServlet extends HttpServlet {
 				listCategory = listsCategoryDAO.getById(categoryId);
 			} catch (RecordNotFoundDaoException ex) {
 				everythingOK = false;
-				list.setError("category", "questa categoria non esiste");
+				list.setError("category", "Questa categoria non esiste");
 				request.setAttribute("list", list);
+				Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 			}
 			list.setCategory(listCategory);
 			if (list.isVaildOnCreate((DAOFactory) this.getServletContext().getAttribute("daoFactory"))) {
@@ -148,7 +149,7 @@ public class NewListServlet extends HttpServlet {
 						} catch (RecordNotFoundDaoException ex) {
 							everythingOK = false;
 							Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
-							list.setError("shared[]", "l'utente " + shared1 + " non esiste");
+							list.setError("shared[]", "L'utente " + shared1 + " non esiste");
 							request.setAttribute("list", list);
 						}
 					}
@@ -163,7 +164,18 @@ public class NewListServlet extends HttpServlet {
 						}
 						if (valid) {
 							for (User u : listShared) {	// connect list to users, apart from the owner
-								if (!listDAO.linkShoppingListToUser(list, u.getId())) {
+								String[] perm = request.getParameterValues("permission-"+u.getEmail());
+								boolean adddelete = true, edit = false, delete = false;
+								switch (perm[0]) {
+									case "basic":
+										adddelete = true; edit = false; delete = false; break;
+									case "edit":
+										adddelete = true; edit = true; delete = false; break;
+									case "full":
+										adddelete = true; edit = true; delete = true; break;
+									default: break;
+								}
+								if (!listDAO.linkShoppingListToUser(list, u.getId(), adddelete, edit, delete)) {
 									everythingOK = false;
 									try {
 										throw new SQLException("link non effettutato tra lista e utente");
