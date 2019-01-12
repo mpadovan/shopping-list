@@ -410,7 +410,7 @@ public class ListDAOImpl implements ListDAO {
 		return new LinkedList<>();
 	}
 
-	@Override
+	// @Override
 	public Boolean linkShoppingListToUser(List list, Integer idpartecipant) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
@@ -484,6 +484,11 @@ public class ListDAOImpl implements ListDAO {
 
 	@Override
 	public Boolean deleteFromList(String token, PublicProduct product) throws DaoException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Boolean linkShoppingListToUser(List list, Integer idpartecipant, Boolean addDeletePermission, Boolean editPermission, Boolean deletePermission) throws DaoException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
