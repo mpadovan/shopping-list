@@ -159,10 +159,10 @@ public class EditListServlet extends HttpServlet {
 									String[] perm = request.getParameterValues("permission-" + u.getEmail());
 									boolean adddelete = true, edit = false, delete = false;
 									switch (perm[0]) {
+										case "view":
+											adddelete = false; edit = false; delete = false; break;
 										case "basic":
 											adddelete = true; edit = false; delete = false; break;
-										case "edit":
-											adddelete = true; edit = true; delete = false; break;
 										case "full":
 											adddelete = true; edit = true; delete = true; break;
 										default: break;

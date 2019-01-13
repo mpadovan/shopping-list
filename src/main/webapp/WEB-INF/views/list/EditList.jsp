@@ -74,13 +74,13 @@
 										   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}"
 										   v-model="emailFields[index]">
 									<label class="radio-inline" style="margin-right:5px;">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic" checked>Basic permissions
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="view" checked>Visualizzazione
 									</label>
 									<label class="radio-inline" style="margin-right:5px;">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="edit">Edit list
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic">Base
 									</label>
 									<label class="radio-inline">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Full permissions
+										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Proprietario
 									</label>
 								</div>
 								<div class="invalid-feedback">
@@ -89,9 +89,9 @@
 							</div>
 							<button disabled id="btn-add-email" type="button" class="btn btn-light" @click="addEmail()">Aggiungi un'email</button>
 							<div class="alert alert-secondary" role="alert" style="margin: 10px 0 10px 0;">
-								<b>Basic permissions</b>: Permission to add and delete products from the list.<br>
-								<b>Edit list</b>: Basic permissions + edit list info.<br>
-								<b>Full permissions</b>: Full control over list and items.<br>
+								<b>Visualizzazione</b>: Può visualizzare la lista e accedere alla chat.<br>
+								<b>Permessi base</b>: Può modificare i prodotti in lista.<br>
+								<b>Permessi proprietario</b>: Pieno controllo sulla lista e i prodotti.<br>
 							</div>
 						</div>
 						<div>
