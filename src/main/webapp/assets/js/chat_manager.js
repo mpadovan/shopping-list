@@ -42,7 +42,8 @@ var chat = new Vue({
 					text: this.text
 				}
 			},
-			text: null
+			text: null,
+			msgAmount: 0
 		};
 	},
 	watch: {
@@ -74,11 +75,19 @@ var chat = new Vue({
 				case "2":
 					if ($('#chat').css('display') == 'none') {
 						data.payload.forEach(element => {
-							if (element.listId === app.list) {
-								toastr['success']('Hai ' + element.unreadCount + ' messaggi non letti su questa lista');
+							if (element.listId == app.list) {
+								Socket.send(JSON.stringify({
+									operation: '1',
+									payload: app.list
+								}));
+								toastr['success']('Hai messaggi non letti su questa lista');
 							}
+							$('#shared-list-outer-' + element.listId).addClass('show-badge');
+							$('#shared-list-' + element.listId).text(element.unreadCount);
 							//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
 						});
+						if(data.payload.length != 0) $('#new-messages').css('display', 'inline');
+						else $('#new-messages').css('display', 'none');
 					} else {
 						var msg = {
 							operation: 1,
@@ -118,7 +127,6 @@ var chat = new Vue({
 	updated: function () {
 		if (this.text == null || this.text == '') {
 			var elem = document.getElementById('message-container');
-			console.log(elem.scrollHeight);
 			elem.scrollTop = elem.scrollHeight;
 		}
 		;
@@ -138,7 +146,6 @@ $(document).ready(function () {
 		}));
 	};
 	Socket.onclose = function (evt) {
-		console.log(evt);
 		toastr['error']('Errore durante il caricamento della chat, ricarica la pagina per continuare');
 	};
 	Socket.onmessage = function (evt) {
@@ -149,7 +156,6 @@ $(document).ready(function () {
 	};
 	try {
 		$('#message-container').addEventListener('resize', function (e) {
-			console.log(e);
 			$('#message-container').scrollTop($('#message-container')[0].scrollHeight);
 		});
 	} catch (e) {

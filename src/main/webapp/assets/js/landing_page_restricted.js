@@ -563,6 +563,8 @@ var app = new Vue({
 		},
 		chat: function (val) {
 			$('#chat').css('display', 'block');
+			$("#shared-list-outer-" + this.list).removeClass('show-badge');
+			$('#shared-list-' + this.list).text('');
 		},
 		item_selected_id: function () {
 			for (var i = 0; i < this.autocompleteComputed.length; i++) {

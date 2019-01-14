@@ -9,6 +9,9 @@
 
 <layouts:empty pageTitle="Landing Page Anonimus">
 	<jsp:attribute name="pageContent">
+		<noscript>
+			<h1>Questo sito funziona con JS, attivalo per utilizzare il sito</h1>
+		</noscript>
 		<div id="app">
 			<div class="section home">
 				<div class="intro_top_home">
@@ -147,12 +150,21 @@
 			</div>
 		</div>
 	</div>
+	<div class="cookies-bar bg-light" id="cookies-bar">
+		<div style="margin:5px; display: inline-block;">Utilizzando il sito accetti all'utilizzo dei cookies per migliorare l'esperienza di utilizzo del sito stesso.</div>
+		<button type="button" class="btn btn-primary" style="margin:5px; display: inline-block;" onclick="closeCookies()">Chiudi</button>
+	</div>
 </jsp:attribute>
 <jsp:attribute name="customCss">
 	<link href="assets/css/landing_page.css" type="text/css" rel="stylesheet" />
 	<link href="assets/css/home_fullscreen.css" type="text/css" rel="stylesheet" />
 </jsp:attribute>
 <jsp:attribute name="customJs">
+	<script>
+		function closeCookies() {
+			$('#cookies-bar').css('display', 'none');
+		}
+	</script>
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="assets/js/landing_page.js"></script>
 </jsp:attribute>

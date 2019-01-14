@@ -118,3 +118,10 @@ li {
 .add-product-to-list:hover {
 	text-decoration: underline;
 }
+
+.cookies-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+}
