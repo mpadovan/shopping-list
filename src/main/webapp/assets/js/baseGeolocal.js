@@ -4,18 +4,23 @@ Vue.component('geores', {
     data: function () {
         return {
             sorted: null,
-            maxCat: 4,
-            maxNegozi: 4
+            maxCat: 3,
+            maxNegozi: 2
         };
     },
-    template: ` <div> 
+    template: ` <div style="margin-bottom: 8px"> 
                     <div v-if="!ok">{{ data }}</div> 
                     <div v-if="ok"><h5>Vicino a te: </h5> 
-                    <div v-for="cat in sorted" > 
-                        <div> 
-                            <h5>{{ cat.category }}</h5> 
-                            <div v-for="element in cat.response.data">{{ element.name }}</div> 
-                        </div> 
+                    <div v-if="cat.response.data.length > 0" v-for="cat in sorted"> 
+						<div class="card" v-for="element in cat.response.data" style="margin:5px 0 5px 0;">
+							<div class="card-header">
+								<div class="text-dark">{{ _.capitalize(cat.category) }}</div>
+							</div>
+							<div class="card-body">
+								<h5 class="card-title text-dark">{{ element.name }}</h5>
+								<p class="card-text text-secondary">{{ element.single_line_address }}</p>
+							</div>
+						</div>
                     </div></div> 
                 </div>`,
     mounted: function () {

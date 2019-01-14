@@ -126,7 +126,13 @@ Vue.component('getCat', {
 	},
 	template: `
 				<div class="list-group d-flex flex-row flex-wrap" style="overflow:auto;" v-if="data != null">
-					<div class="list-group-item list-group-item-action" style="width:49%; margin:0.5%; border-radius:.25rem; border:1px solid rgba(0,0,0,.125);" v-for="element in data[0].response.data">{{ element.name }}</div>
+					<div class="card" style="width:49%; margin:0.5%; border-radius:.25rem; border:1px solid rgba(0,0,0,.125);" v-for="element in data[0].response.data">
+						<div class="card-body">
+							<h5 class="card-title text-dark">{{ element.name }}</h5>
+							<p class="card-text text-secondary">{{ element.single_line_address }}</p>
+							<a v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+						</div>
+					</div>
 				</div>`
 });
 
