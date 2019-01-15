@@ -1,37 +1,49 @@
 /* jshint esversion:6 */
+
+
 Vue.component('geores', {
     props: ['data', 'ok'],
     data: function () {
         return {
             sorted: null,
-            maxCat: 3,
-            maxNegozi: 2
+            maxCat: 4,
+            maxNegozi: 4
         };
     },
-    template: ` <div style="margin-bottom: 8px"> 
-                    <div v-if="!ok">{{ data }}</div> 
-                    <div v-if="ok"><h5>Vicino a te: </h5> 
-                    <div v-if="cat.response.data.length > 0" v-for="cat in sorted"> 
-						<div class="card" v-for="element in cat.response.data" style="margin:5px 0 5px 0;">
-							<div class="card-header">
-								<div class="text-dark">{{ _.capitalize(cat.category) }}</div>
+	methods: {
+		hideModal: function() {
+			this.$emit('close');
+		}
+	},
+    template: ` 
+				<div id="geo-modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<div v-if="!ok">{{ data }}</div> 
+								<div v-if="ok"><h3 class="text-dark">Vicino a te</h3></div>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
-							<div class="card-body">
-								<h5 class="card-title text-dark">{{ element.name }}</h5>
-								<p class="card-text text-secondary">{{ element.single_line_address }}</p>
+							<div class="modal-body">
+								<div v-if="cat.response.data.length > 0" v-for="cat in sorted" class="row"> 
+									<div class="card" v-for="element in cat.response.data" style="display:inline-block; width:48%; margin: 1%;">
+										<div class="card-header">
+											<div class="text-dark">{{ _.capitalize(cat.category) }}</div>
+										</div>
+										<img v-if="element.cover" class="card-img-top" v-bind:src="element.cover.source" alt="Card image cap">
+										<div class="card-body">
+											<h5 class="card-title text-dark">{{ element.name }}</h5>
+											<p class="card-text text-secondary">{{ element.single_line_address }}</p>
+											<a v-if="element.website != 0" v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white btn-sm" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-                    </div></div> 
-                </div>`,
-    mounted: function () {
-        console.log(this.data);
-        tippy('#geolocBtn', {
-            allowTitleHTML: true,
-            arrow: true,
-            placement: 'left',
-            html: '#geolocContent'
-        });
-    },
+					</div>
+				</div>`,
     created: function () {
         if (this.ok) {
             this.sorted = _.cloneDeep(this.data);
@@ -39,7 +51,8 @@ Vue.component('geores', {
                 if (this.sorted[i].response.data.length > this.maxNegozi) {
                     this.sorted[i].response.data.splice(this.maxNegozi);
                     this.sorted[i].response.data.push({
-                        name: (this.data[i].response.data.length - this.maxNegozi) + ' altri negozi...'
+                        name: (this.data[i].response.data.length - this.maxNegozi) + ' altri negozi...',
+						website: 0
                     });
                 }
             }
@@ -78,10 +91,6 @@ var geo = new Vue({
                         self.msg = data;
                         self.ok = true;
                         self.showRes = true;
-                        if (!("Notification" in window)) {
-                            toastr['error']("This browser does not support desktop notification");
-                        }
-
 						/*
                         // Let's check whether notification permissions have already been granted
                         else if (Notification.permission === "granted") {
@@ -110,4 +119,8 @@ var geo = new Vue({
             });
         }
     }
+});
+
+$('#geolocBtn').click(function() {
+	$('#geo-modal').modal('show');
 });

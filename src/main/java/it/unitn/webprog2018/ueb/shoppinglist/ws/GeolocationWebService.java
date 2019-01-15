@@ -90,7 +90,7 @@ public class GeolocationWebService {
 			String response = "";
 			try {
 				uri = new URI("https", "graph.facebook.com", "/search",
-						"type=place&fields=name,single_line_address,website&"
+						"type=place&fields=name,single_line_address,website,cover&"
 						+ "center=" + location + "&distance" + RADIUS + "&"
 						+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + cat.toLowerCase(), null);
 			} catch (URISyntaxException ex) {
@@ -135,7 +135,7 @@ public class GeolocationWebService {
 		URI uri = null;
 		String response = "";
 		try {
-			uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name,single_line_address,website&"
+			uri = new URI("https", "graph.facebook.com", "/search", "type=place&fields=name,single_line_address,website,cover&"
 					+ "center=" + location + "&distance" + RADIUS + "&"
 					+ "access_token=" + APP_ID + "|" + SECRET_KEY + "&q=" + category.toLowerCase(), null);
 		} catch (URISyntaxException ex) {
