@@ -46,13 +46,13 @@
 			<c:if test="${!empty requestScope.sharedLists}">
 				<li>
 					<span class="font-weight-bold" style="font-size: 20px;">
-						Liste condivise
+						Liste condivise <span id="new-messages" class="badge badge-danger" style="display: none;"><i class="far fa-envelope"></i></span>
 					</span>
 					<div class="divider"></div>
 					<ul class="list-unstyled scrollable-menu" id="shareList">
 						<c:forEach items="${requestScope.sharedLists}" var="list">
-							<li id="shared-list-${list.id}" >
-								<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
+							<li>
+								<a id="shared-list-outer-${list.id}" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}"><span id="shared-list-${list.id}" class="badge badge-danger" style="width: 20px; height: 20px;"></span>${list.name}</a>
 							</li>
 						</c:forEach>
 					</ul>

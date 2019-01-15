@@ -304,3 +304,13 @@ a.article:hover {
     }
 }
 
+.badge-danger {
+	color: #fff;
+    background-color: #dc3545;
+    margin-right: 10px;
+	line-height: initial;
+}
+
+.show-badge {
+	padding-left: 0 !important;
+}

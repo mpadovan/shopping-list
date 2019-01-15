@@ -65,11 +65,11 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 			}
 			if(m != null){
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-				String querySetLastaccess = "CALL setLastAccess(?,?,?)";
+				String querySetLastaccess = "CALL setLastAccess(?,?,now(1))";
 				st = this.getCon().prepareStatement(querySetLastaccess);
 				st.setInt(1, user.getId());
 				st.setInt(2, list.getId());
-				st.setString(3, dateFormat.format(m.getSendTime()));
+				// st.setString(3, dateFormat.format(m.getSendTime()));
 				st.executeUpdate();
 			}
 			rs.close();
@@ -94,8 +94,8 @@ public class MessageDAOImpl extends AbstractDAO implements MessageDAO{
 		if(valid)
 		{
 			try{
-				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES (?,?,now(1),?);\n"
-							+ "CALL setLastAccess(?,?,now(1));";
+				String query = "INSERT INTO messages (iduser,idlist,sendtime,text) VALUES (?,?,now(),?);\n"
+							+ "CALL setLastAccess(?,?,now());";
 				System.out.println(query);
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setInt(1, message.getSender().getId());
