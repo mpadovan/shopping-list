@@ -76,7 +76,6 @@ var geo = new Vue({
     },
     created: function () {
         var self = this;
-        console.log(window.location.pathname.split('restricted/')[1].split('/')[1]);
         if (window.location.pathname.split('restricted/')[1].split('/')[1] == undefined) {
             this.msg = "OUCH! Sembra che i criceti che abbiamo ammaestrato siano in sciopero!";
             self.showRes = true;

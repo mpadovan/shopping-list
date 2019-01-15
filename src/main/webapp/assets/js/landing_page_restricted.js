@@ -301,8 +301,6 @@ var app = new Vue({
 		listHided: function () {
 			this.item_selected_id = -2;
 			this.showSearch = true;
-			if (this.items.length === 0)
-				toastr['info']('Clicca due volte velocemente sopra un risultato per aggiungerlo alla lista rapidamente');
 		},
 		searchHided: function () {
 			this.showList = true;
@@ -519,7 +517,6 @@ var app = new Vue({
 			$('#chat').height($('#app').height());
 		},
 		infoItemOnModal: function (item) {
-			console.log(item);
 			this.showInfoModal = item;
 		},
 		infoModalClosed: function() {
@@ -571,7 +568,6 @@ var app = new Vue({
 				$('#item' + i).removeClass('selected');
 			}
 			$('#item' + this.item_selected_id).addClass('selected');
-			console.log(this.item_selected_id);
 		}
 	},
 	created: function () {

@@ -77,10 +77,7 @@ Vue.component('infoModal', {
 							</div>
 						</div>
 					</div>
-				</div>`,
-	created: function () {
-		console.log(this.item);
-	}
+				</div>`
 });
 
 Vue.component('autocompleteItemComponent', {
@@ -97,7 +94,6 @@ Vue.component('getCat', {
 	},
 	created: function () {
 		var self = this;
-		console.log(self.lat + ',' + self.lon);
 		$.get({
 			url: app.path + 'services/geolocation/' + self.cat + '?location=' + self.lat + ',' + self.lon,
 			success: function (data) {
@@ -234,7 +230,6 @@ Vue.component('list-item', {
 	props: ['item'],
 	computed: {
 		capitalized: function () {
-			console.log(this.item.item.name);
 			var capitalized = _.capitalize(this.item.item.name);
 			return capitalized;
 		}
@@ -267,10 +262,7 @@ Vue.component('list-item', {
 				<td @click="infoModal"><i class="fas fa-question-circle"></i></td>
 				<td @click="updateItem"><i class="fas fa-pen-square"></i></td> 
 				<td @click="deleteItem"><i class="fas fa-trash"></i></td> 
-			</tr>`,
-	created: function() {
-		console.log(this.item);
-	}
+			</tr>`
 });
 Vue.component('search-item', {
 	props: ['item'],
@@ -374,7 +366,6 @@ var app = new Vue({
 	},
 	computed: {
 		autocompleteComputed: function () {
-			console.log(this.autocompleteList);
 			var temp = _.cloneDeep(this.autocompleteList);
 			for (var r = 0; r < temp.length; r++) {
 				temp[r].sid = r;
@@ -405,7 +396,6 @@ var app = new Vue({
 			this.isInList(item);
 		},
 		isInList: function (item) {
-			console.log(item.item.id);
 			var settings = {
 				method: 'POST',
 				url: app.path + 'services/lists/anon/' + app.token + '/product',
@@ -479,7 +469,6 @@ var app = new Vue({
 		},
 		addResultsToIstance: function (data) {
 			if (this.showAutocomplete) {
-				console.log(data);
 				(data.length == 0) ? this.autocompleteList = [{
 						name: 'Nessun risultato'
 					}] : this.autocompleteList = data;
@@ -493,7 +482,6 @@ var app = new Vue({
 						};
 				}
 				this.resultsSorted = this.results;
-				console.log(this.results);
 				if (this.results.length == 0)
 					this.noResults = true;
 				else
@@ -572,7 +560,6 @@ var app = new Vue({
 				$('#item' + i).removeClass('selected');
 			}
 			$('#item' + this.item_selected_id).addClass('selected');
-			console.log(this.item_selected_id);
 		}
 	},
 	created: function () {
