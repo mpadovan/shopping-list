@@ -67,7 +67,7 @@
 						<transition name="fade" v-on:after-leave="listHided">
 							<div class="card" id="list" v-if="showList">
 								<div class="card-body">
-									<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.id}/${requestScope.currentList.id}">
+									<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.hash}">
 											<u>${requestScope.currentList.name}</u></a>
 									</h5>
 

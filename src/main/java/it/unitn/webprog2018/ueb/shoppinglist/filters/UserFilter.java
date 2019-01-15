@@ -62,7 +62,7 @@ public class UserFilter implements Filter {
 			uri += "/";
 			}
 			
-			if (!Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getId() + "/.*", uri)) {
+			if (!Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getHash()+ "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
 						+ "The resource you are trying to access is none of your business.\n"

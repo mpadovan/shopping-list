@@ -63,8 +63,6 @@ public class AuthenticationFilter implements Filter {
 				// the user is logged in and we load her lists for the sidebar
 				java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
 				java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
-				// For now we leave it associated with the session, we shall switch to a request attribute once it is safe to change JSPs
-				// Session cannot be null if user is not null
 				request.setAttribute("personalLists", personalLists);
 				request.setAttribute("sharedLists", sharedLists);
 				} catch (DaoException ex) {

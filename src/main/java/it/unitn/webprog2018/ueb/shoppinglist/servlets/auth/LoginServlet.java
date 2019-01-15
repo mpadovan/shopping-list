@@ -97,7 +97,7 @@ public class LoginServlet extends HttpServlet {
 					path += "restricted/admin/PublicProductList";
 					response.sendRedirect(path);
 				} else {
-					path += "restricted/HomePageLogin/" + user.getId();
+					path += "restricted/HomePageLogin/" + user.getHash();
 					response.sendRedirect(path);
 				}
 			} else {

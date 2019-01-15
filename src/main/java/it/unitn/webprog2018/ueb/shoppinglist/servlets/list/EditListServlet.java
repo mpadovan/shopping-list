@@ -187,7 +187,7 @@ public class EditListServlet extends HttpServlet {
 						}
 					}
 					if (everythingOK) {
-						String path = context + "restricted/InfoList/" + me.getId() + "/" + currentList.getId();
+						String path = context + "restricted/InfoList/" + me.getHash()+ "/" + currentList.getHash();
 
 						// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 						String imageURI = "";

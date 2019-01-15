@@ -70,7 +70,7 @@
 						</a>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/admin/InfoAdmin">Profilo</a>
-							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}">Vai al sito</a>
+							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}">Vai al sito</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="${pageContext.servletContext.contextPath}/restricted/Logout">Logout</a>
 						</div>

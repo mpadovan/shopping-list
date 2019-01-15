@@ -191,7 +191,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 				if (everythingOK) {
-					String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+					String path = context + "restricted/HomePageLogin/" + me.getHash()+ "/" + list.getHash();
 
 					// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 					String imageURI = "";
