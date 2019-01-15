@@ -9,6 +9,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,7 +63,7 @@ public class GeolocationWebService {
 	 * Retrieves shops in a 2 km radius that match the categories of the lists
 	 * owned by and shared with the user.
 	 *
-	 * @param userId unique identifier of the
+	 * @param userHash encrypted identifier of the user
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param location	coordinates of the user in the form
 	 * <code>latitude,longitude</code>
@@ -71,15 +72,15 @@ public class GeolocationWebService {
 	 * and the relative shops (names and addresses)
 	 */
 	@GET
-	@Path("/restricted/{userId}")
+	@Path("/restricted/{userHash}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Authentication
-	public String getShopsByUser(@PathParam("userId") int userId,
+	public String getShopsByUser(@PathParam("userHash") String userHash,
 			@QueryParam("location") String location) throws DaoException {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 
 		Set<String> categories = new HashSet<>();
-		java.util.List<List> lists = listDAO.getByUser(userId);
+		java.util.List<List> lists = listDAO.getByUser(User.getDecryptedId(userHash));
 		for (List l : lists) {
 			categories.add(l.getCategory().getName());
 		}

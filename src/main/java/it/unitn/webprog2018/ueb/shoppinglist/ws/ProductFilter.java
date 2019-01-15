@@ -58,7 +58,6 @@ public class ProductFilter implements ContainerRequestFilter {
 			Integer productId = Integer.parseInt(uri.substring(uri.lastIndexOf("/")+1, uri.length()));
 			try {
 				if(!productDAO.getProduct(productId).getOwner().getId().equals(user.getId())) {
-					// TODO USE CORRECT ERROR PAGE
 					if (!servletResponse.isCommitted()) {
 						servletResponse.sendError(401, "YOU SHALL NOT PASS!");
 					}

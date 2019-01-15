@@ -141,7 +141,13 @@ public class User extends AbstractEntity {
 	
 	@Override
 	public String getHash() {
-		return CookieCipher.encrypt(id+email);
+		return CookieCipher.encrypt(id+"_"+email);
+	}
+	
+	public static int getDecryptedId(String encr) {
+		String res = CookieCipher.decrypt(encr);
+		int id = Integer.parseInt(res.substring(0, res.indexOf("_", 0)));
+		return id;
 	}
 	
 	@Override
@@ -230,4 +236,6 @@ public class User extends AbstractEntity {
 		//System.out.println((int)score);
 		return (int) score;
 	}
+	
+	
 }

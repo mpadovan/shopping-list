@@ -52,7 +52,7 @@ public class UserAuthenticationFilter implements ContainerRequestFilter {
 			if (!uri.endsWith("/")) {
 				uri += "/";
 			}
-			if (!Pattern.matches(".*/restricted/" + user.getId() + "/.*", uri)) {
+			if (!Pattern.matches(".*/restricted/" + user.getHash()+ "/.*", uri)) {
 				// TODO add redirection to correct error page.
 				if (!servletResponse.isCommitted()) {
 					HttpErrorHandler.sendError401(servletResponse);
