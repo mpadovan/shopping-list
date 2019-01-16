@@ -48,13 +48,13 @@
 					</tbody>
 				</table>
 
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${requestScope.currentList.id}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 
 				<c:if test="${requestScope.hasDeletePermission}">
 					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
 				</c:if>
 				<c:if test="${requestScope.hasModifyPermission}">
-					<a href="${pageContext.servletContext.contextPath}/restricted/EditList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
+					<a href="${pageContext.servletContext.contextPath}/restricted/EditList/${sessionScope.user.hash}/${requestScope.currentList.id}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
 				</c:if>
 			</div>
 		</div>
@@ -73,7 +73,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-dismiss="modal">Annulla</button>
-						<a href="${pageContext.servletContext.contextPath}/restricted/DeleteList/${sessionScope.user.id}/${requestScope.currentList.id}" class="btn btn-danger">Conferma</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/DeleteList/${sessionScope.user.hash}/${requestScope.currentList.id}" class="btn btn-danger">Conferma</a>
 					</div>
 				</div>
 			</div>

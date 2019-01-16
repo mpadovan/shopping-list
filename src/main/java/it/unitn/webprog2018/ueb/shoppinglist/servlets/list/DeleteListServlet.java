@@ -60,7 +60,7 @@ public class DeleteListServlet extends HttpServlet {
 					uploadHandler.deleteFile(list.getImage(), getServletContext());
 					request.getSession().setAttribute("personalLists", listDAO.getPersonalLists(user.getId()));
 					request.getSession().setAttribute("sharedLists", listDAO.getSharedLists(user.getId()));
-					response.sendRedirect(this.getServletContext().getContextPath() + "/restricted/HomePageLogin/" + user.getId());
+					response.sendRedirect(this.getServletContext().getContextPath() + "/restricted/HomePageLogin/" + user.getHash());
 				}
 			} catch (DaoException ex) {
 				HttpErrorHandler.handleDAOException(ex, response);

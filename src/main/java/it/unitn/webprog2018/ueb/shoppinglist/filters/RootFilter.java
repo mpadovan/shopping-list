@@ -60,7 +60,7 @@ public class RootFilter implements Filter {
 						User user = userDAO.getByEmail(CookieCipher.decrypt(rememberCookie.getValue()));
 						newSession.setAttribute("user", user);
 						
-						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getId());
+						((HttpServletResponse) response).sendRedirect(contextPath + "restricted/HomePageLogin/" + user.getHash());
 						return;
 					} catch (RecordNotFoundDaoException ex) {
 						//redirect alla pagina di Login - esiste un remember cookie che però non corrisponde all'email dell'utente (es: cambio email)

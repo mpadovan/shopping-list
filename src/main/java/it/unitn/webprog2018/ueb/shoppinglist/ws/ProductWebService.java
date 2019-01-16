@@ -147,7 +147,7 @@ public class ProductWebService {
 	 * <code>it.unitn.webprog2018.ueb.shoppinglist.entities.Product</code> whose
 	 * name matches the query (all instances if no query is specified).
 	 *
-	 * @param userId unique identifier of the
+	 * @param userHash encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
@@ -159,12 +159,12 @@ public class ProductWebService {
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
 	 */
 	@GET
-	@Path("/restricted/{userId}")
+	@Path("/restricted/{userHash}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Authentication
-	public String getProducts(@PathParam("userId") int userId, @QueryParam("search") String search,
+	public String getProducts(@PathParam("userHash") String userHash, @QueryParam("search") String search,
 			@QueryParam("compact") String compact, @QueryParam("privateOnly") String privateOnly) {
-
+		int userId = User.getDecryptedId(userHash);
 		try {
 			String query = HttpErrorHandler.getQuery(search);
 
@@ -201,17 +201,19 @@ public class ProductWebService {
 	 *
 	 * @param content String in JSON format, built as: { "name" : __name }
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 */
 	@POST
-	@Path("restricted/{userId}/{listId}")
+	@Path("restricted/{userHash}/{listHash}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void addProduct(String content, @PathParam("userId") Integer userId,
-			@PathParam("listId") Integer listId) {
+	public void addProduct(String content, @PathParam("listHash") String listHash, 
+			@PathParam("userHash") String userHash) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			try {
 				ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();

@@ -10,7 +10,7 @@
 
 <layouts:base pageTitle="Landing Page">
 	<jsp:attribute name="pageContent">
-		<div class="container-fluid mt-4">
+		<div class="container-fluid mt-4"style="position: relative;">
 			<div class="row justify-content-center">
 				<c:if test="${!empty requestScope.currentList}">
 					<div class="col" id="app">
@@ -67,7 +67,7 @@
 						<transition name="fade" v-on:after-leave="listHided">
 							<div class="card" id="list" v-if="showList">
 								<div class="card-body">
-									<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.id}/${requestScope.currentList.id}">
+									<h5 class="card-title text-center">Lista corrente: <a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.hash}">
 											<u>${requestScope.currentList.name}</u></a>
 									</h5>
 
@@ -87,7 +87,7 @@
 												<tr>
 													<th scope="col">Nome prodotto</th>
 													<th scope="col">Quantità</th>
-													<th v-if="permission" scope="col" colspan="3">Gestisci</th>
+													<th scope="col" colspan="3">Gestisci</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -127,7 +127,7 @@
 						<info-modal v-if="showInfoModal" v-bind:item="showInfoModal" @close="infoModalClosed"></info-modal>
 					</div>
 				</div>
-				<div class="chat col-lg-5" id="chat">
+				<div class="chat col-lg-5" id="chat" style="top:0;">
 					<div class="card">
 						<div class="card-body" style="height:90%">
 							<div class="d-flex justify-content-end mb-2">

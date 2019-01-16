@@ -37,7 +37,7 @@
 					<ul class="list-unstyled scrollable-menu" id="personalList" style="font-family: sans-serif;">
 						<c:forEach items="${requestScope.personalLists}" var="list">
 							<li id="personal-list-${list.id}">
-								<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}">${list.name}</a>
+								<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${list.hash}">${list.name}</a>
 							</li>
 						</c:forEach>
 					</ul>
@@ -52,7 +52,7 @@
 					<ul class="list-unstyled scrollable-menu" id="shareList">
 						<c:forEach items="${requestScope.sharedLists}" var="list">
 							<li>
-								<a id="shared-list-outer-${list.id}" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.id}/${list.id}"><span id="shared-list-${list.id}" class="badge badge-danger" style="width: 20px; height: 20px;"></span>${list.name}</a>
+								<a id="shared-list-outer-${list.id}" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${list.hash}"><span id="shared-list-${list.id}" class="badge badge-danger" style="width: 20px; height: 20px;"></span>${list.name}</a>
 							</li>
 						</c:forEach>
 					</ul>

@@ -167,10 +167,10 @@ public class NewListServlet extends HttpServlet {
 								String[] perm = request.getParameterValues("permission-"+u.getEmail());
 								boolean adddelete = true, edit = false, delete = false;
 								switch (perm[0]) {
+									case "view":
+										adddelete = false; edit = false; delete = false; break;
 									case "basic":
 										adddelete = true; edit = false; delete = false; break;
-									case "edit":
-										adddelete = true; edit = true; delete = false; break;
 									case "full":
 										adddelete = true; edit = true; delete = true; break;
 									default: break;
@@ -191,7 +191,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 				if (everythingOK) {
-					String path = context + "restricted/HomePageLogin/" + me.getId() + "/" + list.getId();
+					String path = context + "restricted/HomePageLogin/" + me.getHash()+ "/" + list.getHash();
 
 					// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 					String imageURI = "";

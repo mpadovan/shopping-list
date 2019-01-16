@@ -31,7 +31,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author giulia
  */
-@WebFilter(filterName = "ListFilter", urlPatterns = {"/restricted/HomePageLogin/*", "/restricted/EditList/*", "/restricted/InfoList/*", "/restricted/DeleteList/*"}, 
+@WebFilter(filterName = "ListFilter", urlPatterns = {"/restricted/HomePageLogin/*", "/restricted/EditList/*", "/restricted/InfoList/*", "/restricted/DeleteList/*"},
 		dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
 public class ListFilter implements Filter {
 
@@ -76,44 +76,43 @@ public class ListFilter implements Filter {
 				uri = uri.trim();
 				uri += "/";
 			}
+			Integer listId = 0;
 			// Checks if URI contains the list id (does nothing if it is a no-list home page request -> handled by authentication filter)
-			if (Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getId() + "/.+", uri)) {
-				Integer listId;
-				// handles the case in which userId and listId have the same value
-				if (uri.endsWith("/" + user.getId() + "/")) {
-					listId = user.getId();
-					// request.setAttribute("currentListId", listId);
-				} else {
-					try {
-						listId = Integer.parseInt(uri.substring(uri.lastIndexOf("/", uri.length() - 2) + 1, uri.length() - 1));
-						// request.setAttribute("currentListId", listId);
-					} catch (NumberFormatException ex) {
-						Logger.getLogger(ListFilter.class.getName()).log(Level.SEVERE, null, ex);
-						HttpErrorHandler.sendError400((HttpServletResponse) response);
-						return;
-					}
-				}
+			if (Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getHash() + "/.+", uri)) {
 				try {
-					// if the user can't view the list then she can't do anything else
-					List currentList  = listDAO.getList(listId);
-					if (currentList.getOwner().equals(user) || listDAO.hasViewPermission(listId, user.getId())) {
-						request.setAttribute("hasViewPermission", true);
-						request.setAttribute("hasModifyPermission", currentList.getOwner().equals(user) || listDAO.hasModifyPermission(listId, user.getId()));
-						request.setAttribute("hasDeletePermission", currentList.getOwner().equals(user) || listDAO.hasDeletePermission(listId, user.getId()));
-						request.setAttribute("addDeletePermission", currentList.getOwner().equals(user) || listDAO.hasAddDeletePermission(listId, user.getId()));
-						request.setAttribute("currentList", currentList);
-					} else {
-						HttpErrorHandler.sendError401((HttpServletResponse) response);
-					}
-				} catch (DaoException ex) {
-					HttpErrorHandler.handleDAOException(ex, (HttpServletResponse) response);
+					listId = List.getDecryptedId(uri.substring(uri.lastIndexOf("/", uri.length() - 2) + 1, uri.length() - 1));
+					// request.setAttribute("currentListId", listId);
+				} catch (NumberFormatException ex) {
 					Logger.getLogger(ListFilter.class.getName()).log(Level.SEVERE, null, ex);
+					HttpErrorHandler.sendError400((HttpServletResponse) response);
+					return;
+				}
+
+				if (!response.isCommitted()) {
+					try {
+						// if the user can't view the list then she can't do anything else
+						List currentList = listDAO.getList(listId);
+						if (currentList.getOwner().equals(user) || listDAO.hasViewPermission(listId, user.getId())) {
+							request.setAttribute("hasViewPermission", true);
+							request.setAttribute("hasModifyPermission", currentList.getOwner().equals(user) || listDAO.hasModifyPermission(listId, user.getId()));
+							request.setAttribute("hasDeletePermission", currentList.getOwner().equals(user) || listDAO.hasDeletePermission(listId, user.getId()));
+							request.setAttribute("addDeletePermission", currentList.getOwner().equals(user) || listDAO.hasAddDeletePermission(listId, user.getId()));
+							request.setAttribute("currentList", currentList);
+						} else {
+							HttpErrorHandler.sendError401((HttpServletResponse) response);
+						}
+					} catch (DaoException ex) {
+						HttpErrorHandler.handleDAOException(ex, (HttpServletResponse) response);
+						Logger.getLogger(ListFilter.class.getName()).log(Level.SEVERE, null, ex);
+					}
 				}
 			}
-			try {
-				chain.doFilter(request, response);
-			} catch (IOException | ServletException ex) {
-				Logger.getLogger(ListFilter.class.getName()).log(Level.SEVERE, null, ex);
+			if (!response.isCommitted()) {
+				try {
+					chain.doFilter(request, response);
+				} catch (IOException | ServletException ex) {
+					Logger.getLogger(ListFilter.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			}
 		}
 

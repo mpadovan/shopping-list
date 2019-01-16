@@ -15,6 +15,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.CustomGsonBuilder;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication;
@@ -118,9 +119,9 @@ public class ListWebService {
 	/**
 	 * Retrieves all the products in a list
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 *
 	 * @return an instance of java.lang.String representing, in Json format, a
@@ -130,11 +131,13 @@ public class ListWebService {
 	 * mapped to their respective amount on the list
 	 */
 	@GET
-	@Path("/restricted/{userId}/permission/{listId}/products")
+	@Path("/restricted/{userHash}/permission/{listHash}/products")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Authentication
-	public String getProductsOnList(@PathParam("listId") int listId, @PathParam("userId") Integer userId) {
+	public String getProductsOnList(@PathParam("listHash") String listHash, @PathParam("userHash") String userHash) {
 		String json = null;
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkViewPermission(listId, userId)) {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			Map<PublicProduct, Integer> publicProductsOnList = null;
@@ -216,18 +219,20 @@ public class ListWebService {
 	 * amount on the list is incremented by 1. The action may only be performed
 	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param content	body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
 	@POST
-	@Path("/restricted/{userId}/permission/{listId}/products/public")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/public")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void addPublicProductOnList(@PathParam("userId") int userId, @PathParam("listId") int listId, String content) {
+	public void addPublicProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash, String content) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			try {
 				PublicProduct product = null;
@@ -256,19 +261,21 @@ public class ListWebService {
 	 * amount on the list is incremented by 1. The action may only be performed
 	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param content body of the request in the form of { "id" : product_id }
 	 * (more information may be provided but is not relevant)
 	 */
 	@POST
-	@Path("/restricted/{userId}/permission/{listId}/products/personal")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/personal")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void addProductOnList(@PathParam("listId") int listId,
-			@PathParam("userId") int userId, String content) {
+	public void addProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash,
+			String content) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			Product product = null;
 			try {
@@ -305,9 +312,9 @@ public class ListWebService {
 	 * may only be performed if the user has the permission to edit the products
 	 * on the list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param productId	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
@@ -315,11 +322,13 @@ public class ListWebService {
 	 * (more information may be provided but is not relevant)
 	 */
 	@PUT
-	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/personal/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void editProductOnList(@PathParam("userId") int userId, @PathParam("listId") int listId,
+	public void editProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash,
 			@PathParam("productId") int productId, String content) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId) && checkProductPermission(productId, userId)) {
 			Integer newAmount = -1;
 			try {
@@ -355,9 +364,9 @@ public class ListWebService {
 	 * be performed if the user has the permission to edit the products on the
 	 * list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param productId	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
@@ -365,11 +374,13 @@ public class ListWebService {
 	 * (more information may be provided but is not relevant)
 	 */
 	@PUT
-	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/public/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void editPublicProductOnList(@PathParam("userId") int userId, @PathParam("listId") int listId,
+	public void editPublicProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash,
 			@PathParam("productId") int productId, String content) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			Integer newAmount = -1;
 			try {
@@ -403,18 +414,20 @@ public class ListWebService {
 	 * Removes a PERSONAL product from a list. The action may only be performed
 	 * if the user has the permission to edit the products on the list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param productId	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.Product}
 	 */
 	@DELETE
-	@Path("/restricted/{userId}/permission/{listId}/products/personal/{productId}")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/personal/{productId}")
 	@Authentication
-	public void deleteProductOnList(@PathParam("userId") int userId,
-			@PathParam("listId") int listId, @PathParam("productId") int productId) {
+	public void deleteProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash,
+			@PathParam("productId") int productId) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			try {
@@ -432,18 +445,19 @@ public class ListWebService {
 	 * Removes a public product from a list. The action may only be performed if
 	 * the user has the permission to edit the products on the list.
 	 *
-	 * @param listId	unique identifier of the
+	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
-	 * @param userId	unique identifier of the
+	 * @param userHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User}
 	 * @param productId	unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
 	 */
 	@DELETE
-	@Path("/restricted/{userId}/permission/{listId}/products/public/{productId}")
+	@Path("/restricted/{userHash}/permission/{listHash}/products/public/{productId}")
 	@Authentication
-	public void deletePublicProductOnList(@PathParam("userId") int userId,
-			@PathParam("listId") int listId, @PathParam("productId") int productId) {
+	public void deletePublicProductOnList(@PathParam("userHash") String userHash, @PathParam("listHash") String listHash, @PathParam("productId") int productId) {
+		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
+		int userId = User.getDecryptedId(userHash);
 		if (checkAddDeletePermission(listId, userId)) {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
 			try {

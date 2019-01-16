@@ -64,15 +64,11 @@ public class AccountConfirmationServlet extends HttpServlet {
 		String tokenString = request.getParameter("token");
 
 		Token token = tokenDAO.getByTokenString(tokenString);
-		String uploadFolder = getServletContext().getInitParameter("uploadFolder");
 		if (token == null) {
-			// TODO edit to correct page
-			path += "invalidToken.html";
-			response.sendRedirect(path);
+			response.sendError(403, "Token non valido");
 		} else if (isExpired(token)) {
 			tokenDAO.removeToken(token);
-			path += "expiredToken.html";
-			response.sendRedirect(path);
+			response.sendError(403, "Token scaduto");
 		}
 		if (!response.isCommitted()) {	// If token is null then response is committed
 			User user = token.getUser();

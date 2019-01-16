@@ -116,7 +116,13 @@ public class List extends AbstractEntity {
 
 	@Override
 	public String getHash() {
-		return CookieCipher.encrypt(id+name);
+		return CookieCipher.encrypt(id+"_"+name);
+	}
+	
+	public static int getDecryptedId(String encr) {
+		String res = CookieCipher.decrypt(encr);
+		int id = Integer.parseInt(res.substring(0, res.indexOf("_", 0)));
+		return id;
 	}
 
 }
