@@ -107,7 +107,7 @@
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.id}" class="btn btn-light">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Modifica</button>
 						</div> 
 					</form>

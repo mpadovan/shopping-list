@@ -146,7 +146,7 @@ public class User extends AbstractEntity {
 	
 	public static int getDecryptedId(String encr) {
 		String res = CookieCipher.decrypt(encr);
-		int id = Integer.parseInt(res.substring(0, res.indexOf("_", 0)));
+		int id = Integer.parseInt(res.substring(0, res.indexOf('_')));
 		return id;
 	}
 	
