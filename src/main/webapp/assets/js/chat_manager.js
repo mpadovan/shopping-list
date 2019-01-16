@@ -34,10 +34,7 @@ var chat = new Vue({
 						id: this.user,
 						errors: {}
 					},
-					list: {
-						id: app.list,
-						errors: {}
-					},
+					listid: app.list,
 					sendTime: null,
 					text: this.text
 				}
@@ -106,9 +103,10 @@ var chat = new Vue({
 			if (this.text) {
 				this.message.operation = 0;
 				this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
-				this.message.payload.list.id = app.list;
-				this.message.payload.sender.id = this.user;
+				this.message.payload.listId = app.list;
+				this.message.payload.senderId = app.user;
 				this.message.payload.text = this.text;
+				console.log(this.message);
 				if (this.message.payload.text.length <= 255) {
 					Socket.send(JSON.stringify(this.message));
 				}
