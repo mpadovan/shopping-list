@@ -136,7 +136,7 @@ $(document).ready(function () {
 	$('#app').resize(function () {
 		$('#chat').height($('#app').height());
 	});
-	Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
+	Socket = new WebSocket('wss://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
 	Socket.onopen = function (evt) {
 		Socket.send(JSON.stringify({
 			operation: '1',

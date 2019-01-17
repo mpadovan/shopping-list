@@ -69,7 +69,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/assets/js/sidebar.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-		<script src="http://momentjs.com/downloads/moment.min.js"></script>
+		<script src="https://momentjs.com/downloads/moment.min.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/assets/js/baseGeolocal.js"></script>
 		<jsp:invoke fragment="customJs" />
 	</body>

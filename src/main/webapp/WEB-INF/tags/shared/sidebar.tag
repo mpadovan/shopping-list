@@ -52,7 +52,7 @@
 					<ul class="list-unstyled scrollable-menu" id="shareList">
 						<c:forEach items="${requestScope.sharedLists}" var="list">
 							<li>
-								<a id="shared-list-outer-${list.id}" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${list.hash}"><span id="shared-list-${list.id}" class="badge badge-danger" style="width: 20px; height: 20px;"></span>${list.name}</a>
+								<a id="shared-list-outer-${list.hash}" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${list.hash}"><span id="shared-list-${list.hash}" class="badge badge-danger" style="width: 20px; height: 20px;"></span>${list.name}</a>
 							</li>
 						</c:forEach>
 					</ul>
