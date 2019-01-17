@@ -147,7 +147,7 @@ public class EditProductServlet extends HttpServlet {
 			if (!response.isCommitted()) { // everything went well, we can persist the changes
 				if (product.isVaildOnUpdate((DAOFactory) getServletContext().getAttribute("daoFactory")) 
 						&& productDAO.updateProduct(productId, product)) {
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/ProductList");
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/InfoProduct?id="+productId);
 				} else {
 					request.setAttribute("product", product);
 					InitializeCategoryRedirect(request, response, product);
