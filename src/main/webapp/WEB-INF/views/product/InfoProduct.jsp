@@ -14,14 +14,13 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-sm-12 col-md-auto text-center">
-						<img src="${pageContext.servletContext.contextPath}${requestScope.product.photography}" class="image-product" alt="...">
+						<img src="${pageContext.servletContext.contextPath}${requestScope.product.photography}" class="image-product" alt="Fotografia prodotto" title="Fotografia prodotto">
 					</div>
 					<div class="col">
 						<h5 class="card-title text-center mt-0">Informazioni prodotto "${requestScope.product.name}"</h5>
 						<div class="table-responsive-md">
 							<table class="table ">
 								<tbody>
-
 									<tr>
 										<th scope="row">Nome</th>
 										<td>${requestScope.product.name}</td>
@@ -34,7 +33,7 @@
 										<th scope="row">Logo</th>
 											<c:if test="${requestScope.product.logo != ''}">
 											<td>
-												<div class="text-center info-custom-product"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${requestScope.product.logo}" alt="Logo" title="Logo"></div>
+												<div class="text-center info-custom-product"><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${requestScope.product.logo}" alt="Logo prodotto" title="Logo prodotto"></div>
 											</td>
 										</c:if>
 										<c:if test="${requestScope.product.logo == ''}">
