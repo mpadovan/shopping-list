@@ -15,7 +15,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.ProductsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -119,7 +119,7 @@ public class EditProductServlet extends HttpServlet {
 				// Save new logo
 				try {
 					logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PRODUCT_LOGO, product, getServletContext());
-				} catch (FileAlreadyExistsException ex) {
+				} catch (FileAlreadyExistsException | NoSuchFileException ex) {
 					// It is not a fatal error, we ask the user to try again
 					Logger.getLogger(EditProductServlet.class.getName()).log(Level.WARNING, null, ex);
 					product.setError("logo", "Non è stato possibile salvare il logo, riprova più tardi o contatta un amministratore");

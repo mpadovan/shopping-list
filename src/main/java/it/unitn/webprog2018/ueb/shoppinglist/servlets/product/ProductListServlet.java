@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author giulia
  */
-@WebServlet(name = "ProductListServlet", urlPatterns = {"/restricted/ProductList"})
+@WebServlet(name = "ProductListServlet", urlPatterns = {"/restricted/ProductList/*"})
 public class ProductListServlet extends HttpServlet {
 	private ProductDAO productDAO;
 	

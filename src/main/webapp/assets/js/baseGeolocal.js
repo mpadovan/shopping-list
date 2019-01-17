@@ -76,11 +76,11 @@ var geo = new Vue({
     },
     created: function () {
         var self = this;
-        if (window.location.pathname.split('restricted/')[1].split('/')[1] == undefined) {
+        if (window.location.pathname.split('user-')[1] == undefined) {
             this.msg = "OUCH! Sembra che i criceti che abbiamo ammaestrato siano in sciopero!";
             self.showRes = true;
         } else {
-            this.user = window.location.pathname.split('restricted/')[1].split('/')[1];
+            this.user = "user-" + window.location.pathname.split('user-')[1].split('/')[0];
         }
         if (navigator.geolocation && this.msg == false && this.user !== null) {
             navigator.geolocation.getCurrentPosition(function (position) {
