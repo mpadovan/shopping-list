@@ -46,7 +46,7 @@
 		<%-- Container for page Content printed via JSP tag --%>
 		<div class="wrapper">
 			<shared:sidebar />
-			<div id="content" style="overflow-x: hidden;">
+			<div id="content" style="overflow-x: hidden; background-color: aliceblue;">
 				<shared:navbar />
 
 				<jsp:invoke fragment="pageContent" />
