@@ -14,8 +14,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Message;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import java.io.IOException;
-import java.util.Date;
-import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -66,7 +64,8 @@ public class ChatWebSocketServer {
 	}
 
 	/**
-	 * Handles the closing of a session.
+	 * Handles the closing of a session. Unsubscribes the user from the chat
+	 * session handler.
 	 *
 	 * @param session session that was closed
 	 * @param userHash Encrypted unique identifier of the
@@ -82,7 +81,8 @@ public class ChatWebSocketServer {
 	}
 
 	/**
-	 * Session error handling.
+	 * Session error handling. Closes the connection and notifies the client of
+	 * the error.
 	 *
 	 * @param session session that was being processed when the error was raised
 	 * @param error	Error that was raised
@@ -110,7 +110,7 @@ public class ChatWebSocketServer {
 	}
 
 	/**
-	 * Handles incoming messages.
+	 * Handles incoming messages based on their operation code.
 	 *
 	 * @param message	Json format of the chat message, includes sender_id,
 	 * list_id, send_time and of course message
@@ -118,6 +118,9 @@ public class ChatWebSocketServer {
 	 * @param userHash Encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.User} that owns the
 	 * session
+	 * 
+	 * @see it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatWebSocketMessage
+	 * @see it.unitn.webprog2018.ueb.shoppinglist.websocket.chat.ChatWebSocketMessage.Operation
 	 */
 	@OnMessage
 	public void handleMessage(String message, Session session, @PathParam("userHash") String userHash) {
