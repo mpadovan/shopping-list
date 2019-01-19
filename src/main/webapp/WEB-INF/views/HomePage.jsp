@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:empty pageTitle="Landing Page Anonimus">
+<layouts:empty pageTitle="">
 	<jsp:attribute name="pageContent">
 		<noscript>
 			<h1>Questo sito funziona con JS, attivalo per utilizzare il sito</h1>
