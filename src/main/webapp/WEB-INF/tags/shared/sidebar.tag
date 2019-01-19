@@ -5,6 +5,7 @@
 		<i class="fas fa-arrow-left"></i>
 	</div>
     <div class="sidebar-header" id="header">
+		<p class="p-logo text-center"><img style="width: 30px;" src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Logo" title="Logo"> Shopping List</p>
 		<div class="text-center">
 			<c:if test="${not empty sessionScope.user.image}">
 				<img style="width: 300px; height: 300px;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
@@ -14,7 +15,7 @@
 			</c:if>
 		</div>
 		<div class="text-center div-info-user">
-			<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser"><h5 class="h5-user-name">${sessionScope.user.name} ${sessionScope.user.lastname}</h5></a>
+			<a href="${pageContext.servletContext.contextPath}/restricted/InfoUser"><h6 class="h6-user-name">${sessionScope.user.name} ${sessionScope.user.lastname}</h6></a>
 			<a href="${pageContext.servletContext.contextPath}/restricted/Logout"><p><span class="p-size">Logout </span><i class="fas fa-sign-out-alt"></i></p></a>
 				<c:if test="${sessionScope.user.administrator}">
 				<a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><p><span class="p-size">Amministrazione</span></p></a>
