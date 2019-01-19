@@ -8,10 +8,14 @@ package it.unitn.webprog2018.ueb.shoppinglist.websocket.notification;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * Message sent on the websocket connection to notify users of products that
+ * should be inserted into a list soon. This class is currently not used and is
+ * therefore not testes. It is implemented for future use.
  *
  * @author Giulia Carocari
  */
 public class NotificationWebSocketMessage {
+
 	public enum Operation {
 		@SerializedName("0")
 		SEND_UNREAD_COUNT,
@@ -20,7 +24,7 @@ public class NotificationWebSocketMessage {
 		@SerializedName("2")
 		FETCH_NOTIFICATIONS
 	}
-	
+
 	Operation operation;
 	Object payload;
 
