@@ -29,14 +29,20 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Authentication
 public class UserAuthenticationFilter implements ContainerRequestFilter {
-
-	@Context
-	private ServletContext servletContext;
+	
 	@Context
 	private HttpServletRequest servletRequest;
 	@Context
 	private HttpServletResponse servletResponse;
 
+	/**
+	 * Filters the request to the methods in the web services annotated with @Authentication.
+	 * 
+	 * @param requestContext
+	 * @throws IOException
+	 * 
+	 * @see it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.Authentication
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		HttpSession session = servletRequest.getSession();

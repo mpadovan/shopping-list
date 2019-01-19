@@ -39,6 +39,13 @@ public class ProductFilter implements ContainerRequestFilter {
 	@Context
 	private HttpServletResponse servletResponse;
 
+	/**
+	 * Filters the request to the methods in the web services annotated with @ProductPermission.
+	 * 
+	 * @param requestContext
+	 * @throws IOException
+	 * @see it.unitn.webprog2018.ueb.shoppinglist.ws.annotations.ProductPermission
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
@@ -62,8 +69,7 @@ public class ProductFilter implements ContainerRequestFilter {
 						servletResponse.sendError(401, "YOU SHALL NOT PASS!");
 					}
 				}
-			} catch (DaoException ex) {
-				// TODO add correct redirection to error page ?
+			} catch (DaoException ex) {	
 				HttpErrorHandler.handleDAOException(ex, servletResponse);
 			}
 		}

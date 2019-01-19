@@ -12,13 +12,14 @@ import java.lang.annotation.Target;
 import javax.ws.rs.NameBinding;
 
 /**
- * Name binding annotation to map the UserAuthenticationFilter to its methods
+ * Name binding annotation to map the UserAuthenticationFilter to the methods it
+ * has to filter.
  *
  * @author Giulia Carocari
  */
-@Target({ElementType.METHOD,ElementType.TYPE})
-@Retention(value=RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(value = RetentionPolicy.RUNTIME)
 @NameBinding
 public @interface Authentication {
-	
+
 }
