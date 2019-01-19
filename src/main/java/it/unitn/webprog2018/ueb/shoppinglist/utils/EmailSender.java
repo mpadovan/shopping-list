@@ -13,7 +13,7 @@ import org.apache.commons.mail.SimpleEmail;
 
 	
 /**
- * Utility class for sending simple text messages using emails.
+ * Static class used to send simple text messages using emails.
  * This action is performed through the gmail smtp server.
  *
  * @author Giulia Carocari
@@ -25,7 +25,7 @@ public class EmailSender {
 	private static final Integer PORT = 465;
 	
 	/**
-	 * Method for sending simple text email messages.
+	 * Method used to send simple text email messages.
 	 * 
 	 * @param recipient Recipient of the message
 	 * @param subject Subject of the email

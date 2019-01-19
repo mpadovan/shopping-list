@@ -15,23 +15,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Entirely static class that can be used to obtain the server's IPv4 address.
+ * Entirely static class that can be used to obtain the server's and database's
+ * addresses.
  *
  * @author Giulia Carocari
  */
 public class Network {
-	
+
+	/**
+	 * Returns the server address to be used to manually create links to the
+	 * website.
+	 *
+	 * @return a String representing the hostname of the server
+	 */
 	public static String getServerAddress() {
+		// TODO: SWITCH TO RELEASE VERSION
+		/*
+		 * return www.shppng.tk/
+		 */
 		try {
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-			
+
 			while (networkInterfaces.hasMoreElements()) {
 				Enumeration<InetAddress> addresses = networkInterfaces.nextElement().getInetAddresses();
 				while (addresses.hasMoreElements()) {
 					InetAddress add = addresses.nextElement();
-					if (!add.isLinkLocalAddress() 
-                         && !add.isLoopbackAddress()
-                         && add instanceof Inet4Address) {
+					if (!add.isLinkLocalAddress()
+							&& !add.isLoopbackAddress()
+							&& add instanceof Inet4Address) {
 						return add.getHostAddress();
 					}
 				}
@@ -48,17 +59,23 @@ public class Network {
 		// everything fails, i give up.
 		return null;
 	}
-	
+
+	/**
+	 * Returns the loopback address to connect to the database on the same
+	 * machine as the server.
+	 *
+	 * @return a String representing the address of the database
+	 */
 	public static String getDatabaseAddress() {
 		try {
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-			
+
 			while (networkInterfaces.hasMoreElements()) {
 				Enumeration<InetAddress> addresses = networkInterfaces.nextElement().getInetAddresses();
 				while (addresses.hasMoreElements()) {
 					InetAddress add = addresses.nextElement();
 					if (add.isLoopbackAddress()
-                         && add instanceof Inet4Address) {
+							&& add instanceof Inet4Address) {
 						return add.getHostAddress();
 					}
 				}
@@ -68,5 +85,5 @@ public class Network {
 		}
 		return null;
 	}
-	
+
 }

@@ -15,22 +15,23 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Class that implements shared methods for exception and error handling. Error
- * messages are meant to keep the reporting of http errors uniform across the
- * whole application, each error code is mapped to one or more message strings
+ * Static class that implements shared methods for exception and error handling.
+ * Error messages are meant to keep the reporting of HTTP errors uniform across
+ * the whole application, each error code is mapped to one message
+ * strings.
  *
  * @author Giulia Carocari
  */
 public class HttpErrorHandler {
 
 	private static String contextPath;
-	public static String ERROR_MESSAGE_500 = "Ooops, sembra che qualcosa sia andato storto sul nostro server."
+	private static String ERROR_MESSAGE_500 = "Ooops, sembra che qualcosa sia andato storto sul nostro server."
 			+ " Riprova più tardi o contatta un amministratore";
-	private static String ERROR_MESSAGE_400 = "C'è qualcosa di sbagliato nella tua richiesta. Riprova.";
-	public static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
+	private static final String ERROR_MESSAGE_400 = "C'è qualcosa di sbagliato nella tua richiesta. Riprova.";
+	private static final String ERROR_MESSAGE_401 = "YOU SHALL NOT PASS!\n"
 			+ "La risorsa a cui stai cercando di accedere non ti riguarda.\n"
 			+ "Se pensi di avere accesso alla risorsa provalo tramite login.";
-	public static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
+	private static final String ERROR_MESSAGE_404 = "The resource you are trying to access does not exist on our system";
 
 	/**
 	 * Sets the context path of the application that uses the
@@ -45,7 +46,6 @@ public class HttpErrorHandler {
 		HttpErrorHandler.contextPath = contextPath;
 	}
 
-	
 	/**
 	 * Prepares the string in input to be used for performing SQL string
 	 * matching
@@ -113,9 +113,8 @@ public class HttpErrorHandler {
 	}
 
 	/**
-	 * Handles an Unathorized error response.
-	 * Takes charge of handling IOException and checking if the response is
-	 * already committed.
+	 * Handles an Unathorized error response. Takes charge of handling
+	 * IOException and checking if the response is already committed.
 	 *
 	 * @param response response to send the error to
 	 */
@@ -130,9 +129,8 @@ public class HttpErrorHandler {
 	}
 
 	/**
-	 * Handles a Bad Request error response.
-	 * Takes charge of handling IOException and checking if the response is
-	 * already committed.
+	 * Handles a Bad Request error response. Takes charge of handling
+	 * IOException and checking if the response is already committed.
 	 *
 	 * @param response response to send the error to
 	 */
