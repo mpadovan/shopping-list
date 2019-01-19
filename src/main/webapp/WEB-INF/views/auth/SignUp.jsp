@@ -12,17 +12,18 @@
 	<jsp:attribute name="pageContent">
 		<div class="cointainer-fluid px-2">
 			<div class="card signUp-card">
+				<img class="logo-login" src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Logo" title="Logo">
 				<div class="card-body">
-					<c:if test="${!empty user.errors}">
-						<div class="alert alert-danger" role="alert">
-							<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
-							<p>Controlla i campi sottostanti.</p>
-						</div>
-					</c:if>
 					<div class="text-center mb-4">
 						<h3 class="mb-3 font-weight-normal">Registrazione</h3>
 					</div>
 					<form class="form-signin" action="SignUp" method="POST" enctype='multipart/form-data'>
+						<c:if test="${!empty user.errors}">
+							<div class="alert alert-danger form-control" role="alert">
+								<h4 class="alert-heading">I dati inseriti non sono validi.</h4>
+								<p>Controlla i campi sottostanti.</p>
+							</div>
+						</c:if>
 						<div class="form-label-group">
 							<input type="text"
 								   id="name"
@@ -101,23 +102,32 @@
 			</div>
 		</div>
 	</jsp:attribute>
+	<jsp:attribute name="customCss">
+		<style>
+			.logo-login{
+				width: 200px;
+				margin: auto;
+				padding-top: 35px;
+			}
+		</style>
+	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
-			var weakTh = 30,goodTh = 60, strongTh = 80;		//Thresholds: weak,good or strong password; is valid when is good or strong
+			var weakTh = 30, goodTh = 60, strongTh = 80;		//Thresholds: weak,good or strong password; is valid when is good or strong
 			$(document).ready(function () {
-				var state=0;
+				var state = 0;
 				setTimeout(function () {
 					var $Input = $('input:-webkit-autofill');
 					$Input.next("label").addClass('active');
 				}, 100);
-				$("#password").on("input", function() {
+				$("#password").on("input", function () {
 					var pass = $(this).val();
-					if((pass == null || pass.length == 0) && state === 1){
+					if ((pass == null || pass.length == 0) && state === 1) {
 						$("#progressBar").removeClass("from0to33").removeClass("from66to33").addClass("from33to0");
 						$("#passwordStrength").removeClass("zoomIn").addClass("zoomOut");
 						state = 0;
 					}
-					if(state === 0 && pass.length > 0){
+					if (state === 0 && pass.length > 0) {
 						$("#passwordStrength").removeClass("d-none").removeClass("zoomOut").addClass("zoomIn");
 						$("#progressBar").removeClass("from33to0").addClass("from0to33");
 						state = 1;
@@ -126,24 +136,22 @@
 					var passScore = scorePassword(pass);
 					//console.log(passScore);
 					$("#progressBar").html(passStrength).val(passScore);
-					if(passScore <= goodTh && state===2){
+					if (passScore <= goodTh && state === 2) {
 						$("#progressBar").removeClass("from100to66").removeClass("from33to66").removeClass("bg-warning").addClass("from66to33").addClass("bg-danger").width("33.3%");
-						state=1;
-					}
-					else if(passScore > goodTh && passScore<=strongTh){
-						if(state===1)
+						state = 1;
+					} else if (passScore > goodTh && passScore <= strongTh) {
+						if (state === 1)
 							$("#progressBar").removeClass("bg-danger").addClass("from33to66").addClass("bg-warning").width("66.6%").removeClass("from0to33").removeClass("from66to33");
 						else if (state === 3)
 							$("#progressBar").addClass("from100to66").addClass("bg-warning").width("66.6%").removeClass("from66to100").removeClass("bg-success");
-						state=2;
-					}
-					else if(passScore > strongTh && state === 2){
+						state = 2;
+					} else if (passScore > strongTh && state === 2) {
 						$("#progressBar").removeClass("bg-warning").addClass("from66to100").addClass("bg-success").width("100%").removeClass("from100to66").removeClass("from33to66");
-						state=3;
+						state = 3;
 					}
 				});
 			});
-			
+
 			function scorePassword(pass) {
 				var score = 0;
 				if (!pass)
@@ -151,7 +159,7 @@
 
 				// award every unique letter until 5 repetitions
 				var letters = new Object();
-				for (var i=0; i<pass.length; i++) {
+				for (var i = 0; i < pass.length; i++) {
 					letters[pass[i]] = (letters[pass[i]] || 0) + 1;
 					score += 5.0 / letters[pass[i]];
 				}

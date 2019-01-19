@@ -12,6 +12,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<!-- Favicon -->
+		<link rel="icon" href="${pageContext.servletContext.contextPath}/assets/images/logo.png" type="image/png" />
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- Bootstrap CSS -->
