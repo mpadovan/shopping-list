@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Servlet that handles requests to see the information of a list.
  *
  * @author simon
  */
@@ -36,7 +37,9 @@ public class InfoListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the InfoList
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -71,7 +74,7 @@ public class InfoListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Does nothing
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

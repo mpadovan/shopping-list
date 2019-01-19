@@ -210,7 +210,7 @@ public class ProductWebService {
 	@Path("restricted/{userHash}/{listHash}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Authentication
-	public void addProduct(String content, @PathParam("listHash") String listHash, 
+	public void addProduct(String content, @PathParam("listHash") String listHash,
 			@PathParam("userHash") String userHash) {
 		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
 		int userId = User.getDecryptedId(userHash);
@@ -244,6 +244,16 @@ public class ProductWebService {
 // -------------------------------------------------------------------------- //
 ////////////////////////////// PRIVATE METHODS /////////////////////////////////
 // -------------------------------------------------------------------------- //
+	/**
+	 * Checks if a user has the permission to add products to a list. This
+	 * method is used for the rapid creation of a product.
+	 *
+	 * @param listId Id of the list
+	 * @param userId Id of the user that wants to perform the action
+	 * @return true if the permission is granted, false otherwise.
+	 *
+	 * @see #addProduct(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();

@@ -13,7 +13,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Servlet that handles requests to reset a user's password.
  *
  * @author simon
  */
@@ -39,7 +39,8 @@ public class ResetPasswordServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. IForwards the request to the ResetPassword
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -55,7 +56,8 @@ public class ResetPasswordServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Reads the email associated
+	 * with the account and sends a reset password email.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -87,8 +89,7 @@ public class ResetPasswordServlet extends HttpServlet {
 			user.setTokenpassword(token);
 			try {
 				userDAO.setToken(user);
-				String link = "http://" + Network.getServerAddress()
-						+ ":8080" + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
+				String link = "http://" + Network.getServerAddress() + context + "SetNewPassword?id=" + user.getId() + "&token=" + token;
 				if (EmailSender.send(user.getEmail(), "Reset Password",
 						"Hello " + user.getName() + ", you requested to reset your password.\nPlease click on the following link to reset it:\n" + link)) {
 					request.getRequestDispatcher("/WEB-INF/views/auth/ConfirmSendEmail.jsp").forward(request, response);

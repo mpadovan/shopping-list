@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -39,8 +38,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/geolocation")
 public class GeolocationWebService {
 
-	@Context
-	private UriInfo context;
 	@Context
 	private ServletContext servletContext;
 
@@ -114,6 +111,10 @@ public class GeolocationWebService {
 		}
 		return json;
 	}
+	
+// -------------------------------------------------------------------------- //
+////////////////////////// ANONIMOUS USER METHODS //////////////////////////////
+// -------------------------------------------------------------------------- //
 
 	/**
 	 * Retrieves shops in a 2 km radius that match the category of the anonymous list.
@@ -129,8 +130,7 @@ public class GeolocationWebService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getShops(@PathParam("category") String category,
 			@QueryParam("location") String location) {
-		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
-
+		
 		Client client = ClientBuilder.newClient();
 		String json = "[";
 		URI uri = null;

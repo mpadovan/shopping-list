@@ -12,12 +12,16 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * Web application lifecycle listener.
+ * Web application lifecycle listener. Handles connections to the database.
  *
  * @author giuliapeserico
  */
 public class DBListener implements ServletContextListener {
 
+	/**
+	 * Connects to the database and creates DaoFactory.
+	 * @param sce 
+	 */
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		String dburl;
@@ -34,6 +38,10 @@ public class DBListener implements ServletContextListener {
 		// sce.getServletContext().setAttribute("daoFactory", factory);
 	}
 
+	/**
+	 * Shuts down the connection to the database.
+	 * @param sce 
+	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try {

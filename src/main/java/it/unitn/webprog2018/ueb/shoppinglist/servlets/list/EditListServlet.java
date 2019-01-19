@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
+ * Handles the requests to edit the information of a list.
  *
  * @author simon
  */
@@ -55,7 +56,9 @@ public class EditListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the EditList
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -79,7 +82,8 @@ public class EditListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Updates and persists new
+	 * information about the list whose id is specified as a request parameter.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -160,12 +164,22 @@ public class EditListServlet extends HttpServlet {
 									boolean adddelete = true, edit = false, delete = false;
 									switch (perm[0]) {
 										case "view":
-											adddelete = false; edit = false; delete = false; break;
+											adddelete = false;
+											edit = false;
+											delete = false;
+											break;
 										case "basic":
-											adddelete = true; edit = false; delete = false; break;
+											adddelete = true;
+											edit = false;
+											delete = false;
+											break;
 										case "full":
-											adddelete = true; edit = true; delete = true; break;
-										default: break;
+											adddelete = true;
+											edit = true;
+											delete = true;
+											break;
+										default:
+											break;
 									}
 									if (!listDAO.linkShoppingListToUser(currentList, u.getId(), adddelete, edit, delete)) {
 										everythingOK = false;
@@ -187,7 +201,7 @@ public class EditListServlet extends HttpServlet {
 						}
 					}
 					if (everythingOK) {
-						String path = context + "restricted/InfoList/" + me.getHash()+ "/" + currentList.getHash();
+						String path = context + "restricted/InfoList/" + me.getHash() + "/" + currentList.getHash();
 
 						// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 						String imageURI = "";

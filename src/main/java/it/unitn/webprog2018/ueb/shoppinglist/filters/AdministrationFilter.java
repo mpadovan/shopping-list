@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Filters requests to the administration servlets to prevent users without
+ * admin privileges to access them.
  *
  * @author Giulia Carocari
  */
@@ -37,6 +40,16 @@ public class AdministrationFilter implements Filter {
 		this.filterConfig = filterConfig;
 	}
 
+	/**
+	 * Filters the requests to see if the user in this session has
+	 * administration permissions. If not, it sends an error to the client.
+	 *
+	 * @param request
+	 * @param response
+	 * @param chain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
@@ -58,7 +71,7 @@ public class AdministrationFilter implements Filter {
 				return;
 			} else {
 				if (!user.isAdministrator()) {
-					((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "notAuthorized.html"));
+					HttpErrorHandler.sendError401((HttpServletResponse) response);
 					return;
 				}
 			}
@@ -100,7 +113,7 @@ public class AdministrationFilter implements Filter {
 				pw.close();
 				ps.close();
 				response.getOutputStream().close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 			}
 		} else {
 			try {
@@ -108,7 +121,7 @@ public class AdministrationFilter implements Filter {
 				t.printStackTrace(ps);
 				ps.close();
 				response.getOutputStream().close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 			}
 		}
 	}
@@ -127,7 +140,7 @@ public class AdministrationFilter implements Filter {
 			pw.close();
 			sw.close();
 			stackTrace = sw.getBuffer().toString();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 		}
 		return stackTrace;
 	}

@@ -6,14 +6,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * Class for computing the Sha256 hash for a string
+ * Static class used to compute the Sha256 hash for a string.
  *
  * @author Michele
  */
 public class Sha256 {
 	
 	/**
-	 * Compute the hash value of a string
+	 * Compute the hash value of a string.
 	 * @param password String to be hashed
 	 * @return Sha256 string for the input parameter
 	 */
@@ -28,7 +28,7 @@ public class Sha256 {
 	}
 
 	/**
-	 * Checks if a string is the original value of the Sha256 hash
+	 * Checks if a string is the original value of the Sha256 hash.
 	 * @param password	Clear text to be checked against hash
 	 * @param hash Hashed string
 	 * @return true if the hash of the password matches the hash string passed as a parameter

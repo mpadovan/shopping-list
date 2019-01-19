@@ -5,12 +5,19 @@
  */
 package it.unitn.webprog2018.ueb.shoppinglist.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Class for encrypting purposes. It is used to encrypt usernames to be used in cookies.
+ * Static class for encrypting purposes. It is used to encrypt usernames to be used in
+ * "Keep me signed in" cookies.
  */
 public class CookieCipher {
 
@@ -20,7 +27,8 @@ public class CookieCipher {
 	private static Cipher cipher;
 
 	/**
-	 * Encrypts a string
+	 * Encrypts a string.
+	 *
 	 * @param value String to be encrypted
 	 * @return the encrypted string
 	 */
@@ -30,7 +38,7 @@ public class CookieCipher {
 		try {
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 			output = cipher.doFinal(value.getBytes("UTF-8"));
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
 			System.err.println("Error during encription...\n" + e.toString());
 		}
 		// Making it URL and (linux) file name safe
@@ -38,7 +46,8 @@ public class CookieCipher {
 	}
 
 	/**
-	 * Decrypts a string encrypted using this cypher
+	 * Decrypts a string encrypted using this cypher.
+	 *
 	 * @param value the encrypted string to be decryped
 	 * @return the decryped string
 	 */
@@ -49,7 +58,7 @@ public class CookieCipher {
 		try {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 			output = cipher.doFinal(Base64.getDecoder().decode(value));
-		} catch (Exception e) {
+		} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
 			System.err.println("Error during decription...\n" + e.toString());
 		}
 		return new String(output);
@@ -61,7 +70,7 @@ public class CookieCipher {
 			keyByte = KEY.getBytes("UTF-8");
 			secretKey = new SecretKeySpec(keyByte, ALGORITHM);
 			cipher = Cipher.getInstance(ALGORITHM);
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
 			System.err.println("Error during key generation...\n" + e.toString());
 		}
 	}

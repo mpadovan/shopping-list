@@ -68,7 +68,7 @@ public class ListWebService {
 ////////////////////////////// COMMON METHODS //////////////////////////////////
 // -------------------------------------------------------------------------- //
 	/**
-	 * Retrieves representation of the possible list category entities
+	 * Retrieves representations of the possible list category entities.
 	 *
 	 * @param search Parameter to filter the results by name
 	 * @param compact Parameter to obtain only name and id field of the object
@@ -117,7 +117,7 @@ public class ListWebService {
 /////////////////////////// LOGGED USER METHODS ////////////////////////////////
 // -------------------------------------------------------------------------- //
 	/**
-	 * Retrieves all the products in a list
+	 * Retrieves all the products in a list.
 	 *
 	 * @param listHash	encrypted unique identifier of the
 	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.List}
@@ -475,36 +475,6 @@ public class ListWebService {
 ////////////////////////// ANONYMOUS USER METHODS //////////////////////////////
 // -------------------------------------------------------------------------- //
 	/**
-	 * Sets the list category of an anonymous list.
-	 *
-	 * @param token	Unique identifier of the anonymous list
-	 * @param content Json representation of the
-	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory} Only
-	 * id is necessary; more information may be provided but is irrelevant.
-	 */
-	@PUT
-	@Path("/anon/{token}/listCategory")
-	public void setAnonCategory(@PathParam("token") String token, String content) {
-		ListsCategoryDAO listsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListsCategoryDAO();
-		Gson gson = new Gson();
-		ListsCategory listsCategory;
-		try {
-			listsCategory = gson.fromJson(content, ListsCategory.class);
-		} catch (JsonSyntaxException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
-			HttpErrorHandler.sendError500(response);
-			return;
-		}
-
-		try {
-			listsCategoryDAO.setListCategory(token, listsCategory);
-		} catch (DaoException ex) {
-			Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
-			HttpErrorHandler.handleDAOException(ex, response);
-		}
-	}
-
-	/**
 	 * Retrieves the list category associated with an anonymous list.
 	 *
 	 * @param token	Unique identifier of the anonymous list
@@ -632,8 +602,10 @@ public class ListWebService {
 	 * content of the post request must be in the form of { _newAmount }.
 	 *
 	 * @param token	Unique identifier of the anonymous list
-	 * @param productId Unique identifier of the {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
-	 * @param content Json representation of a single integer that is the new amount of the product on the list.
+	 * @param productId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 * @param content Json representation of a single integer that is the new
+	 * amount of the product on the list.
 	 */
 	@PUT
 	@Path("/anon/{token}/product/{prod_id}")
@@ -664,7 +636,8 @@ public class ListWebService {
 	 * Deletes a (public) product from an anonymous list.
 	 *
 	 * @param token	Unique identifier of the anonymous list
-	 * @param productId Unique identifier of the {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
+	 * @param productId Unique identifier of the
+	 * {@link it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct}
 	 */
 	@DELETE
 	@Path("/anon/{token}/product/{prod_id}")
@@ -685,6 +658,14 @@ public class ListWebService {
 // -------------------------------------------------------------------------- //
 ////////////////////////////// PRIVATE METHODS /////////////////////////////////
 // -------------------------------------------------------------------------- //
+	/**
+	 * Checks if the user has the basic permission on the specified list. This
+	 * permission must be granted by the list owner at list creation time.
+	 *
+	 * @param listId
+	 * @param userId
+	 * @return
+	 */
 	private boolean checkAddDeletePermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
@@ -703,6 +684,14 @@ public class ListWebService {
 		return false;
 	}
 
+	/**
+	 * Checks if the user has the view permission on the specified list. This
+	 * permission must be granted by the list owner at list creation time.
+	 *
+	 * @param listId
+	 * @param userId
+	 * @return
+	 */
 	private boolean checkViewPermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
@@ -721,6 +710,14 @@ public class ListWebService {
 		return false;
 	}
 
+	/**
+	 * Checks if the user has the right to use a given product in a list. He has
+	 * this permission if he is the owner of the product.
+	 *
+	 * @param productId
+	 * @param userId
+	 * @return
+	 */
 	private boolean checkProductPermission(int productId, int userId) {
 		try {
 			ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();

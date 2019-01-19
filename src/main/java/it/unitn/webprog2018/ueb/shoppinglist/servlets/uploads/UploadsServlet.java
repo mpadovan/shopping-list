@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.uploads;
 
 import java.io.File;
@@ -17,14 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Serves the uploaded files to the client requesting them. It maps the URIs of
+ * all uploaded files.
  *
  * @author Giulia Carocari
  */
 @WebServlet(name = "UploadsServlet", urlPatterns = {"/Uploads/*"})
 public class UploadsServlet extends HttpServlet {
-	
+
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Sends the requested file to the
+	 * user.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -48,9 +51,9 @@ public class UploadsServlet extends HttpServlet {
 			response.sendError(404, "The resource you are looking for does not exist in our system");
 		}
 		//Exception thrown by Files.copy()
-		
+
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -60,5 +63,5 @@ public class UploadsServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Provides user and admin uploaded images";
 	}// </editor-fold>
-	
+
 }

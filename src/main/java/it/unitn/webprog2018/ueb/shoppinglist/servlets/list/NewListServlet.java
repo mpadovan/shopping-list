@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
+ * Servlet that handles the requests to create a new list.
  *
  * @author giulia
  */
@@ -55,7 +56,9 @@ public class NewListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the NewList
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -78,7 +81,8 @@ public class NewListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Creates and persists a new
+	 * list with the information in the request body.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -105,7 +109,7 @@ public class NewListServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String description = request.getParameter("description");
 		String[] shared = request.getParameterValues("shared[]");
-		
+
 		it.unitn.webprog2018.ueb.shoppinglist.entities.List list = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
 		list.setName(name);
 		list.setOwner(me);
@@ -164,16 +168,26 @@ public class NewListServlet extends HttpServlet {
 						}
 						if (valid) {
 							for (User u : listShared) {	// connect list to users, apart from the owner
-								String[] perm = request.getParameterValues("permission-"+u.getEmail());
+								String[] perm = request.getParameterValues("permission-" + u.getEmail());
 								boolean adddelete = true, edit = false, delete = false;
 								switch (perm[0]) {
 									case "view":
-										adddelete = false; edit = false; delete = false; break;
+										adddelete = false;
+										edit = false;
+										delete = false;
+										break;
 									case "basic":
-										adddelete = true; edit = false; delete = false; break;
+										adddelete = true;
+										edit = false;
+										delete = false;
+										break;
 									case "full":
-										adddelete = true; edit = true; delete = true; break;
-									default: break;
+										adddelete = true;
+										edit = true;
+										delete = true;
+										break;
+									default:
+										break;
 								}
 								if (!listDAO.linkShoppingListToUser(list, u.getId(), adddelete, edit, delete)) {
 									everythingOK = false;
@@ -191,7 +205,7 @@ public class NewListServlet extends HttpServlet {
 					}
 				}
 				if (everythingOK) {
-					String path = context + "restricted/HomePageLogin/" + me.getHash()+ "/" + list.getHash();
+					String path = context + "restricted/HomePageLogin/" + me.getHash() + "/" + list.getHash();
 
 					// Save the list image, or set the imageURI to an empty string (default will be loaded in InfoList.jsp)
 					String imageURI = "";

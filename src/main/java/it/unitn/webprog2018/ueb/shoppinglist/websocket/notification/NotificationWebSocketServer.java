@@ -23,7 +23,9 @@ import javax.websocket.server.ServerEndpoint;
 
 /**
  * Websocket server endpoint to notify a user when he has a new notification
- * about expiring products. Messages are sent in Json format.
+ * about expiring products. Messages are sent in Json format. This class is
+ * currently not used and is therefore not testes. It is implemented for future
+ * use.
  *
  * @author Giulia Carocari
  */
@@ -32,18 +34,15 @@ import javax.websocket.server.ServerEndpoint;
 public class NotificationWebSocketServer {
 
 	private static final Gson GSON = new Gson();
-	
+
 	@Inject
 	private NotificationSessionHandler notificationSessionHandler;
-	/*
-	public static void setNotificationSessionHandler(NotificationSessionHandler notificationSessionHandler) {
-		NotificationWebSocketServer.notificationSessionHandler = notificationSessionHandler;
-	}
-	*/
+
 	/**
 	 * Method executed at the opening of the connection. Adds the user's session
 	 * to session handler and sends the first update about the notification
-	 * count
+	 * count. This method is currently not used and is therefore not testes. It
+	 * is implemented for future use.
 	 *
 	 * @param session
 	 * @param userId
@@ -54,6 +53,14 @@ public class NotificationWebSocketServer {
 		notificationSessionHandler.notifyUser(userId);
 	}
 
+	/**
+	 * Error handling for this websocket connection. This method is currently
+	 * not used and is therefore not testes. It is implemented for future use.
+	 *
+	 * @param session
+	 * @param t
+	 * @param userId
+	 */
 	@OnError
 	public void onError(Session session, Throwable t, @PathParam("userId") Integer userId) {
 		try {
@@ -71,6 +78,14 @@ public class NotificationWebSocketServer {
 		}
 	}
 
+	/**
+	 * Handles the closing of a connection. Unsubscribes the user from the
+	 * notification session handler. This method is currently not used and is
+	 * therefore not testes. It is implemented for future use.
+	 *
+	 * @param session
+	 * @param userId
+	 */
 	@OnClose
 	public void onClose(Session session, @PathParam("userId") Integer userId) {
 		if (session.isOpen()) {
@@ -78,6 +93,15 @@ public class NotificationWebSocketServer {
 		}
 	}
 
+	/**
+	 * Handles incoming messages to the websocket connection. This method is
+	 * currently not used and is therefore not testes. It is implemented for
+	 * future use.
+	 *
+	 * @param message
+	 * @param session
+	 * @param userId
+	 */
 	@OnMessage
 	public void onMessage(String message, Session session, @PathParam("userId") Integer userId) {
 		NotificationWebSocketMessage incoming = GSON.fromJson(message, NotificationWebSocketMessage.class);

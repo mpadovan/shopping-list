@@ -112,7 +112,11 @@ public class ChatSessionHandler extends SessionHandler {
 // -------------------------------------------------------------------------- //
 ////////////////////// PRIVATE CLASSES AND METHODS /////////////////////////////
 // -------------------------------------------------------------------------- //
-	// Thread that notifies connected users of the new incoming message
+	/**
+	 * Thread that notifies connected users of the new incoming message. A
+	 * separated thread is used to allow the session handler to accept new
+	 * incoming messages in case of slow connections or errors.
+	 */
 	private class NotificationThread extends Thread {
 
 		private final Integer senderId;
@@ -123,6 +127,11 @@ public class ChatSessionHandler extends SessionHandler {
 			this.listId = listId;
 		}
 
+		/**
+		 * Retrieves all users connected to a list and notifies them of the new
+		 * incoming message. Formally, it sends them their unread message count,
+		 * including the new incoming message.
+		 */
 		@Override
 		public void run() {
 			try {
@@ -142,7 +151,13 @@ public class ChatSessionHandler extends SessionHandler {
 		}
 	}
 
-	// Checks if the user can actuallu access the chat
+	/**
+	 * Checks if the user can access the chat
+	 *
+	 * @param listId id of the list to be checked
+	 * @param userId id of the user to be checked
+	 * @return true if the permission is granted, false otherwise
+	 */
 	private boolean checkViewPermission(int listId, int userId) {
 		try {
 			ListDAO listDAO = SessionHandler.getDaoFactory().getListDAO();

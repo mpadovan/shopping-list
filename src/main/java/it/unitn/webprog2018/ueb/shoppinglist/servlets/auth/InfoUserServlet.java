@@ -6,7 +6,6 @@
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Handles the requests to the user's information.
  *
  * @author simon
  */
@@ -22,7 +22,8 @@ public class InfoUserServlet extends HttpServlet {
 	
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Forwards the request to the InfoUser
+	 * jsp. Information about the user are loaded from the session in the jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -38,7 +39,7 @@ public class InfoUserServlet extends HttpServlet {
 	}
 	
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Does nothing.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

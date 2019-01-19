@@ -101,7 +101,7 @@ public class UploadHandler {
 	}
 	
 	/**
-	 * Deletes a file from the server given its uri
+	 * Deletes a file from the server given its URI.
 	 * 
 	 * @param URI	URI of the file to be deleted
 	 * @param context	Servlet context of the application
