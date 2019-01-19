@@ -35,12 +35,23 @@ public class AuthenticationFilter implements Filter {
 
 	private FilterConfig filterConfig = null;
 	private ListDAO listDAO;
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
 		listDAO = ((DAOFactory) filterConfig.getServletContext().getAttribute("daoFactory")).getListDAO();
 	}
 
+	/**
+	 * Filters the request forwarding it if there is no logged user. It is also
+	 * responsible for charging the lists of the user.
+	 *
+	 * @param request
+	 * @param response
+	 * @param chain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
@@ -58,18 +69,18 @@ public class AuthenticationFilter implements Filter {
 				}
 				request.getRequestDispatcher("/WEB-INF/views/auth/Login.jsp").forward(request, response);
 				return;
-			} else { 
+			} else {
 				try {
-				// the user is logged in and we load her lists for the sidebar
-				java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
-				java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
-				request.setAttribute("personalLists", personalLists);
-				request.setAttribute("sharedLists", sharedLists);
+					// the user is logged in and we load her lists for the sidebar
+					java.util.List<List> personalLists = listDAO.getPersonalLists(user.getId());
+					java.util.List<List> sharedLists = listDAO.getSharedLists(user.getId());
+					request.setAttribute("personalLists", personalLists);
+					request.setAttribute("sharedLists", sharedLists);
 				} catch (DaoException ex) {
 					Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);
 					HttpErrorHandler.handleDAOException(ex, (HttpServletResponse) response);
 				}
-				
+
 			}
 		}
 		if (!response.isCommitted()) {

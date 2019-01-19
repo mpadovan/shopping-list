@@ -28,8 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Filter that prevents users from accessing lists they do not have the
+ * permission to view.
  *
- * @author giulia
+ * @author Giulia Carocari
  */
 @WebFilter(filterName = "ListFilter", urlPatterns = {"/restricted/HomePageLogin/*", "/restricted/EditList/*", "/restricted/InfoList/*", "/restricted/DeleteList/*"},
 		dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})

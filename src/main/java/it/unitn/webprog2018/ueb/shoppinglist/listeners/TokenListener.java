@@ -7,9 +7,6 @@ package it.unitn.webprog2018.ueb.shoppinglist.listeners;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.TokenDAO;
-import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
@@ -28,18 +25,25 @@ public class TokenListener implements ServletContextListener {
 	private static final long CLEANING_RATE = 1000 * 60 * 60 * 24;	// 24 hours in milliseconds
 	private TokenDAO tokenDAO;
 
+	/**
+	 * Initializes the scheduled thread pool executor that cleans the database from the expired new account tokens.
+	 * @param sce 
+	 */
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext sc = sce.getServletContext();
 		DAOFactory factory = (DAOFactory) sc.getAttribute("daoFactory");
 		tokenDAO = factory.getTokenDAO();
 		ScheduledThreadPoolExecutor expiredTokenScheduler = new ScheduledThreadPoolExecutor(2);
-		String path = sc.getInitParameter("uploadFolder");
-		expiredTokenScheduler.scheduleAtFixedRate(new CleanDBTask(path), CLEANING_RATE, CLEANING_RATE, TimeUnit.MILLISECONDS);
+		expiredTokenScheduler.scheduleAtFixedRate(new CleanDBTask(), CLEANING_RATE, CLEANING_RATE, TimeUnit.MILLISECONDS);
 
 		sc.setAttribute("expiredTokenScheduler", expiredTokenScheduler);
 	}
 
+	/**
+	 * Shuts down the scheduled thread pool executor to prevent memory leaks.
+	 * @param sce 
+	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		ScheduledThreadPoolExecutor timer = (ScheduledThreadPoolExecutor) sce.getServletContext().getAttribute("expiredTokenScheduler");
@@ -49,12 +53,12 @@ public class TokenListener implements ServletContextListener {
 		timer.shutdownNow();
 	}
 
+	/**
+	 * Task that removes the expired new account tokens from the persistence layer.
+	 */
 	private class CleanDBTask implements Runnable {
 
-		private String path;
-
-		public CleanDBTask(String path) {
-			this.path = path + "/restricted/tmp/";
+		public CleanDBTask() {
 		}
 
 		@Override
