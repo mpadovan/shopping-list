@@ -104,7 +104,7 @@ public class NotificationTimer {
 					+ notification.getList().getName() + "?\n"
 					+ "Clicca qui per connetterti subito al portale:"
 					+ "http://" + Network.getServerAddress()
-					+ ":8080/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list="
+					+ "/ShoppingList/restricted/HomePageLogin/" + notification.getUser().getId() + "?list="
 					+ +notification.getList().getId())) {
 				System.err.println("Could not reach email address");
 			}
