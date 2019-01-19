@@ -61,14 +61,6 @@ public class TokenListener implements ServletContextListener {
 		public void run() {
 			System.out.println("Cleaning DB... ... ...");
 			tokenDAO.removeExpiredTokens();
-			// TODO togliere qui rimosso l'upload dal sign-up
-			File tmpDir = new File(path);
-			File[] entries = tmpDir.listFiles();
-			if (entries != null) {
-				for (File currentFile : entries) {
-					currentFile.delete();
-				}
-			}
 		}
 	}
 }

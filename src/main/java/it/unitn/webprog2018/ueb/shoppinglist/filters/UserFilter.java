@@ -6,6 +6,7 @@
 package it.unitn.webprog2018.ueb.shoppinglist.filters;
 
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
+import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -63,10 +64,7 @@ public class UserFilter implements Filter {
 			}
 			
 			if (!Pattern.matches(".*/restricted/[a-zA-Z]+/" + user.getHash()+ "/.*", uri)) {
-				// TODO add redirection to correct error page.
-				((HttpServletResponse) response).sendError(401, "YOU SHALL NOT PASS!\n"
-						+ "The resource you are trying to access is none of your business.\n"
-						+ "If you think you have the right to access it, prove it by logging in");
+				HttpErrorHandler.sendError401((HttpServletResponse)response);
 				return;
 			}
 			if (!response.isCommitted()) {

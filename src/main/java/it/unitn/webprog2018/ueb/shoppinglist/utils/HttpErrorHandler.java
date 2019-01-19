@@ -60,7 +60,6 @@ public class HttpErrorHandler {
 		if (search != null) {
 			filter = new StringTokenizer(search, " ");
 			while (filter.hasMoreTokens()) {
-				// TODO add sql wildcard
 				query += "%" + filter.nextToken();
 			}
 		}

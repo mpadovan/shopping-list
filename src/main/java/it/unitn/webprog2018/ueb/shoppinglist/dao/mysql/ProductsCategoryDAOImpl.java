@@ -226,7 +226,6 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 	 */
 	@Override
 	public ProductsCategory getDefault() {
-		// TODO use a query (?)
 		ProductsCategory productsCategory = new ProductsCategory();
 		productsCategory.setId(1);
 		return productsCategory;
