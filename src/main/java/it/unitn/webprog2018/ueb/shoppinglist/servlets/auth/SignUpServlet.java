@@ -10,7 +10,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.utils.EmailSender;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Network;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,18 +20,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet that handles the registration of a new user
+ * Servlet that handles the registration of a new user.
  *
  * @author Giulia Carocari
  */
 @WebServlet("/SignUp")
 @MultipartConfig
 public class SignUpServlet extends HttpServlet {
-	
+
 	private static final long TOKEN_EXP = 1000 * 60 * 60 * 24;
 	private UserDAO userDAO;
 	private TokenDAO tokenDAO;
-	
+
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -43,9 +42,10 @@ public class SignUpServlet extends HttpServlet {
 		userDAO = factory.getUserDAO();
 		tokenDAO = factory.getTokenDAO();
 	}
-	
+
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Saves information about the
+	 * new users and sends an account confirmation email.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -61,7 +61,7 @@ public class SignUpServlet extends HttpServlet {
 		if (!context.endsWith("/")) {
 			context += "/";
 		}
-		
+
 		String name = request.getParameter("name");
 		String lastName = request.getParameter("lastName");
 		String email = request.getParameter("email");
@@ -69,7 +69,7 @@ public class SignUpServlet extends HttpServlet {
 		String checkPassword = request.getParameter("checkPassword");
 		String privacy = request.getParameter("privacy");
 		String avatarURI = "";
-		
+
 		User user = new User();
 		user.setName(name);
 		user.setLastname(lastName);
@@ -86,14 +86,13 @@ public class SignUpServlet extends HttpServlet {
 				if (!response.isCommitted()) {
 					// Creating the token for the account confirmation
 					Token token = new Token();
-					
+
 					token.generateToken();
 					token.setExpirationFromNow(TOKEN_EXP);
 					token.setUser(user);
-					
-					String link = "http://" + Network.getServerAddress() +
-							":8080" + context + "AccountConfirmation?token=" + token.getToken();
-					
+
+					String link = "http://" + Network.getServerAddress() + context + "AccountConfirmation?token=" + token.getToken();
+
 					if (tokenDAO.addToken(token)) {
 						if (EmailSender.send(user.getEmail(), "Conferma account",
 								"Ciao " + name + ",\nPer favore clicca sul seguente link per confermare il tuo account:\n" + link)) {
@@ -117,7 +116,15 @@ public class SignUpServlet extends HttpServlet {
 			Logger.getLogger(SignUpServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
+	/**
+	 * Forwards the <code>GET</code> request to the SignUp
+	 * jsp.
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -125,7 +132,7 @@ public class SignUpServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/views/auth/SignUp.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -135,5 +142,5 @@ public class SignUpServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Servlet for registration purposes. Handles only POST requests";
 	}
-	
+
 }

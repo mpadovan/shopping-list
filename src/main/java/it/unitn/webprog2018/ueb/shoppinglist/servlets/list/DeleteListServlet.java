@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Servlet that handles requests to delete a list.
  *
  * @author Giulia Carocari
  */
@@ -40,7 +41,8 @@ public class DeleteListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Deletes the current list of the
+	 * request.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -72,7 +74,7 @@ public class DeleteListServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Does nothing.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

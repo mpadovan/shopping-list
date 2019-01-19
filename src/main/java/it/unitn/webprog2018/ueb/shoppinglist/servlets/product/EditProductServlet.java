@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
+ * Servlet that handles the editing of a personal product.
  *
  * @author simon
  */
@@ -55,7 +56,9 @@ public class EditProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the EditProduct
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -82,7 +85,9 @@ public class EditProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Persists the new information
+	 * about the personal product. It takes charge of handling also the file
+	 * upload and deletion.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -145,9 +150,9 @@ public class EditProductServlet extends HttpServlet {
 				product.setPhotography(imageURI);
 			}
 			if (!response.isCommitted()) { // everything went well, we can persist the changes
-				if (product.isVaildOnUpdate((DAOFactory) getServletContext().getAttribute("daoFactory")) 
+				if (product.isVaildOnUpdate((DAOFactory) getServletContext().getAttribute("daoFactory"))
 						&& productDAO.updateProduct(productId, product)) {
-					response.sendRedirect(getServletContext().getContextPath() + "/restricted/InfoProduct?id="+productId);
+					response.sendRedirect(getServletContext().getContextPath() + "/restricted/InfoProduct?id=" + productId);
 				} else {
 					request.setAttribute("product", product);
 					InitializeCategoryRedirect(request, response, product);
@@ -162,12 +167,14 @@ public class EditProductServlet extends HttpServlet {
 		}
 
 	}
-	private void InitializeCategoryRedirect(HttpServletRequest request,HttpServletResponse response, Product product) throws DaoException, ServletException, IOException {
+
+	private void InitializeCategoryRedirect(HttpServletRequest request, HttpServletResponse response, Product product) throws DaoException, ServletException, IOException {
 		List<ProductsCategory> productsCategory = productsCategoryDAO.getAll();
 		request.setAttribute("productsCategory", productsCategory);
 		request.setAttribute("product", product);
 		request.getRequestDispatcher("/WEB-INF/views/product/EditProduct.jsp").forward(request, response);
 	}
+
 	/**
 	 * Returns a short description of the servlet.
 	 *

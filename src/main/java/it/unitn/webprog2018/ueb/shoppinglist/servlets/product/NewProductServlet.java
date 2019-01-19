@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
+ * Servlet that handles requests to create a new personal product.
  *
  * @author simon
  */
@@ -56,7 +57,9 @@ public class NewProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the NewProduct
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -78,7 +81,8 @@ public class NewProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Creates a new personal product
+	 * from the information in the request body.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

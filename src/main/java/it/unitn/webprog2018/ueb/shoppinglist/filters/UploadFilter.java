@@ -70,8 +70,7 @@ public class UploadFilter implements Filter {
 				}
 				// request for an avatar
 				if (Pattern.matches(".*/uploads/restricted/avatar/.*", uri)) {
-					// TODO add redirection to correct error page.
-					resp.sendError(401, HttpErrorHandler.ERROR_MESSAGE_401);
+					HttpErrorHandler.sendError401(resp);
 				}  // request for a list-image
 				else if (Pattern.matches(".*/uploads/restricted/shared/list/.*", uri)) {
 					// end of the number containing the list id, either beginning of extension or end of uri
@@ -80,10 +79,10 @@ public class UploadFilter implements Filter {
 					System.out.println(listId);
 					try {
 						if (!listDAO.getList(listId).getOwner().getId().equals(user.getId()) || !listDAO.hasViewPermission(listId, user.getId())) {
-							resp.sendError(401, HttpErrorHandler.ERROR_MESSAGE_401);
+							HttpErrorHandler.sendError401(resp);
 						}
 					} catch (DaoException ex) {
-						resp.sendError(500);
+						HttpErrorHandler.sendError500(resp);
 						Logger.getLogger(UploadFilter.class.getName()).log(Level.SEVERE, null, ex);
 					}
 				} // request for a product-image
@@ -92,7 +91,7 @@ public class UploadFilter implements Filter {
 				}
 				// WTH are you looking for?
 				else {
-					resp.sendError(404, HttpErrorHandler.ERROR_MESSAGE_404);
+					HttpErrorHandler.sendError404(resp);
 				}
 			}
 		}

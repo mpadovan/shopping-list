@@ -43,7 +43,7 @@ public class Network {
 					if (!add.isLinkLocalAddress()
 							&& !add.isLoopbackAddress()
 							&& add instanceof Inet4Address) {
-						return add.getHostAddress();
+						return add.getHostAddress() + ":8080/";
 					}
 				}
 			}
@@ -52,7 +52,7 @@ public class Network {
 		}
 		// if no other address is available, we return the loopback address
 		try {
-			return InetAddress.getLocalHost().getHostAddress();
+			return InetAddress.getLocalHost().getHostAddress() + ":8080/";
 		} catch (UnknownHostException ex) {
 			Logger.getLogger(Network.class.getName()).log(Level.SEVERE, null, ex);
 		}

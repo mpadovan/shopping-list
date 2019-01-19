@@ -2,7 +2,7 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package it.unitn.webprog2018.ueb.shoppinglist.servlets.auth;
 
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
@@ -22,20 +22,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Servlet that handles requests to change user information
  *
  * @author giulia
  */
 @WebServlet(name = "EditUserServlet", urlPatterns = {"/restricted/EditUser"})
 public class EditUserServlet extends HttpServlet {
+
 	private UserDAO userDAO;
-	
+
 	@Override
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		userDAO = factory.getUserDAO();
 	}
+
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Forwards the request to the
+	 * EditUser jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -51,9 +55,10 @@ public class EditUserServlet extends HttpServlet {
 		request.setAttribute("changepassword", changepassword);
 		request.getRequestDispatcher("/WEB-INF/views/auth/EditUser.jsp").forward(request, response);
 	}
-		
+
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Updates the user's information
+	 * with the data in the request body.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -81,56 +86,42 @@ public class EditUserServlet extends HttpServlet {
 			user.setLastname(lastName);
 			user.setCheckpassword(user.getPassword());
 			String oldpassword = request.getParameter("oldpassword");
-			if(oldpassword!=null && !oldpassword.equals(""))
-			{
-				System.out.println("password equal");
+			if (oldpassword != null && !oldpassword.equals("")) {
+				// System.out.println("password equal");
 				String password = request.getParameter("password");
 				String checkPassword = request.getParameter("checkpassword");
-				if(Sha256.doHash(oldpassword).equals(user.getPassword()))
-				{
+				if (Sha256.doHash(oldpassword).equals(user.getPassword())) {
 					user.setPassword(Sha256.doHash(password));
 					user.setCheckpassword(Sha256.doHash(checkPassword));
-					if(userDAO.updateUser(id, user))
-					{
+					if (userDAO.updateUser(id, user)) {
 						session.setAttribute("user", user);
-						redirect=true;
-						System.out.println("utente modificato con password");
-					}
-					else
-					{
+						redirect = true;
+						// System.out.println("utente modificato con password");
+					} else {
 						request.setAttribute("user", user);
 						request.setAttribute("changepassword", true);
-						System.out.println("validation utente modificato con password");
+						// System.out.println("validation utente modificato con password");
 					}
-				}
-				else
-				{
+				} else {
 					user.setError("oldpassword", "la password non è corretta");
 					request.setAttribute("user", user);
 					request.setAttribute("changepassword", true);
-					System.out.println("password errata");
+					// System.out.println("password errata");
 				}
-			}
-			else{
-				if(userDAO.updateUser(id, user))
-				{
+			} else {
+				if (userDAO.updateUser(id, user)) {
 					session.setAttribute("user", user);
-					redirect=true;
+					redirect = true;
 					System.out.println("utente modificato senza password");
-				}
-				else
-				{
+				} else {
 					request.setAttribute("user", user);
 					System.out.println("validation utente modificato senza password");
 				}
 			}
-			if(redirect)
-			{
+			if (redirect) {
 				path += "restricted/InfoUser";
 				response.sendRedirect(path);
-			}
-			else
-			{
+			} else {
 				request.getRequestDispatcher("/WEB-INF/views/auth/EditUser.jsp").forward(request, response);
 			}
 		} catch (RecordNotFoundDaoException ex) {
@@ -141,7 +132,7 @@ public class EditUserServlet extends HttpServlet {
 			response.sendError(500, ex.getMessage());
 		}
 	}
-	
+
 	/*private void deleteRememberCookie(HttpServletRequest request, HttpServletResponse response) {
 	Cookie[] cookies = request.getCookies();
 	if (cookies != null) {
@@ -157,7 +148,6 @@ public class EditUserServlet extends HttpServlet {
 	}
 	System.out.println("false");
 	}*/
-	
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -167,5 +157,5 @@ public class EditUserServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Edit admin servlet";
 	}
-	
+
 }

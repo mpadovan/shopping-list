@@ -11,7 +11,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -25,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
+ * Servlet that handles requests to change a user's avatar.
  *
  * @author simon
  */
@@ -44,7 +44,7 @@ public class ChangeImageUserServlet extends HttpServlet {
 	}
 	
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Forwards the request to the ChangeImageUser jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -60,7 +60,7 @@ public class ChangeImageUserServlet extends HttpServlet {
 	}
 	
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Uploads the new image.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

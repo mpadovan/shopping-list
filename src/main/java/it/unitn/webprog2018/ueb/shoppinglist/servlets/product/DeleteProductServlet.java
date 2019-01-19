@@ -12,7 +12,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.UploadHandler;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Deletes a personal product from the model. It also takes charge of deleting
+ * all files associated with the product itself.
  *
  * @author giulia
  */
@@ -32,10 +33,10 @@ import javax.servlet.http.HttpSession;
 public class DeleteProductServlet extends HttpServlet {
 
 	private ProductDAO productDAO;
-	
+
 	@Inject
 	UploadHandler uploadHandler;
-	
+
 	/**
 	 * Method to be executed at servlet initialization. Handles connections with
 	 * persistence layer.
@@ -47,7 +48,8 @@ public class DeleteProductServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Deletes the product whose id is
+	 * specified in a request parameter.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

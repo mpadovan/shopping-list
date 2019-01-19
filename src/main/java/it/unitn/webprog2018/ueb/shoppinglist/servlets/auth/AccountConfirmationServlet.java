@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet that confirms an account and persists the new user
+ * Servlet that confirms an account and persists the new user.
  *
  * @author Giulia Carocari
  */
@@ -44,7 +44,8 @@ public class AccountConfirmationServlet extends HttpServlet {
 	}
 
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Confirms the account and
+	 * persists the user.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -99,6 +100,12 @@ public class AccountConfirmationServlet extends HttpServlet {
 				+ "Only handles GET requests";
 	}
 
+	/**
+	 * Checks if an account confirmation timer is expired.
+	 *
+	 * @param token
+	 * @return
+	 */
 	private boolean isExpired(Token token) {
 		java.util.Date utilDate = new java.util.Date();
 		Date now = new Date(utilDate.getTime());

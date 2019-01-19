@@ -143,4 +143,20 @@ public class HttpErrorHandler {
 			}
 		}
 	}
+	
+	/**
+	 * Handles a Not found error response. Takes charge of handling
+	 * IOException and checking if the response is already committed.
+	 *
+	 * @param response response to send the error to
+	 */
+	public static void sendError404(HttpServletResponse response) {
+		if (!response.isCommitted()) {
+			try {
+				response.sendError(404, HttpErrorHandler.ERROR_MESSAGE_404);
+			} catch (IOException ex1) {
+				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex1);
+			}
+		}
+	}
 }

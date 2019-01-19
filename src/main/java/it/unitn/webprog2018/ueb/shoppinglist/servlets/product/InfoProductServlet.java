@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Handles requests about information of personal product.
  *
  * @author simon
  */
@@ -32,10 +33,11 @@ public class InfoProductServlet extends HttpServlet {
 	public void init() {
 		DAOFactory factory = (DAOFactory) this.getServletContext().getAttribute("daoFactory");
 		productDAO = factory.getProductDAO();
-		
 	}
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. It loads the required
+	 * information from the database and forwards the request to the InfoProduct
+	 * jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -64,7 +66,7 @@ public class InfoProductServlet extends HttpServlet {
 	}
 	
 	/**
-	 * Handles the HTTP <code>POST</code> method.
+	 * Handles the HTTP <code>POST</code> method. Does nothing.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response

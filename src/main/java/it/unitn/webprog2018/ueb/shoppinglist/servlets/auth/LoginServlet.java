@@ -115,6 +115,13 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Forwards the <code>GET</code> request to the login jsp.
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

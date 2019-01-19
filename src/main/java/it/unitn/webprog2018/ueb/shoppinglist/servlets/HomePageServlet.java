@@ -13,14 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet that handles requests to the home page of the app.
  * @author giuliapeserico
  */
 @WebServlet(name = "HomePageServlet", urlPatterns = {"/home"})
 public class HomePageServlet extends HttpServlet {
-	
+
 	/**
-	 * Handles the HTTP <code>GET</code> method.
+	 * Handles the HTTP <code>GET</code> method. Creates a new cookie for the
+	 * anonymous user if it does not exist; then it forwards the request to the
+	 * HomePage jsp.
 	 *
 	 * @param request servlet request
 	 * @param response servlet response
@@ -32,7 +34,7 @@ public class HomePageServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		
+
 		Cookie[] cookies = request.getCookies();
 		boolean found = false;
 		if (cookies != null) {
@@ -45,7 +47,7 @@ public class HomePageServlet extends HttpServlet {
 		if (!found) {
 			try {
 				Cookie cookie = new Cookie("anonToken",
-						((DAOFactory)getServletContext().getAttribute("daoFactory")).getTokenDAO().getAnonimousToken());
+						((DAOFactory) getServletContext().getAttribute("daoFactory")).getTokenDAO().getAnonimousToken());
 				cookie.setMaxAge(60 * 60 * 24 * 365 * 10); // expires in 10 years
 				response.addCookie(cookie);
 			} catch (UpdateException ex) {
@@ -54,7 +56,7 @@ public class HomePageServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher("/WEB-INF/views/HomePage.jsp").forward(request, response);
 	}
-	
+
 	/**
 	 * Returns a short description of the servlet.
 	 *
@@ -64,5 +66,5 @@ public class HomePageServlet extends HttpServlet {
 	public String getServletInfo() {
 		return "Home Page Servlet";
 	}
-	
+
 }
