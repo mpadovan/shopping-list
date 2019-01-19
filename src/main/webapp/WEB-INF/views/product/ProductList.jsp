@@ -15,10 +15,10 @@
 			<div class="card-body">
 				<h2 class="card-title text-center">
 					<div id="btn-back" class="float-left font-product-list">
-						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}"><i class="fas fa-chevron-left"></i> Indietro</a>
+						<a class="btn-back-color" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}"><i class="fas fa-chevron-left"></i> Indietro</a>
 					</div>
 					<div id="btn-back-res" class="float-left font-product-list">
-						<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}"><i class="fas fa-chevron-left"></i></a>
+						<a class="btn-back-color" href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}"><i class="fas fa-chevron-left"></i></a>
 					</div> I tuoi prodotti
 					<div id="btn-new" class="float-right font-product-list">
 						<a class="info-custom-product-a" href="${pageContext.servletContext.contextPath}/restricted/NewProduct">Crea prodotto <i class="fas fa-plus-circle"></i></a>

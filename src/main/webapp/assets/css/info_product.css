@@ -13,6 +13,9 @@ and open the template in the editor.
 #btn-back-res{
 	display: none;
 }
+.btn-back-color{
+	color: #007bff;
+}
 #btn-new{
 	display: block;
 }
