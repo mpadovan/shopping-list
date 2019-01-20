@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletContext;
@@ -94,7 +95,11 @@ public class UploadHandler {
 			if (file.exists()) {	// avoid fileAlreadyExistsException
 				file.delete();
 			}
+			try {
 			Files.copy(fileContent, file.toPath());
+			} catch (NoSuchFileException ex) {
+				return null;
+			}
 			return fileName.substring(fileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 		}
 		return null;

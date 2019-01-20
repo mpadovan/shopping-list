@@ -42,7 +42,7 @@ public class CookieCipher {
 			System.err.println("Error during encription...\n" + e.toString());
 		}
 		// Making it URL and (linux) file name safe
-		return Base64.getEncoder().encodeToString(output); //.replace('+', '-').replace('/', '_').replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("=", "%3D");
+		return Base64.getEncoder().encodeToString(output).replace('+', '-').replace('/', '_'); // .replaceAll("%", "%25").replaceAll("\n", "%0A").replaceAll("=", "%3D");
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class CookieCipher {
 	 */
 	public static String decrypt(String value) {
 		generateKey();
-		// value = value.replaceAll("%0A", "\n").replaceAll("%25", "%").replaceAll("%3D","=").replace('_', '/').replace('-', '+');
+		value = value./*replaceAll("%0A", "\n").replaceAll("%25", "%").replaceAll("%3D","=").*/replace('_', '/').replace('-', '+');
 		byte[] output = new byte[value.length()];
 		try {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
