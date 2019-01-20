@@ -96,6 +96,7 @@
 
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
+		<link href="${pageContext.servletContext.contextPath}/assets/css/info_user.css" type="text/css" rel="stylesheet"/>
 		<link href="${pageContext.servletContext.contextPath}/assets/css/info_admin.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
