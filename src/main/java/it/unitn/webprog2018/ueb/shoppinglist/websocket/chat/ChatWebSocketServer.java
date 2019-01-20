@@ -154,8 +154,11 @@ public class ChatWebSocketServer {
 			}
 			ChatWebSocketMessage exiting = new ChatWebSocketMessage();
 			exiting.setOperation(ChatWebSocketMessage.Operation.SEND_CHAT);
-
-			exiting.setPayload(chatSessionHandler.getMessages(userId, listId));
+			java.util.List<Message> payload = chatSessionHandler.getMessages(userId, listId);
+			for (Message m : payload) {
+				m.getSender().setId(Integer.parseInt(m.getSender().getHash().substring(5)));
+			}
+			exiting.setPayload(payload);
 			session.getBasicRemote().sendText(GSON.toJson(exiting));
 		} catch (DaoException | IOException | JsonSyntaxException ex) {
 			onError(session, ex, userHash);

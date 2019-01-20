@@ -115,7 +115,7 @@ var chat = new Vue({
 		manageMessages: function (data) {
 			this.messages = data;
 			for (var j = 0; this.messages.length > j; j++) {
-				if (this.messages[j].sender.id == this.user)
+				if (this.messages[j].sender.id == this.user.substr(5))
 					this.messages[j].isMine = 'message-s';
 				else
 					this.messages[j].isMine = 'message-r';
