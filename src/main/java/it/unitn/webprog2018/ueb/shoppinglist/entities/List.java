@@ -9,7 +9,6 @@ import com.google.gson.annotations.Expose;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 
 /**
  *
