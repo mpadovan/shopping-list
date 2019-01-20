@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : giulia
 */
 body{
-	background-color: #fafafa;
+	background-color: aliceblue;
 }
 .card-new{
 	margin: 100px auto;;
@@ -79,4 +79,7 @@ body{
   max-width: 420px;
   padding: 15px;
   margin: auto;
+}
+.logo-admin{
+	width: 30px;
 }

@@ -11,16 +11,17 @@
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2">
 			<div class="card login-card">
+				<img class="logo-login" src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Logo" title="Logo">
 				<div class="card-body">
-					<c:if test="${!empty errorLogin}">
-						<div class="alert alert-danger" role="alert">
-							<p>Email o password errati.</p>
-						</div>
-					</c:if>
 					<div class="text-center mb-4">
 						<h1 class="h3 mb-3 font-weight-normal">Login</h1>
 					</div>
 					<form class="form-signin" action="${pageContext.servletContext.contextPath}/Login" method="POST">
+						<c:if test="${!empty errorLogin}">
+							<div class="alert alert-danger form-control" role="alert">
+								<p>Email o password errati.</p>
+							</div>
+						</c:if>
 						<div class="form-label-group">
 							<input type="email"  id="email" name="email" aria-describedby="emailHelp" class="form-control" placeholder="Email" required="required">
 							<label for="email">Email</label>
@@ -44,6 +45,15 @@
 				</div>
 			</div>
 		</div>
+	</jsp:attribute>
+	<jsp:attribute name="customCss">
+		<style>
+			.logo-login{
+				width: 200px;
+				margin: auto;
+				padding-top: 35px;
+			}
+		</style>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
