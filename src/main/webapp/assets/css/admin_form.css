@@ -9,10 +9,10 @@ and open the template in the editor.
 */
 
 body{
-	background-color: lightgrey;
+	background-color: #e0e0e0;
 }
 #content{
-	background-color: lightgrey;
+	background-color: #e0e0e0;
 }
 .new-list-card{
 	max-width: 500px;	

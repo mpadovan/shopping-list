@@ -51,7 +51,9 @@
     overflow: auto;
 }
 .image-closed-list{
-	width: 300px;
+	margin-top: 100px;
+	opacity: 0.7;
+	width: 350px;
 	height: 300px;
 }
 .div-img-closed-list{
@@ -60,16 +62,14 @@
 }
 .card-closed-list{
 	margin: auto;
+	height: 650px;
 }
-@media(max-width: 374px){
+.h6-closed-list{
+	margin-top: 70px;
+}
+@media(max-width: 435px){
 	.image-closed-list{
 		width: 250px;
-		height: 250px;
-	}
-}
-@media(max-width: 321px){
-	.image-closed-list{
-		width: 200px;
 		height: 200px;
 	}
 }

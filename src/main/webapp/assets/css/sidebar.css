@@ -11,18 +11,19 @@ and open the template in the editor.
 body {
     background: #fafafa;
 }
-
+.p-logo{
+	 font-family: FontLogo;
+}
 .p-new-sidebar{
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: #999;
+    color: #fafafa;
 	margin: 0 20px;
 	margin-top: 20px;
 }
 .p-new-sidebar:hover{
-	/*color: #204065;*/
-	color: #0080C0;
+	color: #90caf9;
 }
 .p-products-sidebar{
     font-weight: 300;
@@ -32,8 +33,7 @@ body {
 	font-size: 20px;
 }
 .p-products-sidebar:hover{
-	/*color: #204065;*/
-	color: #0080C0;
+	color: #90caf9;
 }
 .user-image{
 	max-width: 80px;
@@ -53,8 +53,6 @@ a:focus {
     background: #fff;
     border: none;
     border-radius: 0;
-    /*margin-bottom: 40px;*/
-    /*box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);*/
 }
 
 .navbar-btn {
@@ -139,7 +137,7 @@ a:focus {
 #sidebar .sidebar-header {
     margin: 20px;
     background: #0c2646;
-	height: 170px;
+	height: 220px;
 	padding: 10px;
 }
 #body{
@@ -159,13 +157,13 @@ a:focus {
 	margin: 0;
 }
 .div-info-user p:hover{
-	color: #0080C0;
+	color: #90caf9;
 }
 .div-info-user .p-size{
 	size: 15px;
 }
-.div-info-user .h5-user-name:hover{
-	color: #0080C0;
+.div-info-user .h6-user-name:hover{
+	color: #90caf9;
 }
 
 #mCSB_1_container{
@@ -192,7 +190,8 @@ a:focus {
 #sidebar ul li a:hover {
 	font-family: sans-serif;
     color: whitesmoke;
-    background-color:#204065;
+    /*background-color:#204065;*/
+	background-color: #90caf9;
 }
 
 #sidebar ul li.active>a,

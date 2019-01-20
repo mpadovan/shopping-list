@@ -151,14 +151,16 @@
 				</div>
 			</c:if>
 			<c:if test="${empty requestScope.currentList}">
-				<div class="col">
-					<div class="card">
-						<div class="card-body card-closed-list text-center">
-							<p class="mb-2">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</p>
-							<div class="div-img-closed-list"><img class="image-closed-list" src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>
+					<div class="col">
+						<div class="card card-closed-list">
+							<div class="card-body text-center">
+								<!--<p class="mb-2">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</p>
+								<div class="div-img-closed-list"><img class="image-closed-list" src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>-->
+								<h6 class="h6-closed-list">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</h6>
+								<img class="image-closed-list"  src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Shopping List" title="Shopping List">
+							</div>
 						</div>
 					</div>
-				</div>
 			</c:if>
 		</div>
 	</div>
