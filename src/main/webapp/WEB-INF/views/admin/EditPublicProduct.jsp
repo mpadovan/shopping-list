@@ -105,7 +105,7 @@
 			$(document).ready(function () {
 				$('select').each(function () {
 					$(this).select2({
-						theme: 'bootstrap4'
+						
 					});
 				});
 			});

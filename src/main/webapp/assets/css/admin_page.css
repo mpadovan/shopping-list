@@ -30,15 +30,15 @@ body{
 	background-color: #2a5788 ;
 	max-width: 50px;
 	min-height: 50px;
-	border-radius: 10px;
 }
 .info-public-product{
-	background-color: #2a5788;
+	background-color: transparents;
 	width: 50px;
 	height: 50px;
 }
+
 .info-product-category{
-	background-color: #2a5788;
+	background-color: transparent;
 	width: 50px;
 	height: 50px;
 }
@@ -48,6 +48,7 @@ body{
 .logo-product{
 	width: 50px;
 	height: 50px;
+	box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .info-product-image{
 	width: 50px;
@@ -63,6 +64,8 @@ body{
 	width: 50px;
 	height: 50px;
 	margin: auto;
+	box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
 }
 .info-product-card{
 	max-width: 1000px;	
