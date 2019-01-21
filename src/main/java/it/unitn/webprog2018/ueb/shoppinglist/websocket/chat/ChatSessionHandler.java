@@ -45,7 +45,9 @@ public class ChatSessionHandler extends SessionHandler {
 	 */
 	public boolean persistMessage(Message message) throws DaoException {
 		if (checkViewPermission(message.getList().getId(), message.getSender().getId())) {
-			getDaoFactory().getMessageDAO().addMessage(message);
+			if (getDaoFactory().getMessageDAO().addMessage(message)) {
+				notifyNewMessage(message.getSender().getId(), message.getList().getId());
+			}
 			return true;
 		} else {
 			return false;
@@ -140,7 +142,13 @@ public class ChatSessionHandler extends SessionHandler {
 					if (!Objects.equals(userId, senderId) && isConnected(userId)) {
 						ChatWebSocketMessage msg = new ChatWebSocketMessage();
 						msg.setOperation(ChatWebSocketMessage.Operation.SEND_UNREAD_COUNT);
-						msg.setPayload(getUnreadCount(userId));
+						List<ChatWebSocketUnreadCount> payload = getUnreadCount(userId);
+						for (ChatWebSocketUnreadCount m : payload) {
+							it.unitn.webprog2018.ueb.shoppinglist.entities.List l = new it.unitn.webprog2018.ueb.shoppinglist.entities.List();
+							l.setId(m.getListId());
+							m.setListId(Integer.parseInt(l.getHash().substring(5)));
+						}
+						msg.setPayload(payload);
 						getSession(userId).getBasicRemote().sendText(GSON.toJson(msg, msg.getClass()));
 					}
 				}

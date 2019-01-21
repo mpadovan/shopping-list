@@ -72,7 +72,7 @@ var chat = new Vue({
 				case "2":
 					if ($('#chat').css('display') == 'none') {
 						data.payload.forEach(element => {
-							if (element.listId == app.list) {
+							if (element.listId == app.list.substr(5)) {
 								Socket.send(JSON.stringify({
 									operation: '1',
 									payload: app.list
