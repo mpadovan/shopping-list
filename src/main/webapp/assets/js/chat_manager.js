@@ -103,8 +103,8 @@ var chat = new Vue({
 			if (this.text) {
 				this.message.operation = 0;
 				this.message.payload.sendTime = moment().format('MMM D, YYYY hh:mm:ss A');
-				this.message.payload.listId = app.list.substr(5);
-				this.message.payload.senderId = app.user.substr(5);
+				this.message.payload.listId = app.list;
+				this.message.payload.senderId = app.user;
 				this.message.payload.text = this.text;
 				console.log(this.message);
 				if (this.message.payload.text.length <= 255) {
