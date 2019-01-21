@@ -71,7 +71,7 @@ var chat = new Vue({
 			switch (data.operation) {
 				case "2":
 					if ($('#chat').css('display') == 'none') {
-						data.payload.forEach(element => {
+						data.payload.forEach((element, index, array) => {
 							if (element.listId == app.list.substr(5)) {
 								Socket.send(JSON.stringify({
 									operation: '1',
@@ -79,12 +79,14 @@ var chat = new Vue({
 								}));
 								toastr['success']('Hai messaggi non letti su questa lista');
 							}
-							$('#shared-list-outer-' + element.listId).addClass('show-badge');
-							$('#shared-list-' + element.listId).text(element.unreadCount);
+							$('#shared-list-outer-list-' + element.listId).addClass('show-badge');
+							$('#shared-list-list-' + element.listId).text(element.unreadCount);
 							//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
 						});
-						if(data.payload.length != 0) $('#new-messages').css('display', 'inline');
-						else $('#new-messages').css('display', 'none');
+						if (data.payload.length != 0)
+							$('#new-messages').css('display', 'inline');
+						else
+							$('#new-messages').css('display', 'none');
 					} else {
 						var msg = {
 							operation: 1,
