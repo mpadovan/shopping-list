@@ -67,20 +67,20 @@
 						</div>
 						<div id="app">
 							<div id="sharedList">
-								Condividi con:<br>
+								<label>Condividi con:</label>
 								<div v-for="(field, index) in emailFields">
 									<input type="email"
 										   name="shared[]"
 										   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}"
 										   v-model="emailFields[index]">
 									<label class="radio-inline" style="margin-right:5px;">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="view" checked>Visualizzazione
+										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="view" checked>Visualizzazione
 									</label>
 									<label class="radio-inline" style="margin-right:5px;">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic">Base
+										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic">Base
 									</label>
 									<label class="radio-inline">
-										<input type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Proprietario
+										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Proprietario
 									</label>
 								</div>
 								<div class="invalid-feedback">
@@ -128,7 +128,7 @@
 				$(document).ready(function () {
 					$('select').each(function () {
 						$(this).select2({
-							theme: 'bootstrap4'
+							
 						});
 					});
 					$('.js-example-basic-multiple').select2({
