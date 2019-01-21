@@ -153,7 +153,7 @@
 						} else {
 							$('#btn-add-email').prop('disabled', false);
 						}
-						console.log(this.emailFields);
+						// console.log(this.emailFields);
 					}
 				},
 				methods: {

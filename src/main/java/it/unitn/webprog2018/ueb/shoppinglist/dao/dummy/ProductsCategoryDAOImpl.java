@@ -70,7 +70,7 @@ public class ProductsCategoryDAOImpl implements ProductsCategoryDAO {
 	public List<ProductsCategory> getFromQuery(String query) {
 		List<ProductsCategory> matching = new ArrayList<>();
 
-		System.out.println("Checkin out custom products");
+		// System.out.println("Checkin out custom products");
 		for (ProductsCategory p : productsCategories) {
 			if (p.getName().toLowerCase().contains(query.toLowerCase())) {
 				matching.add(p);

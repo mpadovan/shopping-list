@@ -106,7 +106,7 @@ var chat = new Vue({
 				this.message.payload.listId = app.list;
 				this.message.payload.senderId = app.user;
 				this.message.payload.text = this.text;
-				console.log(this.message);
+				// console.log(this.message);
 				if (this.message.payload.text.length <= 255) {
 					Socket.send(JSON.stringify(this.message));
 				}

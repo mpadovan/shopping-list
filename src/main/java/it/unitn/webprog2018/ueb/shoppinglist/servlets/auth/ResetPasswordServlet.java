@@ -85,7 +85,7 @@ public class ResetPasswordServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/views/auth/ResetPassword.jsp").forward(request, response);
 			}
 			String token = UUID.randomUUID().toString();
-			System.out.println("Token: " + token);
+			// System.out.println("Token: " + token);
 			user.setTokenpassword(token);
 			try {
 				userDAO.setToken(user);

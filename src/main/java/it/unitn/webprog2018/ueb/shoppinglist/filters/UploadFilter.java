@@ -76,7 +76,7 @@ public class UploadFilter implements Filter {
 					// end of the number containing the list id, either beginning of extension or end of uri
 					Integer extIndex = uri.lastIndexOf(".") > 0 ? uri.lastIndexOf(".") : uri.length();
 					Integer listId = Integer.parseInt(uri.substring(uri.lastIndexOf("/", uri.length()-2), extIndex));
-					System.out.println(listId);
+					// System.out.println(listId);
 					try {
 						if (!listDAO.getList(listId).getOwner().getId().equals(user.getId()) || !listDAO.hasViewPermission(listId, user.getId())) {
 							HttpErrorHandler.sendError401(resp);

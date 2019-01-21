@@ -50,7 +50,7 @@ public class InfoProductServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		Integer productId = Integer.parseInt(request.getParameter("id"));
-		System.out.println(productId);
+		// System.out.println(productId);
 		try {
 			Product product = productDAO.getProduct(productId);
 			request.setAttribute("product", product);

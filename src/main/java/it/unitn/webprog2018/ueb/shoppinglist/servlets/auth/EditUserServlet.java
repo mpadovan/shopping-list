@@ -112,10 +112,10 @@ public class EditUserServlet extends HttpServlet {
 				if (userDAO.updateUser(id, user)) {
 					session.setAttribute("user", user);
 					redirect = true;
-					System.out.println("utente modificato senza password");
+					// System.out.println("utente modificato senza password");
 				} else {
 					request.setAttribute("user", user);
-					System.out.println("validation utente modificato senza password");
+					// System.out.println("validation utente modificato senza password");
 				}
 			}
 			if (redirect) {

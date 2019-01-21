@@ -582,7 +582,7 @@ public class ListWebService {
 		}
 		PublicProduct product = new PublicProduct();
 		product.setId(productId);
-		System.out.println(content);
+		// System.out.println(content);
 		try {
 			// check if product is already on list, then increase amount by one or newly insert the product
 			Map<PublicProduct, Integer> prodOnList = listDAO.getProductsOnList(token);

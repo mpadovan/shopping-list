@@ -84,7 +84,7 @@ public class EditAdminServlet extends HttpServlet {
 			user.setCheckpassword(user.getPassword());
 			String oldpassword = request.getParameter("oldpassword");
 			if (oldpassword != null && !oldpassword.equals("")) {
-				System.out.println("password equal");
+				// System.out.println("password equal");
 				String password = request.getParameter("password");
 				String checkPassword = request.getParameter("checkpassword");
 				if (Sha256.doHash(oldpassword).equals(user.getPassword())) {
@@ -93,26 +93,26 @@ public class EditAdminServlet extends HttpServlet {
 					if (userDAO.updateUser(id, user)) {
 						session.setAttribute("user", user);
 						redirect = true;
-						System.out.println("utente modificato con password");
+						// System.out.println("utente modificato con password");
 					} else {
 						request.setAttribute("user", user);
 						request.setAttribute("changepassword", true);
-						System.out.println("validation utente modificato con password");
+						// System.out.println("validation utente modificato con password");
 					}
 				} else {
 					user.setError("oldpassword", "la password non è corretta");
 					request.setAttribute("user", user);
 					request.setAttribute("changepassword", true);
-					System.out.println("password errata");
+					// System.out.println("password errata");
 				}
 			} else {
 				if (userDAO.updateUser(id, user)) {
 					session.setAttribute("user", user);
 					redirect = true;
-					System.out.println("utente modificato senza password");
+					// System.out.println("utente modificato senza password");
 				} else {
 					request.setAttribute("user", user);
-					System.out.println("validation utente modificato senza password");
+					// System.out.println("validation utente modificato senza password");
 				}
 			}
 			if (redirect) {
@@ -139,11 +139,11 @@ public class EditAdminServlet extends HttpServlet {
 	cookie.setPath("/");
 	cookie.setMaxAge(0);
 	response.addCookie(cookie);
-	System.out.println("true");
+	// System.out.println("true");
 	}
 	}
 	}
-	System.out.println("false");
+	// System.out.println("false");
 	}*/
 	
 	/**

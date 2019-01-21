@@ -95,7 +95,7 @@ public class TokenDAOImpl extends AbstractDAO implements TokenDAO {
 				else
 					throw new UpdateException("Token not Generated");
 				st.close();
-				System.out.println(token.toString());
+				// System.out.println(token.toString());
 				return CookieCipher.encrypt(token.toString());
 			}
 			catch(SQLException ex){
