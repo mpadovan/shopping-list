@@ -29,7 +29,7 @@
 						<tr>
 							<th>Nome</th>
 							<th>Descrizione</th>
-							<th>Immagine</th>
+							<th>Fotografia</th>
 							<th>Gestisci</th>
 						</tr>
 					</thead>
@@ -43,7 +43,7 @@
 										<c:if test="${c.id == i.category.id}">
 											<c:if test="${empty i.image}"></c:if>
 											<c:if test="${not empty i.image}">
-												<img class="cat-list-img" src="${pageContext.servletContext.contextPath}${i.image}">
+												<img class="cat-list-img rounded" src="${pageContext.servletContext.contextPath}${i.image}" alt="Fotografia" title="Fotografia">
 											</c:if>
 										</c:if>
 									</c:forEach>
