@@ -97,6 +97,7 @@
 	<jsp:attribute name="customCss">
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/assets/css/select2-bootstrap4.css">
 		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
+		
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<!--<script src="assets/js/landing_page.js"></script>-->
@@ -104,7 +105,7 @@
 			$(document).ready(function () {
 				$('select').each(function () {
 					$(this).select2({
-						theme: 'bootstrap4'
+						
 					});
 				});
 			});
