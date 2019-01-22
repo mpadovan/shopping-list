@@ -24,66 +24,68 @@
 						</div>
 					</div>
 				</form>
-				<table class="table table-responsive-md table-striped">
-					<thead>
-						<tr>
-							<th>Nome prodotto</th>
-							<th>Note</th>
-							<th>Logo</th>
-							<th>Fotografia</th>
-							<th>Categoria</th>
-							<th>Gestisci</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="p" items="${requestScope.publicProducts}">
+				<div class="table-responsive-md">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td>${p.name}</td>
-								<td>${p.note}</td>
-								<td>
-									<c:if test="${p.logo ne 'null' && not empty p.logo}">	
-										<div class="info-public-product"><img class="logo-product rounded-circle" src="${pageContext.servletContext.contextPath}${p.logo}" alt="Logo" title="Logo"></div>
-									</c:if>
-								</td>
-								<td>
-									<c:if test="${p.photography ne 'null' && not empty p.photography}">
-										<div class="info-product-image"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="Fotografia" title="Fotografia"></div>
-									</c:if>
-								</td>
-								<td>${p.category.name}</td>
-								<td>
-									<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
-									<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
-								</td>
+								<th>Nome prodotto</th>
+								<th>Note</th>
+								<th>Logo</th>
+								<th>Fotografia</th>
+								<th>Categoria</th>
+								<th>Gestisci</th>
 							</tr>
-							<!-- Modal -->
-						<div class="modal fade" id="delete-${p.id}" tabindex="-1" role="dialog" aria-labelledby="delete-${p.id}" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="delete-${p.id}">Elimina prodotto</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										Sei sicuro di voler eliminare il prodotto "${p.name}"?
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-										<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeletePublicProduct?id=${p.id}" class="btn btn-danger">Elimina</a>
+						</thead>
+						<tbody>
+							<c:forEach var="p" items="${requestScope.publicProducts}">
+								<tr>
+									<td>${p.name}</td>
+									<td>${p.note}</td>
+									<td>
+										<c:if test="${p.logo ne 'null' && not empty p.logo}">	
+											<div class="info-public-product"><img class="logo-product rounded-circle" src="${pageContext.servletContext.contextPath}${p.logo}" alt="Logo" title="Logo"></div>
+											</c:if>
+									</td>
+									<td>
+										<c:if test="${p.photography ne 'null' && not empty p.photography}">
+											<div class="info-product-image"><img class="image-product-list" src="${pageContext.servletContext.contextPath}${p.photography}" alt="Fotografia" title="Fotografia"></div>
+											</c:if>
+									</td>
+									<td>${p.category.name}</td>
+									<td>
+										<span><a href="${pageContext.servletContext.contextPath}/restricted/admin/EditPublicProduct?id=${p.id}"><i class="fas fa-pen-square"></i></a></span>
+										<span class="ml-4"><a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${p.id}"><i class="fas fa-trash"></i></a></span>
+									</td>
+								</tr>
+								<!-- Modal -->
+							<div class="modal fade" id="delete-${p.id}" tabindex="-1" role="dialog" aria-labelledby="delete-${p.id}" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="delete-${p.id}">Elimina prodotto</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											Sei sicuro di voler eliminare il prodotto "${p.name}"?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+											<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeletePublicProduct?id=${p.id}" class="btn btn-danger">Elimina</a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</c:forEach>
-					<c:if test="${fn:length(requestScope.publicProducts) == 0}">
-						<tr>
-							<td class="text-center" colspan="6">Nessun risultato</td>
-						</tr>
-					</c:if>
-					</tbody>
-				</table>
+						</c:forEach>
+						<c:if test="${fn:length(requestScope.publicProducts) == 0}">
+							<tr>
+								<td class="text-center" colspan="6">Nessun risultato</td>
+							</tr>
+						</c:if>
+						</tbody>
+					</table>
+				</div>
 				<c:if test="${requestScope.checkParam > 0}">
 					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/PublicProductList"><p>Torna alla lista</p></a></div>
 				</c:if>
