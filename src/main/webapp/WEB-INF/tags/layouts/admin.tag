@@ -35,10 +35,10 @@
 
 		<title><c:out value="${pageTitle}" /></title>
 	</head>
-	<body>
+	<body style="margin-top: 70px;">
 
 		<%-- Container for page Content printed via JSP tag --%>
-		<nav class="navbar navbar-expand-lg navbar-dark navbar-color">
+		<nav class="navbar navbar-expand-lg navbar-dark navbar-color fixed-top">
 			<a class="navbar-brand" style="color: white;"><img class="logo-admin" src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Logo" title="Logo"> Amministratore</a>
 			<a class="nav-link navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>

@@ -11,51 +11,76 @@
 <layouts:base pageTitle="Info list">
     <jsp:attribute name="pageContent">
 		<div class="card info-list-card">
-			<c:if test="${!empty requestScope.currentList.image}">
-				<img class="card-img-top" src="${pageContext.servletContext.contextPath}${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
-			</c:if>
-			<c:if test="${empty requestScope.currentList.image}">
-				<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
-			</c:if>
+			<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="">
+				<div class="carousel-inner img-cat-list">
+					<c:forEach var="i" varStatus="j" items="${requestScope.categoryImages}">
+						<div style="background-color: #e0e0e0" class="carousel-item <c:if test="${j.index == 0}">active</c:if>">
+							<img class="d-block img-cat-list" src="${pageContext.servletContext.contextPath}${i.image}" alt="Fotografia di categoria di Lista">
+						</div>
+					</c:forEach>
+				</div>
+				<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
 			<div class="card-body">
-				<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
-				<table class="table table-responsive-md">
-					<tbody>
-						<tr>
-							<th scope="row">Nome</th>
-							<td>${requestScope.currentList.name}</td>
-						</tr>
-						<tr>
-							<th scope="row">Descrizione</th>
-							<td>${requestScope.currentList.description}</td>
-						</tr>
-						<tr>
-							<th scope="row">Proprietario</th>
-							<td>${requestScope.currentList.owner.name} ${requestScope.currentList.owner.lastname}</td>
-						</tr>
-						<c:if test="${!empty requestScope.sharedUsers}">
-							<tr>
-								<th scope="column">Condivisa con</th>
-
-								<td>
-									<c:forEach items="${requestScope.sharedUsers}" var="user">
-										${user.email}
-										<br>
-									</c:forEach>
-								</td>
-							</tr>
+				<div class="row">
+					<div class="col-sm-12 col-md-auto text-center">
+						<c:if test="${!empty requestScope.currentList.image}">
+							<img class="card-img-top" src="${pageContext.servletContext.contextPath}${requestScope.currentList.image}" alt="image" title="${requestScope.currentList.name}">
 						</c:if>
-					</tbody>
-				</table>
+						<c:if test="${empty requestScope.currentList.image}">
+							<img class="card-img-top" src="${pageContext.servletContext.contextPath}/assets/images/list-default.png" alt="image" title="${requestScope.currentList.name}">
+						</c:if>
+					</div>
+					<div class="col">
+						<h5 class="card-title text-center">Informazioni lista "${requestScope.currentList.name}"</h5>
+						<div class="table-responsive-md">
+							<table class="table">
+								<tbody>
+									<tr>
+										<th scope="row">Nome</th>
+										<td>${requestScope.currentList.name}</td>
+									</tr>
+									<tr>
+										<th scope="row">Descrizione</th>
+										<td>${requestScope.currentList.description}</td>
+									</tr>
+									<tr>
+										<th scope="row">Proprietario</th>
+										<td>${requestScope.currentList.owner.name} ${requestScope.currentList.owner.lastname}</td>
+									</tr>
+									<c:if test="${!empty requestScope.sharedUsers}">
+										<tr>
+											<th scope="column">Condivisa con</th>
 
-							<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+											<td>
+												<c:forEach items="${requestScope.sharedUsers}" var="user">
+													${user.email}
+													<br>
+												</c:forEach>
+											</td>
+										</tr>
+									</c:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
 
 				<c:if test="${requestScope.hasDeletePermission}">
 					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>
-				</c:if>
-				<c:if test="${requestScope.hasModifyPermission}">
+					</c:if>
+					<c:if test="${requestScope.hasModifyPermission}">
 					<a href="${pageContext.servletContext.contextPath}/restricted/EditList/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light float-right mx-2" title="Modifica"><i class="fas fa-pen-square"></i></a>
-				</c:if>
+					</c:if>
 			</div>
 		</div>
 		<!--Modal-->

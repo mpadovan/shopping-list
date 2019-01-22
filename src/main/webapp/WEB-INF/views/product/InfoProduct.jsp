@@ -42,7 +42,7 @@
 									</tr>
 									<tr>
 										<th scope="row">Categoria</th>
-										<td>${requestScope.product.category.name}</td>
+										<td><img class="rounded logo-product" src="${pageContext.servletContext.contextPath}${requestScope.product.category.logo}"> ${requestScope.product.category.name} </td>
 									</tr>
 								</tbody>
 							</table>

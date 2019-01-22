@@ -8,7 +8,9 @@ package it.unitn.webprog2018.ueb.shoppinglist.servlets.list;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.DAOFactory;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryImagesDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.List;
+import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategoriesImage;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.User;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.HttpErrorHandler;
 import java.io.IOException;
@@ -30,10 +32,12 @@ import javax.servlet.http.HttpSession;
 public class InfoListServlet extends HttpServlet {
 
 	private ListDAO listDAO;
+	private ListsCategoryImagesDAO listsCategoryImagesDAO;
 
 	@Override
 	public void init() {
 		listDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListDAO();
+		listsCategoryImagesDAO = ((DAOFactory) getServletContext().getAttribute("daoFactory")).getListsCategoryImageDAO();
 	}
 
 	/**
@@ -56,12 +60,15 @@ public class InfoListServlet extends HttpServlet {
 		if ((boolean) request.getAttribute("hasViewPermission")) {
 			try {
 				List list = (List) request.getAttribute("currentList");
+				Integer categoryId = list.getCategory().getId();
+				java.util.List<ListsCategoriesImage> images = listsCategoryImagesDAO.getByCategoriesID(categoryId);
 				// request.setAttribute("currentList", list);
 				// request.setAttribute("hasModifyPermission", list.getOwner().equals(user) || listDAO.hasModifyPermission(list.getId(), user.getId()));
 				// request.setAttribute("hasDeletePermission", list.getOwner().equals(user) || listDAO.hasDeletePermission(list.getId(), user.getId()));
 				if (((java.util.List<List>) request.getAttribute("sharedLists")).contains((List) request.getAttribute("currentList"))) {
 					request.setAttribute("sharedUsers", listDAO.getConnectedUsers(list.getId()));
 				}
+				request.setAttribute("categoryImages", images);
 			} catch (DaoException ex) {
 				HttpErrorHandler.handleDAOException(ex, response);
 				Logger.getLogger(InfoListServlet.class.getName()).log(Level.SEVERE, null, ex);
