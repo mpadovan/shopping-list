@@ -13,6 +13,7 @@ and open the template in the editor.
 .cat-list-img{
 	width: 50px;
 	height: 50px;
+	margin-bottom: 4px;
 	box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .cat-list-img-modal{
@@ -29,9 +30,7 @@ and open the template in the editor.
 	max-width: 600px;	
 	margin: 100px auto;
 }
-#content{
-	background-color: lightgray;
-}
+
 .btn-change{
 	background-color: #2a5788;
 	color: white;
@@ -50,12 +49,18 @@ and open the template in the editor.
 /* css images*/
 .carousel-item {
 	/**height: 100vh;**/
-	min-height: 300px;
+	min-height: 400px;
 	background: no-repeat center center scroll;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+}
+@media (min-width: 991.98px){
+	.modal-dialog {
+		max-width: 1000px;
+		margin: 1.75rem auto;
+	}
 }
 .choose-file-none{
 	display: none;
@@ -87,22 +92,3 @@ and open the template in the editor.
 	0%  {top:200px;}
 	100% {top:0px;}
 }
-/*
-.form-down {
-	-webkit-animation-name: form-down; /* Safari 4.0 - 8.0 */
-	/*-webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
-	/*animation-name: form-down;
-	animation-duration: 1s;
-	position: relative;
-}_
-/* Safari 4.0 - 8.0 */
-/*@-webkit-keyframes form-down {
-	0%  {top:0px;}
-	100% {top:200px;}
-}
-
-/* Standard syntax */
-/*@keyframes form-down {
-	0%  {top:0px;}
-	100% {top:200px;}
-}*/

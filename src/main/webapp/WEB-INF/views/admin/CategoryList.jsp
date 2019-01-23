@@ -24,63 +24,65 @@
 						</div>
 					</div>
 				</form>
-				<table class="table table-responsive-md table-striped">
-					<thead>
-						<tr>
-							<th>Nome</th>
-							<th>Descrizione</th>
-							<th>Fotografia</th>
-							<th>Gestisci</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="c" items="${requestScope.listsCategory}">
+				<div class="table-responsive-md">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td>${c.name}</td>
-								<td>${c.description}</td>
-								<td class="td-images">
-									<c:forEach var="i" items="${requestScope.listsCategoryImage}">
-										<c:if test="${c.id == i.category.id}">
-											<c:if test="${empty i.image}"></c:if>
-											<c:if test="${not empty i.image}">
-												<img class="cat-list-img rounded" src="${pageContext.servletContext.contextPath}${i.image}" alt="Fotografia" title="Fotografia">
-											</c:if>
-										</c:if>
-									</c:forEach>
-								<td class="td-handler">
-									<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images margin-table-btn btn-options"></i></a>
-									<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square margin-table-btn btn-options"></i></a>
-									<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash btn-options"></i></a>
-								</td>
+								<th>Nome</th>
+								<th>Descrizione</th>
+								<th>Fotografia</th>
+								<th>Gestisci</th>
 							</tr>
-							<!-- Modal -->
-						<div class="modal fade" id="delete-${c.id}" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="delete-${c.id}">Elimina categoria di lista</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										Sei sicuro di voler eliminare la categoria di lista "${c.name}"?
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-										<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeleteListCategory?id=${c.id}" class="btn btn-danger">Elimina</a>
+						</thead>
+						<tbody>
+							<c:forEach var="c" items="${requestScope.listsCategory}">
+								<tr>
+									<td>${c.name}</td>
+									<td>${c.description}</td>
+									<td class="td-images">
+										<c:forEach var="i" items="${requestScope.listsCategoryImage}">
+											<c:if test="${c.id == i.category.id}">
+												<c:if test="${empty i.image}"></c:if>
+												<c:if test="${not empty i.image}">
+													<img class="cat-list-img rounded" src="${pageContext.servletContext.contextPath}${i.image}" alt="Fotografia" title="Fotografia">
+												</c:if>
+											</c:if>
+										</c:forEach>
+									<td class="td-handler">
+										<a href="#images" data-category-id="${c.id}" data-toggle="modal" data-target="#images"><i class="fas fa-images margin-table-btn btn-options"></i></a>
+										<a href="${pageContext.servletContext.contextPath}/restricted/admin/EditListsCategory?id=${c.id}"><i class="fas fa-pen-square margin-table-btn btn-options"></i></a>
+										<a href="#delete-${c.id}" data-toggle="modal" data-target="#delete-${c.id}"><i class="fas fa-trash btn-options"></i></a>
+									</td>
+								</tr>
+								<!-- Modal -->
+							<div class="modal fade" id="delete-${c.id}" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="delete-${c.id}">Elimina categoria di lista</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											Sei sicuro di voler eliminare la categoria di lista "${c.name}"?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+											<a href="${pageContext.servletContext.contextPath}/restricted/admin/DeleteListCategory?id=${c.id}" class="btn btn-danger">Elimina</a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</c:forEach>
-					<c:if test="${fn:length(requestScope.listsCategory) == 0}">
-						<tr>
-							<td class="text-center" colspan="6">Nessun risultato</td>
-						</tr>
-					</c:if>
-					</tbody>
-				</table>
+						</c:forEach>
+						<c:if test="${fn:length(requestScope.listsCategory) == 0}">
+							<tr>
+								<td class="text-center" colspan="6">Nessun risultato</td>
+							</tr>
+						</c:if>
+						</tbody>
+					</table>
+				</div>
 				<c:if test="${requestScope.checkParam > 0}">
 					<div class="text-center"><a href="${pageContext.servletContext.contextPath}/restricted/admin/ListCategory"><p>Torna alla lista</p></a></div>
 				</c:if>
