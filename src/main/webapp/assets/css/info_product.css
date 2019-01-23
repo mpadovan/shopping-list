@@ -61,8 +61,8 @@ and open the template in the editor.
 	border-radius: 10px;
 }
 .info-product-card{
-	max-width: 1000px;	
-	margin: 100px auto;
+	max-width: 1000px;
+	margin-top: 100px;
 }
 @media(max-width: 457px){
 	#btn-back{

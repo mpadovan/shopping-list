@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:auth pageTitle="Login">
+<layouts:auth pageTitle="Accedi">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2">
 			<div class="card login-card">

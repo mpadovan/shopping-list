@@ -9,10 +9,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
-<layouts:base pageTitle="New product">
+<layouts:base pageTitle="Nuovo prodotto">
     <jsp:attribute name="pageContent">
 		<div class="cointainer-fluid px-2">
-			<div class="card product-card">
+			<div class="card product-card mt-4 mx-auto">
 				<div class="card-body">
 					<c:if test="${!empty product.errors}">
 						<div class="alert alert-danger" role="alert">
@@ -84,7 +84,7 @@
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" title="Torna a lista prodotti" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Crea</button>
 						</div>
 					</form>

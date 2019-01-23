@@ -8,7 +8,7 @@
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<layouts:admin pageTitle="Admin category product">
+<layouts:admin pageTitle="Categoria prodotto">
 	<jsp:attribute name="pageContent">
 		<div class="card" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
 			<div class="card-body">

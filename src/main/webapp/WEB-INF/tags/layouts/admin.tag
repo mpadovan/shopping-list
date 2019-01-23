@@ -81,7 +81,7 @@
 			</div>
 
 		</nav>
-		<div class="container-fluid mt-3">
+		<div class="container-fluid mt-3 px-2">
 			<jsp:invoke fragment="pageContent" />
 		</div>
 
