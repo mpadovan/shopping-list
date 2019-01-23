@@ -8,31 +8,34 @@
 
 Vue.component('infoModal', {
 	props: ['item'],
-	data: function() {
+	data: function () {
 		return {
 			data: {
 				name: '',
 				categoryName: '',
+				categoryLogo: '',
 				notes: '',
 				isPrivate: '',
 				photo: '',
 				logo: '',
 				amIAnon: ''
 			},
-			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg',
+			defaultItem: null
 		}
 	},
 	mounted: function () {
-		this.item = (this.item.item.category == undefined) ? this.item.item : this.item;
-		this.data.name = this.item.item.name;
-		this.data.categoryName = this.item.item.category.name;
-		this.data.notes = this.item.item.note;
-		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : app.path + this.item.item.logo;
-		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : app.path + this.item.item.photography;
+		this.defaultItem = (this.item.item.category == undefined) ? this.item.item : this.item;
+		this.data.name = this.defaultItem.item.name;
+		this.data.categoryName = this.defaultItem.item.category.name;
+		this.data.categoryLogo = this.defaultItem.item.category.logo;
+		this.data.notes = this.defaultItem.item.note;
+		this.data.logo = (this.defaultItem.item.logo == "null" || this.defaultItem.item.logo == undefined) ? this.defaultImage : app.path + this.defaultItem.item.logo;
+		this.data.photo = (this.defaultItem.item.photography == "null" || this.defaultItem.item.photography == undefined) ? this.defaultImage : app.path + this.defaultItem.item.photography;
 		$('#info-modal').modal('show');
 	},
 	methods: {
-		hideModal: function() {
+		hideModal: function () {
 			this.$emit('close');
 		}
 	},
@@ -65,13 +68,19 @@ Vue.component('infoModal', {
 											</tr>
 											<tr>
 												<th scope="row">Logo</th>
-													<td>
-														<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
-													</td>
+												<td>
+													<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
+												</td>
 											</tr>
 											<tr>
 												<th scope="row">Categoria</th>
 												<td>{{data.categoryName}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Categoria</th>
+												<td>
+													<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.categoryLogo" alt="Logo" title="Logo categoria di lista">{{ data.categoryName }}</div>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -80,8 +89,7 @@ Vue.component('infoModal', {
 							</div>
 						</div>
 					</div>
-				</div>
-				`
+				</div>`
 });
 
 Vue.component('ajaxComponent', {
