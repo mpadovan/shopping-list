@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<layouts:base pageTitle="Product list">
+<layouts:base pageTitle="Prodotti">
     <jsp:attribute name="pageContent">
 		<div class="card m-3">
 			<div class="card-body">

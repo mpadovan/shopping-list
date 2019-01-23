@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:admin pageTitle="Change image user">
+<layouts:admin pageTitle="Cambia immagine">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2 py-2">
 			<div class="card card-change-image">

@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
-<layouts:auth pageTitle="Sign up">
+<layouts:auth pageTitle="Registrazione">
 	<jsp:attribute name="pageContent">
 		<div class="cointainer-fluid px-2">
 			<div class="card signUp-card">
