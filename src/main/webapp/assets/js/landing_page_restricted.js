@@ -277,7 +277,9 @@ var app = new Vue({
 		lockAjaxComponent: false,
 		item_selected_id: -2,
 		loaded_list: false,
-		showInfoModal: false
+		showInfoModal: false,
+		fetchListComponent: false,
+		updateTimer: 2000
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -292,6 +294,12 @@ var app = new Vue({
 		}
 	},
 	methods: {
+		keepListAlwaysUpToDate: function() {
+			var self = this;
+			this.timer = setInterval(function() {
+				self.fetchList();
+			}, self.updateTimer);
+		},
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
@@ -452,7 +460,10 @@ var app = new Vue({
 				"url": this.path + 'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
 				"method": "GET",
 			};
-			this.fetchListComponent = true;
+			if(this.fetchListComponent){
+				return;
+			}
+			else this.fetchListComponent = true;
 		},
 		ajaxDone: function (data) {
 			this.ajaxComponent = false;
@@ -592,6 +603,7 @@ var app = new Vue({
 	},
 	mounted: function () {
 		this.loaded_list = true;
+		this.keepListAlwaysUpToDate();
 	}
 });
 
