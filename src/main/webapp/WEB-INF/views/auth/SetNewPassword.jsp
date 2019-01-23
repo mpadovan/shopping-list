@@ -9,7 +9,7 @@
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
-<layouts:auth pageTitle="Change Password">
+<layouts:auth pageTitle="Cambia Password">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid px-2">
 			<div class="card login-card">

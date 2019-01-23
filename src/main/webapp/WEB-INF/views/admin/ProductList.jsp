@@ -9,7 +9,7 @@
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<layouts:admin pageTitle="Admin products">
+<layouts:admin pageTitle="Prodotti pubblici">
 	<jsp:attribute name="pageContent">
 		<div class="card card-list-product">
 			<div class="card-body">

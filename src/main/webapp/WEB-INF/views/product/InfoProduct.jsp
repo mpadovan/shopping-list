@@ -8,9 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:base pageTitle="Info product">
+<layouts:base pageTitle="Informazioni prodotto">
     <jsp:attribute name="pageContent">
-		<div class="card info-product-card">
+		<div class="card info-product-card mx-auto">
 			<div class="card-body">
 				<div class="row">
 					<div class="col-sm-12 col-md-auto text-center">
@@ -48,7 +48,7 @@
 							</table>
 						</div>
 
-						<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+						<a href="${pageContext.servletContext.contextPath}/restricted/ProductList" class="btn btn-light" title="Torna a lista prodotti"><i class="fas fa-chevron-left"></i> Indietro</a>
 						<a href="#delete-${p.id}" data-toggle="modal" data-target="#delete-${requestScope.product.id}" class="btn btn-danger float-right mx-2" title="Elimina"><i class="fas fa-trash"></i></a>
 						<a href="${pageContext.servletContext.contextPath}/restricted/permission/EditProduct?id=${requestScope.product.id}" class="btn btn-light float-right" title="Modifica"><i class="fas fa-pen-square"></i></a>
 					</div>

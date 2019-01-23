@@ -9,10 +9,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
-<layouts:base pageTitle="Edit list">
+<layouts:base pageTitle="Modifica lista">
     <jsp:attribute name="pageContent">
 		<div class="container-fluid">	
-			<div class="card new-list-card">
+			<div class="card new-list-card mt-4 mx-auto">
 				<div class="card-body">
 					<c:if test="${!empty currentList.errors}">
 						<div class="alert alert-danger" role="alert">
@@ -107,7 +107,7 @@
 							</div>
 						</div>
 						<div class="float-right mt-3">
-							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light">Annulla</a>
+							<a href="${pageContext.servletContext.contextPath}/restricted/InfoList/${sessionScope.user.hash}/${requestScope.currentList.hash}" title="Torna a info lista" class="btn btn-light">Annulla</a>
 							<button class="btn btn-new ml-2" type="submit">Modifica</button>
 						</div> 
 					</form>
