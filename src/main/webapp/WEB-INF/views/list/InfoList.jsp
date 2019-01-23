@@ -8,9 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:base pageTitle="Info list">
+<layouts:base pageTitle="Informazioni lista">
     <jsp:attribute name="pageContent">
-		<div class="card info-list-card">
+		<div class="card info-list-card mx-auto">
 			<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="">
 				<div class="carousel-inner img-cat-list">
 					<c:forEach var="i" varStatus="j" items="${requestScope.categoryImages}">
@@ -73,7 +73,7 @@
 					</div>
 				</div>
 
-				<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light"><i class="fas fa-chevron-left"></i> Indietro</a>
+										<a href="${pageContext.servletContext.contextPath}/restricted/HomePageLogin/${sessionScope.user.hash}/${requestScope.currentList.hash}" class="btn btn-light" title="Torna alla lista"><i class="fas fa-chevron-left"></i> Indietro</a>
 
 				<c:if test="${requestScope.hasDeletePermission}">
 					<a href="#" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteList" title="Elimina"><i class="fas fa-trash"></i></a>

@@ -9,10 +9,10 @@
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
-<layouts:base pageTitle="Profile">
+<layouts:base pageTitle="Modifica profilo">
     <jsp:attribute name="pageContent">
 		<div class="cointainer-fluid px-2">
-			<div class="card edit-user-card">
+			<div class="card edit-user-card mt-4 mx-auto">
 				<div class="card-body">
 					<c:if test="${!empty user.errors}">
 						<div class="alert alert-danger" role="alert">

@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 
-<layouts:base pageTitle="Landing Page">
+<layouts:base pageTitle="Shopping List">
 	<jsp:attribute name="pageContent">
 		<div class="container-fluid mt-4"style="position: relative;">
 			<div class="row justify-content-center">

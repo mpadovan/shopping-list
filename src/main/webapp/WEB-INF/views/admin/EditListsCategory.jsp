@@ -9,7 +9,7 @@
 <%@taglib prefix="layouts" tagdir="/WEB-INF/tags/layouts/" %>
 <%@ taglib prefix="shared" tagdir="/WEB-INF/tags/shared/" %>
 
-<layouts:admin pageTitle="Edit Lists Category">
+<layouts:admin pageTitle="Modifica categoria di lista">
 	<jsp:attribute name="pageContent">
 		<div class="card card-new">
 			<div class="card-body">
