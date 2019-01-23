@@ -76,6 +76,7 @@ public class ProductWebService {
 		String query = HttpErrorHandler.getQuery(search);
 
 		PublicProductDAO publicProductDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getPublicProductDAO();
+		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 		List<PublicProduct> publicProducts = null;
 		if (query.equals("")) {
 			try {
@@ -92,8 +93,21 @@ public class ProductWebService {
 				HttpErrorHandler.handleDAOException(ex, response);
 			}
 		}
-		Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
+		Gson gson = CustomGsonBuilder.create(compact != null && compact.equalsIgnoreCase("true"));
+		if ((compact == null || !compact.equalsIgnoreCase("true")) && publicProducts != null) {
+			for (PublicProduct p : publicProducts) {
+				try {
+					p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
+					// System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
+				} catch (DaoException ex) {
+					Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+					HttpErrorHandler.sendError500(response);
+					return null;
+				}
+			}
+		}
 		try {
+			// System.out.println(gson.toJson(publicProducts));
 			return (publicProducts == null ? "[]" : gson.toJson(publicProducts));
 		} catch (JsonException ex) {
 			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
@@ -169,6 +183,7 @@ public class ProductWebService {
 			String query = HttpErrorHandler.getQuery(search);
 
 			ProductDAO productDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductDAO();
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 			List<Product> products;
 			if (query.equals("")) {
 				products = productDAO.getByUser(userId);
@@ -176,7 +191,17 @@ public class ProductWebService {
 				products = productDAO.getByUser(userId, query);
 			}
 			Gson gson = CustomGsonBuilder.create(compact != null && compact.equals("true"));
-
+			if ((compact == null || !compact.equalsIgnoreCase("true")) && products != null) {
+				for (Product p : products) {
+					try {
+						p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
+					} catch (DaoException ex) {
+						Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+						HttpErrorHandler.sendError500(response);
+						return null;
+					}
+				}
+			}
 			try {
 				if (privateOnly != null && privateOnly.equals("true")) {
 					return gson.toJson(products);
