@@ -279,7 +279,8 @@ var app = new Vue({
 		loaded_list: false,
 		showInfoModal: false,
 		fetchListComponent: false,
-		updateTimer: 2000
+		updateTimer: 2000,
+		firstFetch: true
 	},
 	computed: {
 		autocompleteComputed: function () {
@@ -520,10 +521,11 @@ var app = new Vue({
 		},
 		fetchListDone: function (data) {
 			this.permission = true;
-			if (!data.editList) {
+			if (!data.editList && this.firstFetch) {
 				toastr['info']('Non sei abilitato alla modifica di questa lista, contatta l\'amministratore della lista per informazioni');
 				this.permission = false;
 			}
+			this.firstFetch = false;
 			this.fetchListComponent = false;
 			data = data.publicProducts.concat(data.products);
 			//_.sortBy(data,['product.category.name', 'product.name']);
