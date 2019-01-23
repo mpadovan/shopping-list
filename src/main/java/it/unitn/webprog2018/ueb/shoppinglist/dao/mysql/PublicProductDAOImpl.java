@@ -160,6 +160,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			try {
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
+				/*
 				if (File.separator.equals("\\")) {
 					if (logo != null) {
 						logo = logo.replaceAll("\\\\", "\\\\\\\\");
@@ -168,6 +169,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 					}
 				}
+				*/
 				// System.out.println("Update product after replace: " + product.getId() + " " + product.getLogo() + " " + product.getPhotography());
 				String query = "UPDATE publicproducts SET name = ?,note = ?,logo = ?,photography = ?,idproductscategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
@@ -200,6 +202,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			try {
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
+				/*
 				if (File.separator.equals("\\")) {
 					if (logo != null) {
 						logo = logo.replaceAll("\\\\", "\\\\\\\\");
@@ -208,6 +211,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 					}
 				}
+				*/
 				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, product.getName());
@@ -304,6 +308,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 			try {
 				String logo = product.getLogo();
 				String photo = product.getPhotography();
+				/*
 				if (File.separator.equals("\\")) {
 					if (logo != null) {
 						logo = logo.replaceAll("\\\\", "\\\\\\\\");
@@ -312,6 +317,7 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 					}
 				}
+				*/
 				String query = "INSERT INTO publicproducts (name,note,logo,photography,idproductscategory) VALUES (?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, product.getName());

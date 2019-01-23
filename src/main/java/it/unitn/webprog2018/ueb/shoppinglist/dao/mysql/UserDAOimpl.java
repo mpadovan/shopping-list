@@ -19,22 +19,21 @@ import java.util.logging.Logger;
  *
  * @author Michele Tessari
  */
-public class UserDAOimpl extends AbstractDAO implements UserDAO{
-	
+public class UserDAOimpl extends AbstractDAO implements UserDAO {
+
 	public UserDAOimpl(Connection connection, DAOFactory dAOFactory) {
 		super(connection, dAOFactory);
 	}
-	
+
 	@Override
-	public User getById(Integer id) throws DaoException{
-		try{
+	public User getById(Integer id) throws DaoException {
+		try {
 			User user = new User();
 			String query = "SELECT email,password,name,lastname,image,administrator,tokenpassword FROM users WHERE id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				user.setId(id);
 				user.setEmail(rs.getString("email"));
 				user.setPassword(rs.getString("password"));
@@ -49,23 +48,21 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				return user;
 			}
 			throw new RecordNotFoundDaoException("User with id: " + id + " not found");
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
-	public User getByEmail(String email) throws DaoException{
+	public User getByEmail(String email) throws DaoException {
 		try {
 			User user = new User();
 			String query = "SELECT id,password,name,lastname,image,administrator FROM users WHERE email = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setString(1, email);
 			ResultSet rs = st.executeQuery();
-			if(rs.first())
-			{
+			if (rs.first()) {
 				user.setId(rs.getInt("id"));
 				user.setEmail(email);
 				user.setPassword(rs.getString("password"));
@@ -84,41 +81,41 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
-	public Boolean addUser(User user) throws DaoException{
+	public Boolean addUser(User user) throws DaoException {
 		Boolean valid = user.isVaildOnCreate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String image = user.getImage();
+				/*
 				if(File.separator.equals("\\") && image != null)
 					image = image.replaceAll("\\\\", "\\\\\\\\");
+				 */
 				String query = "INSERT INTO users (email,name,lastname,administrator,image,password) VALUES (?,?,?,?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, user.getEmail());
 				st.setString(2, user.getName());
 				st.setString(3, user.getLastname());
-				st.setInt(4, user.isAdministrator()? 1 : 0);
+				st.setInt(4, user.isAdministrator() ? 1 : 0);
 				st.setString(5, image);
 				st.setString(6, user.getPassword());
 				st.executeUpdate();
 				ResultSet rs = st.getGeneratedKeys();
-				if(rs.next())
+				if (rs.next()) {
 					user.setId(rs.getInt(1));
+				}
 				st.close();
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new UpdateException(ex);
 			}
 		}
 		return valid;
 	}
-	
-	public void setToken(User user) throws DaoException
-	{
+
+	public void setToken(User user) throws DaoException {
 		try {
 			String query = "UPDATE users SET tokenpassword = ? WHERE id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
@@ -126,24 +123,26 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 			st.setInt(2, user.getId());
 			int count = st.executeUpdate();
 			st.close();
-			if(count != 1)
-				throw new RecordNotFoundDaoException("user: "+user.getId()+" not found");
+			if (count != 1) {
+				throw new RecordNotFoundDaoException("user: " + user.getId() + " not found");
+			}
 		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
-	public Boolean updateUser(Integer id, User user) throws DaoException{
+	public Boolean updateUser(Integer id, User user) throws DaoException {
 		Boolean valid = user.isVaildOnUpdate(dAOFactory);
-		if(valid)
-		{
-			try{
+		if (valid) {
+			try {
 				String image = user.getImage();
-				if(File.separator.equals("\\") && image != null)
+				/*
+				if (File.separator.equals("\\") && image != null) {
 					image = image.replaceAll("\\\\", "\\\\\\\\");
-				
+				}
+				*/
 				String query = "UPDATE users SET email = ?, password = ?, name = ?, lastname = ?, image = ?, administrator = ?, tokenpassword = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, user.getEmail());
@@ -151,16 +150,16 @@ public class UserDAOimpl extends AbstractDAO implements UserDAO{
 				st.setString(3, user.getName());
 				st.setString(4, user.getLastname());
 				st.setString(5, image);
-				st.setInt(6, user.isAdministrator()? 1 : 0);
+				st.setInt(6, user.isAdministrator() ? 1 : 0);
 				st.setString(7, null);
 				st.setInt(8, id);
 				int count = st.executeUpdate();
 				st.close();
-				if(count != 1)
-					throw new RecordNotFoundDaoException("user: "+id+" not found");
+				if (count != 1) {
+					throw new RecordNotFoundDaoException("user: " + id + " not found");
+				}
 				return valid;
-			}
-			catch(SQLException ex){
+			} catch (SQLException ex) {
 				Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 				throw new DaoException(ex);
 			}
