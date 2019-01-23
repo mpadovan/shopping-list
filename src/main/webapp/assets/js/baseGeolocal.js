@@ -36,7 +36,9 @@ Vue.component('geores', {
 										<div class="card-body">
 											<h5 class="card-title text-dark">{{ element.name }}</h5>
 											<p class="card-text text-secondary">{{ element.single_line_address }}</p>
-											<a v-if="element.website != 0" v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white btn-sm" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+											<div v-if="element.website">
+												<a v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white btn-sm" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+											</div>
 										</div>
 									</div>
 								</div>
