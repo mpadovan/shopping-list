@@ -98,11 +98,9 @@ public class UploadHandler {
 			try {
 				Files.copy(fileContent, file.toPath());
 			} catch(NoSuchFileException ex) {
-				// System.out.println("Returning null when uploading");
 				return null;
 			}
-			// System.out.println("Returning correct file uri");
-			return fileName.substring(fileName.lastIndexOf(uploadFolder) + uploadFolder.length());
+			return (fileName.substring(fileName.lastIndexOf(uploadFolder) + uploadFolder.length())).replace(File.separatorChar, '/');
 		}
 		// System.out.println("Returning null when uploading");
 		return null;
@@ -118,7 +116,7 @@ public class UploadHandler {
 	public boolean deleteFile(String URI, ServletContext context) {
 		String uploadFolder = (String) context.getAttribute("uploadFolder");
 		if (URI != null && !URI.equals("") && !URI.equals("null")) {
-			File oldFile = new File(uploadFolder + URI);
+			File oldFile = new File((uploadFolder + URI).replace('/', File.separatorChar));
 			if (oldFile.exists()) {
 				if (!oldFile.delete()) { // file exists but deleting failed
 					return false;
