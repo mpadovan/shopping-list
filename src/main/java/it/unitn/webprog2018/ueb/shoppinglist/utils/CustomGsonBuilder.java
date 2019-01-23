@@ -46,7 +46,7 @@ public class CustomGsonBuilder {
 				}
 			}).create();
 		} else {
-			return builder.excludeFieldsWithoutExposeAnnotation().create();
+			return builder./*excludeFieldsWithoutExposeAnnotation().*/create();
 		}
 	}
 }
