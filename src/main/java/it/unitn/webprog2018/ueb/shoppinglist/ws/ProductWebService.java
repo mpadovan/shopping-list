@@ -98,7 +98,7 @@ public class ProductWebService {
 			for (PublicProduct p : publicProducts) {
 				try {
 					p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
-					System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
+					// System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
 				} catch (DaoException ex) {
 					Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
 					HttpErrorHandler.sendError500(response);
@@ -107,7 +107,7 @@ public class ProductWebService {
 			}
 		}
 		try {
-			System.out.println(gson.toJson(publicProducts));
+			// System.out.println(gson.toJson(publicProducts));
 			return (publicProducts == null ? "[]" : gson.toJson(publicProducts));
 		} catch (JsonException ex) {
 			Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);

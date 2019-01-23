@@ -12,6 +12,7 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ListsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductDAO;
+import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.ProductsCategoryDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.ListsCategory;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.Product;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.PublicProduct;
@@ -140,10 +141,21 @@ public class ListWebService {
 		int userId = User.getDecryptedId(userHash);
 		if (checkViewPermission(listId, userId)) {
 			ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+			ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
 			Map<PublicProduct, Integer> publicProductsOnList = null;
 			json = "{ \"publicProducts\" : [";
 			try {
 				publicProductsOnList = listDAO.getPublicProductsOnList(listId);
+				for (PublicProduct p : publicProductsOnList.keySet()) {
+					try {
+						p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
+						// System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
+					} catch (DaoException ex) {
+						Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+						HttpErrorHandler.sendError500(response);
+						return null;
+					}
+				}
 			} catch (DaoException ex) {
 				Logger.getLogger(ListWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.handleDAOException(ex, response);
@@ -163,6 +175,7 @@ public class ListWebService {
 						return null;
 					}
 				}
+				// Correct closing of json array.
 				if (json.endsWith(",")) {
 					char[] tmp = json.toCharArray();
 					tmp[json.lastIndexOf(",")] = ']';
@@ -173,6 +186,16 @@ public class ListWebService {
 			Map<Product, Integer> productsOnList = null;
 			try {
 				productsOnList = listDAO.getProductsOnList(listId);
+				for (Product p : productsOnList.keySet()) {
+					try {
+						p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
+						// System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
+					} catch (DaoException ex) {
+						Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+						HttpErrorHandler.sendError500(response);
+						return null;
+					}
+				}
 			} catch (DaoException ex) {
 				Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
 				HttpErrorHandler.handleDAOException(ex, response);
@@ -519,11 +542,23 @@ public class ListWebService {
 	@Path("/anon/{token}/product")
 	public String getProductsOnAnonList(@PathParam("token") String token) {
 		ListDAO listDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getListDAO();
+		ProductsCategoryDAO productsCategoryDAO = ((DAOFactory) servletContext.getAttribute("daoFactory")).getProductsCategoryDAO();
+
 		Map<PublicProduct, Integer> productsOnList;
 		Gson gson = CustomGsonBuilder.create(false);
 		String json = null;
 		try {
 			productsOnList = listDAO.getProductsOnList(token);
+			for (PublicProduct p : productsOnList.keySet()) {
+				try {
+					p.setCategory(productsCategoryDAO.getById(p.getCategory().getId()));
+					// System.out.println(p.getCategory().getName() + " " + p.getCategory().getLogo());
+				} catch (DaoException ex) {
+					Logger.getLogger(ProductWebService.class.getName()).log(Level.SEVERE, null, ex);
+					HttpErrorHandler.sendError500(response);
+					return null;
+				}
+			}
 			json = "[";
 			try {
 				for (Map.Entry<PublicProduct, Integer> entry : productsOnList.entrySet()) {
@@ -582,7 +617,6 @@ public class ListWebService {
 		}
 		PublicProduct product = new PublicProduct();
 		product.setId(productId);
-		System.out.println(content);
 		try {
 			// check if product is already on list, then increase amount by one or newly insert the product
 			Map<PublicProduct, Integer> prodOnList = listDAO.getProductsOnList(token);
