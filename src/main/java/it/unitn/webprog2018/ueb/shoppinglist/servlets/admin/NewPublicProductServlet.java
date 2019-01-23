@@ -119,6 +119,7 @@ public class NewPublicProductServlet extends HttpServlet {
 				if ((logo != null) && (logo.getSize() > 0)) {
 					try {
 						logoURI = uploadHandler.uploadFile(logo, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_LOGO, product, getServletContext());
+						// System.out.println("Logo uri is " + logoURI);
 					} catch (IOException ex) {
 						// It is not a fatal error, we ask the user to try again
 						Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.WARNING, null, ex);
@@ -134,6 +135,7 @@ public class NewPublicProductServlet extends HttpServlet {
 					if ((image != null) && (image.getSize() > 0)) {
 						try {
 							imageURI = uploadHandler.uploadFile(image, UploadHandler.FILE_TYPE.PUBLIC_PRODUCT_IMAGE, product, getServletContext());
+							// System.out.println("Image uri is " + imageURI);
 						} catch (FileAlreadyExistsException ex) {
 							// It is not a fatal error, we ask the user to try again
 							Logger.getLogger(NewPublicProductServlet.class.getName()).log(Level.WARNING, null, ex);

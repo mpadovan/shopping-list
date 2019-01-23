@@ -98,10 +98,13 @@ public class UploadHandler {
 			try {
 				Files.copy(fileContent, file.toPath());
 			} catch(NoSuchFileException ex) {
+				// System.out.println("Returning null when uploading");
 				return null;
 			}
+			// System.out.println("Returning correct file uri");
 			return fileName.substring(fileName.lastIndexOf(uploadFolder) + uploadFolder.length());
 		}
+		// System.out.println("Returning null when uploading");
 		return null;
 	}
 	
