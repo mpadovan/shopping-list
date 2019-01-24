@@ -63,13 +63,19 @@ Vue.component('infoModal', {
 											</tr>
 											<tr>
 												<th scope="row">Logo</th>
-													<td>
-														<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
-													</td>
+												<td>
+													<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.logo" alt="Logo" title="Logo"></div>
+												</td>
 											</tr>
 											<tr>
 												<th scope="row">Categoria</th>
 												<td>{{data.categoryName}}</td>
+											</tr>
+											<tr>
+												<th scope="row">Categoria</th>
+												<td>
+													<div class="info-custom-product"><img class="rounded logo-product" v-bind:src="data.categoryLogo" alt="Logo" title="Logo categoria di lista">{{ data.categoryName }}</div>
+												</td>
 											</tr>
 										</tbody>
 									</table>
