@@ -16,7 +16,7 @@
 					<div class="text-center mb-4">
 						<h3 class="mb-3 font-weight-normal">Cambia immagine profilo</h3>
 					</div>
-					<form  action="ChangeImageUser" method="POST" enctype='multipart/form-data'>
+					<form  action="ChangeImageAdmin" method="POST" enctype='multipart/form-data'>
 						<div class="custom-file my-2">
 							<label class="custom-file-label" for="image">Scegli avatar</label>
 							<input type="file" class="custom-file-input" id="image" name="image">

@@ -8,18 +8,20 @@
 
 Vue.component('infoModal', {
 	props: ['item'],
-	data: function() {
+	data: function () {
 		return {
 			data: {
 				name: '',
 				categoryName: '',
+				categoryLogo: '',
 				notes: '',
 				isPrivate: '',
 				photo: '',
 				logo: '',
 				amIAnon: ''
 			},
-			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg',
+			defaultItem: null
 		}
 	},
 	mounted: function () {
@@ -293,6 +295,12 @@ var app = new Vue({
 		}
 	},
 	methods: {
+		keepListAlwaysUpToDate: function() {
+			var self = this;
+			this.timer = setInterval(function() {
+				self.fetchList();
+			}, self.updateTimer);
+		},
 		searching: function () {
 			if (this.query != '') {
 				this.showList = false;
@@ -453,7 +461,10 @@ var app = new Vue({
 				"url": this.path + 'services/lists/restricted/' + this.user + '/permission/' + this.list + '/products',
 				"method": "GET",
 			};
-			this.fetchListComponent = true;
+			if(this.fetchListComponent){
+				return;
+			}
+			else this.fetchListComponent = true;
 		},
 		ajaxDone: function (data) {
 			this.ajaxComponent = false;
@@ -594,6 +605,7 @@ var app = new Vue({
 	},
 	mounted: function () {
 		this.loaded_list = true;
+		this.keepListAlwaysUpToDate();
 	}
 });
 

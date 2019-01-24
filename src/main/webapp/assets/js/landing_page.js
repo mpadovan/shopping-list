@@ -10,13 +10,15 @@ Vue.component('infoModal', {
 			data: {
 				name: '',
 				categoryName: '',
+				categoryLogo: '',
 				notes: '',
 				isPrivate: '',
 				photo: '',
 				logo: '',
 				amIAnon: ''
 			},
-			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg'
+			defaultImage: 'https://www.gardensbythebay.com.sg/etc/designs/gbb/clientlibs/images/common/not_found.jpg',
+			defaultItem: null
 		}
 	},
 	mounted: function () {

@@ -87,13 +87,6 @@ public class ChangeImageAdminServlet extends HttpServlet {
 			if (!uploadHandler.deleteFile(user.getImage(), getServletContext())) {
 				response.sendError(500);
 			}
-			/*
-			String avatarFileName = Paths.get(avatar.getSubmittedFileName()).getFileName().toString();
-			// Extension handling
-			int ext = avatarFileName.lastIndexOf(".");
-			int noExt = avatarFileName.lastIndexOf(File.separator);
-			
-			 */
 			try {
 				avatarURI = uploadHandler.uploadFile(avatar, UploadHandler.FILE_TYPE.AVATAR, user, getServletContext());
 			} catch (IOException ex) {
@@ -107,6 +100,7 @@ public class ChangeImageAdminServlet extends HttpServlet {
 
 			if (!response.isCommitted()) {
 				user.setImage(avatarURI);
+				user.setCheckpassword(user.getPassword());
 				try {
 					if (userDAO.updateUser(user.getId(), user)) {
 						session.setAttribute("user", user);
