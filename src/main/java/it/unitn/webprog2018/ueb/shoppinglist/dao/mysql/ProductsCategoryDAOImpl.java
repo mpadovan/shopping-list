@@ -60,9 +60,11 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		if (valid) {
 			try {
 				String logo = pc.getLogo();
+				/*
 				if (File.separator.equals("\\") && logo != null) {
 					logo = logo.replaceAll("\\\\", "\\\\\\\\");
 				}
+				*/
 				String query = "INSERT INTO productscategories (name,description,logo) VALUES (?,?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, pc.getName());
@@ -166,9 +168,11 @@ public class ProductsCategoryDAOImpl extends AbstractDAO implements ProductsCate
 		if (valid) {
 			try {
 				String logo = productsCategory.getLogo();
+				/*
 				if (File.separator.equals("\\") && logo!=null) {
 					logo = logo.replaceAll("\\\\", "\\\\\\\\");
 				}
+				*/
 				String query = "UPDATE productscategories SET name = ?, description = ?, logo = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, productsCategory.getName());

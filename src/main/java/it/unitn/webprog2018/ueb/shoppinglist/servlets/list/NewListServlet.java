@@ -146,7 +146,7 @@ public class NewListServlet extends HttpServlet {
 					LinkedList<User> listShared = new LinkedList();
 					for (String shared1 : shared) {
 						try {
-							if (!shared1.isEmpty() && !shared1.equals(me.getEmail())) {
+							if (!shared1.isEmpty() /*&& !shared1.equals(me.getEmail())*/) {
 								User u = userDAO.getByEmail(shared1);
 								listShared.add(u);
 							}
@@ -197,6 +197,9 @@ public class NewListServlet extends HttpServlet {
 										Logger.getLogger(NewListServlet.class.getName()).log(Level.SEVERE, null, ex);
 									}
 								}
+							}
+							if (!listShared.isEmpty()) {
+								listDAO.linkShoppingListToUser(list, me.getId(), true, true, true);
 							}
 						} else {
 							everythingOK = false;

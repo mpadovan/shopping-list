@@ -39,9 +39,11 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		if (valid) {
 			try {
 				String image = listCategoriesImage.getImage();
+				/*
 				if (File.separator.equals("\\") && image != null) {
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				}
+				 */
 				String query = "INSERT INTO listscategoriesimages (image,idcategory) VALUES (?,?)";
 				PreparedStatement st = this.getCon().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				st.setString(1, image);
@@ -100,9 +102,11 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 		if (valid) {
 			try {
 				String image = listCategoriesImage.getImage();
+				/*
 				if (File.separator.equals("\\") && image != null) {
 					image = image.replaceAll("\\\\", "\\\\\\\\");
 				}
+				*/
 				String query = "UPDATE listscategoriesimages SET image = ?, idcategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, image);
@@ -158,9 +162,9 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 	}
 
 	@Override
-	public List <ListsCategoriesImage> getByCategoriesID(Integer CategoryID) throws DaoException {
+	public List<ListsCategoriesImage> getByCategoriesID(Integer CategoryID) throws DaoException {
 		try {
-			List <ListsCategoriesImage> lci = new ArrayList <ListsCategoriesImage> ();
+			List<ListsCategoriesImage> lci = new ArrayList<ListsCategoriesImage>();
 			String query = "select lci.id, lci.image"
 					+ " from listscategoriesimages lci"
 					+ " where lci.idcategory = ?";
@@ -172,7 +176,7 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 				listsCategoriesImage.setId(rs.getInt("id"));
 				listsCategoriesImage.setImage(rs.getString("image"));
 				lci.add(listsCategoriesImage);
-				
+
 			}
 			rs.close();
 			st.close();
@@ -182,41 +186,41 @@ public class ListsCategoryImagesDAOImpl extends AbstractDAO implements ListsCate
 			throw new DaoException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean deleteImage(Integer id) throws DaoException {
-		try{
+		try {
 			String query = "DELETE FROM listscategoriesimages WHERE id = ?";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, id);
 			int count = st.executeUpdate();
 			st.close();
-			if(count != 1)
-				throw new RecordNotFoundDaoException("product "+id+" not found");
+			if (count != 1) {
+				throw new RecordNotFoundDaoException("product " + id + " not found");
+			}
 			return true;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new UpdateException(ex);
 		}
 	}
-	
+
 	@Override
 	public Boolean deleteImageTemporary(Integer idcategory) throws DaoException {
-		try{
+		try {
 			String query = "DELETE FROM listscategoriesimages WHERE idcategory = ? AND image = 'temporary'";
 			PreparedStatement st = this.getCon().prepareStatement(query);
 			st.setInt(1, idcategory);
 			int count = st.executeUpdate();
 			st.close();
-			if(count != 1)
-				throw new RecordNotFoundDaoException("Image with "+idcategory+" not found");
+			if (count != 1) {
+				throw new RecordNotFoundDaoException("Image with " + idcategory + " not found");
+			}
 			return true;
-		}
-		catch(SQLException ex){
+		} catch (SQLException ex) {
 			Logger.getLogger(UserDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
 			throw new UpdateException(ex);
 		}
 	}
-	
+
 }

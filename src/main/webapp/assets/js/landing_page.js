@@ -20,12 +20,13 @@ Vue.component('infoModal', {
 		}
 	},
 	mounted: function () {
-		this.item = (this.item.item.category == undefined) ? this.item.item : this.item;
-		this.data.name = this.item.item.name;
-		this.data.categoryName = this.item.item.category.name;
-		this.data.notes = this.item.item.note;
-		this.data.logo = (this.item.item.logo == "null" || this.item.item.logo == undefined) ? this.defaultImage : app.path + this.item.item.logo;
-		this.data.photo = (this.item.item.photography == "null" || this.item.item.photography == undefined) ? this.defaultImage : app.path + this.item.item.photography;
+		this.defaultItem = (this.item.item.category == undefined) ? this.item.item : this.item;
+		this.data.name = this.defaultItem.item.name;
+		this.data.categoryName = this.defaultItem.item.category.name;
+		this.data.categoryLogo = (this.defaultItem.item.category.logo == "null" || this.defaultItem.item.category.logo == undefined) ? this.defaultImage : app.path + this.defaultItem.item.category.logo;
+		this.data.notes = this.defaultItem.item.note;
+		this.data.logo = (this.defaultItem.item.logo == "null" || this.defaultItem.item.logo == undefined) ? this.defaultImage : app.path + this.defaultItem.item.logo;
+		this.data.photo = (this.defaultItem.item.photography == "null" || this.defaultItem.item.photography == undefined) ? this.defaultImage : app.path + this.defaultItem.item.photography;
 		$('#info-modal').modal('show');
 	},
 	methods: {
@@ -126,7 +127,9 @@ Vue.component('getCat', {
 						<div class="card-body">
 							<h5 class="card-title text-dark">{{ element.name }}</h5>
 							<p class="card-text text-secondary">{{ element.single_line_address }}</p>
-							<a v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+							<div v-if="element.website">
+								<a v-bind:href="element.website" v-bind:class="{'disabled' : !element.website}" class="btn btn-primary text-white" target="_blank">{{(element.website) ? 'Visita il sito' : 'Sito non disponibile'}}</a>
+							</div>
 						</div>
 					</div>
 				</div>`

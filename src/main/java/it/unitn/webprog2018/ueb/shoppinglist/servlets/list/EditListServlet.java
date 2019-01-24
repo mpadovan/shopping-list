@@ -190,6 +190,9 @@ public class EditListServlet extends HttpServlet {
 										}
 									}
 								}
+								if (!listShared.isEmpty()) {
+									listDAO.linkShoppingListToUser(currentList, me.getId(), true, true, true);
+								}
 							} else {
 								everythingOK = false;
 								request.setAttribute("list", currentList);
