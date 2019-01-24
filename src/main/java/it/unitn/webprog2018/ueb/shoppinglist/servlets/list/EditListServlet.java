@@ -190,7 +190,9 @@ public class EditListServlet extends HttpServlet {
 										}
 									}
 								}
-								if (!listShared.isEmpty()) {
+								// Is this list already shared with the user?
+								boolean alreadyShared = ((java.util.List<List>)request.getAttribute("sharedLists")).contains(currentList);
+								if (!listShared.isEmpty() && !alreadyShared) {
 									listDAO.linkShoppingListToUser(currentList, me.getId(), true, true, true);
 								}
 							} else {
