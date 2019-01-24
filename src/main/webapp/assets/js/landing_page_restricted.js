@@ -28,7 +28,7 @@ Vue.component('infoModal', {
 		this.defaultItem = (this.item.item.category == undefined) ? this.item.item : this.item;
 		this.data.name = this.defaultItem.item.name;
 		this.data.categoryName = this.defaultItem.item.category.name;
-		this.data.categoryLogo = this.defaultItem.item.category.logo;
+		this.data.categoryLogo = (this.defaultItem.item.category.logo == "null" || this.defaultItem.item.category.logo == undefined) ? this.defaultImage : app.path + this.defaultItem.item.category.logo;
 		this.data.notes = this.defaultItem.item.note;
 		this.data.logo = (this.defaultItem.item.logo == "null" || this.defaultItem.item.logo == undefined) ? this.defaultImage : app.path + this.defaultItem.item.logo;
 		this.data.photo = (this.defaultItem.item.photography == "null" || this.defaultItem.item.photography == undefined) ? this.defaultImage : app.path + this.defaultItem.item.photography;
