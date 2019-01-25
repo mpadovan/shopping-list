@@ -143,9 +143,9 @@ Vue.component('list-item', {
 	template: `<tr> 
 				<td>{{ capitalized }}</td>
 				<td>{{ item.amount }}</td>
-				<td @click="infoModal"><i class="fas fa-question-circle"></i></td>
+				<td @click="infoModal"><i class="fas fa-info-circle"></i></td>
 				<td v-if="permission" @click="updateItem"><i class="fas fa-pen-square"></i></td> 
-				<td v-if="permission" @click="deleteItem"><i class="fas fa-trash"></i></td> 
+				<td v-if="permission" @click="deleteItem"><i class="fas fa-times"></i></td> 
 			</tr>`
 });
 
@@ -206,7 +206,7 @@ Vue.component('search-item', {
 							<div class="row align-items-center search-item-more-info-overlay" style="width:100%; height:100%;margin:0;"> 
 								<div style="width:fit-content; margin:auto;"> 
 									<div @click="callParent" style="display:inline-block"><i class="fas fa-plus-circle" style="font-size:4rem;margin-right:1rem;"></i></div> 
-									<div @click="infoModal" style="display:inline-block"><i class="fas fa-question-circle" style="font-size:4rem;"></i></div> 
+									<div @click="infoModal" style="display:inline-block"><i class="fas fa-info-circle" style="font-size:4rem;"></i></div> 
 								</div> 
 							</div> 
 						</div> 
