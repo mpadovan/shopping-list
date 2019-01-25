@@ -105,6 +105,8 @@ public class ProductWebService {
 					return null;
 				}
 			}
+		} else if (publicProducts != null) {
+			publicProducts = publicProducts.subList(0, Math.min(5,publicProducts.size()));
 		}
 		try {
 			// System.out.println(gson.toJson(publicProducts));
@@ -201,6 +203,8 @@ public class ProductWebService {
 						return null;
 					}
 				}
+			} else if (products != null) {
+				products = products.subList(0, Math.min(3, products.size()));
 			}
 			try {
 				if (privateOnly != null && privateOnly.equals("true")) {
