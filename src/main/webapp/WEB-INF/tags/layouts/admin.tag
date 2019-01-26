@@ -96,6 +96,8 @@
 		<!-- development version, includes helpful console warnings -->
 		<script src="${pageContext.servletContext.contextPath}/assets/js/admin_page.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+		<script src="${pageContext.servletContext.contextPath}/assets/js/custom_input_file.js"></script>
+		
 		<jsp:invoke fragment="customJs" />
 
 	</body>

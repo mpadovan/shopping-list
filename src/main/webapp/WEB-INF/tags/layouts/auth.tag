@@ -49,8 +49,7 @@
 				crossorigin="anonymous">
 		</script>
 
-		<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>-->
-
+		<script src="${pageContext.servletContext.contextPath}/assets/js/custom_input_file.js"></script>
 		<jsp:invoke fragment="customJs" />
 	</body>
 </html>
