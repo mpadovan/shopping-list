@@ -54,6 +54,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+		<script src="${pageContext.servletContext.contextPath}/assets/js/custom_input_file.js"></script>
 		<jsp:invoke fragment="customJs" />
 	</body>
 </html>
