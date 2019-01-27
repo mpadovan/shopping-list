@@ -233,7 +233,7 @@ public class User extends AbstractEntity {
 			variationCount += (variations[i] ? 1 : 0);
 				
 		score += (variationCount - 1)*10;
-		//System.out.println((int)score);
+		
 		return (int) score;
 	}
 	

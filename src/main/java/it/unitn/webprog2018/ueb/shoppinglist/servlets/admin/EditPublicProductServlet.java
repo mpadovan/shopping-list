@@ -99,7 +99,6 @@ public class EditPublicProductServlet extends HttpServlet {
 		Integer categoryId = Integer.parseInt(request.getParameter("category"));
 		String logoURI = "";
 		String imageURI = "";
-		System.out.println("WEEEEE???");
 		try {
 			PublicProduct product = publicProductDAO.getById(productId);
 			ProductsCategory productsCategory = productsCategoryDAO.getById(categoryId);
@@ -142,16 +141,13 @@ public class EditPublicProductServlet extends HttpServlet {
 				}
 				product.setPhotography(imageURI);
 			}
-			System.out.println("iscommited???");
 			if (!response.isCommitted()) {
-				System.out.println("!response.isCommitted()");
 				if (publicProductDAO.updateProduct(productId, product)) {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/PublicProductList");
 				} else {
 					InitializeCategoryRedirect(request, response, product);
 				}
 			}
-			System.out.println("WTF???");
 		} catch (RecordNotFoundDaoException ex) {
 			Logger.getLogger(EditPublicProductServlet.class.getName()).log(Level.SEVERE, null, ex);
 			response.sendError(404, ex.getMessage());

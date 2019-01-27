@@ -170,7 +170,6 @@ public class PublicProductDAOImpl extends AbstractDAO implements PublicProductDA
 						photo = photo.replaceAll("\\\\", "\\\\\\\\");
 				}
 				*/
-				// System.out.println("Update product after replace: " + product.getId() + " " + product.getLogo() + " " + product.getPhotography());
 				String query = "UPDATE publicproducts SET name = ?,note = ?,logo = ?,photography = ?,idproductscategory = ? WHERE id = ?";
 				PreparedStatement st = this.getCon().prepareStatement(query);
 				st.setString(1, product.getName());
