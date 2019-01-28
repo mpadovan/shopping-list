@@ -88,7 +88,6 @@ public class UploadFilter implements Filter {
 				else if (Pattern.matches(".*/uploads/restricted/shared/product/.*", uri)) {
 					
 				}
-				// WTH are you looking for?
 				else {
 					HttpErrorHandler.sendError404(resp);
 				}

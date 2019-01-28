@@ -94,22 +94,6 @@ public class EditListsCategoryServlet extends HttpServlet {
 		listsCategory.setId(categoryId);
 		listsCategory.setName(name);
 		listsCategory.setDescription(description);
-		/*if (imageIdString != null && !imageIdString.equals("")) {
-			imageId = Integer.parseInt(imageIdString);
-			categoriesImage = new ListsCategoriesImage();
-			categoriesImage.setImage(image);
-			categoriesImage.setId(imageId);
-			
-			try {
-				listsCategoryImagesDAO.updateListsCategoriesImage(categoryId, categoriesImage);
-			} catch (RecordNotFoundDaoException ex) {
-				Logger.getLogger(EditListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-				response.sendError(404, ex.getMessage());
-			} catch (DaoException ex) {
-				Logger.getLogger(EditListsCategoryServlet.class.getName()).log(Level.SEVERE, null, ex);
-				response.sendError(500, ex.getMessage());
-			}
-		}*/
 		
 		try {
 			if (listsCategoryDAO.updateListsCategory(categoryId, listsCategory)) {

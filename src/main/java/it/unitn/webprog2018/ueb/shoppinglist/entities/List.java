@@ -85,30 +85,10 @@ public class List extends AbstractEntity {
 
 	@Override
 	protected void validateOnUpdate(DAOFactory dAOFactory) throws DaoException {
-		/*if (errors.isEmpty()) {
-			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
-			try {
-				List list = listDAO.getList(name, owner);
-				if (id != list.getId()) {
-					setError("name", "Nome già esistente");
-				}
-			} catch (RecordNotFoundDaoException ex) {
-				//tutto andato a buon fine, nessun duplicato
-			}
-		}*/
 	}
 
 	@Override
 	protected void validateOnCreate(DAOFactory dAOFactory) throws DaoException {
-		/*if (errors.isEmpty()) {
-			ListDAO listDAO = ((DAOFactory) dAOFactory).getListDAO();
-			try {
-				List list = listDAO.getList(name, owner);
-				setError("name", "Nome già esistente");
-			} catch (RecordNotFoundDaoException ex) {
-				//tutto andato a buon fine, nessun duplicato
-			}
-		}*/
 	}
 
 	@Override
