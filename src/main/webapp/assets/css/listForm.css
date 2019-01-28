@@ -49,3 +49,6 @@ and open the template in the editor.
     border-top-right-radius: 0;
 	border: 1px solid #ced4da;
 }
+.input-permission{
+	margin-right: 3px;
+}

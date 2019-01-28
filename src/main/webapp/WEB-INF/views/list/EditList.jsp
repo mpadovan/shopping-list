@@ -74,13 +74,13 @@
 										   class="form-control ${(list.getFieldErrors("shared[]") != null ? "is-invalid" : "")}"
 										   v-model="emailFields[index]">
 									<label class="radio-inline" style="margin-right:5px;">
-										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="view" checked>Visualizzazione
+										<input class="input-permission" type="radio" v-bind:name="'permission-' + emailFields[index]" value="view" checked>Visualizzazione
 									</label>
 									<label class="radio-inline" style="margin-right:5px;">
-										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic">Base
+										<input class="input-permission" type="radio" v-bind:name="'permission-' + emailFields[index]" value="basic">Base
 									</label>
 									<label class="radio-inline">
-										<input style="margin-right: 3px;" type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Proprietario
+										<input class="input-permission" type="radio" v-bind:name="'permission-' + emailFields[index]" value="full">Proprietario
 									</label>
 								</div>
 								<div class="invalid-feedback">
@@ -122,7 +122,7 @@
 		<link href="${pageContext.servletContext.contextPath}/assets/css/listForm.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-		<!--<script src="assets/js/landing_page.js"></script>-->
+
 		<script>
 			$(document).ready(function () {
 				$(document).ready(function () {

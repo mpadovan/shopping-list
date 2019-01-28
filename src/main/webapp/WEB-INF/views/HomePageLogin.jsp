@@ -19,13 +19,6 @@
 								<div v-show="loaded_list" style="display: none;">
 									<div class="card">
 										<div class="card-body">
-											<!--
-											<div class="float-right mb-2">
-												<a href="NewProduct.jsp">
-													<u>Crea prodotto</u>
-												</a>
-											</div>
-											-->
 											<div class="input-group mb-0">
 												<input id="search-bar" type="text" class="form-control" v-bind:placeholder="msg" v-model="query">
 												<div class="input-group-append">
@@ -154,8 +147,6 @@
 					<div class="col">
 						<div class="card card-closed-list">
 							<div class="card-body text-center">
-								<!--<p class="mb-2">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</p>
-								<div class="div-img-closed-list"><img class="image-closed-list" src="http://getdrawings.com/image/panda-eating-bamboo-drawing-54.jpg" alt="Hungry Panda"></div>-->
 								<h6 class="h6-closed-list">Seleziona una lista oppure <a href="${pageContext.servletContext.contextPath}/restricted/NewList"><u>clicca qui</u></a> per crearne una nuova</h6>
 								<img class="image-closed-list"  src="${pageContext.servletContext.contextPath}/assets/images/logo.png" alt="Shopping List" title="Shopping List">
 							</div>

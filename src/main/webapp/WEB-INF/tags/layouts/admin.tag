@@ -35,7 +35,7 @@
 
 		<title><c:out value="${pageTitle}" /></title>
 	</head>
-	<body style="margin-top: 70px;">
+	<body>
 
 		<%-- Container for page Content printed via JSP tag --%>
 		<nav class="navbar navbar-expand-lg navbar-dark navbar-color fixed-top">
@@ -59,10 +59,10 @@
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item dropdown">
 						<c:if test="${not empty sessionScope.user.image}">
-							<img style="max-width: 40px; max-height: 40px; display: inline;"src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+							<img src="${pageContext.servletContext.contextPath}${sessionScope.user.image}" class="rounded-circle img-fluid user-image img-navbar" alt="immagine profilo">
 						</c:if>
 						<c:if test="${empty sessionScope.user.image}">
-							<img style="max-width: 40px; max-height: 40px; display: inline;"src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image" alt="immagine profilo">
+							<img src="${pageContext.servletContext.contextPath}/assets/images/avatar2.png" class="rounded-circle img-fluid user-image img-navbar" alt="immagine profilo">
 						</c:if> 
 
 						<a href="#" class="nav-link active dropdown-toggle" 
