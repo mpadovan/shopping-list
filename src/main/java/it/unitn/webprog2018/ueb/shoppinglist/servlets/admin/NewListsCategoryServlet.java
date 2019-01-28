@@ -79,19 +79,7 @@ public class NewListsCategoryServlet extends HttpServlet {
 		
 		try {
 			if (listsCategoryDAO.addListCategory(listsCategory)) {
-				//if (image == null) {
 					response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-				/*} else {
-					listsCategory = listsCategoryDAO.getByName(name);
-					ListsCategoriesImage listsCategoriesImage = new ListsCategoriesImage();
-					listsCategoriesImage.setImage("string");
-					listsCategoriesImage.setCategory(listsCategory);
-					if (listsCategoryImagesDAO.addListsCategoriesImage(listsCategoriesImage)) {
-						response.sendRedirect(getServletContext().getContextPath() + "/restricted/admin/ListCategory");
-					} else {
-						response.sendError(500, "qualcosa è andato storto");
-					}
-				}*/
 			} else {
 				request.setAttribute("listsCategory", listsCategory);
 				request.getRequestDispatcher("/WEB-INF/views/admin/NewListsCategory.jsp").forward(request, response);
