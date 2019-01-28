@@ -68,11 +68,6 @@
 									<transition name="fade" v-on:after-leave="listHided">
 										<div id="list" v-if="showList">
 											<div class="card-body">
-												<!--<nav class="navbar navbar-dark bg-primary">
-													<div class="form-group" style="margin-bottom:0;">
-														<categories @done="showCat" v-bind:data-cat="dataCat" v-bind:data-position="dataPosition"></categories>
-													</div>
-												</nav>-->
 												<div class="table-wrapper-2 table-responsive-md">
 													<table class="table table-striped">
 														<thead>

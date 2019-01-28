@@ -47,13 +47,6 @@
 		</div>
 	</jsp:attribute>
 	<jsp:attribute name="customCss">
-		<style>
-			.logo-login{
-				width: 200px;
-				margin: auto;
-				padding-top: 35px;
-			}
-		</style>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
 		<script>
