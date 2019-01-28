@@ -100,7 +100,7 @@
 		
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-		<!--<script src="assets/js/landing_page.js"></script>-->
+
 		<script>
 			$(document).ready(function () {
 				$('select').each(function () {

@@ -110,10 +110,7 @@
 		<link href="${pageContext.servletContext.contextPath}/assets/css/info_list.css" type="text/css" rel="stylesheet"/>
 	</jsp:attribute>
 	<jsp:attribute name="customJs">
-		<!--<script src="assets/js/landing_page.js"></script>-->
-		<script>
 
-		</script>
 	</jsp:attribute>
 
 </layouts:base>
