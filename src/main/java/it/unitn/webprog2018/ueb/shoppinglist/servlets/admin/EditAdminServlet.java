@@ -94,6 +94,8 @@ public class EditAdminServlet extends HttpServlet {
 						redirect = true;
 					} else {
 						request.setAttribute("user", user);
+						request.setAttribute("changepassword", true);
+						// System.out.println("validation utente modificato con password");
 					}
 				} else {
 					user.setError("oldpassword", "la password non è corretta");

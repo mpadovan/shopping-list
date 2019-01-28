@@ -29,10 +29,9 @@ public class Network {
 	 * @return a String representing the hostname of the server
 	 */
 	public static String getServerAddress() {
-		// TODO: SWITCH TO RELEASE VERSION
+		return "www.shppng.tk";
+		
 		/*
-		 * return www.shppng.tk/
-		 */
 		try {
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 
@@ -58,6 +57,7 @@ public class Network {
 		}
 		// everything fails, i give up.
 		return null;
+		*/
 	}
 
 	/**

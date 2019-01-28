@@ -352,7 +352,7 @@ public class ListWebService {
 			@PathParam("productId") int productId, String content) {
 		int listId = it.unitn.webprog2018.ueb.shoppinglist.entities.List.getDecryptedId(listHash);
 		int userId = User.getDecryptedId(userHash);
-		if (checkAddDeletePermission(listId, userId) && checkProductPermission(productId, userId)) {
+		if (checkAddDeletePermission(listId, userId)) {
 			Integer newAmount = -1;
 			try {
 				Gson gson = new Gson();

@@ -71,20 +71,22 @@ var chat = new Vue({
 			switch (data.operation) {
 				case "2":
 					if ($('#chat').css('display') == 'none') {
-						data.payload.forEach(element => {
-							if (element.listId == app.list) {
+						data.payload.forEach((element, index, array) => {
+							if (element.listId == app.list.substr(5)) {
 								Socket.send(JSON.stringify({
 									operation: '1',
 									payload: app.list
 								}));
 								toastr['success']('Hai messaggi non letti su questa lista');
 							}
-							$('#shared-list-outer-' + element.listId).addClass('show-badge');
-							$('#shared-list-' + element.listId).text(element.unreadCount);
+							$('#shared-list-outer-list-' + element.listId).addClass('show-badge');
+							$('#shared-list-list-' + element.listId).text(element.unreadCount);
 							//$('#shared-list-' + element.listId + '-badge').text(element.unreadCount).css('display', 'block');
 						});
-						if(data.payload.length != 0) $('#new-messages').css('display', 'inline');
-						else $('#new-messages').css('display', 'none');
+						if (data.payload.length != 0)
+							$('#new-messages').css('display', 'inline');
+						else
+							$('#new-messages').css('display', 'none');
 					} else {
 						var msg = {
 							operation: 1,
@@ -106,7 +108,7 @@ var chat = new Vue({
 				this.message.payload.listId = app.list;
 				this.message.payload.senderId = app.user;
 				this.message.payload.text = this.text;
-				console.log(this.message);
+				// console.log(this.message);
 				if (this.message.payload.text.length <= 255) {
 					Socket.send(JSON.stringify(this.message));
 				}
@@ -115,7 +117,7 @@ var chat = new Vue({
 		manageMessages: function (data) {
 			this.messages = data;
 			for (var j = 0; this.messages.length > j; j++) {
-				if (this.messages[j].sender.id == this.user)
+				if (this.messages[j].sender.id == this.user.substr(5))
 					this.messages[j].isMine = 'message-s';
 				else
 					this.messages[j].isMine = 'message-r';
@@ -136,7 +138,7 @@ $(document).ready(function () {
 	$('#app').resize(function () {
 		$('#chat').height($('#app').height());
 	});
-	Socket = new WebSocket('ws://' + window.location.hostname + ':8080/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
+	Socket = new WebSocket('wss://' + window.location.hostname + '/ShoppingList/restricted/messages/' + window.location.pathname.split('HomePageLogin/')[1].split('/')[0]);
 	Socket.onopen = function (evt) {
 		Socket.send(JSON.stringify({
 			operation: '1',

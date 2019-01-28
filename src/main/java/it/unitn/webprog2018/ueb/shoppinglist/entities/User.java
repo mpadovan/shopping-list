@@ -10,7 +10,6 @@ import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.DaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.exceptions.RecordNotFoundDaoException;
 import it.unitn.webprog2018.ueb.shoppinglist.dao.interfaces.UserDAO;
 import it.unitn.webprog2018.ueb.shoppinglist.entities.utils.AbstractEntity;
-import it.unitn.webprog2018.ueb.shoppinglist.utils.CookieCipher;
 import it.unitn.webprog2018.ueb.shoppinglist.utils.Sha256;
 import java.util.HashMap;
 import java.util.Map;
@@ -141,13 +140,13 @@ public class User extends AbstractEntity {
 	
 	@Override
 	public String getHash() {
-		int encr = (this.id*this.id)-7;
+		int encr = (this.id*this.id)+34178;
 		return "user-" + encr;
 	}
 	
 	public static int getDecryptedId(String encr) {
 		int id = Integer.parseInt(encr.substring(5));
-		return (int)Math.sqrt(id+7);
+		return (int)Math.sqrt(id-34178);
 	}
 	
 	@Override

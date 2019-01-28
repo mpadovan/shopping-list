@@ -102,6 +102,7 @@ public class UploadHandler {
 			}
 			return (fileName.substring(fileName.lastIndexOf(uploadFolder) + uploadFolder.length())).replace(File.separatorChar, '/');
 		}
+		// System.out.println("Returning null when uploading");
 		return null;
 	}
 	
